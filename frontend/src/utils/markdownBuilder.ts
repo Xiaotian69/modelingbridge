@@ -121,7 +121,7 @@ export function recordToMarkdown(record: StoredRecord, index?: number): string {
     `保存时间：${new Date(record.savedAt).toLocaleString()}`,
     "",
     "### 输出摘要",
-    record.summary || "未填写",
+    record.fullReport ?? record.summary ?? "未填写",
     "",
     "### AI 使用记录",
     record.usageLog || "未保存",

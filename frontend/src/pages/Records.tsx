@@ -9,6 +9,7 @@ export type StoredRecord = {
   savedAt: string;
   title: string;
   summary: string;
+  fullReport?: string;
   usageLog?: string;
 };
 
@@ -36,13 +37,14 @@ function downloadText(filename: string, content: string, type = "text/plain;char
 }
 
 
-export function saveWorkbenchRecord(payload: { title: string; summary: string; usageLog?: string }) {
+export function saveWorkbenchRecord(payload: { title: string; summary: string; fullReport?: string; usageLog?: string }) {
   const list = loadRecords();
   const rec: StoredRecord = {
     id: `${Date.now()}`,
     savedAt: new Date().toISOString(),
     title: payload.title.slice(0, 80),
     summary: payload.summary.slice(0, 2000),
+    fullReport: payload.fullReport,
     usageLog: payload.usageLog?.slice(0, 5000),
   };
   list.unshift(rec);
@@ -137,6 +139,15 @@ export function RecordsPage() {
               >
                 复制本条 Markdown
               </button>
+              {r.fullReport && (
+                <button
+                  type="button"
+                  className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-bridge-400"
+                  onClick={() => downloadText(`quest-report-${r.id}.md`, r.fullReport!)}
+                >
+                  下载完整报告
+                </button>
+              )}
               {r.usageLog && (
                 <button
                   type="button"

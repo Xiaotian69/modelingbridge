@@ -95,7 +95,8 @@ export function QuestPage() {
   function saveReport() {
     saveWorkbenchRecord({
       title: `闯关报告：${title}`,
-      summary: `完成进度：${progress.completed}/${progress.total}\n\n${report}`,
+      summary: `完成进度：${progress.completed}/${progress.total}（${progress.percent}%）`,
+      fullReport: report,
       usageLog: "闯关模式：本地提示卡 + 人工确认。未自动生成可提交论文。",
     });
     dispatch({ type: "SET_SAVE_STATUS", payload: "已保存到本机学习记录。" });

@@ -34,6 +34,26 @@ describe("quest draft storage", () => {
     expect(loadQuestDraft("broken")).toBeNull();
   });
 
+  it("normalizes a draft missing a stage by back-filling it", () => {
+    const partialDraft = {
+      activeStageId: "breakdown",
+      states: [{ stageId: "read_problem", answer: "my answer", completed: true, updatedAt: "2026-05-25T00:00:00.000Z" }],
+      checks: { read_problem: [true, true, true] },
+      updatedAt: "2026-05-25T00:00:00.000Z",
+    };
+    localStorage.setItem(getQuestDraftKey("partial"), JSON.stringify(partialDraft));
+
+    const loaded = loadQuestDraft("partial");
+
+    expect(loaded).not.toBeNull();
+    expect(loaded!.states).toHaveLength(questStages.length);
+    expect(loaded!.states.find((s) => s.stageId === "model")).toMatchObject({ answer: "", completed: false });
+    Object.keys(loaded!.checks).forEach((id) => {
+      const stage = questStages.find((s) => s.id === id)!;
+      expect(loaded!.checks[id as import("./stages").QuestStageId]).toHaveLength(stage.passConditions.length);
+    });
+  });
+
   it("clears a stored draft", () => {
     const draft: QuestDraft = {
       activeStageId: "read_problem",
