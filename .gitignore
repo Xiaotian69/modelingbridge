@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build output
+frontend/dist/
+frontend/.env.local
+backend/__pycache__/
+backend/*.pyc
+*.pyc
+__pycache__/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Logs
+*.log
+.context/
+
+# Local Claude settings
+.claude/settings.local.json
+
+# Large content archives (not part of the web app)
+2000-2024年美赛赛题汇总/
+2006-2025年美赛优秀论文汇总/
+数学建模Prompt/
+第一阶段任务拆解文档包/
+*.docx
+*.doc
+
+# Python venv
+venv/
+.venv/
