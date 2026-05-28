@@ -2,8 +2,11 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 
 const nav = [
   { to: "/", label: "总览" },
+  { to: "/learn", label: "学习" },
   { to: "/quest", label: "闯关" },
   { to: "/cases", label: "案例" },
+  { to: "/calendar", label: "日历" },
+  { to: "/tools", label: "工具" },
   { to: "/records", label: "记录" },
   { to: "/about", label: "关于" },
 ];

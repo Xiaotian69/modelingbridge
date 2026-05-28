@@ -29,6 +29,18 @@ Thumbs.db
 .claude/settings.local.json
 
 # Large content archives (not part of the web app)
+历年美赛赛题、翻译、优秀论文（中英文）、赛题解析等/
+课程课件/
+2000-2024年美赛赛题汇总*/
+2006-2025年美赛优秀论文汇总*/
+数学建模Prompt/
+第一阶段任务拆解文档包/
+*.7z
+*.rar
+*.zip
+*.pdf
+*.ppt
+*.pptx
 2000-2024年美赛赛题汇总*/
 2006-2025年美赛优秀论文汇总*/
 数学建模Prompt/

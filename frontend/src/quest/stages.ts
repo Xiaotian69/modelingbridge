@@ -171,37 +171,46 @@ export function buildQuestReportMarkdown(input: {
   title: string;
   sourceLabel: string;
   states: QuestStageState[];
+  checks?: Partial<Record<QuestStageId, boolean[]>>;
   aiUsageNote: string;
 }): string {
+  const progress = getQuestProgress(input.states);
   const stageSections = questStages.flatMap((stage) => {
     const state = input.states.find((item) => item.stageId === stage.id);
+    const checks = input.checks?.[stage.id] ?? [];
     return [
-      `## ${stage.order}. ${stage.title}`,
+      `## 第 ${stage.order} 关：${stage.title}`,
       "",
-      `训练目标：${stage.goal}`,
+      `**完成状态**：${state?.completed ? "已通关" : "进行中"}`,
       "",
-      "## 我的判断",
+      `**训练目标**：${stage.goal}`,
+      "",
+      "### 我的判断",
       state?.answer?.trim() || "（未填写）",
       "",
-      `通关状态：${state?.completed ? "已通关" : "未通关"}`,
+      "### 本关通关条件确认",
+      ...stage.passConditions.map((condition, index) => `- [${checks[index] ? "x" : " "}] ${condition}`),
       "",
     ];
   });
 
   return [
-    "# 数模闯关通关报告",
+    "# 数模闯关训练营 · 通关报告",
     "",
-    `训练题：${input.title}`,
-    `来源：${input.sourceLabel}`,
-    `导出时间：${new Date().toLocaleString()}`,
+    `**题目**：${input.title}`,
+    `**训练来源**：${input.sourceLabel}`,
+    `**完成进度**：${progress.completed}/${progress.total} 关（${progress.percent}%）`,
+    `**生成时间**：${new Date().toLocaleString()}`,
+    "",
+    "---",
     "",
     ...stageSections,
     "## AI 使用记录",
     "",
     input.aiUsageNote || "本次训练未记录 AI 调用，或仅使用本地提示卡。",
     "",
-    "## 合规说明",
+    "## 合规声明",
     "",
-    "本报告用于学习复盘。AI 只提供提示、解释和检查，最终数据核验、模型判断、计算结果和论文表达由学生完成。",
+    "本报告仅用于学习复盘，不是可直接提交的比赛论文。数据来源、模型假设、计算结果和最终表述仍需学生自行核验与完成。",
   ].join("\n");
 }

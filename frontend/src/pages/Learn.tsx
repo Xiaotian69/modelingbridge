@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { classicProblems, codingTips, learningTracks, modelMethods, writingTips } from "../data/modelingContent";
+import { classicProblems, codingTips, getClassicProblemPracticeLink, learningTracks, modelMethods, recentTrainingCases, writingTips } from "../data/modelingContent";
 
 const tabs = ["全部", "预测", "优化", "评价", "统计", "机理", "网络"] as const;
 
@@ -32,6 +32,63 @@ export function LearnPage() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Recent MCM/ICM</p>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-950">近三年优先训练</h2>
+          </div>
+          <p className="max-w-2xl text-sm leading-6 text-slate-600">
+            先从题面读懂、数据处理、模型选择和论文表达四件事入手。每个案例都拆成建模、编程、写论文三条线，适合按周推进，也适合赛前集中复盘。
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          {recentTrainingCases.map((caseItem) => (
+            <article key={caseItem.slug} className="quiet-card interactive-card rounded-2xl p-5">
+              <div className="flex flex-wrap items-center gap-2 text-xs">
+                <span className="rounded-full bg-slate-950 px-2.5 py-1 font-semibold text-white">
+                  {caseItem.year}
+                  {caseItem.problem}
+                </span>
+                <span className="rounded-full bg-bridge-50 px-2.5 py-1 font-semibold text-bridge-800">{caseItem.priority}</span>
+                <span className="rounded-full bg-slate-100 px-2.5 py-1 text-slate-600">{caseItem.difficulty}</span>
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-slate-950">{caseItem.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{caseItem.positioning}</p>
+
+              <div className="mt-5 grid gap-4 xl:grid-cols-3">
+                <PracticeLine title="建模" items={caseItem.modelingLine.slice(0, 2)} />
+                <PracticeLine title="编程" items={caseItem.codingLine.slice(0, 2)} />
+                <PracticeLine title="论文" items={caseItem.paperLine.slice(0, 2)} />
+              </div>
+
+              <div className="mt-5 border-t border-slate-100 pt-4">
+                <p className="text-xs font-semibold text-slate-400">可对照的获奖论文路线</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {caseItem.paperRoutes.slice(0, 3).map((route) => (
+                    <span key={route.paperId} className="rounded-full bg-white px-2.5 py-1 text-xs text-slate-600 ring-1 ring-slate-200">
+                      {route.paperId}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {caseItem.methodSlugs.map((slug) => {
+                  const method = modelMethods.find((item) => item.slug === slug);
+                  return (
+                    <a key={slug} href={`#model-${slug}`} className="rounded-full bg-bridge-50 px-2.5 py-1 text-xs font-semibold text-bridge-800 hover:bg-bridge-100">
+                      {method?.name || slug}
+                    </a>
+                  );
+                })}
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -124,28 +181,38 @@ export function LearnPage() {
           </Link>
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-2">
-          {classicProblems.map((problem) => (
-            <article id={`problem-${problem.slug}`} key={problem.slug} className="quiet-card interactive-card scroll-mt-24 rounded-2xl p-5">
-              <div className="flex flex-wrap items-center gap-2 text-xs">
-                <span className="rounded-full bg-slate-950 px-2 py-0.5 font-semibold text-white">{problem.contest}</span>
-                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-slate-600">{problem.year}</span>
-                <span className="rounded-full bg-amber-50 px-2 py-0.5 text-amber-800">{problem.difficulty}</span>
-              </div>
-              <h3 className="mt-3 text-lg font-semibold text-slate-950">{problem.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-600">{problem.value}</p>
-              <p className="mt-3 rounded-xl border border-slate-200 bg-white p-3 text-sm leading-6 text-slate-700">{problem.simplifiedTask}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {problem.methods.map((slug) => {
-                  const method = modelMethods.find((item) => item.slug === slug);
-                  return (
-                    <a key={slug} href={`#model-${slug}`} className="rounded-full bg-bridge-50 px-2.5 py-1 text-xs font-semibold text-bridge-800">
-                      {method?.name || slug}
-                    </a>
-                  );
-                })}
-              </div>
-            </article>
-          ))}
+          {classicProblems.map((problem) => {
+            const practiceLink = getClassicProblemPracticeLink(problem);
+            return (
+              <article id={`problem-${problem.slug}`} key={problem.slug} className="quiet-card interactive-card scroll-mt-24 rounded-2xl p-5">
+                <div className="flex flex-wrap items-center gap-2 text-xs">
+                  <span className="rounded-full bg-slate-950 px-2 py-0.5 font-semibold text-white">{problem.contest}</span>
+                  <span className="rounded-full bg-slate-100 px-2 py-0.5 text-slate-600">{problem.year}</span>
+                  <span className="rounded-full bg-amber-50 px-2 py-0.5 text-amber-800">{problem.difficulty}</span>
+                </div>
+                <h3 className="mt-3 text-lg font-semibold text-slate-950">{problem.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{problem.value}</p>
+                <p className="mt-3 rounded-xl border border-slate-200 bg-white p-3 text-sm leading-6 text-slate-700">{problem.simplifiedTask}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {problem.methods.map((slug) => {
+                    const method = modelMethods.find((item) => item.slug === slug);
+                    return (
+                      <a key={slug} href={`#model-${slug}`} className="rounded-full bg-bridge-50 px-2.5 py-1 text-xs font-semibold text-bridge-800">
+                        {method?.name || slug}
+                      </a>
+                    );
+                  })}
+                </div>
+                <Link
+                  to={practiceLink.href}
+                  aria-label={practiceLink.ariaLabel}
+                  className="mt-4 inline-flex rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:border-bridge-400 hover:text-bridge-800"
+                >
+                  {practiceLink.label}
+                </Link>
+              </article>
+            );
+          })}
         </div>
       </section>
 
@@ -153,6 +220,19 @@ export function LearnPage() {
         <TipPanel title="编码技巧" items={codingTips} />
         <TipPanel title="论文写作技巧" items={writingTips} />
       </section>
+    </div>
+  );
+}
+
+function PracticeLine({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div>
+      <p className="text-sm font-semibold text-slate-950">{title}</p>
+      <ul className="mt-2 space-y-1 text-sm leading-6 text-slate-600">
+        {items.map((item) => (
+          <li key={item}>· {item}</li>
+        ))}
+      </ul>
     </div>
   );
 }

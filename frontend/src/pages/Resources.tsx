@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { listResources } from "../api/client";
+import { withTrialAccessCode } from "../trial/access";
 import type { ResourceFile, ResourceListResponse } from "../types";
 
-const kinds = ["全部", "赛题", "优秀论文", "提示词/模板"];
+const kinds = ["全部", "赛题", "优秀论文", "综合资料", "提示词/模板"];
 
 export function ResourcesPage() {
   const [query, setQuery] = useState("");
@@ -43,7 +44,7 @@ export function ResourcesPage() {
             赛题资源下载窗口
           </h1>
           <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-200 sm:text-base">
-            先把本地上传的美赛真题、优秀论文和提示词模板统一索引起来。后续你和我继续找题、上传资料，只要放进白名单资料夹，刷新页面就能下载。
+            先把本地上传的美赛真题、中文翻译、优秀论文、赛题解析和提示词模板统一索引起来。后续你和我继续找题、上传资料，只要放进白名单资料夹，刷新页面就能下载。
           </p>
         </div>
       </section>
@@ -145,7 +146,7 @@ function ResourceRow({ item }: { item: ResourceFile }) {
           <p className="mt-1 break-all text-xs leading-5 text-slate-500">{item.relative_path}</p>
         </div>
         <a
-          href={item.download_url}
+          href={withTrialAccessCode(item.download_url)}
           className="shrink-0 rounded-lg bg-slate-950 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-slate-800"
         >
           下载

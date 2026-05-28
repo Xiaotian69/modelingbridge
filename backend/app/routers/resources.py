@@ -1,8 +1,12 @@
 import base64
+import re
+import secrets
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse
+
+from app.config import settings
 
 router = APIRouter(prefix="/api", tags=["resources"])
 
@@ -22,6 +26,12 @@ RESOURCE_ROOTS = [
         "path": PROJECT_ROOT / "2006-2025年美赛优秀论文汇总【公众号：数模加油站】",
     },
     {
+        "key": "mcm_full_archive",
+        "title": "历年美赛赛题、翻译、优秀论文（中英文）、赛题解析等",
+        "kind": "综合资料",
+        "path": PROJECT_ROOT / "历年美赛赛题、翻译、优秀论文（中英文）、赛题解析等",
+    },
+    {
         "key": "prompts",
         "title": "美赛 Prompt 与论文模板",
         "kind": "提示词/模板",
@@ -30,6 +40,7 @@ RESOURCE_ROOTS = [
 ]
 
 DOWNLOADABLE_EXTENSIONS = {".pdf", ".docx", ".xlsx", ".xls", ".csv", ".zip", ".rar", ".7z", ".txt"}
+YEAR_PATTERN = re.compile(r"(?<!\d)(19\d{2}|20[0-2]\d)(?!\d)")
 
 
 def _encode_id(path: Path) -> str:
@@ -61,10 +72,10 @@ def _is_relative_to(path: Path, root: Path) -> bool:
 
 
 def _year_from_path(path: Path) -> str:
-    text = path.as_posix()
-    for year in range(2026, 1999, -1):
-        if str(year) in text:
-            return str(year)
+    for part in reversed(path.parts):
+        matches = YEAR_PATTERN.findall(part)
+        if matches:
+            return matches[-1]
     return "未知"
 
 
@@ -83,6 +94,14 @@ def _resource_row(path: Path, root: dict) -> dict:
         "relative_path": rel_to_root,
         "download_url": f"/api/resources/{_encode_id(path)}/download",
     }
+
+
+def _require_trial_access(provided_code: str) -> None:
+    expected_code = settings.trial_access_code.strip()
+    if not expected_code:
+        return
+    if not secrets.compare_digest(provided_code.strip(), expected_code):
+        raise HTTPException(status_code=403, detail="trial_access_required")
 
 
 def _iter_resources() -> list[dict]:
@@ -134,6 +153,7 @@ def list_resources(
 
 
 @router.get("/resources/{resource_id}/download")
-def download_resource(resource_id: str) -> FileResponse:
+def download_resource(resource_id: str, trial_code: str = Query(default="", max_length=120)) -> FileResponse:
+    _require_trial_access(trial_code)
     path = _decode_id(resource_id)
     return FileResponse(path, filename=path.name)

@@ -30,6 +30,12 @@ export type ClassicProblem = {
   deliverables: string[];
 };
 
+export type ClassicProblemPracticeLink = {
+  href: string;
+  label: string;
+  ariaLabel: string;
+};
+
 export type ContestEvent = {
   slug: string;
   name: string;
@@ -56,6 +62,29 @@ export type ResourcePack = {
   usage: string[];
 };
 
+export type RecentTrainingCase = {
+  slug: string;
+  title: string;
+  contest: "MCM" | "ICM";
+  year: string;
+  problem: string;
+  priority: "P0" | "P1";
+  difficulty: "入门友好" | "进阶训练";
+  sourceUrl: string;
+  localAssets: string[];
+  positioning: string;
+  modelingLine: string[];
+  codingLine: string[];
+  paperLine: string[];
+  methodSlugs: string[];
+  paperRoutes: {
+    paperId: string;
+    route: string;
+    learnPoint: string;
+  }[];
+  pitfalls: string[];
+};
+
 export const learningTracks = [
   {
     title: "零基础建模",
@@ -74,6 +103,95 @@ export const learningTracks = [
     duration: "72 小时节奏",
     focus: "选题、分工、求解、论文合稿",
     steps: ["开题 2 小时", "首版模型", "结果检验", "终稿检查"],
+  },
+];
+
+export const recentTrainingCases: RecentTrainingCase[] = [
+  {
+    slug: "mcm-2023c-wordle",
+    title: "2023C Predicting Wordle Results",
+    contest: "MCM",
+    year: "2023",
+    problem: "C",
+    priority: "P0",
+    difficulty: "入门友好",
+    sourceUrl: "https://www.contest.comap.org/undergraduate/contests/matrix/index.html",
+    localAssets: ["2023_MCM_Problem_C.pdf", "Problem_C_Data_Wordle.xlsx", "2023C O奖论文 12 篇"],
+    positioning: "用亲切的文字游戏数据训练特征工程、预测分布和英文结果表达。",
+    modelingLine: ["把报告人数预测、得分分布预测、难度分类拆成三个子问题", "从单词本身派生重复字母、元音、字母频率、词频等特征", "保留 baseline，再比较回归、随机森林、聚类等模型"],
+    codingLine: ["清洗 Excel 合并表头并重命名字段", "计算 Hard Mode 比例和平均猜测次数", "构造单词特征表并预测 1-6-X 得分分布"],
+    paperLine: ["解释每个单词特征为什么可能影响难度", "用误差指标和敏感性分析说明模型可信度", "最后写成给 NYT Puzzle Editor 的短建议"],
+    methodSlugs: ["regression-tree", "time-series", "clustering"],
+    paperRoutes: [
+      { paperId: "2300348", route: "GRU + 回归分析 + 网格搜索随机森林 + K-Means++", learnPoint: "学习如何把四个问题拆成预测、解释和分类三条线。" },
+      { paperId: "2301192", route: "SIRS/Prophet + 多元线性回归 + BP 神经网络 + K-Means++", learnPoint: "学习类比建模的解释力和边界。" },
+    ],
+    pitfalls: ["随机切分报告人数会造成时间泄漏", "只预测平均猜测次数会漏掉题目要求的完整分布", "难度分层必须回到单词特征解释"],
+  },
+  {
+    slug: "mcm-2024c-tennis-momentum",
+    title: "2024C Momentum in Tennis",
+    contest: "MCM",
+    year: "2024",
+    problem: "C",
+    priority: "P0",
+    difficulty: "进阶训练",
+    sourceUrl: "https://www.contest.comap.org/undergraduate/contests/matrix/index.html",
+    localAssets: ["2024_MCM_Problem_C_FINAL.pdf", "Wimbledon_featured_matches.csv", "data_dictionary.csv", "2024C O奖论文 11 篇"],
+    positioning: "把 momentum 这种模糊概念量化成点级时序指标，再做检验和预测。",
+    modelingLine: ["定义局部优势指标而不是直接把连续得分叫 momentum", "用滑动窗口、发球优势修正和随机性检验描述比赛走势", "把优势反转转成可预测的二分类或状态转移问题"],
+    codingLine: ["按 match_id 与 point_no 排序，先选决赛单场试跑", "构造 player1/player2 点级胜负变量与滑动窗口优势曲线", "标记优势反转点并输出候选影响因素表"],
+    paperLine: ["先定义 momentum 的数学含义", "用 match flow 曲线解释模型输出", "给教练 memo 写可执行而非玄学的建议"],
+    methodSlugs: ["regression-tree", "time-series", "clustering"],
+    paperRoutes: [
+      { paperId: "2401298", route: "发球/接发重加权 + 滑动窗口/AUC + 随机性检验 + 双时间贝叶斯网络", learnPoint: "学习先定义指标，再检验随机性的论文顺序。" },
+      { paperId: "2401445", route: "动态比赛指数 DPI + GBDT + DTW + 随机森林/HMM", learnPoint: "学习复杂状态指标如何组织成可读论文。" },
+    ],
+    pitfalls: ["忽略发球优势会高估 momentum", "只画曲线不做随机性对比说服力不够", "只分析决赛而不测试其他比赛会削弱泛化性"],
+  },
+  {
+    slug: "mcm-2025c-olympic-medals",
+    title: "2025C Models for Olympic Medal Tables",
+    contest: "MCM",
+    year: "2025",
+    problem: "C",
+    priority: "P0",
+    difficulty: "进阶训练",
+    sourceUrl: "https://www.comap.org/membership/member-resources/item/models-for-olympic-medal-tables",
+    localAssets: ["2025C O奖论文 15 篇", "COMAP 官方题面", "官方夏奥奖牌与运动员数据"],
+    positioning: "用奥运奖牌预测训练面板数据、排名预测、不确定性和因素解释。",
+    modelingLine: ["拆成奖牌预测、首枚奖牌国家、项目贡献、名帅效应四个子问题", "构造国家-年份面板数据并加入主场、历史奖牌、项目数量等特征", "用 baseline、随机森林、回归或 Poisson/Bootstrap 输出区间"],
+    codingLine: ["整理国家代码、年份、金牌数和总奖牌数", "训练 gold 与 total 两个目标的预测模型", "对无奖牌国家做首奖概率分类并输出解释特征"],
+    paperLine: ["预测表必须带区间而不是只有排名", "项目贡献要用图表解释国家优势", "名帅效应只能谨慎表达，避免把相关直接写成因果"],
+    methodSlugs: ["regression-tree", "time-series", "entropy-topsis"],
+    paperRoutes: [
+      { paperId: "2505964", route: "随机森林 + Monte Carlo + Poisson/线性回归 + 名帅模型", learnPoint: "学习预测、模拟和解释如何组合。" },
+      { paperId: "2507817", route: "网格搜索随机森林 + Logistic 回归 + 项目贡献比例 + Lasso", learnPoint: "学习预测和首奖分类的任务接口。" },
+      { paperId: "2510862", route: "Stacking ensemble + SHAP + PSM-DID", learnPoint: "作为进阶材料理解因果表达边界。" },
+    ],
+    pitfalls: ["只给奖牌排名没有预测区间", "把金牌数和总奖牌数混成一个目标", "名帅效应缺少对照组时不能强写因果"],
+  },
+  {
+    slug: "mcm-2025b-sustainable-tourism",
+    title: "2025B Managing Sustainable Tourism",
+    contest: "MCM",
+    year: "2025",
+    problem: "B",
+    priority: "P1",
+    difficulty: "进阶训练",
+    sourceUrl: "https://www.comap.org/membership/member-resources/item/managing-sustainable-tourism",
+    localAssets: ["2025B O奖论文 7 篇", "COMAP 官方题面"],
+    positioning: "用 Juneau 旅游问题训练经济、社会、环境三目标评价与政策优化。",
+    modelingLine: ["建立经济收益、居民压力、环境影响三类指标", "比较 AHP/熵权、动态模型和多目标规划", "把税率、游客上限、财政分配作为政策变量"],
+    codingLine: ["整理游客量、收入、环境代理变量和政策参数", "计算可持续综合得分并做参数敏感性", "用 SLSQP 或动态规划搜索政策方案"],
+    paperLine: ["先解释三目标冲突，再给政策权衡", "结果部分必须区分短期收益和长期可持续性", "memo 要写给旅游委员会而不是写成模型说明书"],
+    methodSlugs: ["entropy-topsis", "ahp", "linear-programming", "differential-equation"],
+    paperRoutes: [
+      { paperId: "2502617", route: "经济/社会/环境子模型 + SLSQP Pareto 优化", learnPoint: "学习多目标优化的论文组织方式。" },
+      { paperId: "2503268", route: "动态系统 + AHP 综合评价 + 敏感性分析", learnPoint: "学习评价模型和动态系统的组合。" },
+      { paperId: "2504448", route: "游客需求模型 + 环境熵权指标 + 动态规划", learnPoint: "学习政策变量如何进入模型。" },
+    ],
+    pitfalls: ["只追求游客收入会偏离可持续目标", "指标权重没有来源会削弱可信度", "政策建议必须能对应模型变量"],
   },
 ];
 
@@ -322,6 +440,36 @@ export const classicProblems: ClassicProblem[] = [
     deliverables: ["调度量矩阵", "总成本", "不可行约束说明", "道路中断情景"],
   },
 ];
+
+const classicProblemCaseSlugs: Record<string, string> = {
+  "traffic-police-platform": "traffic-police-platform-demo",
+  "wine-evaluation": "wine-evaluation-demo",
+  "credit-decision": "credit-decision-demo",
+  "wordle-prediction": "wordle-prediction-demo",
+  "bike-dispatch": "bike-demand-demo",
+  "canteen-service": "evaluation-topsis-demo",
+  "emergency-dispatch": "optimization-dispatch-demo",
+};
+
+export function getClassicProblemPracticeLink(problem: ClassicProblem): ClassicProblemPracticeLink {
+  const caseSlug = classicProblemCaseSlugs[problem.slug];
+  if (caseSlug) {
+    return {
+      href: `/cases/${caseSlug}`,
+      label: "查看完整拆解",
+      ariaLabel: `${problem.title} 查看完整拆解`,
+    };
+  }
+
+  const query = new URLSearchParams();
+  query.set("problem_text", `${problem.title}\n${problem.simplifiedTask}`);
+  query.set("attachment_note", `来自经典题改编：${problem.source} ${problem.year}。请把输出作为学习提示，不生成可直接提交的论文。`);
+  return {
+    href: `/workbench?${query.toString()}`,
+    label: "带入工作台",
+    ariaLabel: `${problem.title} 带入工作台`,
+  };
+}
 
 export const codingTips = [
   {
@@ -584,6 +732,13 @@ export const resourcePacks: ResourcePack[] = [
     usage: ["拆解摘要结构", "学习图表表达", "对照模型检验写法", "提炼英文论文模板"],
   },
   {
+    title: "历年美赛赛题、翻译、优秀论文与解析归档",
+    localPath: "E:/数模网站开发/历年美赛赛题、翻译、优秀论文（中英文）、赛题解析等",
+    summary: "本地已识别 419 个文件，其中 PDF 381 个、ZIP 24 个、RAR 8 个、DOCX 4 个，覆盖 2006-2025 年多套 O 奖论文、中文摘要、英文原文、赛题和解析资料。",
+    files: "2006-2024 O 奖论文合集、2018-2020 中文摘要+英文原文+赛题、2024/2025 O 奖论文集",
+    usage: ["补齐原题入口", "对照中英文题面", "按年份/题号抽取获奖论文路线", "沉淀近三年真题拆解"],
+  },
+  {
     title: "美赛 Prompt 与论文模板",
     localPath: "E:/数模网站开发/数学建模Prompt",
     summary: "本地已识别 559 个文件，含 PDF、DOCX、XLSX 和多套提示词资料。",
@@ -597,4 +752,8 @@ export function findModelMethod(name: string) {
   return modelMethods.find((method) =>
     [method.name, ...method.aliases].some((alias) => normalized.includes(alias.toLowerCase()) || alias.toLowerCase().includes(normalized)),
   );
+}
+
+export function getRecentTrainingCase(slug: string): RecentTrainingCase | null {
+  return recentTrainingCases.find((item) => item.slug === slug) ?? null;
 }

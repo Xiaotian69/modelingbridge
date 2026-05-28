@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { CoachPanel } from "../components/quest/CoachPanel";
 import { getCase } from "../api/client";
+import { getCaseQuestSeed, getModelCardsForCase, getStageSeed } from "../quest/content";
 import {
   buildQuestReportMarkdown,
   getQuestProgress,
@@ -65,6 +66,9 @@ export function QuestPage() {
 
   const activeStage = questStages.find((stage) => stage.id === activeStageId) ?? questStages[0];
   const activeState = states.find((state) => state.stageId === activeStage.id) ?? states[0];
+  const caseSeed = getCaseQuestSeed(caseSlug);
+  const activeSeed = getStageSeed(caseSlug, activeStage.id);
+  const modelCards = activeStage.id === "model" ? getModelCardsForCase(caseSlug) : [];
   const progress = getQuestProgress(states);
   const title = caseDetail?.title ?? "自定义训练题";
   const sourceLabel = caseDetail ? `案例训练副本：${caseDetail.title}` : "默认示例题";
@@ -84,6 +88,7 @@ export function QuestPage() {
     title,
     sourceLabel,
     states,
+    checks,
     aiUsageNote: "本次闯关第一版使用本地 AI 教练提示卡；如跳转工作台调用大模型，请在最终报告中补充模型、时间和人工确认记录。",
   });
 
@@ -182,11 +187,59 @@ export function QuestPage() {
 
             <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <p className="text-sm font-semibold text-slate-950">当前任务</p>
-              <p className="mt-2 text-sm leading-7 text-slate-700">{activeStage.task}</p>
+              <p className="mt-2 text-sm leading-7 text-slate-700">{activeSeed?.taskBrief ?? activeStage.task}</p>
             </div>
 
+            {activeSeed && (
+              <div className="mt-5 grid gap-3 md:grid-cols-2">
+                <section className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <p className="text-sm font-semibold text-slate-950">常见错误</p>
+                  <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-700">
+                    {activeSeed.commonMistakes.map((item) => (
+                      <li key={item}>· {item}</li>
+                    ))}
+                  </ul>
+                </section>
+                <section className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <p className="text-sm font-semibold text-slate-950">学生必须自己完成</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-700">{activeSeed.mustDoByStudent}</p>
+                  <p className="mt-3 text-xs leading-5 text-amber-700">{activeSeed.complianceNote}</p>
+                </section>
+              </div>
+            )}
+
+            {activeSeed?.outputExample && (
+              <details className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
+                <summary className="cursor-pointer text-sm font-semibold text-slate-950">通关产物示例</summary>
+                <pre className="mt-3 whitespace-pre-wrap rounded-xl bg-slate-50 p-3 text-xs leading-5 text-slate-700">{activeSeed.outputExample}</pre>
+              </details>
+            )}
+
+            {modelCards.length > 0 && (
+              <section className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
+                <p className="text-sm font-semibold text-slate-950">模型参考卡</p>
+                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                  {modelCards.map((card) => (
+                    <article key={card.modelId} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-sm font-semibold text-slate-950">{card.name}</p>
+                      <p className="mt-1 text-xs text-slate-500">{card.family} · {card.level}</p>
+                      <p className="mt-2 text-sm leading-6 text-slate-700">{card.fitWhen}</p>
+                      <details className="mt-2 text-xs leading-5 text-slate-600">
+                        <summary className="cursor-pointer font-semibold text-slate-700">新手判断问题</summary>
+                        <ul className="mt-2 space-y-1">
+                          {card.noviceQuestions.slice(0, 3).map((question) => (
+                            <li key={question}>· {question}</li>
+                          ))}
+                        </ul>
+                      </details>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )}
+
             <label className="mt-5 block text-sm font-semibold text-slate-800">
-              {activeStage.userPrompt}
+              {activeSeed?.studentPrompt ?? activeStage.userPrompt}
               <textarea
                 className="mt-2 min-h-40 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm leading-6 focus:border-bridge-600 focus:outline-none focus:ring-2 focus:ring-bridge-600/20"
                 value={activeState.answer}
@@ -263,7 +316,14 @@ export function QuestPage() {
                 </button>
               ))}
             </div>
-            <CoachPanel mode={coachMode} stage={activeStage} answer={activeState.answer} />
+            <CoachPanel
+              mode={coachMode}
+              stage={activeStage}
+              answer={activeState.answer}
+              caseTitle={caseSeed?.title ?? title}
+              problemText={problemText}
+              stageSeed={activeSeed}
+            />
             <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-5 text-amber-950">
               AI 可以提示、举例和检查，但不能替你完成最终模型判断，也不会生成可直接提交的论文正文。
             </div>

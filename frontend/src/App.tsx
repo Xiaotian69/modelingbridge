@@ -12,27 +12,30 @@ import { RecordsPage } from "./pages/Records";
 import { ResourcesPage } from "./pages/Resources";
 import { ToolsPage } from "./pages/Tools";
 import { WorkbenchPage } from "./pages/Workbench";
+import { TrialGate } from "./trial/TrialGate";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="quest" element={<QuestPage />} />
-          <Route path="learn" element={<LearnPage />} />
-          <Route path="workbench" element={<WorkbenchPage />} />
-          <Route path="feedback" element={<FeedbackPage />} />
-          <Route path="cases" element={<CasesPage />} />
-          <Route path="cases/:slug" element={<CaseDetailPage />} />
-          <Route path="resources" element={<ResourcesPage />} />
-          <Route path="calendar" element={<CalendarPage />} />
-          <Route path="tools" element={<ToolsPage />} />
-          <Route path="records" element={<RecordsPage />} />
-          <Route path="about" element={<AboutPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
+      <TrialGate>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="quest" element={<QuestPage />} />
+            <Route path="learn" element={<LearnPage />} />
+            <Route path="workbench" element={<WorkbenchPage />} />
+            <Route path="feedback" element={<FeedbackPage />} />
+            <Route path="cases" element={<CasesPage />} />
+            <Route path="cases/:slug" element={<CaseDetailPage />} />
+            <Route path="resources" element={<ResourcesPage />} />
+            <Route path="calendar" element={<CalendarPage />} />
+            <Route path="tools" element={<ToolsPage />} />
+            <Route path="records" element={<RecordsPage />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+        </Routes>
+      </TrialGate>
     </BrowserRouter>
   );
 }

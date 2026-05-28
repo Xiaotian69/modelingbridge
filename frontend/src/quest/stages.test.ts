@@ -68,12 +68,18 @@ describe("buildQuestReportMarkdown", () => {
       title: "共享单车需求预测",
       sourceLabel: "案例训练副本",
       states,
+      checks: {
+        read_problem: [true, true, false],
+      },
       aiUsageNote: "AI only gave hints.",
     });
 
-    expect(report).toContain("# 数模闯关通关报告");
-    expect(report).toContain("## 我的判断");
+    expect(report).toContain("# 数模闯关训练营 · 通关报告");
+    expect(report).toContain("**完成进度**：1/7 关");
+    expect(report).toContain("### 我的判断");
     expect(report).toContain("My own problem understanding");
+    expect(report).toContain("- [x] 能说清题目目标");
+    expect(report).toContain("- [ ] 标出仍需确认的信息");
     expect(report).toContain("## AI 使用记录");
     expect(report).toContain("AI only gave hints.");
   });

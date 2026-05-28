@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     mimo_base_url: str = "https://token-plan-cn.xiaomimimo.com/v1"
     mimo_model: str = "mimo-v2.5"
     backend_cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+    trial_access_code: str = ""
 
     @property
     def cors_origins(self) -> list[str]:
