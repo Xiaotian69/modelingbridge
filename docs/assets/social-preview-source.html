@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280, initial-scale=1">
+  <title>ModelingBridge social preview</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 1280px; height: 640px; overflow: hidden; }
+    body { color: #f8fafc; font-family: Inter, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: radial-gradient(circle at 82% 18%, rgba(45,212,191,.25), transparent 32%), linear-gradient(125deg, #08111f, #101a27 54%, #0d2b2c); }
+    .canvas { position: relative; width: 100%; height: 100%; padding: 72px 78px; display: grid; grid-template-columns: 590px 1fr; gap: 50px; align-items: center; isolation: isolate; }
+    .canvas::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .27; background-image: linear-gradient(rgba(94,234,212,.11) 1px, transparent 1px), linear-gradient(90deg, rgba(94,234,212,.11) 1px, transparent 1px); background-size: 50px 50px; mask-image: linear-gradient(90deg, #000, transparent 76%); }
+    .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 50px; font-size: 22px; font-weight: 760; letter-spacing: .08em; }
+    .mark { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; color: #07111f; background: #5eead4; font-weight: 850; }
+    .kicker { margin: 0 0 17px; color: #99f6e4; font-size: 15px; font-weight: 800; letter-spacing: .19em; }
+    h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 57px; line-height: 1.04; font-weight: 500; letter-spacing: -.03em; }
+    .subtitle { margin: 25px 0 0; max-width: 540px; color: rgba(248,250,252,.78); font-size: 21px; line-height: 1.45; }
+    .card { position: relative; width: 530px; height: 410px; padding: 26px; border: 1px solid rgba(255,255,255,.17); border-radius: 28px; background: rgba(255,255,255,.07); box-shadow: 0 32px 78px rgba(0,0,0,.42); transform: rotate(1deg); overflow: hidden; }
+    .card img { width: 650px; height: auto; display: block; transform: translate(-68px, 0); border-radius: 15px; }
+    .steps { position: absolute; right: 35px; bottom: 26px; display: flex; gap: 8px; }
+    .steps span { display: grid; place-items: center; min-width: 76px; height: 33px; padding: 0 12px; border-radius: 9px; color: #07201e; background: #99f6e4; font-size: 11px; font-weight: 850; letter-spacing: .08em; box-shadow: 0 10px 20px rgba(0,0,0,.26); }
+  </style>
+</head>
+<body>
+  <main class="canvas">
+    <section>
+      <div class="brand"><span class="mark">模</span><span>MODELINGBRIDGE · 模桥</span></div>
+      <p class="kicker">FROM PROBLEM TO PROOF</p>
+      <h1>AI learning, with the reasoning left visible.</h1>
+      <p class="subtitle">AI-guided mathematical modeling for beginners.</p>
+    </section>
+    <section class="card">
+      <img src="screenshots/guided-workbench.png" alt="">
+      <div class="steps"><span>FRAME</span><span>MODEL</span><span>VALIDATE</span></div>
+    </section>
+  </main>
+</body>
+</html>
