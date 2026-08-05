@@ -1,101 +1,170 @@
-# ModelingBridge / 模桥 — 本地运行指南（小白向）
+# ModelingBridge
 
-本仓库已按 `docs/phase1` 的规划搭好 **第一版可运行网站**：首页、学习路径、AI 引导工作台（步骤卡片流）、案例库、工具箱、学习记录（本机演示）、合规说明，以及 **FastAPI 后端**（案例接口 + 拆题分析接口）。
+![ModelingBridge — From a messy problem to a testable model](docs/assets/hero.png)
 
-页面结构与文案已对齐你提供的《数学建模AI引导式学习平台网站MVP设计方案》（2026-05 Word 版）：无法直接读取 `.docx` 时，已将正文提取为 **`docs/mvp_design_extracted.txt`** 便于检索对照。
+<p align="center">
+  <a href="README.zh-CN.md">简体中文</a> ·
+  <a href="https://modelingbridge.vercel.app">Live Demo</a>
+</p>
 
-你的微信里的《数模引路 项目计划书》若是 Word 版，无法在此环境直接打开；**产品口径**仍以仓库内 `docs/phase1` 与上述 MVP 方案为准。
+<p align="center">
+  <img alt="React 18" src="https://img.shields.io/badge/React-18-149eca?logo=react&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.6-3178c6?logo=typescript&logoColor=white">
+  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white">
+  <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-0f766e">
+</p>
 
----
+ModelingBridge (模桥) is an AI-guided mathematical modeling learning platform for beginners. It turns an open-ended problem into a sequence of decisions the learner can inspect, confirm, and revise—from framing and data requirements to model selection, implementation, validation, and paper structure.
 
-## 看不懂命令？用最简办法（Windows）
+> The public demo is currently a trial deployment. The repository also runs locally without model credentials by using deterministic demo output.
 
-1. 确认已安装 **Python 3.11+** 和 **Node.js LTS**（见下一节）。  
-2. 在资源管理器中打开本文件夹 `数模网站开发`。  
-3. **先双击** `启动后端.bat`，等窗口里出现 `Backend: http://127.0.0.1:8000`（**不要关这个窗口**）。  
-4. **再双击** `启动前端.bat`，按窗口里提示的地址（一般是 `http://127.0.0.1:5173`）用浏览器打开。  
+## Learn modeling as a process
 
-脚本里使用 **英文提示**，避免在中文 Windows 的 CMD 下出现乱码、把整行当成“命令”执行。  
-**不要在项目根目录执行 `npm run dev`**：`package.json` 在 `frontend` 文件夹里，请只通过 `启动前端.bat` 启动。
+ModelingBridge is built around a simple belief: learning modeling means practicing judgment, not receiving a finished paper. The interface makes the reasoning path visible, asks the learner to confirm each stage, and keeps AI in a coaching role.
 
-更白话的步骤说明见同目录下的 **`怎么运行.txt`**。
+The current product includes:
 
----
+- a seven-checkpoint quest for deliberate practice;
+- an eight-step AI workbench for problem-to-paper scaffolding;
+- eight guided cases and a searchable modeling-method map;
+- local learning records, exportable summaries, tools, resources, and a contest calendar;
+- explicit reminders to verify data, assumptions, constraints, and conclusions.
 
-## 你需要提前安装
+## Guided workflow
 
-1. **Node.js LTS**（自带 npm）：用于前端  
-   下载：https://nodejs.org/
-2. **Python 3.11+**：用于后端  
-   下载：https://www.python.org/downloads/
+| Stage | Learner output |
+| --- | --- |
+| Frame | Goals, constraints, subproblems, and expected deliverables |
+| Choose | Candidate model families with assumptions and trade-offs |
+| Build | Data fields, preprocessing plan, and an implementation scaffold |
+| Validate | Error, robustness, sensitivity, and constraint checks |
+| Communicate | A paper outline and traceable learning notes—not a submitted paper |
 
-安装完成后，打开终端（PowerShell），`cd` 到本仓库根目录：`e:\数模网站开发`
+## Features
 
-## 一、启动后端（必须先开）
+- **Quest mode** — complete a modeling problem through seven learner-owned checkpoints.
+- **Guided workbench** — move through import, task framing, data, model, code, interpretation, validation, and writing.
+- **Case library** — study eight teaching cases without presenting them as official contest solutions.
+- **Method map** — connect recommendations to beginner-friendly cards for optimization, forecasting, evaluation, and simulation methods.
+- **Provider-aware AI** — use configured DeepSeek, MiMo, or another OpenAI-compatible endpoint; fall back to deterministic demo output when credentials are absent or a request fails.
+- **Local progress** — quest state and learning records remain in browser storage unless you export or clear them.
 
-```powershell
-cd e:\数模网站开发\backend
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+## Screenshots
+
+| Guided workbench | Case library |
+| --- | --- |
+| ![Eight-step guided workbench with a synthetic bike-demand problem](docs/assets/screenshots/guided-workbench.png) | ![Teaching case library with eight modeling practice cases](docs/assets/screenshots/case-library.png) |
+
+| Home | Mobile quest |
+| --- | --- |
+| ![ModelingBridge home page and modeling-method map](docs/assets/screenshots/home.png) | ![Seven-checkpoint modeling quest on mobile](docs/assets/screenshots/mobile-path.png) |
+
+Screenshots were captured from the local application with repository-provided demo content and no model credentials or personal records.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    B[Browser] --> F[React + Vite frontend]
+    F --> A[FastAPI API]
+    A --> C[Case JSON and local resources]
+    A --> D[Deterministic demo fallback]
+    A -. optional .-> L[OpenAI-compatible provider]
+    F --> S[Browser local storage]
 ```
 
-（可选）在 `backend` 目录新建 `.env`，填入大模型密钥（OpenAI 兼容接口，例如 DeepSeek）：
+The frontend proxies `/api` to FastAPI during local development. In production, set `VITE_API_BASE_URL` to the deployed API origin.
 
-```text
-LLM_API_KEY=你的密钥
+## Quick start
+
+Requirements: Node.js LTS and Python 3.11+.
+
+1. Start the backend:
+
+   ```bash
+   cd backend
+   python -m venv .venv
+   # Windows: .venv\Scripts\activate
+   # macOS/Linux: source .venv/bin/activate
+   pip install -r requirements.txt
+   uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+   ```
+
+2. In another terminal, start the frontend:
+
+   ```bash
+   cd frontend
+   npm ci
+   npm run dev
+   ```
+
+3. Open `http://127.0.0.1:5173`. The health endpoint is `http://127.0.0.1:8000/api/health`.
+
+On Windows, `启动后端.bat` and `启动前端.bat` provide the same two-process setup.
+
+## Configuration
+
+The backend works without an API key. For live model output, create `backend/.env` and configure an OpenAI-compatible provider:
+
+```dotenv
+LLM_PROVIDER=deepseek
+LLM_API_KEY=your_key_here
 LLM_BASE_URL=https://api.deepseek.com/v1
 LLM_MODEL=deepseek-chat
 ```
 
-不配密钥也可以运行：拆题接口会返回 **演示用结构化结果**，用于熟悉流程。
+Optional deployment settings:
 
-启动服务：
-
-```powershell
-uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-```
-
-浏览器访问 `http://127.0.0.1:8000/api/health` 应看到 `{"ok":true}`。
-
-## 二、启动前端
-
-新开一个终端：
-
-```powershell
-cd e:\数模网站开发\frontend
-npm install
-npm run dev
-```
-
-终端里会显示本地地址（一般是 `http://127.0.0.1:5173`）。用浏览器打开即可。
-
-前端已通过 Vite 代理把 `/api` 转到 `http://127.0.0.1:8000`，因此 **前后端要同时运行**。
-
-## 三、建议你第一次点击哪里
-
-1. 首页 → **开始 AI 拆题**  
-2. 工作台左侧用示例题目直接点 **开始分析**  
-3. 依次勾选 4 个「人工确认」复选框，阅读行动清单  
-4. 打开 **案例库** → 进入「共享单车」演示案例对照结构  
-
-## 四、目录说明（你只需要知道这几项）
-
-| 路径 | 作用 |
+| Variable | Purpose |
 | --- | --- |
-| `frontend/` | 网站界面（React + Vite + Tailwind） |
-| `backend/` | 接口服务（FastAPI） |
-| `cases/` | 案例 JSON（可继续加文件扩展案例库） |
-| `docs/phase1/` | 产品/信息架构/流程说明 |
+| `BACKEND_CORS_ORIGINS` | Comma-separated frontend origins allowed by FastAPI |
+| `VITE_API_BASE_URL` | Public backend origin used by the Vite build |
+| `TRIAL_ACCESS_CODE` / `VITE_TRIAL_ACCESS_CODE` | Lightweight trial gate; not a production authentication system |
 
-## 五、常见问题
+Never commit `.env` files or real credentials. Model prompts and submitted problem text are sent to the configured provider only when a live provider is selected and available.
 
-**案例列表是空的：** 确认 `cases/` 下有 `*.json`，且后端是从 `backend` 目录启动的（本项目的相对路径已按此约定）。  
+## Testing
 
-**工作台报网络错误：** 确认后端 `8000` 已启动，且前端 `npm run dev` 正在运行。  
+Frontend:
 
-**大模型输出格式报错回退演示：** 检查 `LLM_BASE_URL` 是否为 **OpenAI 兼容** 的 `/v1/chat/completions`，以及模型名是否正确。
+```bash
+cd frontend
+npm ci
+npm test
+npm run build
+```
 
----
+Backend development dependencies and tests:
 
-如需把「数模引路」品牌名、配色或学校协会信息改成你的版本，告诉我文案与偏好即可继续改一版。
+```bash
+cd backend
+python -m venv .venv
+# activate the environment first
+pip install -r requirements-dev.txt
+python -m pytest tests -q
+```
+
+Some resource-root tests expect the optional, gitignored local archives documented by the resource module. The web app itself skips archive roots that are not present.
+
+## Deployment
+
+- **Frontend:** Vercel, with `frontend/` as the root and `dist/` as the output directory.
+- **Backend:** Render, using the repository's [`render.yaml`](render.yaml).
+- **Guide:** see [`docs/deploy-vercel-render.md`](docs/deploy-vercel-render.md).
+
+## Responsible AI and learning boundaries
+
+ModelingBridge is a learning aid, not an answer-submission service. Learners remain responsible for data provenance, mathematical assumptions, code correctness, validation, citations, and final writing. Generated suggestions can be incomplete or wrong; verify them before using them in academic work or decisions.
+
+Bundled cases are teaching examples. External archives and source materials are intentionally excluded from Git and retain their original rights and provenance.
+
+## Roadmap
+
+- Make resource provenance and optional archive setup easier to inspect.
+- Add stronger end-to-end coverage for the frontend/backend learning loop.
+- Improve accessible mobile navigation and export formats.
+- Expand case authoring without turning the library into an answer bank.
+
+## License
+
+Code in this repository is available under the [MIT License](LICENSE). Third-party learning materials and external archives are not relicensed by this repository.
