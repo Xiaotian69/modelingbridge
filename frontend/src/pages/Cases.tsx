@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listCases } from "../api/client";
+import { listLocalCases } from "../data/localCases";
 import { classicProblems, getClassicProblemPracticeLink, modelMethods, recentTrainingCases, resourcePacks } from "../data/modelingContent";
 import type { CaseSummary } from "../types";
 
@@ -10,8 +11,11 @@ export function CasesPage() {
 
   useEffect(() => {
     listCases()
-      .then(setItems)
-      .catch(() => setErr("无法加载案例列表，请确认后端已启动（见项目 README）。"));
+      .then((remoteCases) => setItems(remoteCases.length ? remoteCases : listLocalCases()))
+      .catch(() => {
+        setItems(listLocalCases());
+        setErr("当前使用内置教学案例，在线案例接口尚未连接。");
+      });
   }, []);
 
   return (
@@ -36,9 +40,9 @@ export function CasesPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Guided Cases</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-950">完整教学案例</h2>
           </div>
-          {!err && <p className="text-sm font-medium text-slate-600">当前 {items.length} 个</p>}
+          <p className="text-sm font-medium text-slate-600">当前 {items.length} 个</p>
         </div>
-        {err && <p className="mt-4 text-sm text-red-600">{err}</p>}
+        {err && <p className="mt-4 text-sm text-amber-700">{err}</p>}
         <div className="mt-8 grid gap-4 lg:grid-cols-3">
           {items.map((c) => (
             <Link key={c.slug} to={`/cases/${c.slug}`} className="quiet-card interactive-card rounded-3xl p-5">
@@ -51,7 +55,7 @@ export function CasesPage() {
               <p className="mt-4 text-xs text-slate-500">适合：{c.audience}</p>
             </Link>
           ))}
-          {!err && items.length === 0 && (
+          {items.length === 0 && (
             <p className="text-sm text-slate-600">暂无案例数据，请检查后端 `cases/` 目录是否可读。</p>
           )}
         </div>
