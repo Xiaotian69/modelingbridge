@@ -164,6 +164,7 @@ export function WorkbenchPage() {
                 AI Studio
               </p>
               <h1 className="mt-3 text-3xl font-semibold">AI 辅助建模工作台</h1>
+              {!providers.some(p => p.enabled) && <p role="status" className="mt-3 text-sm text-amber-100">AI 在线服务暂未开放。当前可学习建模流程；演示结果不代表实时 AI 回复。</p>}
               <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-200">
                 从题面生成拆题、数据、模型、代码和检验路径。模型建议会连接到学习卡，方便继续追问和补课。
               </p>

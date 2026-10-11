@@ -44,7 +44,7 @@ export function ResourcesPage() {
             赛题资源下载窗口
           </h1>
           <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-200 sm:text-base">
-            先把本地上传的美赛真题、中文翻译、优秀论文、赛题解析和提示词模板统一索引起来。后续你和我继续找题、上传资料，只要放进白名单资料夹，刷新页面就能下载。
+            查找赛题、优秀论文与学习模板。文件列表和下载需要资料服务连接；服务未开放时，可先浏览知识库中的经典题型与静态教学案例。
           </p>
         </div>
       </section>
@@ -106,7 +106,7 @@ export function ResourcesPage() {
         </aside>
 
         <main className="space-y-5">
-          {error && <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">{error}</div>}
+          {error && <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">{error}。资料服务暂不可用，当前无法提供文件下载。请先访问导航中的知识库，或页脚的案例库。</div>}
           {!error && Object.keys(grouped).length === 0 && (
             <div className="quiet-card rounded-3xl p-8 text-sm text-slate-600">暂无匹配资源。可以换个关键词，或把新资料放进资料包目录后刷新。</div>
           )}

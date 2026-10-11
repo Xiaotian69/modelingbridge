@@ -77,12 +77,13 @@ export function CaseDetailPage() {
   if (!slug) return null;
 
   return (
-    <div className="hairline-grid">
+    <div className="hairline-grid" data-route-pending={!c && !err || undefined} aria-busy={!c && !err}>
     <div className="mx-auto max-w-7xl px-4 py-10">
       <Link to="/cases" className="text-sm font-semibold text-bridge-700 hover:underline">
         返回例题库
       </Link>
       {err && <p className="mt-4 text-sm text-red-600">{err}</p>}
+      {!c && !err && <p role="status" className="page-loading">正在加载教学案例…</p>}
       {c && (
         <article className="mt-6">
           <header className="premium-shell rounded-3xl p-6 text-white">

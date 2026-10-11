@@ -18,8 +18,8 @@ describe("Layout", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("link", { name: "学习" })).toHaveAttribute("href", "/learn");
-    expect(screen.getByRole("link", { name: "日历" })).toHaveAttribute("href", "/calendar");
-    expect(screen.getByRole("link", { name: "案例" })).toHaveAttribute("href", "/cases");
+    expect(screen.getByRole("link", { name: "知识库" })).toHaveAttribute("href", "/learn");
+    expect(screen.getByRole("link", { name: "赛事日历" })).toHaveAttribute("href", "/calendar");
+    expect(screen.getByRole("link", { name: "案例库" })).toHaveAttribute("href", "/cases");
   });
 });
