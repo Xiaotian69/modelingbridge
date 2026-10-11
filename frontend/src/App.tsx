@@ -23,6 +23,9 @@ const FeedbackPage = lazy(() =>
 const LearnPage = lazy(() =>
   import("./pages/Learn").then((m) => ({ default: m.LearnPage })),
 );
+const CoursePage = lazy(() => import("./pages/Course").then(m => ({ default: m.CoursePage })));
+const PracticePage = lazy(() => import("./pages/Practice").then(m => ({ default: m.PracticePage })));
+const ModelReferencePage = lazy(() => import("./pages/ModelReference").then(m => ({ default: m.ModelReferencePage })));
 const QuestPage = lazy(() =>
   import("./pages/Quest").then((m) => ({ default: m.QuestPage })),
 );
@@ -49,6 +52,9 @@ export default function App() {
             <Route index element={<HomePage />} />
             <Route path="quest" element={<QuestPage />} />
             <Route path="learn" element={<LearnPage />} />
+            <Route path="learn/linear-programming" element={<CoursePage />} />
+            <Route path="learn/reference" element={<ModelReferencePage />} />
+            <Route path="practice/linear-programming" element={<PracticePage />} />
             <Route path="workbench" element={<WorkbenchPage />} />
             <Route path="feedback" element={<FeedbackPage />} />
             <Route path="cases" element={<CasesPage />} />
