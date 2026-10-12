@@ -10,7 +10,9 @@ import { learning, useLearning } from "../state/learning";
 import type { HelpLevel } from "../state/learningStore";
 import { setReturnTicket } from "../state/returnTicket";
 import { HelpLadder } from "./HelpLadder";
+import { Collapse } from "../components/motion/Collapse";
 
+const FEEDBACK_ID = "exercise-feedback";
 const statusText = { correct: "回答正确", incorrect: "还不对", partial: "部分正确" } as const;
 
 /**
@@ -43,8 +45,16 @@ export function ExerciseView({
   const [restored, setRestored] = useState(
     () => !!record && (record.draft !== undefined || record.attempts > 0 || record.helpLevel > 0),
   );
-  const [result, setResult] = useState<Evaluation | null>(null);
+  // Coming back to a submitted question shows the same feedback again: it is recomputed
+  // from the saved answer by the deterministic grader, only if it still matches the record.
+  const [result, setResult] = useState<Evaluation | null>(() => {
+    if (!record?.lastStatus || record.draft === undefined) return null;
+    const again = evaluate(q, record.draft);
+    return again.status === record.lastStatus ? again : null;
+  });
+  const [submissions, setSubmissions] = useState(0);
   const [helpOpen, setHelpOpen] = useState(() => (record?.helpLevel ?? 0) > 0);
+  const [helpMounted, setHelpMounted] = useState(helpOpen);
   const [level, setLevel] = useState<Exclude<HelpLevel, 0>>(
     () => (record?.helpLevel ? record.helpLevel : 1) as Exclude<HelpLevel, 0>,
   );
@@ -56,6 +66,7 @@ export function ExerciseView({
   const solved = record?.lastStatus === "correct";
   const struggling = attempts >= 2 && !solved;
   const showNudge =
+    submissions > 0 &&
     !!result &&
     (result.status === "incorrect" || result.status === "partial") &&
     attempts >= 2 &&
@@ -71,11 +82,13 @@ export function ExerciseView({
   function submit() {
     const value = evaluate(q, answer);
     setResult(value);
+    setSubmissions((n) => n + 1);
     setRestored(false);
     if (value.status !== "invalid") learning.recordSubmission(q.id, value.status);
   }
   function openLevel(value: Exclude<HelpLevel, 0>) {
     setHelpOpen(true);
+    setHelpMounted(true);
     setLevel(value);
     learning.openHelp(q.id, value, solved);
   }
@@ -95,8 +108,14 @@ export function ExerciseView({
   function reviewKnowledge() {
     learning.saveDraft(q.id, answer);
     learning.flush();
+    // Remember where the feedback sat on screen, so the way back lands on the same spot.
+    const anchor = document.getElementById(FEEDBACK_ID);
+    const restore =
+      anchor && result
+        ? { anchorId: FEEDBACK_ID, anchorTop: anchor.getBoundingClientRect().top, scrollY: window.scrollY }
+        : { scrollY: window.scrollY };
     setReturnTicket({
-      from: { kind: "exercise", id: q.id, path, label },
+      from: { kind: "exercise", id: q.id, path, label, restore },
       to: { sectionId: meta.sectionId },
     });
     navigate(`/learn/linear-programming#${meta.sectionId}`);
@@ -110,7 +129,7 @@ export function ExerciseView({
 
   return (
     <article className="exercise" aria-labelledby={`${name}-title`}>
-      {restored && (
+      <Collapse open={restored}>
         <div className="restore-banner" role="status">
           <span>
             已恢复你的作答 · 已尝试 {attempts} 次
@@ -122,7 +141,7 @@ export function ExerciseView({
             清空重做
           </button>
         </div>
-      )}
+      </Collapse>
       <p className="kicker" id={`${name}-title`}>
         {label} · {q.difficulty} · {q.knowledge} · {typeLabel(q)}
       </p>
@@ -144,8 +163,9 @@ export function ExerciseView({
         <span className="attempts">已尝试 {attempts} 次</span>
       </div>
 
-      {result && (
-        <div role="status" className={`feedback is-${result.status}`}>
+      <Collapse open={!!result} id={FEEDBACK_ID}>
+        {result && (
+        <div role="status" key={submissions} className={`feedback is-${result.status} mb-fade`}>
           {result.status === "invalid" && <strong>请先选择答案，或输入有效数字</strong>}
           {result.status === "correct" && (
             <>
@@ -188,7 +208,8 @@ export function ExerciseView({
                 <span>回看：{knowledgeLink}</span>
               </div>
               <p className="muted-note">这里不会直接显示标准答案；需要时可以打开帮助。</p>
-              {showNudge && (
+              <Collapse open={showNudge}>
+                {showNudge && (
                 <div className="nudge">
                   <span>卡住了？可以回看知识点，或打开帮助。</span>
                   <button type="button" className="link-button" onClick={() => openLevel(1)}>
@@ -212,22 +233,26 @@ export function ExerciseView({
                     关闭所有帮助建议
                   </button>
                 </div>
-              )}
+                )}
+              </Collapse>
             </>
           )}
         </div>
-      )}
+        )}
+      </Collapse>
 
-      {helpOpen && (
-        <HelpLadder
-          level={level}
-          onLevel={openLevel}
-          recommendSolution={struggling}
-          nudge={first}
-          clue={clue}
-          solution={solution}
-          knowledgeLink={knowledgeLink}
-        />
+      {helpMounted && (
+        <Collapse open={helpOpen} appear>
+          <HelpLadder
+            level={level}
+            onLevel={openLevel}
+            recommendSolution={struggling}
+            nudge={first}
+            clue={clue}
+            solution={solution}
+            knowledgeLink={knowledgeLink}
+          />
+        </Collapse>
       )}
 
       <nav className="exercise-nav" aria-label="上一题 / 下一题">

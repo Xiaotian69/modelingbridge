@@ -111,6 +111,7 @@
 /* ---------- Reader layout ---------- */
 .reader-layout {
   display: grid;
+  transition: grid-template-columns var(--dur-expand) var(--ease-standard);
   grid-template-columns: 220px minmax(0, var(--measure)) minmax(200px, 1fr);
   gap: 40px;
   padding: 32px 0 24px;
@@ -251,17 +252,23 @@
 .lesson-section > p {
   margin: 0 0 18px;
 }
+/* Soft highlight of the section an exercise sent the learner to: starts after the page
+   has faded in, rises gently, then fades away (motion tokens). */
 .lesson-section.is-target {
   border-radius: var(--radius-md);
-  animation: target-glow 2.4s ease-out 1;
+  animation: target-glow var(--dur-highlight) var(--ease-standard) var(--dur-page);
 }
 @keyframes target-glow {
   0% {
-    box-shadow: 0 0 0 3px var(--attend);
-    background: color-mix(in srgb, var(--attend) 9%, transparent);
+    box-shadow: 0 0 0 2px transparent;
+    background: transparent;
+  }
+  18% {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--attend) 55%, transparent);
+    background: color-mix(in srgb, var(--attend) 7%, transparent);
   }
   100% {
-    box-shadow: 0 0 0 3px transparent;
+    box-shadow: 0 0 0 2px transparent;
     background: transparent;
   }
 }
@@ -841,6 +848,7 @@
   font-size: 11px;
 }
 .help-body {
+  overflow: hidden;
   padding: 14px 16px;
   font-size: 15px;
   line-height: 1.75;

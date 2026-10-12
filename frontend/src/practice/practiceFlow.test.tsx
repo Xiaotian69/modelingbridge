@@ -53,15 +53,22 @@ it("keeps the answer hidden, then restores draft, attempts and help level after 
   fireEvent.click(within(ladder).getByRole("tab", { name: /2 线索/ }));
   expect(ladder).toHaveTextContent("40 × 40 + 50 × 20");
 
-  fireEvent.click(within(feedback).getByRole("button", { name: /目标函数与检验/ }));
+  // Feedback re-enters on every submission (motion), so query the current one.
+  fireEvent.click(within(screen.getByRole("status")).getByRole("button", { name: /目标函数与检验/ }));
   expect(await screen.findByRole("region", { name: "回到原题" }, LAZY)).toBeInTheDocument();
   expect(screen.getByTestId("where")).toHaveTextContent("/learn/linear-programming#derive");
-  expect(JSON.parse(sessionStorage.getItem(RETURN_KEY)!).from.path).toBe("/practice/linear-programming/practice-1");
+  const ticket = JSON.parse(sessionStorage.getItem(RETURN_KEY)!);
+  expect(ticket.from.path).toBe("/practice/linear-programming/practice-1");
+  expect(ticket.from.restore).toMatchObject({ anchorId: "exercise-feedback" }); // land back on the feedback
 
   fireEvent.click(screen.getByRole("link", { name: "← 回到 练习 1" }));
   expect(await screen.findByLabelText("你的数值答案", {}, LAZY)).toHaveValue("1600");
   expect(screen.getByText(/已恢复你的作答 · 已尝试 2 次 · 上次结果：还不对 · 提示看到第 2 级/)).toBeInTheDocument();
   expect(sessionStorage.getItem(RETURN_KEY)).toBeNull();
+  // The page looks as the learner left it: same (deterministic) feedback, still no answer.
+  const statuses = screen.getAllByRole("status").map((s) => s.textContent ?? "");
+  expect(statuses.some((t) => t.includes("错误类型：只算了一种产品"))).toBe(true);
+  expect(statuses.join(" ")).not.toContain("2600");
 });
 
 it("survives a full reload: the draft comes back from local storage", async () => {

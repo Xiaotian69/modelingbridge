@@ -3,6 +3,7 @@ import { AnswerInput, emptyAnswer, typeLabel } from "./AnswerInput";
 import { evaluate, helpLevels, type Evaluation } from "./evaluate";
 import type { Answer } from "./grading";
 import type { Question } from "./questions";
+import { Collapse } from "../components/motion/Collapse";
 import { learning } from "../state/learning";
 
 /**
@@ -15,12 +16,14 @@ export function Checkpoint({ question: q }: { question: Question }) {
   const [result, setResult] = useState<Evaluation | null>(null);
   const [hint, setHint] = useState(false);
   const [solution, setSolution] = useState(false);
+  const [checks, setChecks] = useState(0);
   const [first, second, full] = helpLevels(q);
   const label = q.placement === "inline" ? "试一试 · 检查点" : "章节自测 · 检查点";
 
   function check() {
     const value = evaluate(q, answer);
     setResult(value);
+    setChecks((n) => n + 1);
     if (value.status !== "invalid") learning.recordCheckpoint(q.id, value.status === "correct");
   }
 
@@ -44,10 +47,12 @@ export function Checkpoint({ question: q }: { question: Question }) {
         </button>
         <span className="muted-note">可以跳过，不计成绩</span>
       </div>
+      <Collapse open={!!result}>
       {result && (
         <div
           role="status"
-          className={`feedback is-${result.status}`}
+          key={checks}
+          className={`feedback is-${result.status} mb-fade`}
         >
           {result.status === "invalid" && <strong>请先选择一个答案，或输入有效数字</strong>}
           {result.status === "correct" && (
@@ -78,19 +83,25 @@ export function Checkpoint({ question: q }: { question: Question }) {
               </button>
             </div>
           )}
-          {hint && result.status !== "correct" && (
-            <p>
-              提示：{first}
-              {second ? ` ${second}` : ""}
-            </p>
-          )}
-          {solution && result.status !== "correct" && (
-            <p>
-              解析：{full.answer}。{full.explanation}
-            </p>
-          )}
+          {/* Rendered only once asked for: the solution never sits hidden in the page. */}
+          <Collapse open={hint && result.status !== "correct"}>
+            {hint && (
+              <p>
+                提示：{first}
+                {second ? ` ${second}` : ""}
+              </p>
+            )}
+          </Collapse>
+          <Collapse open={solution && result.status !== "correct"}>
+            {solution && (
+              <p>
+                解析：{full.answer}。{full.explanation}
+              </p>
+            )}
+          </Collapse>
         </div>
       )}
+      </Collapse>
       <p className="source-line">
         {q.source.author} · 已核验 · {q.verification}
       </p>

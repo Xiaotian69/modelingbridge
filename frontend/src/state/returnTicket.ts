@@ -3,10 +3,13 @@
  * the reader shows a bar that brings them back. One ticket at a time; per browser tab
  * (sessionStorage), so it survives a refresh of the lesson but not closing the tab.
  */
+import type { ScrollRestore } from "../components/motion/RouteScroll";
+
 export const RETURN_KEY = "mb.v2.return";
 
 export type ReturnTicket = {
-  from: { kind: "exercise"; id: string; path: string; label: string };
+  /** `restore`: where the learner was on the exercise page, to land back there. */
+  from: { kind: "exercise"; id: string; path: string; label: string; restore?: ScrollRestore };
   to: { sectionId: string };
   createdAt: string;
 };

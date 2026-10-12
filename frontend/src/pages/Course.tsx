@@ -12,6 +12,7 @@ import { Checkpoint } from "../learning/Checkpoint";
 import { publishedQuestions } from "../learning/questions";
 import { exerciseMeta } from "../learning/exerciseMeta";
 import { Icon } from "../components/ui/Icon";
+import { duration } from "../design/motion";
 import { learning, useLearning } from "../state/learning";
 import { clearReturnTicket, readReturnTicket, type ReturnTicket } from "../state/returnTicket";
 hljs.registerLanguage("python", python);
@@ -111,7 +112,8 @@ function ReturnBar({ ticket, onDismiss }: { ticket: ReturnTicket; onDismiss: () 
           onClick={(event) => {
             event.preventDefault();
             clearReturnTicket();
-            navigate(ticket.from.path);
+            // Land where the learner left the exercise (RouteScroll), not at the top.
+            navigate(ticket.from.path, { state: { restore: ticket.from.restore } });
           }}
         >
           ← 回到 {ticket.from.label}
@@ -155,8 +157,9 @@ export function CoursePage() {
     // Arriving from an exercise: briefly highlight the section that answers it.
     if (ticket?.to.sectionId === section.id) {
       setTarget(section.id);
-      const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      const timer = window.setTimeout(() => setTarget(null), reduced ? 6000 : 2600);
+      // Animated glow lasts page-enter + highlight; reduced motion keeps a static outline longer.
+      const ms = duration("page") + duration("highlight");
+      const timer = window.setTimeout(() => setTarget(null), ms ? ms + 100 : 6000);
       return () => window.clearTimeout(timer);
     }
   }, [hash, ticket]);

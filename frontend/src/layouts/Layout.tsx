@@ -1,9 +1,11 @@
 import { Suspense, useEffect, useRef, useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigationType } from "react-router-dom";
+import { EASING, duration } from "../design/motion";
 import { PageErrorBoundary } from "../components/ui/PageErrorBoundary";
 import { Brand } from "../components/ui/Brand";
 import { Icon } from "../components/ui/Icon";
 import { ThemeToggle } from "../app/ThemeToggle";
+import { Sheet } from "../components/motion/Sheet";
 import {
   activeNav,
   footerNav,
@@ -16,6 +18,7 @@ import {
 export function Layout() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const navigationType = useNavigationType();
   const toggle = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLElement>(null);
   const main = useRef<HTMLElement>(null);
@@ -46,19 +49,25 @@ export function Layout() {
       media?.removeEventListener("change", desktop);
     };
   }, [open]);
-  // Replay only the visual transition, preserving the outlet's state and browser history.
+  // Page enter (motion system §page): a short fade + rise on forward navigation only.
+  // Back / forward (POP) restore a scroll position instantly, so they get no animation;
+  // hash-only changes keep the same page and scroll smoothly instead (RouteScroll).
   useEffect(() => {
-    if (!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
-      const animation = main.current?.animate?.(
-        [
-          { opacity: 0.65, transform: "translateY(5px)" },
-          { opacity: 1, transform: "translateY(0)" },
-        ],
-        { duration: 220, easing: "ease-out" },
-      );
-      return () => animation?.cancel();
-    }
-  }, [location.pathname]);
+    if (navigationType === "POP") return;
+    const ms = duration("page");
+    if (!ms) return;
+    const lite = document.documentElement.dataset.motion === "lite";
+    const animation = main.current?.animate?.(
+      lite
+        ? [{ opacity: 0.6 }, { opacity: 1 }]
+        : [
+            { opacity: 0.6, transform: "translateY(6px)" },
+            { opacity: 1, transform: "none" },
+          ],
+      { duration: ms, easing: EASING.enter },
+    );
+    return () => animation?.cancel(); // rapid switching: the next page starts clean
+  }, [location.pathname, navigationType]);
 
   const ariaCurrent = (to: string) => (current === to ? "page" : undefined);
 
@@ -103,39 +112,36 @@ export function Layout() {
           </button>
         </div>
       </header>
-      {open && (
-        <div className="mobile-menu-layer">
-          <div className="mobile-menu-backdrop" onClick={() => setOpen(false)} />
-          <nav
-            ref={menu}
-            id="mobile-navigation"
-            className="mobile-menu"
-            aria-label="移动导航"
-          >
-            {mobileNav.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                aria-current={ariaCurrent(item.to)}
-                onClick={() => setOpen(false)}
-              >
+      <Sheet open={open} side="right" onBackdrop={() => setOpen(false)}>
+        <nav
+          ref={menu}
+          id="mobile-navigation"
+          className="mb-sheet-panel mobile-menu"
+          aria-label="移动导航"
+        >
+          {mobileNav.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              aria-current={ariaCurrent(item.to)}
+              onClick={() => setOpen(false)}
+            >
+              {item.label}
+              <Icon name="arrow" size={16} />
+            </Link>
+          ))}
+          <div className="mobile-menu-theme">
+            <ThemeToggle showLabel />
+          </div>
+          <div className="mobile-menu-footer">
+            {footerNav.map((item) => (
+              <Link key={item.to} to={item.to} onClick={() => setOpen(false)}>
                 {item.label}
-                <Icon name="arrow" size={16} />
               </Link>
             ))}
-            <div className="mobile-menu-theme">
-              <ThemeToggle showLabel />
-            </div>
-            <div className="mobile-menu-footer">
-              {footerNav.map((item) => (
-                <Link key={item.to} to={item.to} onClick={() => setOpen(false)}>
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </nav>
-        </div>
-      )}
+          </div>
+        </nav>
+      </Sheet>
       <main
         id="main-content"
         ref={main}

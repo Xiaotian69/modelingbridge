@@ -41,8 +41,22 @@
   --space-6: 32px;
   --space-7: 48px;
   --space-8: 72px;
-  --motion-fast: 140ms;
-  --motion-base: 220ms;
+  /*
+   * Motion (single source; design/motion.ts mirrors these numbers and a test keeps them equal).
+   * --motion-scale: 1 normally, 0 for reduced motion, 0.6 on low-end devices ([data-motion="lite"]).
+   */
+  --motion-scale: 1;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --dur-quick: calc(140ms * var(--motion-scale));
+  --dur-page: calc(220ms * var(--motion-scale));
+  --dur-expand: calc(220ms * var(--motion-scale));
+  --dur-panel: calc(260ms * var(--motion-scale));
+  --dur-theme: calc(240ms * var(--motion-scale));
+  --dur-highlight: calc(1800ms * var(--motion-scale));
+  --motion-fast: var(--dur-quick);
+  --motion-base: var(--dur-page);
   --header-h: 60px;
   /* Feasible-region chart (learning/Graph.tsx): hue carries meaning, legend repeats it in text. */
   --chart-grid: #dce8e3;
@@ -110,4 +124,14 @@
   --focus: #35a999;
   background: var(--paper);
   color: var(--ink);
+}
+
+:root[data-motion="lite"] {
+  --motion-scale: 0.6;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root,
+  :root[data-motion="lite"] {
+    --motion-scale: 0;
+  }
 }

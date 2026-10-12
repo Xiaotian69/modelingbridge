@@ -1,4 +1,5 @@
-import { useId, type ReactNode } from "react";
+import { useId, useLayoutEffect, useRef, type ReactNode } from "react";
+import { EASING, duration } from "../design/motion";
 import type { HelpLevel } from "../state/learningStore";
 
 const names = ["启发", "线索", "完整解析"] as const;
@@ -26,6 +27,24 @@ export function HelpLadder({
   knowledgeLink: ReactNode;
 }) {
   const id = useId();
+  const body = useRef<HTMLDivElement>(null);
+  const lastHeight = useRef(0);
+  // Continuity between levels: the panel eases from its old height to the new one
+  // while the new text fades in (keyed below). No animation under reduced motion.
+  useLayoutEffect(() => {
+    const el = body.current;
+    if (!el) return;
+    const to = el.offsetHeight;
+    const from = lastHeight.current;
+    lastHeight.current = to;
+    const ms = duration("expand");
+    if (!from || from === to || !ms) return;
+    const animation = el.animate?.([{ height: `${from}px` }, { height: `${to}px` }], {
+      duration: ms,
+      easing: EASING.standard,
+    });
+    return () => animation?.cancel();
+  }, [level]);
   return (
     <section className="help-ladder" aria-label="帮助">
       <div className="help-tabs" role="tablist" aria-label="帮助深度">
@@ -47,7 +66,14 @@ export function HelpLadder({
           );
         })}
       </div>
-      <div className="help-body" role="tabpanel" id={`${id}-panel`} aria-labelledby={`${id}-tab-${level}`}>
+      <div
+        ref={body}
+        className="help-body"
+        role="tabpanel"
+        id={`${id}-panel`}
+        aria-labelledby={`${id}-tab-${level}`}
+      >
+        <div key={level} className="mb-fade">
         <span className="help-source">课程预置 · 已核验</span>
         {level === 1 && <p>{nudge}</p>}
         {level === 2 && <p>{clue ?? "这道题没有更细的线索了，可以回看知识点或查看完整解析。"}</p>}
@@ -60,6 +86,7 @@ export function HelpLadder({
           </>
         )}
         <p className="muted-note">相关段落：{knowledgeLink}</p>
+        </div>
       </div>
     </section>
   );
