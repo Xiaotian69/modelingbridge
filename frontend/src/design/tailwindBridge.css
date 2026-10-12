@@ -1,0 +1,117 @@
+/*
+ * Theme bridge for pages still written with Tailwind colour classes
+ * (tailwind.config.js maps each colour to one of these variables).
+ * Light values follow the V2 neutrals; dark values invert lightness so every
+ * text / background pair keeps its contrast. New UI should use tokens.css directly.
+ */
+:root {
+  --tw-white: 255 255 255;
+  --tw-slate-50: 246 245 240;
+  --tw-slate-100: 239 238 232;
+  --tw-slate-200: 221 227 223;
+  --tw-slate-300: 201 209 205;
+  --tw-slate-400: 147 160 157;
+  --tw-slate-500: 100 117 122;
+  --tw-slate-600: 91 107 112;
+  --tw-slate-700: 60 76 81;
+  --tw-slate-800: 42 57 62;
+  --tw-slate-900: 31 46 51;
+  --tw-slate-950: 27 42 47;
+  --tw-bridge-50: 240 253 250;
+  --tw-bridge-100: 204 251 241;
+  --tw-bridge-200: 181 230 218;
+  --tw-bridge-400: 90 184 167;
+  --tw-bridge-600: 20 138 123;
+  --tw-bridge-700: 21 122 110;
+  --tw-bridge-800: 24 95 85;
+  --tw-bridge-900: 19 78 74;
+  --tw-emerald-50: 236 253 245;
+  --tw-emerald-100: 209 250 229;
+  --tw-emerald-200: 167 243 208;
+  --tw-emerald-300: 110 231 183;
+  --tw-emerald-800: 6 95 70;
+  --tw-emerald-900: 6 78 59;
+  --tw-emerald-950: 2 44 34;
+  --tw-amber-50: 255 251 235;
+  --tw-amber-100: 254 243 199;
+  --tw-amber-200: 253 230 138;
+  --tw-amber-400: 251 191 36;
+  --tw-amber-700: 180 83 9;
+  --tw-amber-800: 146 64 14;
+  --tw-amber-900: 120 53 15;
+  --tw-amber-950: 69 26 3;
+  --tw-rose-50: 255 241 242;
+  --tw-rose-100: 255 228 230;
+  --tw-rose-200: 254 205 211;
+  --tw-rose-700: 190 18 60;
+  --tw-rose-900: 136 19 55;
+  --tw-red-300: 252 165 165;
+  --tw-red-600: 220 38 38;
+  --tw-red-700: 185 28 28;
+  --tw-cyan-50: 236 254 255;
+  --tw-cyan-200: 165 243 252;
+  --tw-cyan-800: 21 94 117;
+}
+
+:root[data-theme="dark"] {
+  --tw-white: 21 33 38;
+  --tw-slate-50: 26 40 45;
+  --tw-slate-100: 31 47 52;
+  --tw-slate-200: 38 54 59;
+  --tw-slate-300: 52 71 76;
+  --tw-slate-400: 111 132 135;
+  --tw-slate-500: 142 161 162;
+  --tw-slate-600: 159 177 176;
+  --tw-slate-700: 188 202 200;
+  --tw-slate-800: 211 221 219;
+  --tw-slate-900: 224 232 230;
+  --tw-slate-950: 228 236 234;
+  --tw-bridge-50: 18 48 43;
+  --tw-bridge-100: 22 64 58;
+  --tw-bridge-200: 31 90 80;
+  --tw-bridge-400: 62 158 140;
+  --tw-bridge-600: 79 186 165;
+  --tw-bridge-700: 92 200 178;
+  --tw-bridge-800: 125 216 197;
+  --tw-bridge-900: 164 230 216;
+  --tw-emerald-50: 16 48 42;
+  --tw-emerald-100: 22 64 54;
+  --tw-emerald-200: 31 90 74;
+  --tw-emerald-300: 47 122 99;
+  --tw-emerald-800: 155 224 196;
+  --tw-emerald-900: 182 234 212;
+  --tw-emerald-950: 205 242 226;
+  --tw-amber-50: 46 36 16;
+  --tw-amber-100: 58 45 18;
+  --tw-amber-200: 90 69 24;
+  --tw-amber-400: 201 154 62;
+  --tw-amber-700: 227 176 103;
+  --tw-amber-800: 236 192 122;
+  --tw-amber-900: 242 211 155;
+  --tw-amber-950: 247 226 184;
+  --tw-rose-50: 52 26 26;
+  --tw-rose-100: 67 32 32;
+  --tw-rose-200: 92 42 40;
+  --tw-rose-700: 242 160 151;
+  --tw-rose-900: 248 196 189;
+  --tw-red-300: 122 54 51;
+  --tw-red-600: 240 138 128;
+  --tw-red-700: 242 160 151;
+  --tw-cyan-50: 15 44 51;
+  --tw-cyan-200: 29 85 96;
+  --tw-cyan-800: 159 220 234;
+}
+
+/* The always-dark brand panel keeps light-on-dark text in both themes. */
+:root[data-theme="dark"] .premium-shell {
+  --tw-white: 255 255 255;
+  --tw-slate-200: 221 227 223;
+  --tw-slate-300: 201 209 205;
+  --tw-emerald-100: 209 250 229;
+}
+
+/* Unstyled form fields: dark surface instead of the browser's grey (zero specificity, classes still win). */
+:where(:root[data-theme="dark"]) :where(input:not([type="checkbox"], [type="radio"], [type="range"]), textarea, select) {
+  background-color: var(--surface-sunken);
+  color: var(--text);
+}

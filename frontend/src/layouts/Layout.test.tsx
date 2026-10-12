@@ -47,11 +47,11 @@ describe("Layout", () => {
     expect(within(main).getByRole("link", { name: "精讲" })).not.toHaveAttribute("aria-current");
   });
 
-  it("pins not-yet-migrated pages to the legacy light surface, but not the home page", () => {
+  it("no longer pins any page to the old light-only surface (all pages follow the theme)", () => {
     renderAt("/quest");
-    expect(document.getElementById("main-content")).toHaveClass("legacy-surface");
+    expect(document.getElementById("main-content")).not.toHaveClass("legacy-surface");
     cleanup();
-    renderAt("/");
+    renderAt("/records");
     expect(document.getElementById("main-content")).not.toHaveClass("legacy-surface");
   });
 });

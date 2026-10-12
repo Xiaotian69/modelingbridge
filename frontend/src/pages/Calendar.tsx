@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { generateContestPlan } from "../api/client";
 import { contestCalendar, type ContestEvent } from "../data/modelingContent";
+import { PageHead } from "../components/ui/PageHead";
 import type { ContestPlanOutput, ProviderId, StudentLevel } from "../types";
 
 const valueTone = {
@@ -82,19 +83,10 @@ export function CalendarPage() {
 
   return (
     <div className="hairline-grid">
-      <section className="premium-shell">
-        <div className="relative mx-auto max-w-7xl px-4 py-14 text-white">
-          <p className="inline-flex rounded-md border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100">
-            Contest Planner
-          </p>
-          <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
-            赛事日历 + AI 备赛规划
-          </h1>
-          <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-200 sm:text-base">
-            先点开赛事看详情，把目标赛和练手赛加入规划，再填写个人基础。系统会按小白/进阶/冲刺水平，生成一套可执行的备赛路线。
-          </p>
-        </div>
-      </section>
+      <PageHead
+        title="赛事日历与备赛规划"
+        lead="先点开赛事看详情，把目标赛和练手赛加入规划，再填写个人基础，按小白 / 进阶 / 冲刺水平生成一套可执行的备赛路线。时间以各赛事官网通知为准。"
+      />
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-10 lg:grid-cols-[1fr_0.86fr]">
         <div className="space-y-5">

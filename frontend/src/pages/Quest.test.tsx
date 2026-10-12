@@ -26,20 +26,22 @@ describe("QuestPage", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("heading", { name: "数模闯关训练营" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "七关实战" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /读题破冰/ })).toBeInTheDocument();
     expect(screen.getByText("先不要选模型，用自己的话复述这道题到底要解决什么。")).toBeInTheDocument();
-    expect(screen.getByText("AI 教练提示")).toBeInTheDocument();
+    expect(screen.getByText("教练提示")).toBeInTheDocument();
+    expect(screen.getByText("课程预置内容，不调用在线 AI。")).toBeInTheDocument();
   });
 
-  it("links to the workbench with quest context", () => {
+  it("no longer passes the problem text through a URL (design §5.4)", () => {
     render(
       <MemoryRouter initialEntries={["/quest"]} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <QuestPage />
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("link", { name: "打开 AI 工作台" })).toHaveAttribute("href", expect.stringContaining("problem_text="));
+    expect(screen.getByRole("link", { name: "AI 工作台（实验）" })).toHaveAttribute("href", "/workbench");
+    document.querySelectorAll("a").forEach((a) => expect(a.getAttribute("href") ?? "").not.toContain("problem_text"));
   });
 
   it("restores a saved default quest draft", () => {

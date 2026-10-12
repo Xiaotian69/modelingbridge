@@ -5,7 +5,7 @@ import {
   modelMethods,
 } from "../data/modelingContent";
 
-export type SearchGroup = "精讲" | "练习" | "方法速查" | "赛题";
+export type SearchGroup = "精讲" | "练习" | "方法速查" | "提示词" | "赛题";
 export type SearchEntry = {
   id: string;
   group: SearchGroup;
@@ -16,7 +16,7 @@ export type SearchEntry = {
   haystack: string;
 };
 
-export const GROUP_ORDER: SearchGroup[] = ["精讲", "练习", "方法速查", "赛题"];
+export const GROUP_ORDER: SearchGroup[] = ["精讲", "练习", "方法速查", "提示词", "赛题"];
 const LP_SLUG = "linear-programming";
 const norm = (s: string) => s.toLowerCase();
 
@@ -59,10 +59,22 @@ export function staticEntries(): SearchEntry[] {
   return [practice, ...methods, ...problems];
 }
 
-/** Lesson sections, loaded only when someone starts searching. */
+/** Lesson sections and prompt templates, loaded only when someone starts searching. */
 export async function lessonEntries(): Promise<SearchEntry[]> {
-  const { sections } = await import("../learning/content");
-  return sections.map((s, i) => ({
+  const [{ sections }, { publishedPrompts }] = await Promise.all([
+    import("../learning/content"),
+    import("../content/prompts"),
+  ]);
+  const prompts = publishedPrompts.map<SearchEntry>((p) => ({
+    id: `prompt:${p.id}`,
+    group: "提示词",
+    title: p.title,
+    meta: `提示词库 · ${p.taskType}`,
+    href: `/library/prompts/${p.id}`,
+    badge: "原创模板",
+    haystack: norm(`提示词 prompt ${p.title} ${p.summary} ${p.taskType}`),
+  }));
+  return [...prompts, ...sections.map<SearchEntry>((s, i) => ({
     id: `lesson:${s.id}`,
     group: "精讲",
     title: s.title,
@@ -70,7 +82,7 @@ export async function lessonEntries(): Promise<SearchEntry[]> {
     href: `/learn/linear-programming#${s.id}`,
     badge: "可学",
     haystack: norm(`线性规划 ${s.title} ${s.lead}`),
-  }));
+  }))];
 }
 
 /** All whitespace-separated terms must match. Results grouped, at most `perGroup` each. */

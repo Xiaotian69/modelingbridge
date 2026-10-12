@@ -18,3 +18,5 @@ export const LP_SECTIONS = [
 export const LP_SECTION_IDS: string[] = LP_SECTIONS.map((s) => s.id);
 export const sectionNumber = (id: string) => LP_SECTION_IDS.indexOf(id) + 1;
 export const sectionTitle = (id: string) => LP_SECTIONS.find((s) => s.id === id)?.title ?? "";
+/** Lesson checkpoints (question blocks in content.ts); not graded, shown as “尝试过 x/4” (Q8). */
+export const LP_CHECKPOINT_IDS = ["think-1", "self-1", "self-2", "self-3"];

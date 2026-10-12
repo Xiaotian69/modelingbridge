@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base. Colours come from design/tokens.css; legacy pages pin the old palette via .legacy-surface. */
+/* Base. Colours come from design/tokens.css (older Tailwind pages via design/tailwindBridge.css). */
 :root {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Microsoft YaHei", sans-serif;
@@ -85,9 +85,8 @@ select {
     box-shadow: var(--shadow);
   }
   .quiet-card {
-    border: 1px solid var(--line);
-    background: #fff;
-    box-shadow: 0 4px 18px #15392f05;
+    border: 1px solid var(--border);
+    background: var(--surface);
   }
   .hairline-grid {
     background-color: var(--paper);
@@ -101,12 +100,12 @@ select {
   }
   .interactive-card:hover {
     transform: translateY(-2px);
-    border-color: #6bb5a7;
+    border-color: var(--brand);
     box-shadow: var(--shadow);
   }
   .soft-badge {
-    border: 1px solid var(--line);
-    background: #f4f8f6;
+    border: 1px solid var(--border);
+    background: var(--surface-sunken);
   }
   .animate-rise {
     animation: bridge-rise 300ms ease-out both;
@@ -144,8 +143,8 @@ select {
   font-weight: 650;
 }
 .button-dark {
-  background: #162d37;
-  color: #fff;
+  background: var(--text);
+  color: var(--bg);
 }
 
 @media (prefers-reduced-motion: reduce) {

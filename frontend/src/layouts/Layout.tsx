@@ -9,7 +9,6 @@ import { Sheet } from "../components/motion/Sheet";
 import {
   activeNav,
   footerNav,
-  isLegacyPage,
   mobileNav,
   primaryNav,
   recordsNav,
@@ -24,7 +23,6 @@ export function Layout() {
   const main = useRef<HTMLElement>(null);
   const current = activeNav(location.pathname);
   const home = location.pathname === "/";
-  const legacy = isLegacyPage(location.pathname);
 
   useEffect(() => {
     setOpen(false);
@@ -145,7 +143,7 @@ export function Layout() {
       <main
         id="main-content"
         ref={main}
-        className={`site-main${legacy ? " legacy-surface" : ""}`}
+        className="site-main"
         tabIndex={-1}
       >
         <PageErrorBoundary key={location.pathname}>

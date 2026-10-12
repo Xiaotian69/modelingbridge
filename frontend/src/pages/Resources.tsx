@@ -1,164 +1,120 @@
-import { useEffect, useMemo, useState } from "react";
-import { listResources } from "../api/client";
-import { withTrialAccessCode } from "../trial/access";
-import type { ResourceFile, ResourceListResponse } from "../types";
+import { useMemo } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import {
+  LICENSE_LABEL,
+  RESOURCE_KINDS,
+  buildResourceIndex,
+  type ResourceItem,
+} from "../content/resources";
 
-const kinds = ["全部", "赛题", "优秀论文", "综合资料", "提示词/模板"];
+const ALL = "全部";
 
+/** 资料索引: original material and official links only (Q6). No file downloads. */
 export function ResourcesPage() {
-  const [query, setQuery] = useState("");
-  const [kind, setKind] = useState("全部");
-  const [data, setData] = useState<ResourceListResponse | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [params, setParams] = useSearchParams();
+  const query = params.get("q") ?? "";
+  const kindParam = params.get("kind");
+  const kind = kindParam && (RESOURCE_KINDS as readonly string[]).includes(kindParam) ? kindParam : ALL;
+  const items = useMemo(buildResourceIndex, []);
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setLoading(true);
-      setError("");
-      listResources({ q: query, kind, limit: 180 })
-        .then(setData)
-        .catch((e) => setError(e instanceof Error ? e.message : "资源列表加载失败"))
-        .finally(() => setLoading(false));
-    }, 180);
-    return () => window.clearTimeout(timer);
-  }, [query, kind]);
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return items.filter(
+      (item) =>
+        (kind === ALL || item.kind === kind) &&
+        (!q || [item.title, item.summary, ...item.meta].join(" ").toLowerCase().includes(q)),
+    );
+  }, [items, kind, query]);
 
-  const grouped = useMemo(() => {
-    const rows = data?.items ?? [];
-    return rows.reduce<Record<string, ResourceFile[]>>((acc, item) => {
-      const key = `${item.kind} · ${item.year}`;
-      acc[key] = acc[key] ? [...acc[key], item] : [item];
-      return acc;
-    }, {});
-  }, [data]);
+  const update = (key: string, value: string) => {
+    const next = new URLSearchParams(params);
+    if (!value || value === ALL) next.delete(key);
+    else next.set(key, value);
+    setParams(next, { replace: true });
+  };
 
   return (
-    <div className="hairline-grid">
-      <section className="premium-shell">
-        <div className="relative mx-auto max-w-7xl px-4 py-14 text-white">
-          <p className="inline-flex rounded-md border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100">
-            Resource Vault
-          </p>
-          <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
-            赛题资源下载窗口
-          </h1>
-          <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-200 sm:text-base">
-            查找赛题、优秀论文与学习模板。文件列表和下载需要资料服务连接；服务未开放时，可先浏览知识库中的经典题型与静态教学案例。
-          </p>
-        </div>
-      </section>
+    <div className="site-container library-page">
+      <div className="library-intro">
+        <h1>资料索引</h1>
+        <p className="page-lead">
+          收录模桥原创的课程、教学案例与练习，以及各赛事的官方公开页面。
+        </p>
+        <p className="notice notice-info">
+          第三方整理的赛题、优秀论文合集在授权核验前不提供下载，也不在此列出；赛题原文请到官方页面获取。
+        </p>
+      </div>
 
-      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-10 lg:grid-cols-[20rem_1fr]">
-        <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
-          <div className="quiet-card rounded-3xl p-5">
-            <h2 className="text-xl font-semibold text-slate-950">检索</h2>
-            <label className="mt-5 block text-sm font-semibold text-slate-700">
-              关键词
-              <input
-                className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="年份、MCM、ICM、题号、论文..."
-              />
-            </label>
-            <div className="mt-5">
-              <p className="text-sm font-semibold text-slate-700">类型</p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {kinds.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() => setKind(item)}
-                    className={[
-                      "rounded-full border px-3 py-1.5 text-sm font-semibold transition",
-                      kind === item ? "border-slate-950 bg-slate-950 text-white" : "border-slate-200 bg-white text-slate-600 hover:border-bridge-400",
-                    ].join(" ")}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
-              <p className="text-sm font-semibold text-slate-950">当前结果</p>
-              <p className="mt-1 text-2xl font-semibold text-slate-950">{data?.summary.total ?? 0}</p>
-              <p className="text-xs text-slate-500">{loading ? "扫描中..." : "最多展示前 180 个，可用关键词继续缩小范围"}</p>
-            </div>
-          </div>
-
-          <div className="quiet-card rounded-3xl p-5">
-            <h2 className="text-base font-semibold text-slate-950">资料夹状态</h2>
-            <div className="mt-3 space-y-3">
-              {data?.summary.groups.map((group) => (
-                <div key={group.key} className="rounded-2xl border border-slate-200 bg-white p-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-semibold text-slate-800">{group.title}</p>
-                    <span className={`rounded-full px-2 py-0.5 text-xs ${group.exists ? "bg-emerald-50 text-emerald-800" : "bg-rose-50 text-rose-700"}`}>
-                      {group.exists ? "已连接" : "未找到"}
-                    </span>
-                  </div>
-                  <p className="mt-2 break-all text-xs leading-5 text-slate-500">{group.path}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </aside>
-
-        <main className="space-y-5">
-          {error && <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">{error}。资料服务暂不可用，当前无法提供文件下载。请先访问导航中的知识库，或页脚的案例库。</div>}
-          {!error && Object.keys(grouped).length === 0 && (
-            <div className="quiet-card rounded-3xl p-8 text-sm text-slate-600">暂无匹配资源。可以换个关键词，或把新资料放进资料包目录后刷新。</div>
-          )}
-          {Object.entries(grouped).map(([group, rows]) => (
-            <section key={group} className="quiet-card rounded-3xl p-5">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 className="text-xl font-semibold text-slate-950">{group}</h2>
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">{rows.length} 个文件</span>
-              </div>
-              <div className="mt-4 grid gap-3">
-                {rows.map((item) => (
-                  <ResourceRow key={item.id} item={item} />
-                ))}
-              </div>
-            </section>
+      <div className="filter-bar">
+        <label className="field-inline">
+          <span className="sr-only">搜索资料</span>
+          <input
+            type="search"
+            value={query}
+            placeholder="搜索标题、年份、方法…"
+            onChange={(e) => update("q", e.target.value)}
+          />
+        </label>
+        <div className="chip-group" role="group" aria-label="资料类型">
+          {[ALL, ...RESOURCE_KINDS].map((item) => (
+            <button
+              key={item}
+              type="button"
+              className="chip"
+              aria-pressed={kind === item}
+              onClick={() => update("kind", item)}
+            >
+              {item}
+            </button>
           ))}
-        </main>
-      </section>
+        </div>
+      </div>
+
+      <p className="result-count" role="status">
+        共 {filtered.length} 条
+      </p>
+      {filtered.length === 0 ? (
+        <div className="empty-state">
+          <p>没有找到匹配的资料。</p>
+          <button type="button" className="btn btn-secondary" onClick={() => setParams({}, { replace: true })}>
+            查看全部
+          </button>
+        </div>
+      ) : (
+        <ul className="resource-list">
+          {filtered.map((item) => (
+            <ResourceRow key={item.id} item={item} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
 
-function ResourceRow({ item }: { item: ResourceFile }) {
+function ResourceRow({ item }: { item: ResourceItem }) {
   return (
-    <article className="interactive-card rounded-2xl border border-slate-200 bg-white p-4">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="rounded-full bg-bridge-50 px-2 py-0.5 font-semibold text-bridge-800">{item.kind}</span>
-            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-slate-600">{item.year}</span>
-            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-slate-600">{item.extension || "file"}</span>
-            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-slate-600">{formatBytes(item.size)}</span>
-          </div>
-          <h3 className="mt-2 truncate text-base font-semibold text-slate-950" title={item.name}>
-            {item.title}
-          </h3>
-          <p className="mt-1 break-all text-xs leading-5 text-slate-500">{item.relative_path}</p>
+    <li className="resource-row">
+      <div className="resource-main">
+        <div className="badge-row">
+          <span className="badge">{item.kind}</span>
+          <span className={`badge badge-license is-${item.licenseStatus}`}>{LICENSE_LABEL[item.licenseStatus]}</span>
         </div>
-        <a
-          href={withTrialAccessCode(item.download_url)}
-          className="shrink-0 rounded-lg bg-slate-950 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-slate-800"
-        >
-          下载
-        </a>
+        <h2>{item.title}</h2>
+        <p>{item.summary}</p>
+        {item.meta.length > 0 && <p className="resource-meta">{item.meta.join(" · ")}</p>}
       </div>
-    </article>
+      <div className="resource-actions">
+        {item.to && (
+          <Link className="btn btn-secondary" to={item.to}>
+            {item.kind === "官方赛事与规则" ? "看日历" : "打开"}
+          </Link>
+        )}
+        {item.officialUrl && (
+          <a className="text-link" href={item.officialUrl} target="_blank" rel="noreferrer">
+            {item.officialLabel ?? "官方页面"} ↗
+          </a>
+        )}
+      </div>
+    </li>
   );
-}
-
-function formatBytes(value: number) {
-  if (value < 1024) return `${value} B`;
-  if (value < 1024 * 1024) return `${(value / 1024).toFixed(1)} KB`;
-  if (value < 1024 * 1024 * 1024) return `${(value / 1024 / 1024).toFixed(1)} MB`;
-  return `${(value / 1024 / 1024 / 1024).toFixed(1)} GB`;
 }

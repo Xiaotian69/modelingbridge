@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { activeNav, isLegacyPage } from "./navigation";
+import { activeNav } from "./navigation";
 import {
   DEFAULT_PREFS,
   PREFS_KEY,
@@ -33,16 +33,6 @@ describe("navigation", () => {
     ["/learning", null],
   ])("%s belongs to %s", (path, expected) => {
     expect(activeNav(path)).toBe(expected);
-  });
-  it("treats unmigrated pages as legacy, but not home or the library shell", () => {
-    expect(isLegacyPage("/quest")).toBe(true);
-    expect(isLegacyPage("/learn")).toBe(true);
-    expect(isLegacyPage("/learn/reference")).toBe(true);
-    expect(isLegacyPage("/learn/linear-programming")).toBe(false);
-    expect(isLegacyPage("/practice/linear-programming/practice-2")).toBe(false);
-    expect(isLegacyPage("/")).toBe(false);
-    expect(isLegacyPage("/library")).toBe(false);
-    expect(isLegacyPage("/nope")).toBe(false);
   });
 });
 

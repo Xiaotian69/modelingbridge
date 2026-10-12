@@ -1,7 +1,10 @@
 /** App-facing learning state: one in-memory copy, persisted locally, observable from React. */
 import { useSyncExternalStore } from "react";
 import { LP_SECTION_IDS } from "../learning/sectionIds";
+import { PRACTICE_KEY, READING_KEY } from "../learning/storage";
+import { clearReturnTicket } from "./returnTicket";
 import {
+  LEARNING_BACKUP_KEY,
   LEARNING_KEY,
   defaultStorage,
   emptyState,
@@ -165,6 +168,30 @@ export const learning = {
   /** “清空重做”: forget the draft and help level, keep the attempt history. */
   restart(id: string) {
     update((s) => withExercise(s, id, (e) => ({ ...e, draft: undefined, helpLevel: 0 })));
+  },
+  /**
+   * 学习记录 › 清空课程与练习进度: empties the V2 state and removes the V1 keys too
+   * (otherwise the next load would migrate them back), plus the corrupt-data backup and
+   * the return ticket. Quest drafts and reports have their own keys and are not touched.
+   */
+  clearAll() {
+    const s = ensure();
+    if (draftTimer) clearTimeout(draftTimer);
+    draftTimer = null;
+    const store = defaultStorage();
+    if (store && s.persistent) {
+      writeState(store, emptyState());
+      for (const key of [PRACTICE_KEY, READING_KEY, LEARNING_BACKUP_KEY]) {
+        try {
+          store.removeItem(key);
+        } catch {
+          /* ignore */
+        }
+      }
+    }
+    clearReturnTicket();
+    snapshot = { state: emptyState(), persistent: s.persistent, readOnly: false };
+    emit();
   },
   /** Test helper: drop the in-memory copy so the next read reloads from storage. */
   resetForTests() {

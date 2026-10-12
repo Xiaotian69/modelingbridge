@@ -142,7 +142,8 @@ export function HomePage() {
         <span>也可以直接去：</span>
         <Link to="/quest">七关实战</Link>
         <Link to="/library">资料中心</Link>
-        <Link to="/learn/reference">模型速查</Link>
+        <Link to="/library/prompts">提示词库</Link>
+        <Link to="/learn/reference">方法速查</Link>
         <Link to="/library/calendar">赛事日历</Link>
       </nav>
     </div>

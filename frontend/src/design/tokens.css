@@ -1,8 +1,7 @@
 /*
  * ModelingBridge V2 design tokens.
  * New UI uses the semantic tokens (--bg, --surface, --text …).
- * Pages not yet migrated render inside `.legacy-surface`, which pins the
- * previous light palette (legacy variable names included) until each page moves over.
+ * Older Tailwind pages follow the theme through design/tailwindBridge.css.
  */
 :root {
   color-scheme: light;
@@ -99,31 +98,15 @@
   --code-bg: #0a1316;
 }
 
-/* Previous palette, kept for pages that have not been migrated yet. */
-:root,
-.legacy-surface {
-  --ink: #162d37;
-  --muted: #64747a;
-  --navy: #0c222d;
-  --paper: #f8faf9;
-  --line: #dfe7e5;
-  --accent: #157a6e;
+/* Previous variable names, kept as aliases so older stylesheets follow the theme. */
+:root {
+  --ink: var(--text);
+  --muted: var(--text-muted);
+  --navy: var(--hero-bg);
+  --paper: var(--bg);
+  --line: var(--border);
+  --accent: var(--brand);
   --shadow: 0 8px 24px #173e3210;
-  --motion-base-legacy: 240ms;
-}
-.legacy-surface {
-  color-scheme: light;
-  --bg: #f8faf9;
-  --surface: #ffffff;
-  --surface-sunken: #f2f1eb;
-  --text: #162d37;
-  --text-muted: #64747a;
-  --border: #dfe7e5;
-  --brand: #157a6e;
-  --brand-ink: #ffffff;
-  --focus: #35a999;
-  background: var(--paper);
-  color: var(--ink);
 }
 
 :root[data-motion="lite"] {

@@ -37,23 +37,3 @@ export function activeNav(pathname: string): string | null {
     if (item.match.some((prefix) => isUnder(pathname, prefix))) return item.to;
   return null;
 }
-
-/**
- * Pages that still use the pre-V2 light styling. They render inside `.legacy-surface`
- * until each one is migrated (later batches), so dark mode never half-applies to them.
- */
-const legacyExact = ["/learn"];
-const legacyPrefixes = [
-  "/learn/reference",
-  "/quest",
-  "/cases",
-  "/records",
-  "/workbench",
-  "/feedback",
-  "/about",
-  "/resources",
-  "/tools",
-  "/calendar",
-];
-export const isLegacyPage = (pathname: string) =>
-  legacyExact.includes(pathname) || legacyPrefixes.some((prefix) => isUnder(pathname, prefix));

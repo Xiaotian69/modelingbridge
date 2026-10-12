@@ -1,5 +1,5 @@
 import type { ProviderId, StudentLevel, WorkbenchAnalysis } from "../types";
-import type { StoredRecord } from "../pages/Records";
+import type { StoredRecord } from "../state/localRecords";
 
 export interface WorkbenchMarkdownContext {
   problemText: string;

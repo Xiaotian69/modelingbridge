@@ -1,3 +1,4 @@
+import { PageHead } from "../components/ui/PageHead";
 import { codingTips, writingTips } from "../data/modelingContent";
 
 const checks = [
@@ -22,19 +23,10 @@ const checks = [
 export function ToolsPage() {
   return (
     <div className="hairline-grid">
-      <section className="premium-shell">
-        <div className="relative mx-auto max-w-7xl px-4 py-14 text-white">
-          <p className="inline-flex rounded-md border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100">
-            Coding & Writing
-          </p>
-          <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
-            编码和论文写作技巧
-          </h1>
-          <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-200 sm:text-base">
-            建模不是只会一个模型名。真正能交付的队伍，需要代码可复现、图表能说明问题、论文能把假设和结果讲清楚。
-          </p>
-        </div>
-      </section>
+      <PageHead
+        title="编码与论文写作技巧"
+        lead="建模不是只会一个模型名。真正能交付的队伍，需要代码可复现、图表能说明问题、论文能把假设和结果讲清楚。"
+      />
 
       <section className="mx-auto grid max-w-7xl gap-5 px-4 py-10 lg:grid-cols-2">
         <TipColumn title="编码技巧" data={codingTips} />

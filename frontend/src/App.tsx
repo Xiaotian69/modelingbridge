@@ -37,6 +37,9 @@ const RecordsPage = lazy(() =>
 const ResourcesPage = lazy(() =>
   import("./pages/Resources").then((m) => ({ default: m.ResourcesPage })),
 );
+const PromptsPage = lazy(() =>
+  import("./pages/Prompts").then((m) => ({ default: m.PromptsPage })),
+);
 const ToolsPage = lazy(() =>
   import("./pages/Tools").then((m) => ({ default: m.ToolsPage })),
 );
@@ -71,6 +74,8 @@ export function AppRoutes() {
         {/* 资料 */}
         <Route path="library" element={<LibraryLayout />}>
           <Route index element={<ResourcesPage />} />
+          <Route path="prompts" element={<PromptsPage />} />
+          <Route path="prompts/:promptId" element={<PromptsPage />} />
           <Route path="tools" element={<ToolsPage />} />
           <Route path="calendar" element={<CalendarPage />} />
         </Route>

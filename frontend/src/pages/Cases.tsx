@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listCases } from "../api/client";
 import { listLocalCases } from "../data/localCases";
-import { classicProblems, getClassicProblemPracticeLink, modelMethods, recentTrainingCases, resourcePacks } from "../data/modelingContent";
+import { classicProblems, getClassicProblemPracticeLink, modelMethods, recentTrainingCases } from "../data/modelingContent";
+import { PageHead } from "../components/ui/PageHead";
 import type { CaseSummary } from "../types";
 
 export function CasesPage() {
@@ -20,19 +21,11 @@ export function CasesPage() {
 
   return (
     <div className="hairline-grid">
-      <section className="premium-shell">
-        <div className="relative mx-auto max-w-7xl px-4 py-14 text-white">
-          <p className="inline-flex rounded-md border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100">
-            Problem Studio
-          </p>
-          <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
-            例题库：先练简化题，再上正式赛题
-          </h1>
-          <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-200 sm:text-base">
-            每道题只给教学路径和训练目标，不给可直接提交的论文答案。经典赛题只做改编练习，正式备赛请回到官方原题。
-          </p>
-        </div>
-      </section>
+      <PageHead
+        crumbs={[{ label: "实战", to: "/quest" }, { label: "教学案例" }]}
+        title="教学案例：先练简化题，再上正式赛题"
+        lead="每道题只给教学路径和训练目标，不给可直接提交的论文答案。经典赛题只做改编练习，正式备赛请回到官方原题。"
+      />
 
       <section className="mx-auto max-w-7xl px-4 py-10">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -131,31 +124,12 @@ export function CasesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-10">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Local Resources</p>
-          <h2 className="mt-2 text-3xl font-semibold text-slate-950">已上传的美赛资料包</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-            这些资料先作为内容加工来源：用于整理经典题、优秀论文结构和问答式学习提示，不直接在网页里批量展开 PDF。
-          </p>
-        </div>
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
-          {resourcePacks.map((pack) => (
-            <article key={pack.title} className="quiet-card rounded-2xl p-5">
-              <h3 className="text-lg font-semibold text-slate-950">{pack.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-600">{pack.summary}</p>
-              <p className="mt-3 rounded-xl border border-slate-200 bg-white p-3 text-xs leading-5 text-slate-500">{pack.localPath}</p>
-              <p className="mt-3 text-sm text-slate-700">{pack.files}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {pack.usage.map((item) => (
-                  <span key={item} className="rounded-full bg-bridge-50 px-2.5 py-1 text-xs font-semibold text-bridge-800">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </article>
-          ))}
-        </div>
+      <section className="mx-auto max-w-7xl px-4 py-6">
+        <p className="notice notice-info">
+          历年赛题原文与优秀论文请到各赛事官方页面获取；第三方整理的合集在授权核验前不提供下载。可在
+          <Link to="/library" className="text-link"> 资料中心 › 资料索引 </Link>
+          查看官方链接。
+        </p>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-10">

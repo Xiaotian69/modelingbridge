@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { PageHead } from "../components/ui/PageHead";
 import { classicProblems, codingTips, getClassicProblemPracticeLink, learningTracks, modelMethods, recentTrainingCases, writingTips } from "../data/modelingContent";
 
 const tabs = ["全部", "预测", "优化", "评价", "统计", "机理", "网络"] as const;
@@ -10,29 +11,24 @@ export function ModelReferencePage() {
 
   return (
     <div className="hairline-grid">
-      <section className="premium-shell">
-        <div className="relative mx-auto max-w-7xl px-4 py-14 text-white">
-          <p className="inline-flex rounded-md border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100">
-            Learning Mode
-          </p>
-          <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
-            模型速查与资料
-          </h1>
-          <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-200 sm:text-base">
-            在这里回顾适用条件、输入输出和常见误区。第一次学习线性规划，建议先跟随完整例题学习，再回来速查。
-          </p>
-          <Link to="/learn/linear-programming" className="mt-5 inline-block underline">进入线性规划精讲 →</Link>
-          <div className="mt-8 grid gap-3 md:grid-cols-3">
-            {learningTracks.map((track) => (
-              <article key={track.title} className="glass-panel rounded-2xl p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <h2 className="font-semibold text-white">{track.title}</h2>
-                  <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-emerald-100">{track.duration}</span>
-                </div>
-                <p className="mt-3 text-sm leading-6 text-slate-200">{track.focus}</p>
-              </article>
-            ))}
-          </div>
+      <PageHead
+        crumbs={[{ label: "精讲", to: "/learn" }, { label: "方法速查" }]}
+        title="方法速查与资料"
+        lead="回顾适用条件、输入输出和常见误区。第一次学习线性规划，建议先跟随完整例题学习，再回来速查。"
+      >
+        <Link to="/learn/linear-programming" className="btn btn-secondary">进入线性规划精讲 →</Link>
+      </PageHead>
+      <section className="mx-auto max-w-7xl px-4 pt-6">
+        <div className="grid gap-3 md:grid-cols-3">
+          {learningTracks.map((track) => (
+            <article key={track.title} className="quiet-card rounded-2xl p-4">
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="font-semibold text-slate-950">{track.title}</h2>
+                <span className="rounded-full bg-bridge-50 px-2 py-0.5 text-xs text-bridge-800">{track.duration}</span>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{track.focus}</p>
+            </article>
+          ))}
         </div>
       </section>
 

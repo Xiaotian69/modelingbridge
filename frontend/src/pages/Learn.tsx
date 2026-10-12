@@ -1,81 +1,88 @@
 import { Link, Navigate, useLocation } from "react-router-dom";
-import "../learning/learning.css";
+import { PageHead } from "../components/ui/PageHead";
+import { modelMethods } from "../data/modelingContent";
+
+/** 精讲目录 (design doc §3.3): one open lesson, method quick references, honest “筹备中”. */
 export function LearnPage() {
   const { hash } = useLocation();
   if (hash === "#model-linear-programming")
     return <Navigate replace to="/learn/linear-programming" />;
   if (hash) return <Navigate replace to={`/learn/reference${hash}`} />;
   return (
-    <div className="learning-home">
-      <header className="learning-intro">
-        <p className="eyebrow">MODELINGBRIDGE / 学习中心</p>
-        <h1>
-          从看懂一个问题，
-          <br />
-          到独立完成一个模型。
-        </h1>
-        <p>先跟着完整例题学会方法，再用练习检验理解，最后走进开放的赛题。</p>
-      </header>
-      <section className="learning-feature">
-        <div>
-          <p className="eyebrow">01 / 首个精讲样板 · 约 45–60 分钟</p>
-          <h2>
-            线性规划
-            <br />
-            <span>有限资源，怎样分配才更好？</span>
-          </h2>
-          <p>
-            陪一家加工坊安排一周生产。从变量与约束开始，亲手画出可行域，算出最优计划，再检验它是否可信。
-          </p>
-          <Link className="lesson-button" to="/learn/linear-programming">
-            开始精讲
-          </Link>
-        </div>
-        <div
-          className="feature-equation"
-          aria-label="课程例题：最大化 40x 加 50y，最优计划 A 40、B 20 平方米"
-        >
-          <span>两种产品 · 两种资源 · 一个决策</span>
-          <b>max 40x + 50y</b>
-          <div className="feature-lines">
-            <i />
-            <i />
-            <i />
+    <div className="learn-page">
+      <PageHead
+        title="精讲目录"
+        lead="先跟着完整例题学会方法，再用练习检验理解，最后走进开放的赛题。"
+      />
+      <div className="site-container">
+        <section className="learn-feature" aria-labelledby="learn-lp">
+          <div>
+            <p className="page-kicker">已开放 · 约 45–60 分钟</p>
+            <h2 id="learn-lp">线性规划：有限资源，怎样分配才更好？</h2>
+            <p>
+              陪一家加工坊安排一周生产。从变量与约束开始，亲手画出可行域，算出最优计划，再检验它是否可信。
+            </p>
+            <div className="page-head-actions">
+              <Link className="btn btn-primary" to="/learn/linear-programming">
+                开始精讲
+              </Link>
+              <Link className="btn btn-secondary" to="/practice/linear-programming">
+                进入专项练习
+              </Link>
+            </div>
           </div>
-          <p>理解每一个式子从哪里来。</p>
-        </div>
-      </section>
-      <section className="learning-modes" aria-label="三种学习模式">
-        <article>
-          <span className="mode-number">A</span>
-          <h2>精讲模式</h2>
-          <p>连续阅读、手工推导、可操作图表。跟着一个问题，走完建模全过程。</p>
-          <Link to="/learn/linear-programming">阅读线性规划 →</Link>
-        </article>
-        <article>
-          <span className="mode-number">B</span>
-          <h2>刷题模式</h2>
-          <p>按难度专项训练。逐步提示、提交解析、错题重练，记录保存在本机。</p>
-          <Link to="/practice/linear-programming">进入专项练习</Link>
-        </article>
-        <article>
-          <span className="mode-number">C</span>
-          <h2>赛题实战模式</h2>
-          <p>保留七关训练。从问题分析走到论文表达，以开放任务练习独立建模。</p>
-          <Link to="/quest">进入七关实战</Link>
-        </article>
-      </section>
-      <footer className="learning-bottom">
-        <div>
-          <h2>已经学过，想快速查一查？</h2>
-          <p>
-            模型条件、输入输出与近年题目资料仍然保留。其他模型的精讲将在样板确认后逐步建设。
-          </p>
-        </div>
-        <Link className="lesson-button secondary" to="/learn/reference">
-          模型速查与资料 →
-        </Link>
-      </footer>
+          <div className="learn-equation" aria-label="课程例题：最大化 40x 加 50y，最优计划 A 40、B 20 平方米">
+            <span>两种产品 · 两种资源 · 一个决策</span>
+            <b>max 40x + 50y</b>
+            <span>2x + y ≤ 100 · x + 2y ≤ 80</span>
+          </div>
+        </section>
+
+        <section className="learn-modes" aria-label="三种学习方式">
+          <article>
+            <h2>精讲</h2>
+            <p>连续阅读、手工推导、可操作图表。跟着一个问题，走完建模全过程。</p>
+            <Link className="text-link" to="/learn/linear-programming">
+              阅读线性规划 →
+            </Link>
+          </article>
+          <article>
+            <h2>刷题</h2>
+            <p>按难度专项训练。错题诊断、分层提示、错题重练，记录保存在本机。</p>
+            <Link className="text-link" to="/practice/linear-programming">
+              6 道线性规划练习 →
+            </Link>
+          </article>
+          <article>
+            <h2>实战</h2>
+            <p>七关训练：从读题走到论文框架，以开放任务练习独立建模。</p>
+            <Link className="text-link" to="/quest">
+              进入七关实战
+            </Link>
+          </article>
+        </section>
+
+        <section className="learn-methods" aria-labelledby="learn-methods">
+          <div className="records-head">
+            <h2 id="learn-methods">方法索引</h2>
+            <Link className="text-link" to="/learn/reference#methods">
+              全部方法速查 →
+            </Link>
+          </div>
+          <ul>
+            {modelMethods.map((method) => (
+              <li key={method.slug}>
+                <Link to={method.slug === "linear-programming" ? "/learn/linear-programming" : `/learn/reference#model-${method.slug}`}>
+                  <strong>{method.name}</strong>
+                  <span className="muted-note">
+                    {method.family} · {method.slug === "linear-programming" ? "精讲已开放" : "仅速查 · 精讲筹备中"}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </div>
   );
 }

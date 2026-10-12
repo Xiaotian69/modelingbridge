@@ -47,6 +47,14 @@ describe("V2 routes and legacy URL compatibility", () => {
     expect(screen.getByRole("link", { name: "模板与工具" })).toHaveAttribute("href", "/library/tools");
   });
 
+  it("opens the prompt library list and a deep-linked template under 资料中心", async () => {
+    renderAt("/library/prompts/pr.breakdown.io");
+    expect(await screen.findByRole("heading", { name: "小问输入输出表" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "提示词库", current: "page" })).toHaveAttribute("href", "/library/prompts");
+    const main = screen.getByRole("navigation", { name: "主导航" });
+    expect(main.querySelector('[aria-current="page"]')).toHaveTextContent("资料");
+  });
+
   it("keeps the experimental workbench reachable by URL", async () => {
     renderAt("/workbench");
     expect(await screen.findByTestId("where")).toHaveTextContent("/workbench");
