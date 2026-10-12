@@ -11,7 +11,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, expect, it } from "vitest";
 import { Layout } from "./Layout";
 afterEach(cleanup);
-it("closes the mobile menu on Escape and after navigation", () => {
+it("lists all six destinations and closes on Escape and after navigation", () => {
   render(
     <MemoryRouter
       future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
@@ -26,13 +26,16 @@ it("closes the mobile menu on Escape and after navigation", () => {
   const toggle = screen.getByRole("button", { name: "打开导航菜单" });
   fireEvent.click(toggle);
   expect(toggle).toHaveAttribute("aria-expanded", "true");
+  const menu = screen.getByRole("navigation", { name: "移动导航" });
+  for (const label of ["首页", "精讲", "刷题", "实战", "资料", "学习记录"])
+    expect(within(menu).getByRole("link", { name: label })).toBeInTheDocument();
   fireEvent.keyDown(document, { key: "Escape" });
   expect(toggle).toHaveAttribute("aria-expanded", "false");
+  expect(toggle).toHaveFocus();
   fireEvent.click(toggle);
   fireEvent.click(
-    within(screen.getByRole("navigation", { name: "移动导航" })).getByText(
-      "知识库",
-    ),
+    within(screen.getByRole("navigation", { name: "移动导航" })).getByRole("link", { name: "精讲" }),
   );
   expect(toggle).toHaveAttribute("aria-expanded", "false");
+  expect(screen.queryByRole("navigation", { name: "移动导航" })).not.toBeInTheDocument();
 });

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { PreferencesPanel } from "../app/PreferencesPanel";
 import { recordToMarkdown, recordsToMarkdown } from "../utils/markdownBuilder";
 
 const STORAGE_KEY = "mb_records";
@@ -76,6 +77,7 @@ export function RecordsPage() {
         <strong>本机浏览器</strong>
         中保存你在工作台点击「保存学习记录」的内容，便于复盘；后续可接账号与数据库。
       </p>
+      <PreferencesPanel />
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
           to="/workbench"
