@@ -10,4 +10,4 @@ Architecture: external worktree for public documentation; separate private repos
 - [x] Verify frontend tests/build, local links, ignored material and staged diff.
 - [x] Initialize Private skeleton and source/privacy/license inventory without raw files.
 - [x] Confirm production binding: feat/edgeone-hk-pilot, production auto-deploy on, Preview auto-deploy off.
-- [ ] Push V2 development and collaboration branches; create Draft PR targeting V2; keep existing PRs unchanged.
+- [x] Push V2 development and collaboration branches; create Draft PR #3 targeting V2; keep existing PRs unchanged.

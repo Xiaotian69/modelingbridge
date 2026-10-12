@@ -33,3 +33,5 @@ PR #1/#2 保持 OPEN Draft。未创建 develop、未合并或发布。
 审核本机资料来源/隐私/版权，逐项决定是否入私库；私库协作者访问另行确认。
 
 复核两次本地 V2 提交：无匹配凭证、硬编码凭证赋值或原始资料文件；一份交付文档含工作目录路径（不含个人身份字段），历史保持原样。
+
+交付：已推送 feat/modelingbridge-v2-ui（7645dbb）与 chore/github-collaboration；Draft PR #3：https://github.com/Xiaotian69/modelingbridge/pull/3，目标为新版开发分支。生产分支仍为 54e7d4c，未推送或发布。
