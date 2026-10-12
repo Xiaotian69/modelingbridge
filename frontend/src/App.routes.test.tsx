@@ -18,7 +18,7 @@ afterEach(() => {
 
 function Where() {
   const { pathname } = useLocation();
-  return <output data-testid="where">{pathname}</output>;
+  return <span data-testid="where">{pathname}</span>;
 }
 const renderAt = (path: string) =>
   render(

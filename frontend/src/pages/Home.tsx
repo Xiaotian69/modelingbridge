@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MathNetwork } from "../components/motion/MathNetwork";
 import { Icon } from "../components/ui/Icon";
 import { HomeSearch } from "./home/HomeSearch";
 import { readContinueItems, type ContinueItem } from "./home/continueLearning";
+import { sectionNumber, sectionTitle } from "../learning/sectionIds";
 
 type RouteStop = { title: string; detail: string; href?: string };
 const route: RouteStop[] = [
@@ -16,17 +17,11 @@ const route: RouteStop[] = [
 
 function ContinueLearning() {
   const [items] = useState<ContinueItem[]>(() => readContinueItems());
-  const [sectionTitle, setSectionTitle] = useState<string | null>(null);
   const reading = items.find((i) => i.kind === "reading");
-  useEffect(() => {
-    if (!reading) return;
-    import("../learning/content")
-      .then(({ sections }) => {
-        const index = sections.findIndex((s) => s.id === reading.sectionId);
-        if (index >= 0) setSectionTitle(`第 ${index + 1} 节 · ${sections[index].title}`);
-      })
-      .catch(() => {});
-  }, [reading]);
+  const readingLabel =
+    reading && sectionNumber(reading.sectionId) > 0
+      ? `第 ${sectionNumber(reading.sectionId)} 节 · ${sectionTitle(reading.sectionId)}`
+      : "上次读到的位置";
   if (!items.length) return null;
   return (
     <section className="continue-strip" aria-labelledby="continue-title">
@@ -37,7 +32,7 @@ function ContinueLearning() {
             <li key={item.kind}>
               {item.kind === "reading" && (
                 <>
-                  <span>线性规划 · {sectionTitle ?? "上次读到的位置"}</span>
+                  <span>线性规划 · {readingLabel}</span>
                   <Link className="btn btn-secondary" to={item.href}>
                     继续阅读
                   </Link>

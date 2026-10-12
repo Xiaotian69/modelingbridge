@@ -4,9 +4,11 @@ import { cleanup, fireEvent, render, screen, within } from "@testing-library/rea
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { HomePage } from "./Home";
+import { learning } from "../state/learning";
 
 beforeEach(() => {
   localStorage.clear();
+  learning.resetForTests();
   vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null);
 });
 afterEach(() => {
@@ -49,6 +51,7 @@ it("hides 继续学习 for first-time visitors and shows it when local progress 
     "mb_learning_practice_v1",
     JSON.stringify({ "practice-1": { correct: false, attempts: 2, updated: "2026-10-12T00:00:00.000Z" } }),
   );
+  learning.resetForTests(); // a new page load: V1 records are migrated into the V2 store
   renderHome();
   const strip = screen.getByRole("heading", { name: "继续学习" }).closest("section")!;
   expect(within(strip).getByRole("link", { name: "继续阅读" })).toHaveAttribute(
@@ -56,6 +59,7 @@ it("hides 继续学习 for first-time visitors and shows it when local progress 
     "/learn/linear-programming#derive",
   );
   expect(within(strip).getByText(/1 题待重练/)).toBeInTheDocument();
+  expect(within(strip).getByText(/第 4 节 · 不用软件，完整求出最优解/)).toBeInTheDocument();
 });
 
 it("searches methods locally and marks methods without a lesson as 速查", () => {

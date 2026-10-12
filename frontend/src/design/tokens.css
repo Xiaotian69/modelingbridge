@@ -44,6 +44,15 @@
   --motion-fast: 140ms;
   --motion-base: 220ms;
   --header-h: 60px;
+  /* Feasible-region chart (learning/Graph.tsx): hue carries meaning, legend repeats it in text. */
+  --chart-grid: #dce8e3;
+  --chart-region: #bbebda;
+  --chart-region-edge: #187d65;
+  --chart-cut: #287dbe;
+  --chart-assemble: #945fac;
+  --chart-optimum: #b55313;
+  --chart-text: #4f6460;
+  --code-bg: #0f1d22;
   --shadow-float: 0 12px 32px rgba(11, 29, 36, 0.18);
 }
 
@@ -66,6 +75,14 @@
   --ai: #a79df0;
   --focus: #e3a25a;
   --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --chart-grid: #233539;
+  --chart-region: #1f4a42;
+  --chart-region-edge: #5cc8b2;
+  --chart-cut: #6fb3ea;
+  --chart-assemble: #c39be0;
+  --chart-optimum: #f0a060;
+  --chart-text: #9fb1b0;
+  --code-bg: #0a1316;
 }
 
 /* Previous palette, kept for pages that have not been migrated yet. */

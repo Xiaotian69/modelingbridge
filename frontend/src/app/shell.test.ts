@@ -36,7 +36,10 @@ describe("navigation", () => {
   });
   it("treats unmigrated pages as legacy, but not home or the library shell", () => {
     expect(isLegacyPage("/quest")).toBe(true);
-    expect(isLegacyPage("/learn/linear-programming")).toBe(true);
+    expect(isLegacyPage("/learn")).toBe(true);
+    expect(isLegacyPage("/learn/reference")).toBe(true);
+    expect(isLegacyPage("/learn/linear-programming")).toBe(false);
+    expect(isLegacyPage("/practice/linear-programming/practice-2")).toBe(false);
     expect(isLegacyPage("/")).toBe(false);
     expect(isLegacyPage("/library")).toBe(false);
     expect(isLegacyPage("/nope")).toBe(false);
@@ -46,12 +49,12 @@ describe("navigation", () => {
 describe("preferences", () => {
   it("defaults to system theme with the splash on", () => {
     expect(readPrefs(memory())).toEqual(DEFAULT_PREFS);
-    expect(DEFAULT_PREFS).toEqual({ theme: "system", splash: true });
+    expect(DEFAULT_PREFS).toEqual({ theme: "system", splash: true, nudges: true });
   });
   it("round-trips and ignores invalid values field by field", () => {
     const store = memory();
-    expect(writePrefs({ theme: "dark", splash: false }, store)).toBe(true);
-    expect(readPrefs(store)).toEqual({ theme: "dark", splash: false });
+    expect(writePrefs({ theme: "dark", splash: false, nudges: false }, store)).toBe(true);
+    expect(readPrefs(store)).toEqual({ theme: "dark", splash: false, nudges: false });
     store.setItem(PREFS_KEY, JSON.stringify({ theme: "purple", splash: "yes" }));
     expect(readPrefs(store)).toEqual(DEFAULT_PREFS);
     store.setItem(PREFS_KEY, "{not json");

@@ -63,6 +63,7 @@ export function AppRoutes() {
         {/* 刷题 */}
         <Route path="practice" element={<Navigate to="/practice/linear-programming" replace />} />
         <Route path="practice/linear-programming" element={<PracticePage />} />
+        <Route path="practice/linear-programming/:exerciseId" element={<PracticePage />} />
         {/* 实战 */}
         <Route path="quest" element={<QuestPage />} />
         <Route path="cases" element={<CasesPage />} />

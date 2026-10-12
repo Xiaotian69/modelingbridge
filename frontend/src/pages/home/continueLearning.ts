@@ -1,8 +1,8 @@
 /**
- * Reads what the learner left unfinished from the existing (V1) local keys.
- * Read-only: batch 1 does not migrate or rewrite any stored data.
+ * What the learner left unfinished: lesson position and practice from the V2 learning
+ * store (which migrates the V1 keys on first load), quest drafts from their own keys.
  */
-import { READING_KEY, readHistory } from "../../learning/storage";
+import { learning } from "../../state/learning";
 
 const QUEST_PREFIX = "mb_quest_draft:";
 const QUEST_TOTAL = 7;
@@ -23,20 +23,15 @@ function safeStorage(): Storage | null {
 export function readContinueItems(store: Storage | null = safeStorage()): ContinueItem[] {
   if (!store) return [];
   const items: ContinueItem[] = [];
-  try {
-    const section: unknown = JSON.parse(store.getItem(READING_KEY) || "null");
-    if (typeof section === "string" && /^[a-z-]+$/.test(section))
-      items.push({ kind: "reading", sectionId: section, href: `/learn/linear-programming#${section}` });
-  } catch {
-    /* Corrupt reading position: ignore. */
-  }
-  const history = readHistory();
-  const practiced = Object.entries(history).filter(([id]) => id !== "think-1");
+  const { state } = learning.get();
+  const section = state.reading.lp?.lastSectionId;
+  if (section) items.push({ kind: "reading", sectionId: section, href: `/learn/linear-programming#${section}` });
+  const practiced = Object.values(state.exercises).filter((e) => e.attempts > 0);
   if (practiced.length)
     items.push({
       kind: "practice",
       attempted: practiced.length,
-      wrong: practiced.filter(([, a]) => !a.correct).length,
+      wrong: practiced.filter((e) => e.lastStatus && e.lastStatus !== "correct").length,
       href: "/practice/linear-programming",
     });
   let latestQuest: Extract<ContinueItem, { kind: "quest" }> | null = null;

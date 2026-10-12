@@ -31,7 +31,7 @@ it("turns the splash off and switches theme, persisting both locally", () => {
   fireEvent.click(screen.getByRole("radio", { name: "深色" }));
   expect(readPrefs().theme).toBe("dark");
   expect(document.documentElement.dataset.theme).toBe("dark");
-  expect(JSON.parse(localStorage.getItem(PREFS_KEY)!)).toEqual({ theme: "dark", splash: false });
+  expect(JSON.parse(localStorage.getItem(PREFS_KEY)!)).toEqual({ theme: "dark", splash: false, nudges: true });
 });
 
 it("warns when the browser refuses to store preferences", () => {

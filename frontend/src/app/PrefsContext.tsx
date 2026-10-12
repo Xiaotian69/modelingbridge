@@ -61,14 +61,8 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
   );
 }
 
-const fallback: PrefsValue = {
-  prefs: readPrefs(),
-  update: () => {},
-  saved: false,
-  resolvedTheme: "light",
-};
-
-/** Components rendered outside the provider (isolated tests) get read-only defaults. */
+/** Components rendered outside the provider (isolated tests) read current values, read-only. */
 export function usePrefs(): PrefsValue {
-  return useContext(PrefsContext) ?? fallback;
+  const value = useContext(PrefsContext);
+  return value ?? { prefs: readPrefs(), update: () => {}, saved: false, resolvedTheme: "light" };
 }

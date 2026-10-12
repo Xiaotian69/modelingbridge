@@ -42,9 +42,9 @@ export function activeNav(pathname: string): string | null {
  * Pages that still use the pre-V2 light styling. They render inside `.legacy-surface`
  * until each one is migrated (later batches), so dark mode never half-applies to them.
  */
+const legacyExact = ["/learn"];
 const legacyPrefixes = [
-  "/learn",
-  "/practice",
+  "/learn/reference",
   "/quest",
   "/cases",
   "/records",
@@ -56,4 +56,4 @@ const legacyPrefixes = [
   "/calendar",
 ];
 export const isLegacyPage = (pathname: string) =>
-  legacyPrefixes.some((prefix) => isUnder(pathname, prefix));
+  legacyExact.includes(pathname) || legacyPrefixes.some((prefix) => isUnder(pathname, prefix));

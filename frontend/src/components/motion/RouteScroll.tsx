@@ -1,6 +1,12 @@
 import { useLayoutEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 
+/** Room for sticky bars above a hash target: its CSS scroll-margin-top, else 90px. */
+function offsetFor(target: HTMLElement) {
+  const margin = parseFloat(getComputedStyle(target).scrollMarginTop);
+  return Number.isFinite(margin) && margin > 0 ? margin : 90;
+}
+
 /** Wait for lazy content before resolving hashes or restoring history position. */
 export function RouteScroll() {
   const location = useLocation();
@@ -34,7 +40,7 @@ export function RouteScroll() {
       }
       const top =
         saved ??
-        (target ? target.getBoundingClientRect().top + window.scrollY - 90 : 0);
+        (target ? target.getBoundingClientRect().top + window.scrollY - offsetFor(target) : 0);
       window.scrollTo({ top, behavior: "instant" });
       done = true;
     };

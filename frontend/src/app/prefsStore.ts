@@ -5,9 +5,10 @@
 export const PREFS_KEY = "mb.v2.prefs";
 
 export type ThemePref = "system" | "light" | "dark";
-export type Prefs = { theme: ThemePref; splash: boolean };
+/** `nudges`: show the one-off “卡住了？” help suggestion after repeated wrong answers (D-015). */
+export type Prefs = { theme: ThemePref; splash: boolean; nudges: boolean };
 
-export const DEFAULT_PREFS: Prefs = { theme: "system", splash: true };
+export const DEFAULT_PREFS: Prefs = { theme: "system", splash: true, nudges: true };
 const THEMES: ThemePref[] = ["system", "light", "dark"];
 
 type StorageLike = Pick<Storage, "getItem" | "setItem">;
@@ -30,6 +31,7 @@ export function readPrefs(store: StorageLike | null = storage()): Prefs {
         ? (value.theme as ThemePref)
         : DEFAULT_PREFS.theme,
       splash: typeof value.splash === "boolean" ? value.splash : DEFAULT_PREFS.splash,
+      nudges: typeof value.nudges === "boolean" ? value.nudges : DEFAULT_PREFS.nudges,
     };
   } catch {
     return { ...DEFAULT_PREFS };

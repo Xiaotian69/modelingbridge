@@ -1,0 +1,184 @@
+/** App-facing learning state: one in-memory copy, persisted locally, observable from React. */
+import { useSyncExternalStore } from "react";
+import { LP_SECTION_IDS } from "../learning/sectionIds";
+import {
+  LEARNING_KEY,
+  defaultStorage,
+  emptyState,
+  loadLearningState,
+  mergeStates,
+  sanitizeState,
+  writeState,
+  writeV1Mirror,
+  type Answer,
+  type ExerciseRecord,
+  type HelpLevel,
+  type LearningState,
+  type LoadResult,
+  type SubmitStatus,
+} from "./learningStore";
+
+type Snapshot = LoadResult;
+let snapshot: Snapshot | null = null;
+const listeners = new Set<() => void>();
+let draftTimer: ReturnType<typeof setTimeout> | null = null;
+let listening = false;
+
+function ensure(): Snapshot {
+  if (!snapshot) {
+    snapshot = loadLearningState(defaultStorage(), LP_SECTION_IDS);
+    listen();
+  }
+  return snapshot;
+}
+
+function emit() {
+  listeners.forEach((l) => l());
+}
+
+function persist(mirror: boolean) {
+  const s = ensure();
+  const store = defaultStorage();
+  if (!s.persistent || s.readOnly || !store) return;
+  const ok = writeState(store, s.state);
+  if (!ok) {
+    snapshot = { ...s, persistent: false };
+    emit();
+    return;
+  }
+  if (mirror) writeV1Mirror(store, s.state);
+}
+
+function flushDraft() {
+  if (draftTimer) {
+    clearTimeout(draftTimer);
+    draftTimer = null;
+    persist(false);
+  }
+}
+
+function listen() {
+  if (listening || typeof window === "undefined") return;
+  listening = true;
+  window.addEventListener("pagehide", flushDraft);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) flushDraft();
+  });
+  // Another tab wrote: merge record by record (newer wins) instead of overwriting.
+  window.addEventListener("storage", (event) => {
+    if (event.key !== LEARNING_KEY || !snapshot || !event.newValue) return;
+    try {
+      const theirs = sanitizeState(JSON.parse(event.newValue));
+      if (!theirs) return;
+      snapshot = { ...snapshot, state: mergeStates(snapshot.state, theirs) };
+      emit();
+    } catch {
+      /* ignore malformed writes */
+    }
+  });
+}
+
+function update(mutate: (s: LearningState) => LearningState, opts: { mirror?: boolean; debounce?: boolean } = {}) {
+  const s = ensure();
+  if (s.readOnly) return;
+  snapshot = { ...s, state: mutate(s.state) };
+  emit();
+  if (opts.debounce) {
+    if (draftTimer) clearTimeout(draftTimer);
+    draftTimer = setTimeout(() => {
+      draftTimer = null;
+      persist(false);
+    }, 300);
+  } else {
+    flushDraft();
+    persist(!!opts.mirror);
+  }
+}
+
+const now = () => new Date().toISOString();
+const blank = (): ExerciseRecord => ({ attempts: 0, helpLevel: 0, updatedAt: now() });
+const withExercise = (s: LearningState, id: string, patch: (e: ExerciseRecord) => ExerciseRecord): LearningState => ({
+  ...s,
+  exercises: { ...s.exercises, [id]: { ...patch(s.exercises[id] ?? blank()), updatedAt: now() } },
+  lastActivity: { kind: "exercise", id, at: now() },
+});
+
+export const learning = {
+  get: () => ensure(),
+  /** Write a pending (debounced) draft now, e.g. before leaving for the lesson. */
+  flush: () => flushDraft(),
+  subscribe(listener: () => void) {
+    ensure();
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  },
+  setReading(sectionId: string) {
+    if (!LP_SECTION_IDS.includes(sectionId)) return;
+    update(
+      (s) => {
+        const prev = s.reading.lp;
+        if (prev?.lastSectionId === sectionId) return s;
+        const visited = prev?.visited.includes(sectionId) ? prev.visited : [...(prev?.visited ?? []), sectionId];
+        return {
+          ...s,
+          reading: { ...s.reading, lp: { lastSectionId: sectionId, visited, updatedAt: now() } },
+          lastActivity: { kind: "lesson", id: sectionId, at: now() },
+        };
+      },
+      { mirror: true },
+    );
+  },
+  recordCheckpoint(id: string, correct: boolean) {
+    update((s) => ({
+      ...s,
+      checkpoints: { ...s.checkpoints, [id]: { tried: true, lastResult: correct ? "correct" : "incorrect", updatedAt: now() } },
+    }));
+  },
+  saveDraft(id: string, draft: Answer) {
+    update((s) => withExercise(s, id, (e) => ({ ...e, draft })), { debounce: true });
+  },
+  recordSubmission(id: string, status: SubmitStatus) {
+    update(
+      (s) =>
+        withExercise(s, id, (e) => ({
+          ...e,
+          attempts: e.attempts + 1,
+          lastStatus: status,
+          legacy: undefined,
+          solvedAfterSolution: status === "correct" ? !!e.sawSolution : e.solvedAfterSolution,
+        })),
+      { mirror: true },
+    );
+  },
+  openHelp(id: string, level: HelpLevel, solved: boolean) {
+    update((s) =>
+      withExercise(s, id, (e) => ({
+        ...e,
+        helpLevel: Math.max(e.helpLevel, level) as HelpLevel,
+        sawSolution: e.sawSolution || (level === 3 && !solved),
+      })),
+    );
+  },
+  dismissNudge(id: string) {
+    update((s) => withExercise(s, id, (e) => ({ ...e, nudgeDismissed: true })));
+  },
+  /** “清空重做”: forget the draft and help level, keep the attempt history. */
+  restart(id: string) {
+    update((s) => withExercise(s, id, (e) => ({ ...e, draft: undefined, helpLevel: 0 })));
+  },
+  /** Test helper: drop the in-memory copy so the next read reloads from storage. */
+  resetForTests() {
+    snapshot = null;
+    if (draftTimer) clearTimeout(draftTimer);
+    draftTimer = null;
+    emit();
+  },
+};
+
+export function useLearning(): Snapshot {
+  return useSyncExternalStore(learning.subscribe, learning.get, () => ({
+    state: emptyState(),
+    persistent: false,
+    readOnly: false,
+  }));
+}

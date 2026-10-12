@@ -32,7 +32,7 @@ export function PreferencesPanel() {
           ))}
         </div>
         <p className="prefs-note">
-          深色主题已用于首页与全站框架；其余页面在后续批次迁移前保持浅色显示。
+          深色主题已用于首页、线性规划精讲与专项练习；其余页面在后续批次迁移前保持浅色显示。
         </p>
       </fieldset>
       <label className="switch-row" htmlFor={splashId}>
@@ -46,6 +46,19 @@ export function PreferencesPanel() {
         <span>
           <b>开屏动画</b>
           打开或刷新首页时播放约 2 秒的粒子动画。系统开启“减少动态效果”时始终不播放。
+        </span>
+      </label>
+      <label className="switch-row" htmlFor={`${splashId}-nudges`}>
+        <input
+          id={`${splashId}-nudges`}
+          type="checkbox"
+          role="switch"
+          checked={prefs.nudges}
+          onChange={(event) => update({ nudges: event.target.checked })}
+        />
+        <span>
+          <b>帮助建议</b>
+          同一道题连续答错时，在反馈下方出现一次“卡住了？”提示。关闭后不再出现，帮助按钮仍然可用。
         </span>
       </label>
       {!saved && (

@@ -93,8 +93,8 @@ export function Graph() {
         </desc>
         {[0, 20, 40, 60, 80, 100, 120].map((t) => (
           <g key={t}>
-            <line x1={X(t)} y1={Y(0)} x2={X(t)} y2={Y(120)} stroke="#dce8e3" />
-            <line x1={X(0)} y1={Y(t)} x2={X(120)} y2={Y(t)} stroke="#dce8e3" />
+            <line className="lab-grid" x1={X(t)} y1={Y(0)} x2={X(t)} y2={Y(120)} />
+            <line className="lab-grid" x1={X(0)} y1={Y(t)} x2={X(120)} y2={Y(t)} />
             <text x={X(t)} y="496" textAnchor="middle">
               {t}
             </text>
@@ -104,9 +104,8 @@ export function Graph() {
           </g>
         ))}
         <polygon
+          className="lab-region"
           points={r.vertices.map(coord).join(" ")}
-          fill="#bbebda"
-          stroke="#187d65"
           strokeWidth="2"
         />
         <line
@@ -114,7 +113,7 @@ export function Graph() {
           y1={Y(0)}
           x2={X(0)}
           y2={Y(p.b1)}
-          stroke="#287dbe"
+          className="lab-cut"
           strokeWidth="2"
         />
         <line
@@ -122,7 +121,7 @@ export function Graph() {
           y1={Y(0)}
           x2={X(0)}
           y2={Y(p.b2 / 2)}
-          stroke="#945fac"
+          className="lab-assemble"
           strokeDasharray="8 5"
           strokeWidth="2"
         />
@@ -132,7 +131,7 @@ export function Graph() {
             y1={Y(objective[0][1])}
             x2={X(objective[objective.length - 1][0])}
             y2={Y(objective[objective.length - 1][1])}
-            stroke="#b55313"
+            className="lab-objective"
             strokeDasharray="3 5"
             strokeWidth="2"
           />
@@ -143,7 +142,7 @@ export function Graph() {
             y1={Y(r.optima[0][1])}
             x2={X(r.optima[1][0])}
             y2={Y(r.optima[1][1])}
-            stroke="#b55313"
+            className="lab-optimum-edge"
             strokeWidth="5"
           />
         )}
@@ -153,8 +152,7 @@ export function Graph() {
             cx={X(v[0])}
             cy={Y(v[1])}
             r="6"
-            fill="#b55313"
-            stroke="white"
+            className="lab-optimum"
             strokeWidth="2"
           />
         ))}
