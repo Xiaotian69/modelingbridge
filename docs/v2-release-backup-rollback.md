@@ -10,7 +10,7 @@
 | 托管 | 腾讯云 EdgeOne Pages（静态，无后端），项目根目录 `frontend`，`npm run build`，发布目录 `dist`，SPA 重写见 `frontend/edgeone.json` |
 | 生产分支 | `origin/feat/edgeone-hk-pilot` = `54e7d4c` |
 | 线上构建 | 2026-10-12 读取 `https://www.modelingbridge.cc/`：`assets/index-CkE5nywU.js`、`assets/index-Otb_V5sv.css`，与本机构建 `54e7d4c` 的产物**完全一致**（`Last-Modified: 2026-10-11 05:47:34 GMT`） |
-| V2 候选 | `feat/v2-ux-batch3`；`54e7d4c` 是它的祖先，所以上线是**快进**，不需要强推 |
+| V2 候选 | `feat/v2-ux-batch3`（发布提交 `f485653`）；`54e7d4c` 是它的祖先，所以上线是**快进**，不需要强推 |
 | 已知问题 | `https://modelingbridge.cc`（裸域名）TLS 握手失败，www 正常（与 V2 无关，见第 6 节） |
 
 ## 2. 已完成的备份（本机，未上传）
@@ -21,7 +21,7 @@
 | --- | --- |
 | `prod-source-54e7d4c.zip` | 生产提交的完整源码（`git archive`） |
 | `prod-dist-54e7d4c.zip` | 生产提交的构建产物，资源哈希与线上一致，可直接作为静态站点回滚包 |
-| `v2-dist-495935c.zip` | V2 候选构建产物 |
+| `v2-dist-f485653.zip` | V2 候选构建产物 |
 | `live-index.html` | 线上首页 HTML 快照 |
 | `SHA256SUMS.txt` | 以上文件的校验和 |
 
