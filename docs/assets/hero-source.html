@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1600, initial-scale=1">
+  <title>ModelingBridge hero</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 1600px; height: 720px; overflow: hidden; }
+    body {
+      color: #f8fafc;
+      font-family: Inter, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 88% 12%, rgba(45, 212, 191, .22), transparent 30%),
+        linear-gradient(125deg, #08111f 0%, #101a27 55%, #0d2b2c 100%);
+    }
+    .canvas { position: relative; width: 100%; height: 100%; padding: 76px 82px; display: grid; grid-template-columns: 650px 1fr; gap: 54px; align-items: center; isolation: isolate; }
+    .canvas::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .34; background-image: linear-gradient(rgba(94,234,212,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(94,234,212,.1) 1px, transparent 1px); background-size: 52px 52px; mask-image: linear-gradient(90deg, #000, transparent 72%); }
+    .bridge { position: absolute; left: 510px; top: 90px; width: 470px; height: 170px; border-top: 2px solid rgba(94,234,212,.34); border-radius: 50%; transform: rotate(-8deg); }
+    .bridge::before, .bridge::after { content: ""; position: absolute; width: 2px; height: 150px; top: -3px; background: linear-gradient(rgba(94,234,212,.38), transparent); }
+    .bridge::before { left: 104px; } .bridge::after { right: 103px; }
+    .copy { position: relative; z-index: 2; }
+    .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 50px; font-size: 25px; font-weight: 750; letter-spacing: .08em; }
+    .mark { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 13px; color: #07111f; background: #5eead4; box-shadow: 0 0 34px rgba(94,234,212,.22); font-weight: 850; }
+    .kicker { margin: 0 0 18px; color: #99f6e4; font-size: 16px; font-weight: 800; letter-spacing: .2em; }
+    h1 { margin: 0; max-width: 630px; font-family: Georgia, "Times New Roman", serif; font-size: 66px; line-height: 1.02; letter-spacing: -.032em; font-weight: 500; }
+    .flow { margin: 30px 0 0; color: rgba(248,250,252,.77); font-size: 19px; letter-spacing: .025em; }
+    .visual { position: relative; height: 520px; z-index: 2; }
+    .shot { position: absolute; width: 760px; height: 485px; top: 18px; left: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 26px; background: #fff; box-shadow: 0 38px 88px rgba(0,0,0,.5); transform: rotate(.8deg); }
+    .shot img { width: 760px; height: auto; display: block; transform: translateY(-2px); }
+    .chip { position: absolute; right: -6px; bottom: 0; z-index: 4; width: 288px; padding: 17px 20px; border-radius: 18px; border: 1px solid rgba(153,246,228,.28); background: rgba(12,27,39,.96); box-shadow: 0 20px 44px rgba(0,0,0,.38); }
+    .chip small { display: block; margin-bottom: 7px; color: #5eead4; font-size: 11px; font-weight: 800; letter-spacing: .16em; }
+    .chip span { font-size: 15px; line-height: 1.45; }
+  </style>
+</head>
+<body>
+  <main class="canvas">
+    <div class="bridge"></div>
+    <section class="copy">
+      <div class="brand"><span class="mark">模</span><span>MODELINGBRIDGE · 模桥</span></div>
+      <p class="kicker">AI-GUIDED MODELING</p>
+      <h1>From a messy problem to a testable model.</h1>
+      <p class="flow">Frame · Choose · Build · Validate</p>
+    </section>
+    <section class="visual">
+      <div class="shot"><img src="screenshots/guided-workbench.png" alt=""></div>
+      <div class="chip"><small>LEARNER IN CONTROL</small><span>Eight explicit steps. Human confirmation at every handoff.</span></div>
+    </section>
+  </main>
+</body>
+</html>
