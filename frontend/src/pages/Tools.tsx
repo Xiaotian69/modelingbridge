@@ -37,7 +37,7 @@ export function ToolsPage() {
         <div className="quiet-card rounded-3xl p-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Checklist</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">检查清单</p>
               <h2 className="mt-2 text-2xl font-semibold text-slate-950">交稿前四张检查卡</h2>
             </div>
             <p className="text-sm text-slate-500">适合最后 6 小时复盘</p>

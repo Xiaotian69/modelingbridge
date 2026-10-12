@@ -93,7 +93,7 @@ export function CalendarPage() {
           <div className="quiet-card rounded-3xl p-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Calendar</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">赛事日历</p>
                 <h2 className="mt-2 text-2xl font-semibold text-slate-950">选择赛事加入规划</h2>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -154,7 +154,7 @@ export function CalendarPage() {
             <div className="quiet-card rounded-3xl p-6">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Detail</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">赛事详情</p>
                   <h2 className="mt-2 text-2xl font-semibold text-slate-950">{active.name}</h2>
                 </div>
                 <button
@@ -190,7 +190,7 @@ export function CalendarPage() {
 
         <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
           <div className="quiet-card rounded-3xl p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">My Plan</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">我的规划</p>
             <h2 className="mt-2 text-2xl font-semibold text-slate-950">我的备赛画像</h2>
             <div className="mt-5 grid gap-4">
               <label className="text-sm font-semibold text-slate-700">

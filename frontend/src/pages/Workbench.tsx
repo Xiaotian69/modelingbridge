@@ -225,7 +225,7 @@ export function WorkbenchPage() {
 
           <main className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <div className="border-b border-slate-200 pb-4">
-              <p className="text-xs font-semibold text-bridge-700">Step {step + 1}</p>
+              <p className="text-xs font-semibold text-bridge-700">第 {step + 1} 步</p>
               <h2 className="mt-1 text-xl font-semibold text-slate-950">{STEPS[step].title}</h2>
               <p className="mt-1 text-sm text-slate-500">{STEPS[step].hint}</p>
             </div>

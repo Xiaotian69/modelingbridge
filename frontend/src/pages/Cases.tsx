@@ -15,7 +15,7 @@ export function CasesPage() {
       .then((remoteCases) => setItems(remoteCases.length ? remoteCases : listLocalCases()))
       .catch(() => {
         setItems(listLocalCases());
-        setErr("当前使用内置教学案例，在线案例接口尚未连接。");
+        setErr("当前显示站内内置的教学案例。");
       });
   }, []);
 
@@ -30,12 +30,12 @@ export function CasesPage() {
       <section className="mx-auto max-w-7xl px-4 py-10">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Guided Cases</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">教学案例</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-950">完整教学案例</h2>
           </div>
           <p className="text-sm font-medium text-slate-600">当前 {items.length} 个</p>
         </div>
-        {err && <p className="mt-4 text-sm text-amber-700">{err}</p>}
+        {err && <p className="mt-4 text-sm text-slate-500">{err}</p>}
         <div className="mt-8 grid gap-4 lg:grid-cols-3">
           {items.map((c) => (
             <Link key={c.slug} to={`/cases/${c.slug}`} className="quiet-card interactive-card rounded-3xl p-5">
@@ -56,7 +56,7 @@ export function CasesPage() {
 
       <section className="mx-auto max-w-7xl px-4 py-10">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Recent Contest Scripts</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">近年真题拆解</p>
           <h2 className="mt-2 text-3xl font-semibold text-slate-950">近三年真题拆解</h2>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
             优先把 2023-2025 的美赛题做成训练脚本：先读懂题面和数据，再照着获奖论文路线学拆题、建模、编程和写作。这里只做学习拆解，不提供可直接提交的成稿。
@@ -134,7 +134,7 @@ export function CasesPage() {
 
       <section className="mx-auto max-w-7xl px-4 py-10">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Classic Drills</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">经典母题</p>
           <h2 className="mt-2 text-3xl font-semibold text-slate-950">历年经典母题 · 简化训练版</h2>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
             这里不是原题搬运，而是把经典题背后的建模母题拆成可训练的小任务，适合新队伍先建立手感。

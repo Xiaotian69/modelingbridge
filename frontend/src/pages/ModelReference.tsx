@@ -35,7 +35,7 @@ export function ModelReferencePage() {
       <section className="mx-auto max-w-7xl px-4 py-10">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Recent MCM/ICM</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">近年美赛</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-950">近三年优先训练</h2>
           </div>
           <p className="max-w-2xl text-sm leading-6 text-slate-600">
@@ -92,7 +92,7 @@ export function ModelReferencePage() {
       <section id="methods" className="mx-auto max-w-7xl px-4 py-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Model Library</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">方法库</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-950">模型方法库</h2>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -170,7 +170,7 @@ export function ModelReferencePage() {
       <section className="mx-auto max-w-7xl px-4 py-10">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Classic Problems</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">经典题改编</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-950">经典题改编练习</h2>
           </div>
           <Link to="/cases" className="text-sm font-semibold text-bridge-700 hover:underline">
