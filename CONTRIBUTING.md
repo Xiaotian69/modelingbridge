@@ -1,6 +1,6 @@
 # 模桥新手贡献指南
 
-每次只做一个小任务。先读 [协作手册](docs/TEAM_WORKFLOW.md)，由负责人在 Issue 中指定开发基线和允许修改的文件；当前整理分支未发布前，不从旧 main 开始新版功能。
+每次只做一个小任务。先读 [协作手册](docs/TEAM_WORKFLOW.md)，由负责人在 Issue 中指定开发基线和允许修改的文件；当前新版开发基线为 `feat/modelingbridge-v2-ui`；整理 PR 未合并前可在 `chore/github-collaboration` 阅读本指南，不从旧 main 开始新版功能。
 
 ## 1. 准备环境与账号
 
@@ -30,10 +30,10 @@ git fetch origin
 负责人在 Issue 写明基线后，替换下一条命令的 `BASE_BRANCH`：
 
 ```powershell
-git switch -c feat/lp-content-check --track origin/BASE_BRANCH
+git switch -c docs/lp-content-check --no-track origin/BASE_BRANCH
 ```
 
-`BASE_BRANCH` 是占位符，不应原样执行。命名用 `feat/*`、`fix/*`、`docs/*`、`chore/*`，任务分支只属于一人。Codex 默认 `codex/*` 也可使用。
+`BASE_BRANCH` 是占位符，不应原样执行。当前负责人已确认可替换为 `feat/modelingbridge-v2-ui`；后续任务以 Issue 为准。使用 --no-track 避免误把个人分支推向基线，首次推送用下方 -u origin HEAD。命名用 `feat/*`、`fix/*`、`docs/*`、`chore/*`，任务分支只属于一人。Codex 默认 `codex/*` 也可使用。
 
 ## 3. 本地运行和测试
 
@@ -90,7 +90,7 @@ git push -u origin HEAD
 ## 6. 创建 PR 与同步
 
 在 GitHub 分支页面点 Compare & pull request，目标选择 Issue 指定基线，填写模板：做了什么、测试结果、影响、截图和 AI 辅助范围。不确定时先创建 Draft，邀请 @Xiaotian69 审核。
-推送可能触发部署预览；生产绑定未明确前由负责人确认推送安全。
+推送可能触发部署预览；当前 Production 仅绑定 feat/edgeone-hk-pilot、Preview 自动部署关闭；禁止向生产分支推送，配置变化时重新确认。
 
 工作区干净时同步基线（用实际名称替换）：
 

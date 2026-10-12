@@ -189,7 +189,7 @@ The public repository contains general code and material approved for public use
 ## Current hosting
 
 Production uses Tencent Cloud EdgeOne Pages. Existing configuration and historical preparation notes are retained in [the deployment guide](docs/deploy-edgeone-hk-pilot.md). Its historical pre-launch wording is not a statement that today's website is offline.
-Vercel/Render are historical options. The actual production branch, build revision, and backend integration must be verified by the maintainer. This change does not modify configuration or trigger a release.
+Vercel/Render are historical options. The maintainer confirmed Production tracks `feat/edgeone-hk-pilot`, with production automatic deployment enabled and Preview automatic deployment disabled. The V2 development baseline is `feat/modelingbridge-v2-ui` (7645dbb). This work does not push to the production branch or trigger a release; the deployed revision and backend integration require separate verification.
 Static case fallback works without FastAPI; real AI and backend resource endpoints still depend on an API. Demo responses must not be presented as a live AI service.
 
 ## Code license and content rights

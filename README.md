@@ -189,7 +189,7 @@ README 的团队展示与 GitHub Contributors 提交统计相互独立。使用�
 ## 部署现状
 
 当前正式托管为腾讯云 EdgeOne Pages；配置与历史准备说明见 [EdgeOne 文档](docs/deploy-edgeone-hk-pilot.md)。其中“尚未上线”的历史记录不代表当前网站状态。
-Vercel/Render 是历史部署方案。实际生产绑定分支、构建版本和后端接入状态由负责人核实；本次不修改配置或触发发布。
+Vercel/Render 是历史部署方案。负责人已确认 Production 绑定 `feat/edgeone-hk-pilot`，生产自动部署开启、Preview 自动部署关闭。V2 开发基线为 `feat/modelingbridge-v2-ui`（7645dbb）；本次不推送生产分支或触发发布，线上构建版本与后端状态需单独核实。
 EdgeOne 静态前端可使用案例回退，真实 AI 与后端资料接口仍依赖 FastAPI。不能将演示返回当作真实 AI 服务。
 
 ## 许可证与内容版权
