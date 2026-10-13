@@ -1,0 +1,197 @@
+/* 线性规划交互实验室. Reuses the lesson lab look (.lp-lab, .lab-*) from reader.css; tokens only. */
+.lab-back {
+  margin: 6px 0 0;
+}
+.lab-model {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  font-family: "Cambria Math", "Times New Roman", serif;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.lab-explorer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+/* Desktop: chart and explanation stay in view while the sliders scroll. */
+.lab-explorer-chart {
+  position: sticky;
+  top: calc(var(--header-h) + 12px);
+  min-width: 0;
+}
+.lab-explorer-chart svg {
+  max-height: calc(100vh - 360px);
+  min-height: 260px;
+}
+.lab-explorer-chart .lab-result {
+  margin-bottom: 0;
+}
+.lab-explorer-chart .lab-result p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.lab-explorer-controls {
+  display: grid;
+  gap: 10px;
+}
+.lab-group {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  min-width: 0;
+  font-size: 14px;
+}
+.lab-group legend {
+  float: left;
+  display: grid;
+  width: 100%;
+  margin-bottom: 4px;
+  padding: 0;
+  font-weight: 700;
+}
+.lab-group legend + * {
+  clear: both;
+}
+.lab-group legend small {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+.lab-group label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.lab-group output {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.lab-group input[type="range"] {
+  width: 100%;
+  accent-color: var(--brand);
+}
+.lab-check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.lp-explorer svg {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.lp-explorer svg text {
+  fill: var(--chart-text);
+  font-size: 13px;
+}
+.lp-explorer .lab-axis-label {
+  font-size: 12px;
+}
+.lab-order {
+  stroke: var(--text-muted);
+}
+.lab-region-line {
+  stroke: var(--chart-region-edge);
+  stroke-width: 4;
+}
+.lp-explorer .lab-extends {
+  fill: var(--attend);
+  font-size: 13px;
+  font-weight: 700;
+}
+.lp-explorer .lab-empty {
+  fill: var(--bad);
+  font-size: 18px;
+  font-weight: 700;
+}
+.legend-cut {
+  color: var(--chart-cut);
+}
+.legend-assemble {
+  color: var(--chart-assemble);
+}
+.legend-order {
+  color: var(--text-muted);
+}
+.legend-objective {
+  color: var(--chart-optimum);
+}
+.legend-region {
+  color: var(--chart-region-edge);
+}
+.lp-explorer .lab-result {
+  border-left: 4px solid var(--ok);
+}
+.lp-explorer .lab-result.is-warn {
+  border-left-color: var(--attend);
+}
+.lp-explorer .lab-result.is-bad {
+  border-left-color: var(--bad);
+}
+.lab-vertices {
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+.lab-vertices tr.is-best td {
+  font-weight: 700;
+  color: var(--brand);
+}
+.lab-result-mobile {
+  display: none;
+}
+.lab-footnote {
+  margin: 16px 0 40px;
+}
+@media (max-width: 899px) {
+  .lab-explorer-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lab-explorer-chart {
+    order: -1;
+    position: static;
+  }
+  .lab-explorer-chart svg {
+    max-height: 38vh;
+    min-height: 0;
+  }
+  .lab-explorer-chart .chart-legend {
+    margin: 2px 0 0;
+    font-size: 12px;
+  }
+  /* The explanation would make the chart block too tall on a phone: show it after the sliders. */
+  .lab-explorer-chart .lab-result p {
+    display: none;
+  }
+  .lab-explorer-chart .lab-result {
+    margin: 4px 0 0;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+  .lab-result-mobile {
+    display: block;
+  }
+}
+/* Tall phones: keep the chart in view while dragging the sliders below it. Short screens
+   (landscape phones) scroll normally, otherwise too little room is left for the sliders. */
+@media (max-width: 899px) and (min-height: 600px) {
+  .lab-explorer-chart {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 2;
+    padding: 6px 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  /* Keyboard focus must not scroll a slider underneath the pinned chart. */
+  .lab-group input {
+    scroll-margin-top: calc(var(--header-h) + 38vh + 110px);
+  }
+}

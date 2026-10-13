@@ -1017,3 +1017,16 @@
   color: var(--brand-ink) !important;
   font-weight: 700;
 }
+
+/* ---------- Entry to the LP interactive lab (V2.1) ---------- */
+.lab-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 14px 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--brand);
+  font-size: 14px;
+}

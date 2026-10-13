@@ -1,0 +1,12136 @@
+[
+ {
+  "model": {
+   "c": [
+    40,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2,
+     "b": 1,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1,
+     "b": 2,
+     "rhs": 80,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2600.0,
+  "unique": true,
+  "span": 2.167499992822286e-06
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2,
+     "b": 1,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1,
+     "b": 2,
+     "rhs": 80,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2000.0,
+  "unique": false,
+  "span": 40.0000002668
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2,
+     "b": 1,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1,
+     "b": 2,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 70,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2,
+     "b": 0,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1,
+     "b": 0,
+     "rhs": 80,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "unbounded"
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2,
+     "b": 0,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1,
+     "b": 0,
+     "rhs": 80,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2000.0,
+  "unique": false,
+  "span": null
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2,
+     "b": 1,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1,
+     "b": 2,
+     "rhs": 80,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": -0.0,
+  "unique": false,
+  "span": 50.0
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2,
+     "b": 1,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1,
+     "b": 2,
+     "rhs": 0,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": -0.0,
+  "unique": true,
+  "span": -0.0
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2,
+     "b": 1,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1,
+     "b": 2,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 60,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2600.0,
+  "unique": true,
+  "span": 0.0
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2,
+     "b": 1,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1,
+     "b": 2,
+     "rhs": 80,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4000.0,
+  "unique": false,
+  "span": 20.000000333416665
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 0.5,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 1.5,
+     "rhs": 130,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4519.047619047619,
+  "unique": true,
+  "span": 1.647934035453602e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 0.5,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 1.5,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1633.3333333333333,
+  "unique": true,
+  "span": 7.004285720313419e-07
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 1.5,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 65,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 500.0,
+  "unique": true,
+  "span": 3.0060000000275977e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 3.5,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 3.5,
+     "rhs": 140,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1607.142857142857,
+  "unique": true,
+  "span": 5.1460571626194e-07
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 95,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2850.0,
+  "unique": true,
+  "span": 1.9006666605037026e-06
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 80,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1700.0,
+  "unique": true,
+  "span": 3.401999998280709e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 2.5,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 0.0,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 140,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 1.5,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 130,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1450.0,
+  "unique": true,
+  "span": 1.3059000025350542e-05
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 1.0,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 4.0,
+     "rhs": 105,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1940.217391304348,
+  "unique": true,
+  "span": 1.6128998368003522e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 3.5,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 4.0,
+     "rhs": 115,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2012.5,
+  "unique": true,
+  "span": 2.301142870919648e-06
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.0,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1960.0,
+  "unique": true,
+  "span": 3.2346391520832185e-07
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 115,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1466.6666666666665,
+  "unique": true,
+  "span": 4.193333422465782e-07
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.0,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 2.5,
+     "rhs": 145,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 480.0,
+  "unique": true,
+  "span": 6.871428581689543e-07
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 4.0,
+     "rhs": 10,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 35,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 2.5,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.5,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2566.6666666666665,
+  "unique": true,
+  "span": 4.668484834269293e-07
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 105,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2100.0,
+  "unique": true,
+  "span": 4.202000027930808e-07
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 4.0,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 10,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 2.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 3.5,
+     "rhs": 45,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "unbounded"
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.5,
+     "rhs": 95,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3850.0,
+  "unique": true,
+  "span": 1.6504285724749934e-06
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 1.5,
+     "rhs": 150,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 750.0,
+  "unique": true,
+  "span": 9.387500057300713e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 0.0,
+     "rhs": 115,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2723.214285714286,
+  "unique": true,
+  "span": 2.0073157998012903e-06
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 65,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 0.5,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.5,
+     "rhs": 5,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 750.0,
+  "unique": false,
+  "span": 10.0
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 0.0,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 2.0,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2100.0,
+  "unique": true,
+  "span": 1.5280000127404492e-06
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.5,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1197.8260869565217,
+  "unique": true,
+  "span": 1.1894235445453205e-06
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 4.0,
+     "rhs": 105,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1575.0,
+  "unique": true,
+  "span": 7.879999998294806e-07
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 1.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 937.5,
+  "unique": true,
+  "span": 3.753999997968549e-06
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 3.5,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 3.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 15,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 707.1428571428571,
+  "unique": true,
+  "span": 2.1093616927222078e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 3.5,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 3.0,
+     "rhs": 105,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 916.6666666666667,
+  "unique": true,
+  "span": 2.569466666102471e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 0.5,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 3.0,
+     "rhs": 10,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 333.33333333333337,
+  "unique": true,
+  "span": 1.1144444389543651e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.5,
+     "rhs": 0,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2628.5714285714284,
+  "unique": true,
+  "span": 3.286964229687328e-07
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 4.0,
+     "rhs": 10,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 250.0,
+  "unique": true,
+  "span": 3.9372549220928477e-08
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 3.5,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 0,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 5400.0,
+  "unique": true,
+  "span": 1.482627453697205e-06
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 5,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 200.0,
+  "unique": true,
+  "span": 5.025000007208291e-07
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 4.0,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 50,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 0.5,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.0,
+     "rhs": 25,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 178.57142857142858,
+  "unique": true,
+  "span": 1.5712499982593423e-07
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.5,
+     "rhs": 10,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 40.0,
+  "unique": true,
+  "span": 1.3666666613213843e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 3.5,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 864.2857142857142,
+  "unique": true,
+  "span": 3.9077419463258895e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 3.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 2.5,
+     "rhs": 45,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1080.0,
+  "unique": true,
+  "span": 2.162000009775511e-06
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 2.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 140,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1040.0,
+  "unique": true,
+  "span": 6.939999970256849e-07
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 5,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 35.714285714285715,
+  "unique": true,
+  "span": 5.140000070014139e-08
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 3.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 100,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 2.5,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 20,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2700.0,
+  "unique": true,
+  "span": 1.0503888887569701e-06
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 3.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 130,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 3.0,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 3.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 85,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 1.0,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 100,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 1.5,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.5,
+     "rhs": 150,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4500.0,
+  "unique": true,
+  "span": 5.626249929946425e-06
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.0,
+     "rhs": 150,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2240.0000000000005,
+  "unique": true,
+  "span": 3.4040506236010515e-07
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 4.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 4.0,
+     "rhs": 110,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 250.00000000000003,
+  "unique": true,
+  "span": 3.346666623826877e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 1.0,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 120,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 0.0,
+     "rhs": 95,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2142.857142857143,
+  "unique": true,
+  "span": 7.298236965880278e-07
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 2.5,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 3.5,
+     "rhs": 125,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 5833.333333333333,
+  "unique": true,
+  "span": 8.334761787409661e-07
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 115,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2012.5,
+  "unique": true,
+  "span": 5.96592593637979e-07
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 0.0,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 5,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1512.5,
+  "unique": true,
+  "span": 3.6324000163290293e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 105,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1650.0,
+  "unique": true,
+  "span": 1.4675555561893816e-06
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.0,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.0,
+     "rhs": 135,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2892.8571428571427,
+  "unique": true,
+  "span": 4.501555584586943e-07
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 1.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 3.5,
+     "rhs": 150,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 16900.0,
+  "unique": true,
+  "span": 3.7557777545771387e-06
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 75,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3750.0,
+  "unique": true,
+  "span": 7.896841935917109e-07
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 3.5,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 880.0,
+  "unique": true,
+  "span": 2.4303448320495136e-07
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.5,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 50,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 3.5,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.0,
+     "rhs": 35,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 437.5,
+  "unique": true,
+  "span": 1.7540000030180636e-07
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 30,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 2.0,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 35,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 10,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.5,
+     "rhs": 105,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 200.0,
+  "unique": true,
+  "span": 1.0049999943362309e-07
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 3.5,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 110,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 0.0,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 75,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 5500.0,
+  "unique": true,
+  "span": 2.7505000161909265e-06
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 3.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 1.0,
+     "rhs": 15,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 125.0,
+  "unique": true,
+  "span": 3.780000028541508e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.5,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 115,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 0.0,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 3.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 110,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 4.0,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 4.0,
+     "rhs": 15,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1950.0,
+  "unique": true,
+  "span": 1.3006666605974715e-06
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 2.0,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 75,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1012.5,
+  "unique": true,
+  "span": 2.4049152713701005e-07
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.0,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 40,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 800.0,
+  "unique": true,
+  "span": 1.6019999975469545e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 4.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 3.0,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1083.3333333333335,
+  "unique": true,
+  "span": 1.6682050940630688e-07
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 60,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 60,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 0.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 15,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 17250.0,
+  "unique": true,
+  "span": 2.6204050698197534e-06
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 0.0,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 125,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1875.0,
+  "unique": true,
+  "span": 5.2528000509255435e-06
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 0.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.0,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1875.0,
+  "unique": true,
+  "span": 3.5733333447751647e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 1.0,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 1.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 100,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 4.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 90,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 771.4285714285714,
+  "unique": true,
+  "span": 3.6046666522793203e-06
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 3.5,
+     "rhs": 20,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 533.3333333333334,
+  "unique": true,
+  "span": 6.679166641987422e-08
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 2.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 15,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2975.0,
+  "unique": true,
+  "span": 5.630270294432194e-07
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 2.5,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 1.5,
+     "rhs": 30,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1600.0,
+  "unique": true,
+  "span": 4.213157929200406e-07
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 3.0,
+     "rhs": 120,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1600.0,
+  "unique": true,
+  "span": 8.005000040611776e-07
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 0.5,
+     "rhs": 125,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1600.0,
+  "unique": true,
+  "span": 5.6035000142173885e-06
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 4.0,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 125,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 7200.0,
+  "unique": true,
+  "span": 9.764067812056965e-07
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 0.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 10,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2750.0,
+  "unique": true,
+  "span": 5.501999993384743e-07
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 1.5,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 20,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1080.0,
+  "unique": true,
+  "span": 1.2011111181209344e-06
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 80,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 20,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 700.0,
+  "unique": true,
+  "span": 1.0904444458503804e-07
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 3.0,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 4.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 55,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 15,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 962.5,
+  "unique": true,
+  "span": 7.934705870127345e-07
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 0.5,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 120,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 6175.0,
+  "unique": true,
+  "span": 2.7448888886283385e-06
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 1.5,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 2.0,
+     "rhs": 100,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4000.0,
+  "unique": true,
+  "span": 7.274545410496103e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 0.0,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 30,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 0.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.0,
+     "rhs": 40,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 700.0,
+  "unique": true,
+  "span": 5.772941165105294e-07
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 4.0,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 2.5,
+     "rhs": 35,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 350.0,
+  "unique": true,
+  "span": 5.849999986651255e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 3.5,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 4.0,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 105,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 0.5,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1388.8888888888887,
+  "unique": true,
+  "span": 1.9686295473775317e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 0.0,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 3.5,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 928.5714285714287,
+  "unique": true,
+  "span": 2.0021538489345402e-07
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 0.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 2.5,
+     "rhs": 15,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 30.0,
+  "unique": true,
+  "span": 6.199999980083248e-08
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 1.5,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 3.0,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 140,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.5,
+     "rhs": 40,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 628.5714285714286,
+  "unique": true,
+  "span": 2.189813645969707e-07
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 1.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.5,
+     "rhs": 45,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1100.0,
+  "unique": true,
+  "span": 6.866806518956992e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 0.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.0,
+     "rhs": 40,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 866.6666666666667,
+  "unique": true,
+  "span": 1.876036037629092e-07
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 4.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 35,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.0,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 60,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": -0.0,
+  "unique": true,
+  "span": -0.0
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 1.5,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 1.5,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 45,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 1.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 1.0,
+     "rhs": 30,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1500.0,
+  "unique": true,
+  "span": 3.001999999696636e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 0.0,
+     "rhs": 15,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 6933.333333333334,
+  "unique": true,
+  "span": 5.943714199929673e-06
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 0.5,
+     "rhs": 125,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 342.8571428571429,
+  "unique": true,
+  "span": 6.877142786671746e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 3.0,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 20,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 533.3333333333334,
+  "unique": true,
+  "span": 1.6873684103302366e-07
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.5,
+     "rhs": 135,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2360.7142857142853,
+  "unique": true,
+  "span": 1.7000606584716138e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 350.0,
+  "unique": true,
+  "span": 1.0028571395537256e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 0.5,
+     "rhs": 10,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 0.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 5,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1200.0,
+  "unique": true,
+  "span": 2.4020000182645164e-06
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 0.0,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 115,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 0.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 0.5,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 5950.0,
+  "unique": true,
+  "span": 5.950999991455319e-06
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.0,
+     "rhs": 5,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 125.0,
+  "unique": true,
+  "span": 1.9600000089603498e-07
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 0.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 90,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 6900.0,
+  "unique": true,
+  "span": 2.7603999797065626e-06
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 0.5,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.0,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 15,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 18200.0,
+  "unique": true,
+  "span": 3.3092727562689106e-06
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 0.0,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 0.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 80,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "unbounded"
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 50,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 1.0,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 5,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 5650.0,
+  "unique": true,
+  "span": 5.860296226956052e-06
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 0.0,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 140,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 6066.666666666666,
+  "unique": true,
+  "span": 9.334871862165528e-07
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 1.5,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.5,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 85,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 95,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 95,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 7150.0,
+  "unique": true,
+  "span": 1.340812502803601e-06
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 3.5,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 4.0,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1000.0000000000001,
+  "unique": true,
+  "span": 1.6683333114997367e-07
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 1.0,
+     "rhs": 145,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2400.0,
+  "unique": true,
+  "span": 4.6470967163259047e-07
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 80,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 10792.857142857143,
+  "unique": true,
+  "span": 4.5685627654279415e-06
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 4.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 95,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 2.0,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1750.0000000000007,
+  "unique": true,
+  "span": 6.367272504803623e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 3.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 110,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 1.0,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 125,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 8750.0,
+  "unique": true,
+  "span": 1.296444438025901e-06
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 60,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 180.0,
+  "unique": true,
+  "span": 3.619999944248775e-07
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 1.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 45,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 2.5,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 3.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 110,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.0,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 0,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 425.0,
+  "unique": true,
+  "span": 8.519999994405225e-07
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 4.0,
+     "rhs": 120,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1028.5714285714287,
+  "unique": true,
+  "span": 1.4413999821272228e-05
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 2.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 2.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 110,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 1.5,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 240.0,
+  "unique": true,
+  "span": 1.1123076859576031e-07
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 1.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 4.0,
+     "rhs": 110,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1650.0,
+  "unique": true,
+  "span": 3.00181818602141e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 0.5,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.0,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 5950.0,
+  "unique": true,
+  "span": 5.951000037640597e-06
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 4.0,
+     "rhs": 65,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 780.0,
+  "unique": true,
+  "span": 2.1795348992270647e-07
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 4.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 120,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2000.0,
+  "unique": true,
+  "span": 4.5737143068436126e-06
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 2.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 4.0,
+     "rhs": 40,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 7475.0,
+  "unique": true,
+  "span": 1.2671186340185159e-06
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 2.5,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 0.0,
+     "rhs": 90,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2240.0,
+  "unique": true,
+  "span": 1.1204999950109595e-06
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 3.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3266.6666666666665,
+  "unique": true,
+  "span": 5.027179525995962e-07
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 0.5,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 1.0,
+     "rhs": 120,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 450.0,
+  "unique": true,
+  "span": 1.2026666666997698e-06
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 10,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 0.0,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 35,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2716.6666666666665,
+  "unique": true,
+  "span": 5.435333365610973e-07
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.5,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.5,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1593.75,
+  "unique": true,
+  "span": 3.1501234535166335e-07
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 2.5,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 10,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 275.0,
+  "unique": true,
+  "span": 1.226666654474684e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.5,
+     "rhs": 40,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 628.5714285714286,
+  "unique": true,
+  "span": 3.147857086105432e-07
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 1.5,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 115,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2875.0,
+  "unique": true,
+  "span": 8.217142948296896e-07
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 3.0,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 10,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 30,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 1.0,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.0,
+     "rhs": 25,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 437.5,
+  "unique": true,
+  "span": 9.231579056745431e-08
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 1.0,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 2.0,
+     "rhs": 5,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 150.0,
+  "unique": true,
+  "span": 3.355555537135994e-08
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 3.0,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 3.5,
+     "rhs": 120,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 266.6666666666667,
+  "unique": true,
+  "span": 9.368333344639268e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.0,
+     "rhs": 35,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 218.75,
+  "unique": true,
+  "span": 1.5981818298390257e-07
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.5,
+     "rhs": 95,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 375.0,
+  "unique": true,
+  "span": 7.520000053773401e-07
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 1.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 90,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 400.0,
+  "unique": true,
+  "span": 4.010000052647099e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 3.0,
+     "rhs": 10,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1600.0,
+  "unique": true,
+  "span": 2.4015000477106696e-07
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 1.5,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 50,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": -0.0,
+  "unique": false,
+  "span": 40.0
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 90,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 900.0,
+  "unique": true,
+  "span": 4.5049999926050076e-07
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 3.5,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 130,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1092.857142857143,
+  "unique": true,
+  "span": 5.1046666764401914e-06
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 4.0,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 25,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3750.0,
+  "unique": true,
+  "span": 6.049999967672193e-07
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 4.0,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 0.0,
+     "rhs": 100,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 337.5,
+  "unique": true,
+  "span": 1.692500006811315e-07
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.5,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 110,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 3.0,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 60,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1285.714285714286,
+  "unique": true,
+  "span": 4.618974287495803e-07
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 0.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.0,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 40,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 17250.0,
+  "unique": true,
+  "span": 2.464428575876809e-06
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 1.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 4.0,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 75,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 4.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 55,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1208.3333333333335,
+  "unique": true,
+  "span": 5.838160745952337e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 1.0,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 4.0,
+     "rhs": 65,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2566.6666666666665,
+  "unique": true,
+  "span": 9.628750108348072e-07
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 75,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 2.5,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 1.0,
+     "rhs": 100,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2600.0,
+  "unique": true,
+  "span": 1.5832173971830343e-06
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.5,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1100.0,
+  "unique": true,
+  "span": 2.96423074530594e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 4.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 0.0,
+     "rhs": 125,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 400.0,
+  "unique": true,
+  "span": 2.004999997140544e-07
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 3.5,
+     "rhs": 150,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 600.0,
+  "unique": true,
+  "span": 1.6390909074459614e-07
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 1.5,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 2.5,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 70,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 4.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.5,
+     "rhs": 60,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2356.25,
+  "unique": true,
+  "span": 6.984444486011785e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 150,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 0.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 105,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 1.5,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 5,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 107.14285714285714,
+  "unique": true,
+  "span": 2.4031745926578196e-08
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 105,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 962.5,
+  "unique": true,
+  "span": 8.11368420272629e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 2.5,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 1.5,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4000.0,
+  "unique": true,
+  "span": 5.715714195275723e-07
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 1.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 1.5,
+     "rhs": 100,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2666.666666666667,
+  "unique": true,
+  "span": 2.66766664935858e-06
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.5,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 35,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3300.0,
+  "unique": true,
+  "span": 6.602000013344878e-07
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 1.5,
+     "rhs": 0,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": -0.0,
+  "unique": true,
+  "span": -0.0
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 2.5,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 1.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 65,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 4.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 95,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 0.5,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 25,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 750.0,
+  "unique": true,
+  "span": 4.506000017556744e-07
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.5,
+     "rhs": 55,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1100.0,
+  "unique": true,
+  "span": 6.116666639854884e-07
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 1.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 35,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4800.0,
+  "unique": true,
+  "span": 1.655517237963977e-06
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 0.0,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 2.0,
+     "rhs": 120,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3187.5,
+  "unique": true,
+  "span": 2.1801709522151214e-06
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 1.5,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 0.0,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 6486.666666666667,
+  "unique": true,
+  "span": 9.981025606009553e-07
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 0.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.5,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1320.0,
+  "unique": true,
+  "span": 8.806666613736525e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 1.5,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 1.5,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3733.333333333333,
+  "unique": true,
+  "span": 6.096870706073787e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 4.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 110,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 687.5,
+  "unique": true,
+  "span": 1.3769999895885121e-06
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 1.5,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 1.5,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 5,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2200.0,
+  "unique": true,
+  "span": 4.347654325442818e-07
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.5,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 3.0,
+     "rhs": 80,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 980.0,
+  "unique": true,
+  "span": 2.8028571641414146e-07
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 3.5,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 0.5,
+     "rhs": 140,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 257.14285714285717,
+  "unique": true,
+  "span": 1.8070000123771024e-07
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 4.0,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 120,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.5,
+     "rhs": 60,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1920.0,
+  "unique": true,
+  "span": 5.171923049829275e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 0.5,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 2.0,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 65,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 7089.473684210527,
+  "unique": true,
+  "span": 1.725093241589093e-06
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 4.0,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.0,
+     "rhs": 65,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": -0.0,
+  "unique": true,
+  "span": -0.0
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 1.0,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 110,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 1.0,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 1.5,
+     "rhs": 5,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "unbounded"
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 4.0,
+     "rhs": 10,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 120.0,
+  "unique": true,
+  "span": 5.8666666191697914e-08
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 0.5,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.0,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 375.0,
+  "unique": true,
+  "span": 7.520000053773401e-07
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 1.5,
+     "rhs": 25,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 107.14285714285715,
+  "unique": true,
+  "span": 1.682222195616608e-07
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 2.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 85,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.5,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.5,
+     "rhs": 5,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 42.85714285714286,
+  "unique": true,
+  "span": 2.0466666228458054e-08
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 4.0,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 487.99999999999983,
+  "unique": true,
+  "span": 5.093750168327915e-07
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 130,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2695.2380952380954,
+  "unique": true,
+  "span": 5.523999988099604e-06
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 110,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1414.2857142857142,
+  "unique": true,
+  "span": 9.845465811508802e-07
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 1.5,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 25,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.0,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 1.0,
+     "rhs": 100,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4593.75,
+  "unique": true,
+  "span": 2.8960848421633045e-06
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 140,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 1.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 0.0,
+     "rhs": 140,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 966.6666666666667,
+  "unique": true,
+  "span": 1.5482666810839874e-06
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 25,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.0,
+     "rhs": 110,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1283.3333333333333,
+  "unique": true,
+  "span": 3.853000061819027e-06
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 0.5,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 140,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 400.0,
+  "unique": true,
+  "span": 1.1190697613017164e-07
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 50,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.0,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 4.0,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 145,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 1.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 35,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 45,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 4.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 1.5,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 25,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1725.0000000000002,
+  "unique": true,
+  "span": 1.6509565111122448e-06
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2000.0,
+  "unique": false,
+  "span": 15.000000133399999
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 3.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 70,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 1.5,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 1.0,
+     "rhs": 95,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 6750.0,
+  "unique": true,
+  "span": 1.3335308324258222e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 1.5,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 100,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 450.0,
+  "unique": true,
+  "span": 1.0022222163286187e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 10,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.5,
+     "rhs": 45,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 83.33333333333334,
+  "unique": true,
+  "span": 7.784615334571754e-08
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 10,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 400.0,
+  "unique": true,
+  "span": 1.7763568394002505e-15
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 4.0,
+     "rhs": 135,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 200.0,
+  "unique": true,
+  "span": 8.039999999098768e-08
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.0,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 65,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 6300.0,
+  "unique": true,
+  "span": 2.607310364055593e-06
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 4.0,
+     "rhs": 125,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1950.0,
+  "unique": true,
+  "span": 2.2761666542692183e-06
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 2.0,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 65,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1400.000000000001,
+  "unique": true,
+  "span": 5.60399968208003e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.5,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 5,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1875.0,
+  "unique": true,
+  "span": 1.0005333430334368e-06
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 45,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1237.5,
+  "unique": true,
+  "span": 1.238499997668896e-06
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 45,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 5400.0,
+  "unique": true,
+  "span": 9.94921066421739e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 120,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3000.0,
+  "unique": true,
+  "span": 6.925384639089316e-07
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.0,
+     "rhs": 90,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3375.0,
+  "unique": true,
+  "span": 4.5013333505039554e-07
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 40,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1120.0,
+  "unique": true,
+  "span": 2.101874976290219e-07
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.5,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 45,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 0.5,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 5,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 4.0,
+     "rhs": 10,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 95,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 1.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 115,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.5,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 130,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 2.5,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 1.5,
+     "rhs": 30,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 100.0,
+  "unique": true,
+  "span": 2.0200000250270023e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 825.0,
+  "unique": true,
+  "span": 5.216842083655138e-07
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.5,
+     "rhs": 35,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3600.0000000000005,
+  "unique": true,
+  "span": 7.682133254860446e-06
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 1.5,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 242.85714285714283,
+  "unique": false,
+  "span": 21.904762555047625
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 65,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 81.25,
+  "unique": true,
+  "span": 1.6450000117629315e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 0.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.0,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 25,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2766.666666666667,
+  "unique": true,
+  "span": 5.726206865119821e-06
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 10,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 70,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 4.0,
+     "rhs": 95,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1506.25,
+  "unique": true,
+  "span": 7.536249988504551e-07
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 4.0,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 115,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 4.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 35,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 0.0,
+     "rhs": 95,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 900.0,
+  "unique": true,
+  "span": 1.4015555436230898e-06
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 3.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 50,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1666.6666666666667,
+  "unique": true,
+  "span": 2.2235555263705464e-06
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.5,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 5,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2250.0,
+  "unique": true,
+  "span": 9.003999920764727e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 0.0,
+     "rhs": 150,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4275.0,
+  "unique": true,
+  "span": 1.2217142852932739e-06
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 0.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.0,
+     "rhs": 115,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3500.0,
+  "unique": true,
+  "span": 2.0422499886763035e-06
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 120,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 685.7142857142858,
+  "unique": true,
+  "span": 6.867142712252416e-07
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 2.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 3.5,
+     "rhs": 135,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1178.5714285714284,
+  "unique": true,
+  "span": 5.160625029532184e-07
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 1.0,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2975.0,
+  "unique": true,
+  "span": 1.0503529352945407e-06
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 1.5,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 1.0,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 25,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 6500.0,
+  "unique": true,
+  "span": 1.3001999832340516e-06
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 1.0,
+     "rhs": 10,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 45,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 500.0,
+  "unique": true,
+  "span": 5.009999988203617e-07
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 2.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 150,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 10,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 1.0,
+     "rhs": 125,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2450.0,
+  "unique": true,
+  "span": 2.4510000002919696e-06
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 0.0,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 0.5,
+     "rhs": 65,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3250.0,
+  "unique": true,
+  "span": 1.5604800012170017e-06
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 3.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 145,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 13600.0,
+  "unique": true,
+  "span": 1.813466667499597e-06
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 1.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 1.0,
+     "rhs": 130,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1000.0,
+  "unique": true,
+  "span": 3.002999996226663e-06
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 3.0,
+     "rhs": 65,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1213.3333333333335,
+  "unique": true,
+  "span": 2.759848495514916e-06
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 3.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 85,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 666.6666666666667,
+  "unique": true,
+  "span": 8.902222212725519e-07
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 2.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.0,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 45,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.0,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 145,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 2.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 25,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 560.7142857142858,
+  "unique": true,
+  "span": 8.425714153048602e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 1.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 90,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 2.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.0,
+     "rhs": 10,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 175.0,
+  "unique": true,
+  "span": 3.352380950616407e-08
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.5,
+     "rhs": 20,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 500.0,
+  "unique": true,
+  "span": 7.157142825064966e-07
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 1.5,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 30,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 375.0,
+  "unique": true,
+  "span": 1.5040000107546803e-06
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 90,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1066.6666666666667,
+  "unique": true,
+  "span": 4.270666735806117e-07
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 3.0,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 125,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 2.5,
+     "rhs": 125,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2250.0,
+  "unique": true,
+  "span": 7.203199920979841e-07
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 3.0,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 80,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1866.6666666666667,
+  "unique": true,
+  "span": 1.8676666731683629e-06
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 3.5,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 35,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1050.0,
+  "unique": true,
+  "span": 3.503333303456202e-07
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 130,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3480.0,
+  "unique": true,
+  "span": 3.4810000215657055e-06
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 25,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1125.0,
+  "unique": true,
+  "span": 4.289523829470454e-07
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.0,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 1.5,
+     "rhs": 150,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1890.0,
+  "unique": true,
+  "span": 6.303333445127161e-06
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 2.5,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 140,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 2.5,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.0,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 70,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "unbounded"
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 0.0,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.0,
+     "rhs": 20,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 66.66666666666667,
+  "unique": true,
+  "span": 6.766666693636125e-08
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.0,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 105,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 11400.0,
+  "unique": true,
+  "span": 2.2801999932653416e-06
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 65,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.0,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2425.0,
+  "unique": true,
+  "span": 5.391111095320866e-07
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 60,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 0.5,
+     "rhs": 65,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 3.5,
+     "rhs": 150,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "unbounded"
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 4.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 80,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 3.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 130,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2900.0,
+  "unique": true,
+  "span": 1.4505000081044273e-06
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 140,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3733.333333333333,
+  "unique": true,
+  "span": 1.120300004231467e-05
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 0.0,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 0.5,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 35,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 9500.0,
+  "unique": true,
+  "span": 3.8004000089131296e-06
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 0.5,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 0,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 9450.0,
+  "unique": true,
+  "span": 2.100222218359704e-06
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3536.0,
+  "unique": true,
+  "span": 2.1343965517672814e-05
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 1.5,
+     "rhs": 135,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 5250.0,
+  "unique": true,
+  "span": 9.547272838972276e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.5,
+     "rhs": 95,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1285.7142857142856,
+  "unique": true,
+  "span": 1.385692338282332e-06
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 90,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1928.5714285714287,
+  "unique": true,
+  "span": 1.2863809502050572e-06
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 0.5,
+     "rhs": 115,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1785.7142857142858,
+  "unique": true,
+  "span": 4.3314285136375474e-07
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.0,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 2.0,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 135,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 0.0,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1400.0,
+  "unique": true,
+  "span": 1.4010000086273067e-06
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 3.5,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 3.5,
+     "rhs": 95,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 342.85714285714283,
+  "unique": true,
+  "span": 2.8317647387238516e-07
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 3.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 45,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1950.0,
+  "unique": true,
+  "span": 1.3006666605974715e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 140,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 19600.0,
+  "unique": true,
+  "span": 2.8001429086543794e-06
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.0,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 0.5,
+     "rhs": 65,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1800.0,
+  "unique": true,
+  "span": 1.0805999934859756e-06
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 115,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 1.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.5,
+     "rhs": 110,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1866.6666666666667,
+  "unique": true,
+  "span": 2.819119480079735e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 1.5,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.0,
+     "rhs": 5,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 83.33333333333334,
+  "unique": true,
+  "span": 6.746666736390239e-08
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 2.5,
+     "rhs": 120,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 145,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 9600.0,
+  "unique": true,
+  "span": 1.5485484397004257e-06
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 3.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 0.5,
+     "rhs": 95,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 433.33333333333337,
+  "unique": true,
+  "span": 9.390991007052207e-08
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 60,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 85,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 135,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1131.25,
+  "unique": true,
+  "span": 2.5880000205091847e-06
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 0.5,
+     "rhs": 120,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 650.0,
+  "unique": true,
+  "span": 1.0672131267597251e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 120,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "unbounded"
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 0.0,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1728.5714285714284,
+  "unique": true,
+  "span": 1.5373968373921798e-06
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 60,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    70,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 3.0,
+     "rhs": 10,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1400.0,
+  "unique": true,
+  "span": 2.271891901273193e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 0.5,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 120,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 0.0,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 20,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 0.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 105,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2625.0,
+  "unique": true,
+  "span": 2.626000011218821e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.0,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 0.5,
+     "rhs": 140,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 225.0,
+  "unique": true,
+  "span": 4.520000018715109e-07
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 0.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 95,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4400.0,
+  "unique": true,
+  "span": 3.2428421263830387e-06
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.0,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 4.0,
+     "rhs": 150,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1500.0,
+  "unique": false,
+  "span": 75.0
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 2.0,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 4.0,
+     "rhs": 130,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3125.0,
+  "unique": true,
+  "span": 2.9176000069242036e-06
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 1.0,
+     "rhs": 35,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2099.999999999995,
+  "unique": true,
+  "span": 7.003335014132972e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 0.0,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 1.0,
+     "rhs": 130,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 6500.0,
+  "unique": true,
+  "span": 1.300200011655761e-06
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 130,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 858.6206896551723,
+  "unique": true,
+  "span": 1.6619333536027625e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 1.0,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 3.5,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 80,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 3.0,
+     "rhs": 50,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 1.0,
+     "rhs": 90,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 666.6666666666667,
+  "unique": true,
+  "span": 4.6736666803326443e-07
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 1.0,
+     "rhs": 35,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 350.0,
+  "unique": true,
+  "span": 4.6800000319535684e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 4.0,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 130,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3715.000000000001,
+  "unique": true,
+  "span": 3.240697573403395e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 2.0,
+     "rhs": 70,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1050.0,
+  "unique": true,
+  "span": 2.8026666427649615e-07
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 1.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 0.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 70,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 0.5,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 4.0,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 110,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 1.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 70,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4375.0,
+  "unique": true,
+  "span": 1.3034893555641247e-06
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    20
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 4.0,
+     "rhs": 30,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3250.0,
+  "unique": true,
+  "span": 6.726206862595063e-07
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 4.0,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.5,
+     "rhs": 5,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 35,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.0,
+     "rhs": 145,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1750.0,
+  "unique": true,
+  "span": 4.0022856800143405e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 0.0,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 0.5,
+     "rhs": 50,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4500.0,
+  "unique": true,
+  "span": 1.074865664918434e-06
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 0.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 135,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2516.326530612245,
+  "unique": true,
+  "span": 1.566336509384314e-06
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.0,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 30,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 3.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 2.0,
+     "rhs": 30,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1050.0,
+  "unique": true,
+  "span": 3.8218181957331995e-07
+ },
+ {
+  "model": {
+   "c": [
+    80,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 85,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 0.5,
+     "rhs": 55,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2266.6666666666665,
+  "unique": true,
+  "span": 5.44239998134799e-07
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 1.5,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.5,
+     "rhs": 15,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 20,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 3.5,
+     "rhs": 15,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 550.0,
+  "unique": true,
+  "span": 1.377500016275235e-07
+ },
+ {
+  "model": {
+   "c": [
+    50,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 0.5,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 20,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 400.0,
+  "unique": true,
+  "span": 9.623999996932753e-07
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 1.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 3.0,
+     "rhs": 35,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 583.3333333333333,
+  "unique": true,
+  "span": 5.008571568916001e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    5
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 4.0,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 1.0,
+     "rhs": 20,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 366.6666666666667,
+  "unique": true,
+  "span": 2.7574999705848313e-07
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 25,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 1.0,
+     "rhs": 5,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 250.0,
+  "unique": true,
+  "span": 8.366666648385035e-08
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 0.5,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 1.5,
+     "rhs": 40,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1200.0,
+  "unique": true,
+  "span": 4.4481481609182083e-07
+ },
+ {
+  "model": {
+   "c": [
+    40,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 1.0,
+     "rhs": 115,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 640.0,
+  "unique": true,
+  "span": 6.409999969037017e-06
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 2.5,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 1.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 85,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 1.5,
+     "rhs": 45,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1200.0,
+  "unique": false,
+  "span": 20.00000030025
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 4.0,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 0.0,
+     "rhs": 95,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 525.0,
+  "unique": true,
+  "span": 1.4026666690369893e-06
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 4.0,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 5,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2193.75,
+  "unique": true,
+  "span": 2.194750003070567e-06
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 4.0,
+     "rhs": 115,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 1.5,
+     "rhs": 125,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2012.5,
+  "unique": true,
+  "span": 3.8352381181994133e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 135,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3295.1612903225805,
+  "unique": true,
+  "span": 1.2164404736836332e-06
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    65
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 2.0,
+     "rhs": 0,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 115,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 2.0,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 4.0,
+     "rhs": 150,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 70,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 0.0,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 0.5,
+     "rhs": 145,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 7250.0,
+  "unique": true,
+  "span": 1.4501999999083637e-05
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 1.5,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 5,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 3500.0,
+  "unique": true,
+  "span": 1.4004000021827778e-06
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 1.5,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 3.5,
+     "rhs": 145,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2933.333333333334,
+  "unique": true,
+  "span": 6.771538115420602e-07
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    80
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 150,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 2000.0,
+  "unique": true,
+  "span": 4.002000011382734e-06
+ },
+ {
+  "model": {
+   "c": [
+    35,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 1.0,
+     "rhs": 20,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 1.0,
+     "rhs": 35,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 900.0,
+  "unique": true,
+  "span": 2.485517249795066e-07
+ },
+ {
+  "model": {
+   "c": [
+    0,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 4.0,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 0.5,
+     "rhs": 60,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 525.0,
+  "unique": true,
+  "span": 1.4026666690369893e-06
+ },
+ {
+  "model": {
+   "c": [
+    10,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 1.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 2.0,
+     "rhs": 40,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1100.0,
+  "unique": true,
+  "span": 6.291428560091714e-07
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 2.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.0,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 30,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 4.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 2.0,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 20,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 2.5,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 2.5,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 5,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 400.0,
+  "unique": true,
+  "span": 2.8069999871149773e-07
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    55
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 2.5,
+     "rhs": 110,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 105,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 6600.0,
+  "unique": true,
+  "span": 1.7371052791759212e-06
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 0.0,
+     "rhs": 10,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 275.0,
+  "unique": false,
+  "span": 107.50000017563636
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 4.0,
+     "rhs": 10,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.0,
+     "rhs": 135,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 0,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 200.0,
+  "unique": true,
+  "span": 7.657142919725857e-08
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 40,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 0.0,
+     "b": 1.5,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 45,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4400.0,
+  "unique": true,
+  "span": 1.1002500031054296e-06
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.0,
+     "b": 1.5,
+     "rhs": 140,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 2.5,
+     "rhs": 10,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 160.0,
+  "unique": true,
+  "span": 5.257142854375729e-08
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.5,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 0.5,
+     "rhs": 145,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4998.275862068964,
+  "unique": true,
+  "span": 1.1210748809276083e-06
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    75
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 1.5,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 0.0,
+     "rhs": 145,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 7250.0,
+  "unique": true,
+  "span": 1.4501999976346269e-05
+ },
+ {
+  "model": {
+   "c": [
+    45,
+    10
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 2.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 3.5,
+     "rhs": 135,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4050.0,
+  "unique": true,
+  "span": 9.949824715249633e-07
+ },
+ {
+  "model": {
+   "c": [
+    30,
+    30
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.5,
+     "b": 0.0,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.0,
+     "b": 3.5,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 110,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    0
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 4.0,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 3.5,
+     "rhs": 30,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 150.0,
+  "unique": true,
+  "span": 1.0066666611407982e-07
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 2.0,
+     "rhs": 100,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 3.5,
+     "rhs": 25,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 285.7142857142857,
+  "unique": true,
+  "span": 8.048120392345481e-08
+ },
+ {
+  "model": {
+   "c": [
+    5,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 3.5,
+     "rhs": 35,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 4.0,
+     "rhs": 35,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 393.75,
+  "unique": true,
+  "span": 1.3730434744729791e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    45
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 1.0,
+     "b": 0.0,
+     "rhs": 145,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.5,
+     "b": 1.5,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 110,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    20,
+    25
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 70,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.0,
+     "b": 0.5,
+     "rhs": 55,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 35,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    65,
+    40
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 4.0,
+     "b": 1.5,
+     "rhs": 30,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 4.0,
+     "b": 1.5,
+     "rhs": 100,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 800.0,
+  "unique": true,
+  "span": 5.126399997834596e-07
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    35
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 0.5,
+     "b": 1.5,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 0.5,
+     "rhs": 120,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 4459.090909090908,
+  "unique": true,
+  "span": 2.441950293530226e-06
+ },
+ {
+  "model": {
+   "c": [
+    60,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.0,
+     "b": 1.5,
+     "rhs": 90,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 45,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 150,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    55,
+    15
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 1.0,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 105,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 10,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 1650.0,
+  "unique": true,
+  "span": 4.127500012884866e-07
+ },
+ {
+  "model": {
+   "c": [
+    75,
+    50
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.5,
+     "b": 0.5,
+     "rhs": 80,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 1.5,
+     "b": 2.5,
+     "rhs": 15,
+     "sense": "<="
+    }
+   ]
+  },
+  "status": "optimal",
+  "value": 750.0,
+  "unique": true,
+  "span": 1.668888902628396e-07
+ },
+ {
+  "model": {
+   "c": [
+    15,
+    70
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 2.0,
+     "b": 2.5,
+     "rhs": 75,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 2.0,
+     "b": 3.5,
+     "rhs": 130,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 130,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ },
+ {
+  "model": {
+   "c": [
+    25,
+    60
+   ],
+   "constraints": [
+    {
+     "id": "cut",
+     "a": 3.5,
+     "b": 1.0,
+     "rhs": 95,
+     "sense": "<="
+    },
+    {
+     "id": "assemble",
+     "a": 3.5,
+     "b": 3.5,
+     "rhs": 125,
+     "sense": "<="
+    },
+    {
+     "id": "order",
+     "a": 1,
+     "b": 1,
+     "rhs": 145,
+     "sense": ">="
+    }
+   ]
+  },
+  "status": "infeasible"
+ }
+]

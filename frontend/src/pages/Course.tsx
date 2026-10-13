@@ -1,13 +1,38 @@
+import { Link } from "react-router-dom";
 import { sections, type Block } from "../learning/content";
 import { Graph } from "../learning/Graph";
 import { LessonReader, type LessonDefinition } from "../learning/LessonReader";
+
+const LAB = "/learn/linear-programming/lab";
+
+/** Entry to the interactive lab; the lab offers the way back to this section. */
+function LabEntry({ from, text }: { from: string; text: string }) {
+  return (
+    <aside className="lab-cta">
+      <span>{text}</span>
+      <Link className="btn btn-secondary" to={`${LAB}?from=${from}`} state={{ fromLesson: true }}>
+        打开交互实验室 →
+      </Link>
+    </aside>
+  );
+}
 
 /** 线性规划精讲: the verified content (content.ts) rendered by the shared reader. */
 const lp: LessonDefinition<Block> = {
   lesson: "lp",
   name: "线性规划",
   sections,
-  renderExtra: (block) => (block.type === "graph" ? <Graph /> : undefined),
+  renderExtra: (block) =>
+    block.type === "graph" ? (
+      <>
+        <Graph />
+        <LabEntry from="geometry" text="想同时改利润、约束系数，或看看无可行解、无界和多重最优解是什么样？" />
+      </>
+    ) : undefined,
+  afterSection: (id) =>
+    id === "sensitivity" ? (
+      <LabEntry from="sensitivity" text="在实验室里拖动利润和工时，观察最优点在什么范围内保持不变。" />
+    ) : null,
   codeLabel: "Python · SciPy · 可在本机运行",
   cover: {
     kicker: "精讲 · 优化模型入门 · 线性规划",

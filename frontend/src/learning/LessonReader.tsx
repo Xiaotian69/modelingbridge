@@ -32,6 +32,8 @@ export type LessonDefinition<B> = {
   application: { to: string; label: string; endLabel: string };
   end: { title: string; text: string; practiceLabel: string; note: string };
   symbols: [string, string][];
+  /** Optional extra content at the end of a section (e.g. the LP lab entry). */
+  afterSection?: (sectionId: string) => ReactNode;
 };
 
 function SharedBlock({ block, codeLabel }: { block: Block; codeLabel: string }) {
@@ -334,6 +336,7 @@ export function LessonReader<B extends { type: string }>({ def }: { def: LessonD
               {section.blocks.map((block, j) => (
                 <Fragment key={j}>{render(block)}</Fragment>
               ))}
+              {def.afterSection?.(section.id)}
               <nav className="section-turn" aria-label={`${section.title}的节导航`}>
                 {i > 0 ? <Link to={`#${sections[i - 1].id}`}>← 上一节</Link> : <span>第一节</span>}
                 {i < sections.length - 1 ? (
