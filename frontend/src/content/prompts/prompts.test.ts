@@ -3,9 +3,12 @@ import { questStages } from "../../quest/stages";
 import { PROMPT_TASK_TYPES, REVIEW_LABEL, fillTemplate, placeholdersOf, promptTemplates, publishedPrompts } from ".";
 
 describe("prompt library content (03 §3.9)", () => {
-  it("publishes 5–10 reviewed templates with unique ids", () => {
-    expect(publishedPrompts.length).toBeGreaterThanOrEqual(5);
-    expect(publishedPrompts.length).toBeLessThanOrEqual(10);
+  it("publishes exactly 15 templates and preserves the nine existing deep links", () => {
+    expect(publishedPrompts).toHaveLength(15);
+    expect(publishedPrompts.map((p) => p.id)).toEqual(expect.arrayContaining([
+      "pr.breakdown.base", "pr.breakdown.io", "pr.assumption.check", "pr.method.compare", "pr.data.plan",
+      "pr.code.debug", "pr.chart.plan", "pr.paper.selfcheck", "pr.ai.usage",
+    ]));
     const ids = promptTemplates.map((p) => p.id);
     expect(new Set(ids).size).toBe(ids.length);
     ids.forEach((id) => expect(id).toMatch(/^pr\.[a-z]+\.[a-z]+$/));
@@ -26,6 +29,8 @@ describe("prompt library content (03 §3.9)", () => {
     expect(p.stage.length).toBeGreaterThan(0);
     p.stage.forEach((s) => expect(questStages.map((q) => q.id)).toContain(s));
     expect(p.limits).toMatch(/捏造/);
+    expect(p.contests.length).toBeGreaterThan(0);
+    p.contests.forEach((c) => expect(["general", "CUMCM", "MCM-ICM", "campus"]).toContain(c));
   });
 
   it("never calls a template 已审核 unless the owner reviewed it", () => {
