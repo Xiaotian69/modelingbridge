@@ -71,7 +71,7 @@ export async function lessonEntries(): Promise<SearchEntry[]> {
     title: p.title,
     meta: `提示词库 · ${p.taskType}`,
     href: `/library/prompts/${p.id}`,
-    badge: "原创模板",
+    badge: p.reviewStatus === "owner-reviewed" ? "原创模板" : "原创模板 · 待复核",
     haystack: norm(`提示词 prompt ${p.title} ${p.summary} ${p.taskType}`),
   }));
   return [...prompts, ...sections.map<SearchEntry>((s, i) => ({

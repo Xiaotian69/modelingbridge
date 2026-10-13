@@ -47,8 +47,11 @@ export type PromptTemplate = {
   licenseStatus: "original";
   version: string;
   updatedAt: string;
-  /** reviewed = 已自查并通过自动检查；内容仍待负责人复核。 */
-  reviewStatus: "reviewed" | "draft";
+  /**
+   * self-checked = 作者自查 + 自动检查通过，**尚未经负责人审核**（界面显示“待复核”）；
+   * owner-reviewed = 负责人已逐条审核；draft = 不公开。
+   */
+  reviewStatus: "self-checked" | "owner-reviewed" | "draft";
   demo: true;
 };
 
@@ -88,7 +91,7 @@ export const promptTemplates: PromptTemplate[] = [
     licenseStatus: "original",
     version: "1.0",
     updatedAt: "2026-10-12",
-    reviewStatus: "reviewed",
+    reviewStatus: "self-checked",
     demo: true,
   },
   {
@@ -118,7 +121,7 @@ export const promptTemplates: PromptTemplate[] = [
     licenseStatus: "original",
     version: "1.0",
     updatedAt: "2026-10-12",
-    reviewStatus: "reviewed",
+    reviewStatus: "self-checked",
     demo: true,
   },
   {
@@ -152,7 +155,7 @@ export const promptTemplates: PromptTemplate[] = [
     licenseStatus: "original",
     version: "1.0",
     updatedAt: "2026-10-12",
-    reviewStatus: "reviewed",
+    reviewStatus: "self-checked",
     demo: true,
   },
   {
@@ -186,7 +189,7 @@ export const promptTemplates: PromptTemplate[] = [
     licenseStatus: "original",
     version: "1.0",
     updatedAt: "2026-10-12",
-    reviewStatus: "reviewed",
+    reviewStatus: "self-checked",
     demo: true,
   },
   {
@@ -222,7 +225,7 @@ export const promptTemplates: PromptTemplate[] = [
     licenseStatus: "original",
     version: "1.0",
     updatedAt: "2026-10-12",
-    reviewStatus: "reviewed",
+    reviewStatus: "self-checked",
     demo: true,
   },
   {
@@ -257,7 +260,7 @@ export const promptTemplates: PromptTemplate[] = [
     licenseStatus: "original",
     version: "1.0",
     updatedAt: "2026-10-12",
-    reviewStatus: "reviewed",
+    reviewStatus: "self-checked",
     demo: true,
   },
   {
@@ -290,7 +293,7 @@ export const promptTemplates: PromptTemplate[] = [
     licenseStatus: "original",
     version: "1.0",
     updatedAt: "2026-10-12",
-    reviewStatus: "reviewed",
+    reviewStatus: "self-checked",
     demo: true,
   },
   {
@@ -306,7 +309,7 @@ export const promptTemplates: PromptTemplate[] = [
 
 检查清单：
 1. 是否说清了每个小问用的方法和得到的主要结果（含关键数值）？
-2. 结果是否都能在正文中找到依据？
+2. 每个结果是否写明了对应的小问和所用模型，方便我回到正文逐条核对？
 3. 是否提到了模型检验或敏感性分析？
 4. 是否有空泛表述（如“效果很好”）需要换成具体结论？
 5. 篇幅和结构是否符合常见要求？（具体字数、页数以当届官方规则为准）
@@ -319,9 +322,9 @@ export const promptTemplates: PromptTemplate[] = [
     limits: COMMON_LIMITS,
     source: { author: AUTHOR },
     licenseStatus: "original",
-    version: "1.0",
-    updatedAt: "2026-10-12",
-    reviewStatus: "reviewed",
+    version: "1.1",
+    updatedAt: "2026-10-13",
+    reviewStatus: "self-checked",
     demo: true,
   },
   {
@@ -352,13 +355,19 @@ export const promptTemplates: PromptTemplate[] = [
     licenseStatus: "original",
     version: "1.0",
     updatedAt: "2026-10-12",
-    reviewStatus: "reviewed",
+    reviewStatus: "self-checked",
     demo: true,
   },
 ];
 
-/** Templates that may be shown publicly. */
-export const publishedPrompts = promptTemplates.filter((p) => p.reviewStatus === "reviewed");
+/** Templates that may be shown publicly (drafts never are). */
+export const publishedPrompts = promptTemplates.filter((p) => p.reviewStatus !== "draft");
+
+/** Public wording of the review state; nothing self-checked is ever called “已审核”. */
+export const REVIEW_LABEL: Record<Exclude<PromptTemplate["reviewStatus"], "draft">, { short: string; long: string }> = {
+  "self-checked": { short: "待复核", long: "作者已自查，尚未经负责人审核" },
+  "owner-reviewed": { short: "已审核", long: "负责人已审核" },
+};
 
 export const findPrompt = (id: string) => publishedPrompts.find((p) => p.id === id) ?? null;
 

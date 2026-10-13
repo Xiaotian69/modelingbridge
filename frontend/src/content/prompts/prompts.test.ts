@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { questStages } from "../../quest/stages";
-import { PROMPT_TASK_TYPES, fillTemplate, placeholdersOf, promptTemplates, publishedPrompts } from ".";
+import { PROMPT_TASK_TYPES, REVIEW_LABEL, fillTemplate, placeholdersOf, promptTemplates, publishedPrompts } from ".";
 
 describe("prompt library content (03 §3.9)", () => {
   it("publishes 5–10 reviewed templates with unique ids", () => {
@@ -26,6 +26,13 @@ describe("prompt library content (03 §3.9)", () => {
     expect(p.stage.length).toBeGreaterThan(0);
     p.stage.forEach((s) => expect(questStages.map((q) => q.id)).toContain(s));
     expect(p.limits).toMatch(/捏造/);
+  });
+
+  it("never calls a template 已审核 unless the owner reviewed it", () => {
+    expect(REVIEW_LABEL["self-checked"].short).toBe("待复核");
+    expect(REVIEW_LABEL["self-checked"].long).not.toMatch(/已审核/);
+    // Release 2.0.0-preview: no template has been owner-reviewed yet.
+    expect(publishedPrompts.every((p) => p.reviewStatus === "self-checked")).toBe(true);
   });
 
   it("only pre-fills public problem text, never a student's own work", () => {

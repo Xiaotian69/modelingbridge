@@ -30,6 +30,8 @@ describe("提示词库", () => {
   it("lists every published template and filters by 用途", () => {
     renderAt("/library/prompts");
     expect(screen.getAllByRole("link", { name: /演示模板/ })).toHaveLength(publishedPrompts.length);
+    expect(screen.getAllByText("待复核")).toHaveLength(publishedPrompts.length);
+    expect(screen.queryByText("已审核")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("radio", { name: "代码调试" }));
     expect(screen.getAllByRole("link", { name: /演示模板/ })).toHaveLength(1);
     fireEvent.click(screen.getByRole("radio", { name: "全部用途" }));
@@ -41,6 +43,7 @@ describe("提示词库", () => {
     writeText.mockResolvedValue(undefined);
     renderAt("/library/prompts/pr.code.debug");
     expect(screen.getByRole("heading", { name: "代码报错排查" })).toBeInTheDocument();
+    expect(screen.getByText("作者已自查，尚未经负责人审核")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "填入示例" }));
     expect(screen.getAllByText("示例，请替换").length).toBe(4);
     await act(async () => fireEvent.click(screen.getByRole("button", { name: "复制完整提示词" })));

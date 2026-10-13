@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { PROMPT_TASK_TYPES, findPrompt, placeholdersOf, publishedPrompts, type PromptTemplate } from "../content/prompts";
+import { PROMPT_TASK_TYPES, REVIEW_LABEL, findPrompt, placeholdersOf, publishedPrompts, type PromptTemplate } from "../content/prompts";
 import { questStages } from "../quest/stages";
 import { copyText } from "./library/copyText";
 import { PromptDetail } from "./library/PromptDetail";
@@ -53,7 +53,7 @@ export function PromptsPage() {
       <div className="library-intro">
         <h1>提示词库</h1>
         <p className="page-lead">
-          {publishedPrompts.length} 条模桥原创演示模板。先自己思考，再填写变量、复制到你使用的 AI 工具中；本页不会调用任何 AI。
+          {publishedPrompts.length} 条模桥原创演示模板（标“待复核”的尚未经负责人审核）。先自己思考，再填写变量、复制到你使用的 AI 工具中；本页不会调用任何 AI。
         </p>
         {back && (
           <p>
@@ -113,6 +113,9 @@ export function PromptsPage() {
                       <span className="badge">{p.taskType === "AI使用说明" ? "AI 使用说明" : p.taskType}</span>
                       <span className="badge">通用</span>
                       <span className="badge">演示模板</span>
+                      {p.reviewStatus !== "draft" && (
+                        <span className={`badge badge-review is-${p.reviewStatus}`}>{REVIEW_LABEL[p.reviewStatus].short}</span>
+                      )}
                     </span>
                   </Link>
                   <button type="button" className="link-button" aria-label={`复制：${p.title}`} onClick={() => quickCopy(p)}>

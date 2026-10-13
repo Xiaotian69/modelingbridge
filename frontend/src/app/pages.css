@@ -114,6 +114,10 @@
   border-color: color-mix(in srgb, var(--info) 45%, var(--border));
   color: var(--info);
 }
+.badge-review.is-self-checked {
+  border-color: color-mix(in srgb, var(--attend) 45%, var(--border));
+  color: var(--attend);
+}
 .badge-license.is-index-only {
   border-color: color-mix(in srgb, var(--attend) 45%, var(--border));
   color: var(--attend);

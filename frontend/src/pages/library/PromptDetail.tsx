@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { fillTemplate, type PromptTemplate } from "../../content/prompts";
+import { REVIEW_LABEL, fillTemplate, type PromptTemplate } from "../../content/prompts";
 import { questStages } from "../../quest/stages";
 import { copyText } from "./copyText";
 
@@ -109,6 +109,9 @@ export function PromptDetail({ prompt, headingLevel = 2 }: { prompt: PromptTempl
         <span className="badge">{prompt.taskType}</span>
         <span className="badge badge-license is-original">原创</span>
         <span className="badge">演示模板</span>
+        {prompt.reviewStatus !== "draft" && (
+          <span className={`badge badge-review is-${prompt.reviewStatus}`}>{REVIEW_LABEL[prompt.reviewStatus].short}</span>
+        )}
       </div>
       <Heading id={`prompt-${prompt.id}`} className="prompt-title">
         {prompt.title}
@@ -130,8 +133,12 @@ export function PromptDetail({ prompt, headingLevel = 2 }: { prompt: PromptTempl
         <div>
           <dt>版本</dt>
           <dd>
-            v{prompt.version} · {prompt.updatedAt} · 已自查，待负责人复核
+            v{prompt.version} · {prompt.updatedAt}
           </dd>
+        </div>
+        <div>
+          <dt>审核状态</dt>
+          <dd>{prompt.reviewStatus === "draft" ? "草稿" : REVIEW_LABEL[prompt.reviewStatus].long}</dd>
         </div>
       </dl>
       <p className="notice notice-warn">比赛是否允许使用 AI、如何披露，以当届官方规则为准。</p>
