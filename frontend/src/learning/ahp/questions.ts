@@ -67,8 +67,8 @@ export const ahpQuestions: CourseQuestion[] = [
     ],
     answer: "third",
     answerLabel: "1/3",
-    hints: ["判断矩阵是互反矩阵：a_ji 与 a_ij 相乘等于 1。"],
-    explanation: "互反性要求 a_ji = 1 / a_ij。成长是薪资的 3 倍重要，薪资就是成长的 1/3 倍重要。判断值都是正数，不会出现负数或 0。",
+    hints: ["判断矩阵是互反矩阵：aⱼᵢ 与 aᵢⱼ 相乘等于 1。"],
+    explanation: "互反性要求 aⱼᵢ = 1 / aᵢⱼ。成长是薪资的 3 倍重要，薪资就是成长的 1/3 倍重要。判断值都是正数，不会出现负数或 0。",
     verification: "互反定义",
   },
   {
@@ -78,16 +78,16 @@ export const ahpQuestions: CourseQuestion[] = [
     difficulty: "基础",
     knowledge: "一致性",
     type: "judgment",
-    prompt: "如果判断矩阵完全一致（对任意 i、j、k 都有 a_ik = a_ij · a_jk），那么它的最大特征值 λmax 恰好等于阶数 n。",
+    prompt: "如果判断矩阵完全一致（对任意 i、j、k 都有 aᵢₖ = aᵢⱼ · aⱼₖ），那么它的最大特征值 λmax 恰好等于阶数 n。",
     options: [
       { id: "true", label: "正确" },
       { id: "false", label: "错误" },
     ],
     answer: "true",
     answerLabel: "正确",
-    hints: ["一致矩阵可以写成 a_ij = w_i / w_j，算一算 A·w。"],
+    hints: ["一致矩阵可以写成 aᵢⱼ = wᵢ / wⱼ，算一算 A·w。"],
     explanation:
-      "一致矩阵满足 a_ij = w_i / w_j，于是 (A·w)_i = Σ_j (w_i / w_j)·w_j = n·w_i，所以 λmax = n、CI = 0。判断不一致时 λmax > n，偏离越大越不一致。",
+      "一致矩阵满足 aᵢⱼ = wᵢ / wⱼ，于是 (A·w)ᵢ = Σⱼ (wᵢ / wⱼ)·wⱼ = n·wᵢ，所以 λmax = n、CI = 0。判断不一致时 λmax > n，偏离越大越不一致。",
     verification: "代数推导；numpy 验证示例矩阵 λmax = 3",
   },
   {
@@ -101,7 +101,7 @@ export const ahpQuestions: CourseQuestion[] = [
     options: [
       { id: "positive", label: "所有元素都是正数" },
       { id: "diagonal", label: "主对角线元素都等于 1" },
-      { id: "reciprocal", label: "a_ji = 1 / a_ij" },
+      { id: "reciprocal", label: "aⱼᵢ = 1 / aᵢⱼ" },
       { id: "rowsum", label: "每一行元素之和等于 1" },
     ],
     answer: ["positive", "diagonal", "reciprocal"],
@@ -126,7 +126,7 @@ export const ahpQuestions: CourseQuestion[] = [
     answerLabel: "w₁ = 4/7 ≈ 0.571",
     hints: ["一致矩阵的每一列都与权重成比例。", "取第 1 列 (1, 1/2, 1/4)，除以它的和 1.75。"],
     explanation:
-      "一致矩阵满足 a_ij = w_i / w_j，任取一列归一化即为权重。第 1 列 (1, 0.5, 0.25) 的和为 1.75，所以 w = (4/7, 2/7, 1/7) ≈ (0.571, 0.286, 0.143)。特征向量法、方根法、和积法在这里给出相同结果。",
+      "一致矩阵满足 aᵢⱼ = wᵢ / wⱼ，任取一列归一化即为权重。第 1 列 (1, 0.5, 0.25) 的和为 1.75，所以 w = (4/7, 2/7, 1/7) ≈ (0.571, 0.286, 0.143)。特征向量法、方根法、和积法在这里给出相同结果。",
     verification: "numpy.linalg.eig（ahp-verified.json: lesson.consistent）",
   },
   {

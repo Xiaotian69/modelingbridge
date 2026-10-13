@@ -16,6 +16,13 @@ function offsetFor(target: HTMLElement) {
 export type ScrollRestore = { anchorId?: string; anchorTop?: number; scrollY?: number };
 
 const STORE_KEY = "mb.v2.scroll";
+/**
+ * History key + URL. On a full page load every URL gets the router key "default", so the key
+ * alone would make a new deep link (e.g. /learn/ahp#synthesis) reuse the position saved for
+ * whatever page was loaded before it in this tab. Reloading the same URL still restores.
+ */
+const positionKey = (l: { key: string; pathname: string; search: string; hash: string }) =>
+  `${l.key}|${l.pathname}${l.search}${l.hash}`;
 const MAX_ENTRIES = 50;
 
 /** Back/forward positions per history entry; kept in sessionStorage so they survive a reload. */
@@ -68,7 +75,7 @@ export function RouteScroll() {
       )
         return;
       const saved =
-        navigation === "POP" ? positions.current!.get(location.key) : undefined;
+        navigation === "POP" ? positions.current!.get(positionKey(location)) : undefined;
       let target: HTMLElement | null = null;
       try {
         target = location.hash
@@ -107,7 +114,7 @@ export function RouteScroll() {
     frame = requestAnimationFrame(restore);
     const record = () => {
       if (!done) return;
-      positions.current!.set(location.key, window.scrollY);
+      positions.current!.set(positionKey(location), window.scrollY);
     };
     const persist = () => savePositions(positions.current!);
     window.addEventListener("scroll", record, { passive: true });
@@ -119,6 +126,6 @@ export function RouteScroll() {
       window.removeEventListener("pagehide", persist);
       persist();
     };
-  }, [location.key, location.hash, location.pathname, location.state, navigation]);
+  }, [location.key, location.hash, location.pathname, location.search, location.state, navigation]);
   return null;
 }

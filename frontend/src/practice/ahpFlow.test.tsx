@@ -52,6 +52,8 @@ it("diagnoses a CR mistake, sends the learner to the AHP section and brings them
   expect(screen.getByText(/已尝试 1 次/, { selector: ".attempts" })).toBeInTheDocument();
   const saved = JSON.parse(localStorage.getItem(LEARNING_KEY)!);
   expect(saved.exercises["ahp-practice-2"]).toMatchObject({ attempts: 1, lastStatus: "incorrect" });
+  // The V1 rollback mirror only carries linear programming.
+  expect(Object.keys(JSON.parse(localStorage.getItem("mb_learning_practice_v1") || "{}"))).not.toContain("ahp-practice-2");
 });
 
 it("does not show an AHP return ticket inside the linear programming lesson", async () => {

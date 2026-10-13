@@ -31,7 +31,7 @@ export const ahpExerciseMeta: Record<string, ExerciseMeta> = {
   "ahp-self-2": {
     sectionId: "consistency",
     errors: [
-      { option: "false", tag: "混淆了一致与不一致", message: "一致矩阵满足 a_ij = w_i / w_j，代入 A·w 正好得到 n·w；只有不一致时 λmax 才大于 n。" },
+      { option: "false", tag: "混淆了一致与不一致", message: "一致矩阵满足 aᵢⱼ = wᵢ / wⱼ，代入 A·w 正好得到 n·w；只有不一致时 λmax 才大于 n。" },
     ],
   },
   "ahp-self-3": {
@@ -47,6 +47,7 @@ export const ahpExerciseMeta: Record<string, ExerciseMeta> = {
       { value: 1 / 3, tag: "直接平均分配", message: "1/3 是三个准则同等重要时的权重，没有用到判断矩阵里的信息。" },
       { value: 4, tag: "把判断值当成权重", message: "4 是准则 1 与准则 3 的比值，不是归一化后的权重。权重之和应为 1。" },
       { value: 2, tag: "把判断值当成权重", message: "2 是准则 1 与准则 2 的比值，不是权重。请把一列归一化。" },
+      { value: 1 / 7, tag: "把行当成列归一化", message: "把第 1 行 (1, 2, 4) 归一化得到的是 1/7。一致矩阵中与权重成比例的是列：第 j 列等于权重除以 wⱼ。" },
     ],
   },
   "ahp-practice-2": {
@@ -78,6 +79,7 @@ export const ahpExerciseMeta: Record<string, ExerciseMeta> = {
       { value: 2.466, tag: "忘了归一化", message: "2.466 是第 2 行的几何平均数，还要除以三行几何平均数之和。" },
       { value: 15, tag: "忘了开方", message: "15 是第 2 行的连乘积，需要先开 3 次方，再归一化。" },
       { value: 1 / 3, tag: "直接平均分配", message: "1/3 没有用到判断矩阵的信息。" },
+      { value: 9 / (1 / 3 + 3 + 9 + 1.7), tag: "用了行和归一化", message: "这是把每行的和归一化（和法）的近似结果。题目要求方根法：每行先连乘，再开 3 次方，最后归一化。" },
     ],
   },
 };

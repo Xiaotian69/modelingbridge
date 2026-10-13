@@ -274,7 +274,8 @@ export function writeV1Mirror(store: StorageLike, state: LearningState) {
   try {
     const practice = readV1Practice(store);
     for (const [id, e] of Object.entries(state.exercises)) {
-      if (!e.attempts || !e.lastStatus) continue;
+      // V1 only ever had linear programming; later courses (ahp-*) are not mirrored.
+      if (id.startsWith("ahp-") || !e.attempts || !e.lastStatus) continue;
       practice[id] = { correct: e.lastStatus === "correct", attempts: e.attempts, updated: e.updatedAt };
     }
     store.setItem(PRACTICE_KEY, JSON.stringify(practice));

@@ -92,3 +92,23 @@ it("keeps back/forward positions across a reload of the page", async () => {
   const saved = JSON.parse(sessionStorage.getItem("mb.v2.scroll") || "[]") as [string, number][];
   expect(saved.some(([, y]) => y === 840)).toBe(true);
 });
+
+it("a new deep link opened by full page load goes to its section, not the previous page's position", async () => {
+  // First full load in this tab: /lesson, scrolled to 840 (stored under the router key "default").
+  const first = renderAt("/lesson");
+  await tick();
+  vi.stubGlobal("scrollY", 840);
+  fireEvent.scroll(window);
+  first.unmount();
+  // Second full load in the same tab: another URL with a hash (also key "default").
+  vi.stubGlobal("scrollY", 0);
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ top: 700 } as DOMRect);
+  renderAt("/other#part");
+  await tick();
+  expect(scroll).toHaveBeenLastCalledWith({ top: 610, behavior: "instant" });
+  // Reloading the first URL still restores where the learner was.
+  cleanup();
+  renderAt("/lesson");
+  await tick();
+  expect(scroll).toHaveBeenLastCalledWith({ top: 840, behavior: "instant" });
+});
