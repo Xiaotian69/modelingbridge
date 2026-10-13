@@ -114,7 +114,7 @@ export function RecordsPage() {
     const data = {
       app: "ModelingBridge 模桥",
       exportedAt: new Date().toISOString(),
-      note: "本文件只包含此浏览器中的学习数据；提示词变量与浏览偏好不在其中。",
+      note: "本文件只包含此浏览器中的学习数据；AI 技能包的设置与浏览偏好不在其中。",
       learning: state,
       questDrafts: Object.fromEntries(drafts.map((d) => [d.sourceId, d.raw])),
       reports,
@@ -371,7 +371,7 @@ export function RecordsPage() {
             </div>
             <div className="records-card">
               <p className="records-title">AI 对话</p>
-              <p className="muted-note">AI 助教尚未开放，本站目前不保存、也不发送任何 AI 对话。提示词库的复制操作只写入你的剪贴板。</p>
+              <p className="muted-note">AI 助教尚未开放，本站目前不保存、也不发送任何 AI 对话。AI 技能包的复制操作只写入你的剪贴板。</p>
             </div>
           </div>
           <p className="muted-note">无痕模式、清除浏览器站点数据或换设备都会丢失本地记录；跨设备同步将在以后提供。</p>

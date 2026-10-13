@@ -7,7 +7,7 @@ import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AppRoutes } from "./App";
 import { lessonEntries, searchEntries, staticEntries } from "./app/searchIndex";
-import { publishedPrompts } from "./content/prompts";
+import { skills } from "./content/skills";
 
 beforeEach(() => {
   localStorage.clear();
@@ -29,32 +29,32 @@ const renderAt = (path: string) =>
   );
 
 describe("V2.1 modules in one tree", () => {
-  it("indexes every published template once next to the AHP and LP entries", async () => {
+  it("indexes every AI skill once next to the AHP and LP entries", async () => {
     const entries = [...(await lessonEntries()), ...staticEntries()];
-    const promptIds = entries.filter((e) => e.group === "提示词").map((e) => e.href);
-    expect(promptIds).toHaveLength(15);
-    expect(new Set(promptIds).size).toBe(15);
-    publishedPrompts.forEach((p) => expect(promptIds).toContain(`/library/prompts/${p.id}`));
+    const skillHrefs = entries.filter((e) => e.group === "AI 技能").map((e) => e.href);
+    expect(skillHrefs).toHaveLength(skills.length);
+    skills.forEach((s) => expect(skillHrefs).toContain(`/library/skills/${s.id}`));
     expect(entries.some((e) => e.href.startsWith("/learn/ahp"))).toBe(true);
     expect(entries.some((e) => e.href === "/learn/linear-programming/lab")).toBe(true);
     const ids = entries.map((e) => e.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it("keeps the lab and the new templates findable side by side", async () => {
+  it("keeps the lab and the skills findable side by side", async () => {
     const entries = [...(await lessonEntries()), ...staticEntries()];
     expect(searchEntries(entries, "灵敏度", 10).some((h) => h.href === "/learn/linear-programming/lab")).toBe(true);
-    expect(searchEntries(entries, "敏感性", 10).some((h) => h.href === "/library/prompts/pr.validation.sensitivity")).toBe(true);
-    expect(searchEntries(entries, "AI 使用规则", 10).some((h) => h.href === "/library/prompts/pr.ai.rules")).toBe(true);
+    expect(searchEntries(entries, "提示词", 10).some((h) => h.href.startsWith("/library/skills/"))).toBe(true);
+    expect(searchEntries(entries, "论文", 10).some((h) => h.href === "/library/skills/paper")).toBe(true);
   });
 
   it.each([
-    ["/library/prompts/pr.ai.rules", "国赛与美赛 AI 使用规则核对"],
-    ["/library/prompts/pr.paper.selfcheck", null],
+    ["/library/prompts/pr.ai.rules", /论文写作/],
+    ["/library/prompts/pr.paper.selfcheck", /论文写作/],
+    ["/library/skills/validate", /结果分析与检验/],
   ])("deep-links %s inside 资料中心", async (path, title) => {
     renderAt(path);
-    if (title) expect(await screen.findByRole("heading", { name: title })).toBeInTheDocument();
-    expect(await screen.findByRole("link", { name: "提示词库", current: "page" })).toHaveAttribute("href", "/library/prompts");
+    expect(await screen.findByRole("heading", { level: 2, name: title })).toBeInTheDocument();
+    expect(await screen.findByRole("link", { name: "AI 技能包", current: "page" })).toHaveAttribute("href", "/library/skills");
   });
 
   it("still opens the AHP course and the LP lab by URL", async () => {

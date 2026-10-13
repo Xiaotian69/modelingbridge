@@ -6,7 +6,7 @@ import {
 } from "../data/modelingContent";
 import { COURSES, courseByMethod } from "../learning/courses";
 
-export type SearchGroup = "精讲" | "练习" | "方法速查" | "提示词" | "赛题";
+export type SearchGroup = "精讲" | "练习" | "方法速查" | "AI 技能" | "赛题";
 export type SearchEntry = {
   id: string;
   group: SearchGroup;
@@ -17,7 +17,7 @@ export type SearchEntry = {
   haystack: string;
 };
 
-export const GROUP_ORDER: SearchGroup[] = ["精讲", "练习", "方法速查", "提示词", "赛题"];
+export const GROUP_ORDER: SearchGroup[] = ["精讲", "练习", "方法速查", "AI 技能", "赛题"];
 const norm = (s: string) => s.toLowerCase();
 
 /** Entries that do not need the lesson text. */
@@ -72,11 +72,11 @@ export function staticEntries(): SearchEntry[] {
   return [...practice, lab, ...methods, ...problems];
 }
 
-/** Lesson sections and prompt templates, loaded only when someone starts searching. */
+/** Lesson sections and AI skills, loaded only when someone starts searching. */
 export async function lessonEntries(): Promise<SearchEntry[]> {
-  const [{ sections }, { publishedPrompts }, { ahpSections }] = await Promise.all([
+  const [{ sections }, { skills }, { ahpSections }] = await Promise.all([
     import("../learning/content"),
-    import("../content/prompts"),
+    import("../content/skills"),
     import("../learning/ahp/content"),
   ]);
   const ahp = ahpSections.map<SearchEntry>((s, i) => ({
@@ -88,16 +88,16 @@ export async function lessonEntries(): Promise<SearchEntry[]> {
     badge: "可学",
     haystack: norm(`层次分析法 ahp 判断矩阵 权重 一致性 ${s.title} ${s.lead}`),
   }));
-  const prompts = publishedPrompts.map<SearchEntry>((p) => ({
-    id: `prompt:${p.id}`,
-    group: "提示词",
-    title: p.title,
-    meta: `提示词库 · ${p.taskType}`,
-    href: `/library/prompts/${p.id}`,
-    badge: p.reviewStatus === "owner-reviewed" ? "原创模板" : "原创模板 · 待复核",
-    haystack: norm(`提示词 prompt ${p.title} ${p.summary} ${p.taskType}`),
+  const skillEntries = skills.map<SearchEntry>((s) => ({
+    id: `skill:${s.id}`,
+    group: "AI 技能",
+    title: `${s.title}技能`,
+    meta: `AI 技能包 · 第 ${s.order} 步`,
+    href: `/library/skills/${s.id}`,
+    badge: "原创",
+    haystack: norm(`ai 技能 skill 提示词 prompt ${s.title} ${s.yields} ${s.purpose}`),
   }));
-  return [...prompts, ...ahp, ...sections.map<SearchEntry>((s, i) => ({
+  return [...skillEntries, ...ahp, ...sections.map<SearchEntry>((s, i) => ({
     id: `lesson:${s.id}`,
     group: "精讲",
     title: s.title,

@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CoachPanel } from "../components/quest/CoachPanel";
 import { PageHead } from "../components/ui/PageHead";
 import { getCase } from "../api/client";
-import { promptsForStage } from "../content/prompts";
+import { QUEST_STAGE_SKILL, findSkill } from "../content/skills";
 import { getLocalCase, listLocalCases } from "../data/localCases";
 import { getCaseQuestSeed, getModelCardsForCase, getStageSeed } from "../quest/content";
 import {
@@ -16,7 +16,7 @@ import {
 import { loadQuestDraft, saveQuestDraft } from "../quest/storage";
 import { useQuestState } from "../hooks/useQuestState";
 import type { CaseDetail } from "../types";
-import { prefillPromptVars } from "./library/PromptDetail";
+import { stashQuestCase } from "./library/skillSession";
 import { saveWorkbenchRecord } from "../state/localRecords";
 
 const DEFAULT_PROBLEM =
@@ -98,14 +98,14 @@ export function QuestPage() {
   const answerReady = activeState.answer.trim().length >= 20;
   const allChecked = checkedConditions.every(Boolean);
   const canComplete = unlock !== "locked" && answerReady && allChecked;
-  const relatedPrompts = promptsForStage(activeStage.id);
+  const relatedSkill = findSkill(QUEST_STAGE_SKILL[activeStage.id])!;
   const here = `/quest${caseSlug ? `?case=${encodeURIComponent(caseSlug)}` : ""}`;
   const report = buildQuestReportMarkdown({
     title,
     sourceLabel,
     states,
     checks,
-    aiUsageNote: "本次七关实战使用站内课程预置的教练提示卡，未调用在线 AI。如在外部 AI 工具中使用了提示词库模板，请在最终报告中补充工具、时间和人工确认记录。",
+    aiUsageNote: "本次七关实战使用站内课程预置的教练提示卡，未调用在线 AI。如在外部 AI 工具中使用了 AI 技能包，请在最终报告中补充工具、时间和人工确认记录。",
   });
 
   function selectStage(stage: QuestStage) {
@@ -358,25 +358,19 @@ export function QuestPage() {
             </section>
 
             <section className="quest-box">
-              <h3>相关提示词（{relatedPrompts.length}）</h3>
-              {relatedPrompts.length ? (
-                <ul className="quest-prompts">
-                  {relatedPrompts.map((p) => (
-                    <li key={p.id}>
-                      <Link
-                        to={`/library/prompts/${p.id}?back=${encodeURIComponent(here)}`}
-                        onClick={() => prefillPromptVars(p, { problemText })}
-                      >
-                        {p.title}
-                      </Link>
-                      <span>{p.summary}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="muted-note">本关暂无配套模板。</p>
-              )}
-              <p className="muted-note">提示词只复制到你的剪贴板，供外部工具使用；打开时会预填公开题面，不会带上你的作答。</p>
+              <h3>配套 AI 技能</h3>
+              <ul className="quest-prompts">
+                <li>
+                  <Link
+                    to={`/library/skills/${relatedSkill.id}?from=quest&back=${encodeURIComponent(here)}`}
+                    onClick={() => stashQuestCase({ title, text: problemText })}
+                  >
+                    {relatedSkill.title}
+                  </Link>
+                  <span>{relatedSkill.yields}</span>
+                </li>
+              </ul>
+              <p className="muted-note">生成一份完整的任务说明书，复制给你自己的 AI 使用；会附上本题公开题面，不会带上你的作答。</p>
             </section>
 
             <p className="notice notice-warn">
