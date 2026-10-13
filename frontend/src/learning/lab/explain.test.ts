@@ -13,8 +13,12 @@ describe("explanations come from the solver", () => {
     const e = explain(m, r);
     expect(e.headline).toBe("最优计划：A 40 m²、B 20 m²，利润 2600 元");
     expect(e.lines.join("")).toContain("「切割」、「装配」");
-    expect(e.lines.join("")).toContain("A 的利润在 25–100 元之间时最优点不变");
-    expect(e.lines.join("")).toContain("B 的利润在 20–80 元之间时最优点不变");
+    expect(e.lines.join("")).toContain("A 的利润在 25–100 元之间时，A 40 m²、B 20 m² 都是最优计划");
+    expect(e.lines.join("")).toContain("B 的利润在 20–80 元之间时也一样");
+    // Endpoints are ties, not "still the unique optimum".
+    expect(e.lines.join("")).toContain(
+      "注意端点：A 的利润等于 25 元、A 的利润等于 100 元、B 的利润等于 20 元、B 的利润等于 80 元时，等值线正好与一条边界平行，这个计划仍然最优，但与相邻的计划并列最优，最优解不再唯一",
+    );
   });
 
   it("each preset produces its situation", () => {
@@ -36,6 +40,9 @@ describe("explanations come from the solver", () => {
     expect(e.lines.join("")).toContain("「装配」还剩 30");
     expect(e.lines.join("")).toContain("A 的利润不低于 20 元时");
     expect(e.lines.join("")).toContain("B 的利润不超过 40 元时");
+    // Only 20 (A) and 40 (B) are ties; B = 0 is just the slider's lower limit.
+    expect(e.lines.join("")).toContain("注意端点：A 的利润等于 20 元、B 的利润等于 40 元时");
+    expect(e.lines.join("")).not.toContain("B 的利润等于 0 元");
   });
 });
 
@@ -66,6 +73,17 @@ describe("stability ranges are correct (checked by re-solving)", () => {
       if (range!.lo > 1) {
         const out = at(range!.lo - 1);
         expect(out.status !== "optimal" || !out.optima.some((o) => same(o, v))).toBe(true);
+      }
+      // Exactly at a tie endpoint v is still optimal, but no longer the only optimum;
+      // at a lower end of 0 that is only the non-negativity limit, v stays the unique optimum.
+      for (const [end, tie] of [
+        [range!.lo, range!.loTie],
+        [range!.hi, range!.hiTie],
+      ] as const) {
+        if (!Number.isFinite(end)) continue;
+        const r2 = at(end);
+        expect(r2.status === "optimal" && r2.optima.some((o) => same(o, v))).toBe(true);
+        if (r2.status === "optimal") expect(r2.unique).toBe(!tie);
       }
     }
   });

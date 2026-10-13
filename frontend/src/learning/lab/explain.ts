@@ -3,16 +3,22 @@
  * The "why" part uses objective-coefficient ranging: keeping one profit fixed, the interval of
  * the other profit for which the current optimal corner stays optimal. For corner v it is the set
  * of c with c·v ≥ c·w for every other corner w and c·d ≤ 0 for every unbounded direction d.
+ * At an endpoint that comes from such a condition, equality holds: v is still optimal but ties
+ * with another corner (or with points along an unbounded direction), so the optimum is not
+ * unique there. A lower end of 0 that only comes from "profits are non-negative" is not a tie.
  */
 import { solveLab, usage, type LabResult, type Model, type Point } from "./lp2d";
 
-export type Range = { lo: number; hi: number }; // hi may be Infinity
+/** hi may be Infinity. loTie / hiTie: v ties with another optimal plan exactly at that end. */
+export type Range = { lo: number; hi: number; loTie: boolean; hiTie: boolean };
 
 /** Interval of c[k] (other coefficient fixed) for which `v` stays optimal; null if never. */
 export function stabilityRange(m: Model, result: Extract<LabResult, { status: "optimal" }>, v: Point, k: 0 | 1): Range | null {
   const other = k === 0 ? 1 : 0;
   let lo = 0;
   let hi = Infinity;
+  let loTie = false;
+  let hiTie = false;
   // Each condition reads  ck · coef ≥ rhs.
   const conditions: { coef: number; rhs: number }[] = [
     ...result.vertices.map((w) => ({ coef: v[k] - w[k], rhs: m.c[other] * (w[other] - v[other]) })),
@@ -24,21 +30,27 @@ export function stabilityRange(m: Model, result: Extract<LabResult, { status: "o
       continue;
     }
     const bound = rhs / coef;
-    if (coef > 0) lo = Math.max(lo, bound);
-    else hi = Math.min(hi, bound);
+    if (coef > 0) {
+      if (bound > lo + 1e-9) [lo, loTie] = [bound, true];
+      else if (Math.abs(bound - lo) <= 1e-9) loTie = true;
+    } else if (bound < hi - 1e-9) [hi, hiTie] = [bound, true];
+    else if (Math.abs(bound - hi) <= 1e-9) hiTie = true;
   }
-  return lo <= hi + 1e-9 ? { lo, hi } : null;
+  return lo <= hi + 1e-9 ? { lo, hi, loTie, hiTie } : null;
 }
 
 const n = (x: number) => (Math.abs(x - Math.round(x)) < 1e-9 ? String(Math.round(x)) : x.toFixed(2).replace(/0+$/, "").replace(/\.$/, ""));
 export const fmtPoint = ([x, y]: Point) => `A ${n(x)} m²、B ${n(y)} m²`;
 /** “在 25–100 元之间” / “不低于 40 元” / “不超过 40 元”, ready to follow the subject. */
+const ties = (r: Range) => [r.loTie ? r.lo : null, r.hiTie ? r.hi : null].filter((x): x is number => x !== null);
 const fmtRange = (r: Range, unit: string) =>
   r.hi === Infinity
     ? r.lo <= 0
-      ? `取任何值`
+      ? r.loTie
+        ? `不低于 0 ${unit}`
+        : `取任何值`
       : `不低于 ${n(r.lo)} ${unit}`
-    : r.lo <= 0
+    : r.lo <= 0 && !r.loTie
       ? `不超过 ${n(r.hi)} ${unit}`
       : `在 ${n(r.lo)}–${n(r.hi)} ${unit}之间`;
 
@@ -105,9 +117,18 @@ export function explain(m: Model, r: LabResult): Explanation {
       lines.push(`「${label(u.id)}」还剩 ${n(u.left)}，再增加这种资源，利润不会提高。`);
   const ra = stabilityRange(m, r, best, 0);
   const rb = stabilityRange(m, r, best, 1);
-  if (ra && rb)
+  if (ra && rb) {
     lines.push(
-      `为什么是这个点？目标函数等值线的倾斜程度由 A、B 利润之比决定。保持 B 的利润 ${n(m.c[1])} 元不变，A 的利润${fmtRange(ra, "元")}时最优点不变；保持 A 的利润 ${n(m.c[0])} 元不变，B 的利润${fmtRange(rb, "元")}时最优点不变。超出这个范围，等值线会先碰到另一个角点。`,
+      `为什么是这个点？目标函数等值线的倾斜程度由 A、B 利润之比决定。保持 B 的利润 ${n(m.c[1])} 元不变，A 的利润${fmtRange(ra, "元")}时，${fmtPoint(best)} 都是最优计划；保持 A 的利润 ${n(m.c[0])} 元不变，B 的利润${fmtRange(rb, "元")}时也一样。超出这个范围，等值线会先碰到另一个角点，最优点随之改变。`,
     );
+    const ends = [
+      ...ties(ra).map((x) => `A 的利润等于 ${n(x)} 元`),
+      ...ties(rb).map((x) => `B 的利润等于 ${n(x)} 元`),
+    ];
+    if (ends.length)
+      lines.push(
+        `注意端点：${ends.join("、")}时，等值线正好与一条边界平行，这个计划仍然最优，但与相邻的计划并列最优，最优解不再唯一；只有严格落在区间内部，它才是唯一最优解。`,
+      );
+  }
   return { tone: "ok", headline: `最优计划：${fmtPoint(best)}，利润 ${n(r.value)} 元`, lines };
 }

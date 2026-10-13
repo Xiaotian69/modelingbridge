@@ -154,9 +154,35 @@
   .lab-explorer-grid {
     grid-template-columns: minmax(0, 1fr);
   }
-  /* Phones: keep the chart in view while dragging the sliders below it. */
   .lab-explorer-chart {
     order: -1;
+    position: static;
+  }
+  .lab-explorer-chart svg {
+    max-height: 38vh;
+    min-height: 0;
+  }
+  .lab-explorer-chart .chart-legend {
+    margin: 2px 0 0;
+    font-size: 12px;
+  }
+  /* The explanation would make the chart block too tall on a phone: show it after the sliders. */
+  .lab-explorer-chart .lab-result p {
+    display: none;
+  }
+  .lab-explorer-chart .lab-result {
+    margin: 4px 0 0;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+  .lab-result-mobile {
+    display: block;
+  }
+}
+/* Tall phones: keep the chart in view while dragging the sliders below it. Short screens
+   (landscape phones) scroll normally, otherwise too little room is left for the sliders. */
+@media (max-width: 899px) and (min-height: 600px) {
+  .lab-explorer-chart {
     position: sticky;
     top: var(--header-h);
     z-index: 2;
@@ -164,24 +190,8 @@
     background: var(--surface);
     border-bottom: 1px solid var(--border);
   }
-  .lab-explorer-chart svg {
-    max-height: 38vh;
-    min-height: 0;
-  }
-  /* The explanation would make the sticky block too tall on a phone: show it after the sliders. */
-  .lab-explorer-chart .lab-result p {
-    display: none;
-  }
-  .lab-result-mobile {
-    display: block;
-  }
-  .lab-explorer-chart .lab-result {
-    margin: 4px 0 0;
-    padding: 6px 10px;
-    font-size: 14px;
-  }
-  .lab-explorer-chart .chart-legend {
-    margin: 2px 0 0;
-    font-size: 12px;
+  /* Keyboard focus must not scroll a slider underneath the pinned chart. */
+  .lab-group input {
+    scroll-margin-top: calc(var(--header-h) + 38vh + 110px);
   }
 }
