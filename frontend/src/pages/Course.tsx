@@ -19,6 +19,7 @@ hljs.registerLanguage("python", python);
 
 const PRACTICE = "/practice/linear-programming";
 const QUEST_CASE = "/quest?case=optimization-dispatch-demo";
+const LAB = "/learn/linear-programming/lab";
 
 function ContentBlock({ block }: { block: Block }) {
   switch (block.type) {
@@ -80,7 +81,12 @@ function ContentBlock({ block }: { block: Block }) {
         </div>
       );
     case "graph":
-      return <Graph />;
+      return (
+        <>
+          <Graph />
+          <LabEntry from="geometry" text="想同时改利润、约束系数，或看看无可行解、无界和多重最优解是什么样？" />
+        </>
+      );
     case "question": {
       const q = publishedQuestions.find((q) => q.id === block.id);
       return q ? <Checkpoint question={q} /> : null;
@@ -98,6 +104,18 @@ function ContentBlock({ block }: { block: Block }) {
         </ul>
       );
   }
+}
+
+/** Entry to the interactive lab; the lab offers the way back to this section. */
+function LabEntry({ from, text }: { from: string; text: string }) {
+  return (
+    <aside className="lab-cta">
+      <span>{text}</span>
+      <Link className="btn btn-secondary" to={`${LAB}?from=${from}`} state={{ fromLesson: true }}>
+        打开交互实验室 →
+      </Link>
+    </aside>
+  );
 }
 
 /** 回程条: back to the exercise the learner came from, with its state intact. */
@@ -320,6 +338,9 @@ export function CoursePage() {
               {section.blocks.map((block, j) => (
                 <ContentBlock key={j} block={block} />
               ))}
+              {section.id === "sensitivity" && (
+                <LabEntry from="sensitivity" text="在实验室里拖动利润和工时，观察最优点在什么范围内保持不变。" />
+              )}
               <nav className="section-turn" aria-label={`${section.title}的节导航`}>
                 {i > 0 ? <Link to={`#${sections[i - 1].id}`}>← 上一节</Link> : <span>第一节</span>}
                 {i < sections.length - 1 ? (

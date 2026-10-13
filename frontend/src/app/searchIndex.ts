@@ -56,7 +56,16 @@ export function staticEntries(): SearchEntry[] {
     badge: "可练",
     haystack: norm("线性规划 专项 练习 刷题 题目 约束 目标函数 整数 灵敏度 lp"),
   };
-  return [practice, ...methods, ...problems];
+  const lab: SearchEntry = {
+    id: "lab:lp",
+    group: "练习",
+    title: "线性规划交互实验室",
+    meta: "改利润和约束，实时看可行域与最优解",
+    href: "/learn/linear-programming/lab",
+    badge: "可操作",
+    haystack: norm("线性规划 交互 实验室 实验 可行域 最优解 无界 无可行解 多重最优 灵敏度 参数 lp"),
+  };
+  return [practice, lab, ...methods, ...problems];
 }
 
 /** Lesson sections and prompt templates, loaded only when someone starts searching. */

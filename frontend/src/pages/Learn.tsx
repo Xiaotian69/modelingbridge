@@ -29,6 +29,9 @@ export function LearnPage() {
               <Link className="btn btn-secondary" to="/practice/linear-programming">
                 进入专项练习
               </Link>
+              <Link className="btn btn-secondary" to="/learn/linear-programming/lab">
+                交互实验室
+              </Link>
             </div>
           </div>
           <div className="learn-equation" aria-label="课程例题：最大化 40x 加 50y，最优计划 A 40、B 20 平方米">
