@@ -4,8 +4,8 @@ import { PreferencesPanel } from "../app/PreferencesPanel";
 import { Collapse } from "../components/motion/Collapse";
 import { PageHead } from "../components/ui/PageHead";
 import { getLocalCase } from "../data/localCases";
-import { publishedQuestions } from "../learning/questions";
-import { LP_CHECKPOINT_IDS, LP_SECTIONS, sectionNumber, sectionTitle } from "../learning/sectionIds";
+import { practiceBankOf } from "../learning/courseBanks";
+import { COURSES, sectionIndex, sectionTitleIn } from "../learning/courses";
 import { PRACTICE_KEY, READING_KEY } from "../learning/storage";
 import { learning, useLearning } from "../state/learning";
 import { LEARNING_KEY, type ExerciseRecord } from "../state/learningStore";
@@ -24,7 +24,6 @@ import { recordToMarkdown, recordsToMarkdown } from "../utils/markdownBuilder";
 
 export { saveWorkbenchRecord, type StoredRecord };
 
-const exercises = publishedQuestions.filter((q) => q.placement !== "inline");
 const QUEST_TOTAL = 7;
 
 type Status = "correct" | "wrong" | "draft" | "new";
@@ -43,7 +42,7 @@ const STATUS: Record<Status, { mark: string; text: string }> = {
 const HELP = ["", "看过启发", "看过线索", "看过完整解析"];
 
 function exerciseLabel(id: string) {
-  const m = /^(self|practice)-(\d+)$/.exec(id);
+  const m = /^(?:ahp-)?(self|practice)-(\d+)$/.exec(id);
   return m ? `${m[1] === "self" ? "自测" : "练习"} ${m[2]}` : id;
 }
 
@@ -69,17 +68,30 @@ export function RecordsPage() {
   const [confirming, setConfirming] = useState(false);
   const [scope, setScope] = useState({ learning: true, quests: true, reports: true });
 
-  const reading = state.reading.lp;
-  const triedCheckpoints = LP_CHECKPOINT_IDS.filter((id) => state.checkpoints[id]?.tried).length;
-  const statuses = exercises.map((q) => ({ q, record: state.exercises[q.id], status: statusOf(state.exercises[q.id]) }));
-  const counts = statuses.reduce<Record<Status, number>>(
-    (acc, s) => ({ ...acc, [s.status]: acc[s.status] + 1 }),
-    { correct: 0, wrong: 0, draft: 0, new: 0 },
-  );
-  const shown = onlyWrong ? statuses.filter((s) => s.status === "wrong") : statuses;
+  const courses = COURSES.map((course) => {
+    const statuses = practiceBankOf(course.id).map((q) => ({
+      q,
+      record: state.exercises[q.id],
+      status: statusOf(state.exercises[q.id]),
+    }));
+    const counts = statuses.reduce<Record<Status, number>>(
+      (acc, s) => ({ ...acc, [s.status]: acc[s.status] + 1 }),
+      { correct: 0, wrong: 0, draft: 0, new: 0 },
+    );
+    return {
+      course,
+      reading: state.reading[course.id],
+      tried: course.checkpointIds.filter((id) => state.checkpoints[id]?.tried).length,
+      statuses,
+      counts,
+      shown: onlyWrong ? statuses.filter((s) => s.status === "wrong") : statuses,
+    };
+  });
+  const totalWrong = courses.reduce((n, c) => n + c.counts.wrong, 0);
+  const readingCount = courses.filter((c) => c.reading).length;
   const startedDrafts = drafts.filter((d) => d.started);
   const learningCount =
-    (reading ? 1 : 0) + Object.keys(state.exercises).length + Object.keys(state.checkpoints).length;
+    readingCount + Object.keys(state.exercises).length + Object.keys(state.checkpoints).length;
   const hasAnything = learningCount > 0 || drafts.length > 0 || reports.length > 0;
 
   const size = useMemo(
@@ -152,28 +164,35 @@ export function RecordsPage() {
         )}
 
         <section className="records-section" aria-labelledby="rec-course">
-          <div className="records-head">
-            <h2 id="rec-course">课程进度</h2>
-            <Link className="btn btn-secondary" to={reading ? `/learn/linear-programming#${reading.lastSectionId}` : "/learn/linear-programming"}>
-              {reading ? "继续阅读" : "开始阅读"}
-            </Link>
-          </div>
-          <div className="records-card">
-            <p className="records-title">线性规划精讲</p>
-            {reading ? (
-              <>
-                <p>
-                  上次读到第 {sectionNumber(reading.lastSectionId)} 节「{sectionTitle(reading.lastSectionId)}」 · 读过 {reading.visited.length}/
-                  {LP_SECTIONS.length} 节
+          <h2 id="rec-course">课程进度</h2>
+          <div className="records-two">
+            {courses.map(({ course, reading, tried }) => (
+              <div className="records-card" key={course.id}>
+                <div className="records-head">
+                  <p className="records-title">{course.title}精讲</p>
+                  <Link
+                    className="btn btn-secondary"
+                    to={reading ? `${course.lessonPath}#${reading.lastSectionId}` : course.lessonPath}
+                  >
+                    {reading ? "继续阅读" : "开始阅读"}
+                  </Link>
+                </div>
+                {reading ? (
+                  <>
+                    <p>
+                      上次读到第 {sectionIndex(course, reading.lastSectionId) + 1} 节「{sectionTitleIn(course, reading.lastSectionId)}」 ·
+                      读过 {reading.visited.length}/{course.sections.length} 节
+                    </p>
+                    <progress max={course.sections.length} value={reading.visited.length} aria-label={`${course.title}已读小节`} />
+                  </>
+                ) : (
+                  <p className="muted-note">还没有阅读记录。</p>
+                )}
+                <p className="muted-note">
+                  章内检查点尝试过 {tried}/{course.checkpointIds.length}（检查点不计成绩）
                 </p>
-                <progress max={LP_SECTIONS.length} value={reading.visited.length} aria-label="已读小节" />
-              </>
-            ) : (
-              <p className="muted-note">还没有阅读记录。</p>
-            )}
-            <p className="muted-note">
-              章内检查点尝试过 {triedCheckpoints}/{LP_CHECKPOINT_IDS.length}（检查点不计成绩）
-            </p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -182,37 +201,41 @@ export function RecordsPage() {
             <h2 id="rec-practice">专项练习</h2>
             <label className="switch-inline">
               <input type="checkbox" checked={onlyWrong} onChange={(e) => setOnlyWrong(e.target.checked)} />
-              只看错题（{counts.wrong}）
+              只看错题（{totalWrong}）
             </label>
           </div>
-          <p className="records-counts">
-            线性规划 {exercises.length} 题：✓ {counts.correct} · ✕ {counts.wrong} 待重练 · ◐ {counts.draft} 有草稿 · ○ {counts.new} 未做
-          </p>
-          {shown.length === 0 ? (
-            <p className="muted-note">没有待重练的题目。</p>
-          ) : (
-            <ul className="records-list">
-              {shown.map(({ q, record, status: s }) => (
-                <li key={q.id}>
-                  <span className={`q-mark is-${s}`} aria-hidden="true">
-                    {STATUS[s].mark}
-                  </span>
-                  <span className="records-item-main">
-                    <strong>{exerciseLabel(q.id)}</strong>
-                    <span className="muted-note">
-                      {q.difficulty} · {STATUS[s].text}
-                      {record?.attempts ? ` · 提交 ${record.attempts} 次` : ""}
-                      {record?.helpLevel ? ` · ${HELP[record.helpLevel]}` : ""}
-                      {record?.legacy ? " · 旧版记录" : ""}
-                    </span>
-                  </span>
-                  <Link className="text-link" to={`/practice/linear-programming/${q.id}`}>
-                    {s === "wrong" ? "重练" : s === "draft" ? "继续作答" : s === "correct" ? "再看一遍" : "去做题"}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+          {courses.map(({ course, statuses, counts, shown }) => (
+            <div key={course.id} className="records-course">
+              <p className="records-counts">
+                {course.title} {statuses.length} 题：✓ {counts.correct} · ✕ {counts.wrong} 待重练 · ◐ {counts.draft} 有草稿 · ○ {counts.new} 未做
+              </p>
+              {shown.length === 0 ? (
+                <p className="muted-note">没有待重练的题目。</p>
+              ) : (
+                <ul className="records-list">
+                  {shown.map(({ q, record, status: s }) => (
+                    <li key={q.id}>
+                      <span className={`q-mark is-${s}`} aria-hidden="true">
+                        {STATUS[s].mark}
+                      </span>
+                      <span className="records-item-main">
+                        <strong>{exerciseLabel(q.id)}</strong>
+                        <span className="muted-note">
+                          {q.difficulty} · {STATUS[s].text}
+                          {record?.attempts ? ` · 提交 ${record.attempts} 次` : ""}
+                          {record?.helpLevel ? ` · ${HELP[record.helpLevel]}` : ""}
+                          {record?.legacy ? " · 旧版记录" : ""}
+                        </span>
+                      </span>
+                      <Link className="text-link" to={`${course.practicePath}/${q.id}`}>
+                        {s === "wrong" ? "重练" : s === "draft" ? "继续作答" : s === "correct" ? "再看一遍" : "去做题"}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
         </section>
 
         <section className="records-section" aria-labelledby="rec-quest">
@@ -324,7 +347,7 @@ export function RecordsPage() {
                   <p>选择要从此浏览器删除的内容（不可撤销，建议先导出 JSON）：</p>
                   <label>
                     <input type="checkbox" checked={scope.learning} onChange={(e) => setScope({ ...scope, learning: e.target.checked })} />
-                    课程与练习进度：阅读位置 {reading ? 1 : 0} 条、练习记录 {Object.keys(state.exercises).length} 条、检查点{" "}
+                    课程与练习进度：阅读位置 {readingCount} 条、练习记录 {Object.keys(state.exercises).length} 条、检查点{" "}
                     {Object.keys(state.checkpoints).length} 条（含旧版备份键）
                   </label>
                   <label>

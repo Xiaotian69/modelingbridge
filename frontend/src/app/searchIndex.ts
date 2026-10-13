@@ -4,6 +4,7 @@ import {
   getClassicProblemPracticeLink,
   modelMethods,
 } from "../data/modelingContent";
+import { COURSES, courseByMethod } from "../learning/courses";
 
 export type SearchGroup = "精讲" | "练习" | "方法速查" | "提示词" | "赛题";
 export type SearchEntry = {
@@ -17,19 +18,18 @@ export type SearchEntry = {
 };
 
 export const GROUP_ORDER: SearchGroup[] = ["精讲", "练习", "方法速查", "提示词", "赛题"];
-const LP_SLUG = "linear-programming";
 const norm = (s: string) => s.toLowerCase();
 
 /** Entries that do not need the lesson text. */
 export function staticEntries(): SearchEntry[] {
   const methods = modelMethods.map<SearchEntry>((m) => {
-    const taught = m.slug === LP_SLUG;
+    const taught = courseByMethod(m.slug);
     return {
       id: `method:${m.slug}`,
       group: "方法速查",
       title: m.name,
       meta: `${m.family} · ${m.level}`,
-      href: taught ? "/learn/linear-programming" : `/learn/reference#model-${m.slug}`,
+      href: taught ? taught.lessonPath : `/learn/reference#model-${m.slug}`,
       badge: taught ? "精讲可学" : "速查 · 精讲筹备中",
       haystack: norm([m.name, m.family, m.when, ...m.aliases].join(" ")),
     };
@@ -47,24 +47,38 @@ export function staticEntries(): SearchEntry[] {
       haystack: norm([p.title, p.contest, p.year, p.type, ...p.methods].join(" ")),
     };
   });
-  const practice: SearchEntry = {
-    id: "practice:lp",
-    group: "练习",
-    title: "线性规划专项练习",
-    meta: "确定性判分 · 错题重练",
-    href: "/practice/linear-programming",
-    badge: "可练",
-    haystack: norm("线性规划 专项 练习 刷题 题目 约束 目标函数 整数 灵敏度 lp"),
+  const keywords: Record<string, string> = {
+    lp: "线性规划 专项 练习 刷题 题目 约束 目标函数 整数 灵敏度 lp",
+    ahp: "层次分析法 ahp 专项 练习 刷题 判断矩阵 权重 一致性 cr 特征向量 评价",
   };
-  return [practice, ...methods, ...problems];
+  const practice = COURSES.map<SearchEntry>((c) => ({
+    id: `practice:${c.id}`,
+    group: "练习",
+    title: `${c.title}专项练习`,
+    meta: "确定性判分 · 错题重练",
+    href: c.practicePath,
+    badge: "可练",
+    haystack: norm(keywords[c.id] ?? c.title),
+  }));
+  return [...practice, ...methods, ...problems];
 }
 
 /** Lesson sections and prompt templates, loaded only when someone starts searching. */
 export async function lessonEntries(): Promise<SearchEntry[]> {
-  const [{ sections }, { publishedPrompts }] = await Promise.all([
+  const [{ sections }, { publishedPrompts }, { ahpSections }] = await Promise.all([
     import("../learning/content"),
     import("../content/prompts"),
+    import("../learning/ahp/content"),
   ]);
+  const ahp = ahpSections.map<SearchEntry>((s, i) => ({
+    id: `lesson:ahp:${s.id}`,
+    group: "精讲",
+    title: s.title,
+    meta: `层次分析法 · 第 ${i + 1} 节`,
+    href: `/learn/ahp#${s.id}`,
+    badge: "可学",
+    haystack: norm(`层次分析法 ahp 判断矩阵 权重 一致性 ${s.title} ${s.lead}`),
+  }));
   const prompts = publishedPrompts.map<SearchEntry>((p) => ({
     id: `prompt:${p.id}`,
     group: "提示词",
@@ -74,7 +88,7 @@ export async function lessonEntries(): Promise<SearchEntry[]> {
     badge: p.reviewStatus === "owner-reviewed" ? "原创模板" : "原创模板 · 待复核",
     haystack: norm(`提示词 prompt ${p.title} ${p.summary} ${p.taskType}`),
   }));
-  return [...prompts, ...sections.map<SearchEntry>((s, i) => ({
+  return [...prompts, ...ahp, ...sections.map<SearchEntry>((s, i) => ({
     id: `lesson:${s.id}`,
     group: "精讲",
     title: s.title,

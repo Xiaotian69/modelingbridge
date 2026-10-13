@@ -1,6 +1,7 @@
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { PageHead } from "../components/ui/PageHead";
 import { modelMethods } from "../data/modelingContent";
+import { courseByMethod } from "../learning/courses";
 
 /** 精讲目录 (design doc §3.3): one open lesson, method quick references, honest “筹备中”. */
 export function LearnPage() {
@@ -38,6 +39,29 @@ export function LearnPage() {
           </div>
         </section>
 
+        <section className="learn-feature" aria-labelledby="learn-ahp">
+          <div>
+            <p className="page-kicker">已开放 · 第二门精讲 · 约 40–50 分钟</p>
+            <h2 id="learn-ahp">层次分析法（AHP）：三份实习，怎样选得有理有据？</h2>
+            <p>
+              从一次真实的选择出发，画出层次结构，用两两比较构造判断矩阵，求权重、做一致性检验，再合成最终排序。课程里有可以动手改判断的矩阵实验。
+            </p>
+            <div className="page-head-actions">
+              <Link className="btn btn-primary" to="/learn/ahp">
+                开始 AHP 精讲
+              </Link>
+              <Link className="btn btn-secondary" to="/practice/ahp">
+                AHP 专项练习
+              </Link>
+            </div>
+          </div>
+          <div className="learn-equation" aria-label="课程核心公式：A 乘 w 等于 λmax 乘 w，一致性比率 CR 等于 CI 除以 RI">
+            <span>判断矩阵 · 权重 · 一致性</span>
+            <b>Aw = λ<sub>max</sub>w</b>
+            <span>CR = CI / RI &lt; 0.1</span>
+          </div>
+        </section>
+
         <section className="learn-modes" aria-label="三种学习方式">
           <article>
             <h2>精讲</h2>
@@ -72,10 +96,10 @@ export function LearnPage() {
           <ul>
             {modelMethods.map((method) => (
               <li key={method.slug}>
-                <Link to={method.slug === "linear-programming" ? "/learn/linear-programming" : `/learn/reference#model-${method.slug}`}>
+                <Link to={courseByMethod(method.slug)?.lessonPath ?? `/learn/reference#model-${method.slug}`}>
                   <strong>{method.name}</strong>
                   <span className="muted-note">
-                    {method.family} · {method.slug === "linear-programming" ? "精讲已开放" : "仅速查 · 精讲筹备中"}
+                    {method.family} · {courseByMethod(method.slug) ? "精讲已开放" : "仅速查 · 精讲筹备中"}
                   </span>
                 </Link>
               </li>

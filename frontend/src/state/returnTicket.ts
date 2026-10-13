@@ -10,7 +10,8 @@ export const RETURN_KEY = "mb.v2.return";
 export type ReturnTicket = {
   /** `restore`: where the learner was on the exercise page, to land back there. */
   from: { kind: "exercise"; id: string; path: string; label: string; restore?: ScrollRestore };
-  to: { sectionId: string };
+  /** lessonId absent on tickets written before V2.1: those always meant linear programming. */
+  to: { sectionId: string; lessonId?: "lp" | "ahp" };
   createdAt: string;
 };
 

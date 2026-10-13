@@ -981,6 +981,9 @@
   font-size: 24px;
   font-family: "Cambria Math", "Times New Roman", serif;
 }
+.learn-feature + .learn-feature {
+  margin-top: 16px;
+}
 .learn-modes {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1111,4 +1114,10 @@
   .learn-methods ul {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+.records-course + .records-course {
+  margin-top: 14px;
+}
+.records-card .records-head {
+  margin-bottom: 6px;
 }

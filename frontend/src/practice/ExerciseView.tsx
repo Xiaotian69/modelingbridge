@@ -2,9 +2,9 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnswerInput, emptyAnswer, typeLabel } from "../learning/AnswerInput";
 import { evaluate, helpLevels, type Evaluation } from "../learning/evaluate";
-import { metaFor } from "../learning/exerciseMeta";
-import type { Question } from "../learning/questions";
-import { sectionNumber, sectionTitle } from "../learning/sectionIds";
+import { metaForQuestion } from "../learning/courseBanks";
+import type { CourseQuestion as Question } from "../learning/courseQuestion";
+import { courseOfQuestion, sectionIndex, sectionTitleIn } from "../learning/courses";
 import { usePrefs } from "../app/PrefsContext";
 import { learning, useLearning } from "../state/learning";
 import type { HelpLevel } from "../state/learningStore";
@@ -37,7 +37,8 @@ export function ExerciseView({
   const { state } = useLearning();
   const { prefs, update: updatePrefs } = usePrefs();
   const record = state.exercises[q.id];
-  const meta = metaFor(q.id);
+  const meta = metaForQuestion(q.id);
+  const course = courseOfQuestion(q.id);
   const [first, clue, solution] = helpLevels(q);
 
   // Restored on mount from the local record: draft, attempts and help level (要求 5).
@@ -116,14 +117,14 @@ export function ExerciseView({
         : { scrollY: window.scrollY };
     setReturnTicket({
       from: { kind: "exercise", id: q.id, path, label, restore },
-      to: { sectionId: meta.sectionId },
+      to: { sectionId: meta.sectionId, lessonId: course.id },
     });
-    navigate(`/learn/linear-programming#${meta.sectionId}`);
+    navigate(`${course.lessonPath}#${meta.sectionId}`);
   }
 
   const knowledgeLink = (
     <button type="button" className="link-button" onClick={reviewKnowledge}>
-      {q.knowledge} · 第 {sectionNumber(meta.sectionId)} 节「{sectionTitle(meta.sectionId)}」→
+      {q.knowledge} · 第 {sectionIndex(course, meta.sectionId) + 1} 节「{sectionTitleIn(course, meta.sectionId)}」→
     </button>
   );
 

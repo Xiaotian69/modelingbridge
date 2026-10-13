@@ -26,6 +26,7 @@ const LearnPage = lazy(() =>
   import("./pages/Learn").then((m) => ({ default: m.LearnPage })),
 );
 const CoursePage = lazy(() => import("./pages/Course").then(m => ({ default: m.CoursePage })));
+const AhpCoursePage = lazy(() => import("./pages/AhpCourse").then((m) => ({ default: m.AhpCoursePage })));
 const PracticePage = lazy(() => import("./pages/Practice").then(m => ({ default: m.PracticePage })));
 const ModelReferencePage = lazy(() => import("./pages/ModelReference").then(m => ({ default: m.ModelReferencePage })));
 const QuestPage = lazy(() =>
@@ -62,11 +63,14 @@ export function AppRoutes() {
         {/* 精讲 */}
         <Route path="learn" element={<LearnPage />} />
         <Route path="learn/linear-programming" element={<CoursePage />} />
+        <Route path="learn/ahp" element={<AhpCoursePage />} />
         <Route path="learn/reference" element={<ModelReferencePage />} />
         {/* 刷题 */}
         <Route path="practice" element={<Navigate to="/practice/linear-programming" replace />} />
         <Route path="practice/linear-programming" element={<PracticePage />} />
         <Route path="practice/linear-programming/:exerciseId" element={<PracticePage />} />
+        <Route path="practice/ahp" element={<PracticePage topic="ahp" />} />
+        <Route path="practice/ahp/:exerciseId" element={<PracticePage topic="ahp" />} />
         {/* 实战 */}
         <Route path="quest" element={<QuestPage />} />
         <Route path="cases" element={<CasesPage />} />

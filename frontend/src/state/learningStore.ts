@@ -14,6 +14,9 @@ export const LEARNING_BACKUP_KEY = "mb.v2.learning.corrupt";
 export const META_KEY = "mb.v2.meta";
 export const SCHEMA_VERSION = 2;
 export const LP_LESSON = "lp";
+/** Lessons with a reading position (V2.1 adds AHP; older data simply has no `ahp` entry). */
+export const LESSON_KEYS = ["lp", "ahp"] as const;
+export type LessonKey = (typeof LESSON_KEYS)[number];
 /** Inline thinking question that lived in the V1 practice history; it is a checkpoint. */
 const V1_CHECKPOINT_IDS = ["think-1"];
 
@@ -39,7 +42,7 @@ export type ReadingRecord = { lastSectionId: string; visited: string[]; updatedA
 
 export type LearningState = {
   schemaVersion: typeof SCHEMA_VERSION;
-  reading: Partial<Record<typeof LP_LESSON, ReadingRecord>>;
+  reading: Partial<Record<LessonKey, ReadingRecord>>;
   checkpoints: Record<string, CheckpointRecord>;
   exercises: Record<string, ExerciseRecord>;
   lastActivity?: { kind: "lesson" | "exercise"; id: string; at: string };
@@ -86,15 +89,16 @@ function sanitizeExercise(v: unknown): ExerciseRecord | null {
 export function sanitizeState(raw: unknown): LearningState | null {
   if (!isObject(raw) || raw.schemaVersion !== SCHEMA_VERSION) return null;
   const state = emptyState();
-  if (isObject(raw.reading) && isObject(raw.reading.lp)) {
-    const r = raw.reading.lp;
-    if (typeof r.lastSectionId === "string" && typeof r.updatedAt === "string")
-      state.reading.lp = {
-        lastSectionId: r.lastSectionId,
-        visited: Array.isArray(r.visited) ? r.visited.filter((x): x is string => typeof x === "string") : [],
-        updatedAt: r.updatedAt,
-      };
-  }
+  if (isObject(raw.reading))
+    for (const lesson of LESSON_KEYS) {
+      const r = raw.reading[lesson];
+      if (isObject(r) && typeof r.lastSectionId === "string" && typeof r.updatedAt === "string")
+        state.reading[lesson] = {
+          lastSectionId: r.lastSectionId,
+          visited: Array.isArray(r.visited) ? r.visited.filter((x): x is string => typeof x === "string") : [],
+          updatedAt: r.updatedAt,
+        };
+    }
   if (isObject(raw.checkpoints))
     for (const [id, c] of Object.entries(raw.checkpoints))
       if (isObject(c) && (c.lastResult === "correct" || c.lastResult === "incorrect") && typeof c.updatedAt === "string")
@@ -286,8 +290,10 @@ export function mergeStates(mine: LearningState, theirs: LearningState): Learnin
     !a ? b : !b ? a : b.updatedAt > a.updatedAt ? b : a;
   const ids = (a: object, b: object) => new Set([...Object.keys(a), ...Object.keys(b)]);
   const out = emptyState();
-  const lp = pick(mine.reading.lp, theirs.reading.lp);
-  if (lp) out.reading.lp = lp;
+  for (const lesson of LESSON_KEYS) {
+    const r = pick(mine.reading[lesson], theirs.reading[lesson]);
+    if (r) out.reading[lesson] = r;
+  }
   for (const id of ids(mine.exercises, theirs.exercises)) out.exercises[id] = pick(mine.exercises[id], theirs.exercises[id])!;
   for (const id of ids(mine.checkpoints, theirs.checkpoints))
     out.checkpoints[id] = pick(mine.checkpoints[id], theirs.checkpoints[id])!;

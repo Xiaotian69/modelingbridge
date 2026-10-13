@@ -2,7 +2,7 @@ import { useId, useState } from "react";
 import { AnswerInput, emptyAnswer, typeLabel } from "./AnswerInput";
 import { evaluate, helpLevels, type Evaluation } from "./evaluate";
 import type { Answer } from "./grading";
-import type { Question } from "./questions";
+import type { CourseQuestion as Question } from "./courseQuestion";
 import { Collapse } from "../components/motion/Collapse";
 import { learning } from "../state/learning";
 

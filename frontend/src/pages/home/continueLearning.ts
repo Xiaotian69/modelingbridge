@@ -2,13 +2,14 @@
  * What the learner left unfinished: lesson position and practice from the V2 learning
  * store (which migrates the V1 keys on first load), quest drafts from their own keys.
  */
+import { COURSES, courseOfQuestion, type LessonId } from "../../learning/courses";
 import { learning } from "../../state/learning";
 
 const QUEST_PREFIX = "mb_quest_draft:";
 const QUEST_TOTAL = 7;
 
 export type ContinueItem =
-  | { kind: "reading"; sectionId: string; href: string }
+  | { kind: "reading"; lesson: LessonId; sectionId: string; href: string }
   | { kind: "practice"; attempted: number; wrong: number; href: string }
   | { kind: "quest"; completed: number; total: number; href: string; updatedAt: string };
 
@@ -24,16 +25,28 @@ export function readContinueItems(store: Storage | null = safeStorage()): Contin
   if (!store) return [];
   const items: ContinueItem[] = [];
   const { state } = learning.get();
-  const section = state.reading.lp?.lastSectionId;
-  if (section) items.push({ kind: "reading", sectionId: section, href: `/learn/linear-programming#${section}` });
-  const practiced = Object.values(state.exercises).filter((e) => e.attempts > 0);
-  if (practiced.length)
+  // The most recently read lesson (each course keeps its own position).
+  const latest = COURSES.map((c) => ({ c, r: state.reading[c.id] }))
+    .filter((x) => x.r)
+    .sort((a, b) => (a.r!.updatedAt > b.r!.updatedAt ? -1 : 1))[0];
+  if (latest)
+    items.push({
+      kind: "reading",
+      lesson: latest.c.id,
+      sectionId: latest.r!.lastSectionId,
+      href: `${latest.c.lessonPath}#${latest.r!.lastSectionId}`,
+    });
+  const practiced = Object.entries(state.exercises).filter(([, e]) => e.attempts > 0);
+  if (practiced.length) {
+    // Continue in the course practised most recently.
+    const [lastId] = [...practiced].sort(([, a], [, b]) => (a.updatedAt > b.updatedAt ? -1 : 1))[0];
     items.push({
       kind: "practice",
       attempted: practiced.length,
-      wrong: practiced.filter((e) => e.lastStatus && e.lastStatus !== "correct").length,
-      href: "/practice/linear-programming",
+      wrong: practiced.filter(([, e]) => e.lastStatus && e.lastStatus !== "correct").length,
+      href: courseOfQuestion(lastId).practicePath,
     });
+  }
   let latestQuest: Extract<ContinueItem, { kind: "quest" }> | null = null;
   try {
     for (let i = 0; i < store.length; i++) {

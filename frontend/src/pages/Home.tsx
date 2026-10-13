@@ -4,23 +4,25 @@ import { MathNetwork } from "../components/motion/MathNetwork";
 import { Icon } from "../components/ui/Icon";
 import { HomeSearch } from "./home/HomeSearch";
 import { readContinueItems, type ContinueItem } from "./home/continueLearning";
-import { sectionNumber, sectionTitle } from "../learning/sectionIds";
+import { courseById, sectionIndex, sectionTitleIn } from "../learning/courses";
 
 type RouteStop = { title: string; detail: string; href?: string };
 const route: RouteStop[] = [
   { title: "认识建模", detail: "3–5 分钟导论 · 筹备中" },
   { title: "线性规划", detail: "精讲 · 刷题 · 实战", href: "/learn/linear-programming" },
   { title: "回归预测", detail: "筹备中" },
-  { title: "评价决策", detail: "筹备中" },
+  { title: "评价决策", detail: "层次分析法 · 精讲 · 刷题", href: "/learn/ahp" },
   { title: "综合项目", detail: "筹备中" },
 ];
 
 function ContinueLearning() {
   const [items] = useState<ContinueItem[]>(() => readContinueItems());
   const reading = items.find((i) => i.kind === "reading");
+  const readingCourse = reading?.kind === "reading" ? courseById(reading.lesson) : null;
+  const readingNumber = reading && readingCourse ? sectionIndex(readingCourse, reading.sectionId) + 1 : 0;
   const readingLabel =
-    reading && sectionNumber(reading.sectionId) > 0
-      ? `第 ${sectionNumber(reading.sectionId)} 节 · ${sectionTitle(reading.sectionId)}`
+    readingCourse && readingNumber > 0
+      ? `第 ${readingNumber} 节 · ${sectionTitleIn(readingCourse, reading!.sectionId)}`
       : "上次读到的位置";
   if (!items.length) return null;
   return (
@@ -32,7 +34,9 @@ function ContinueLearning() {
             <li key={item.kind}>
               {item.kind === "reading" && (
                 <>
-                  <span>线性规划 · {readingLabel}</span>
+                  <span>
+                    {readingCourse?.title ?? "精讲"} · {readingLabel}
+                  </span>
                   <Link className="btn btn-secondary" to={item.href}>
                     继续阅读
                   </Link>
