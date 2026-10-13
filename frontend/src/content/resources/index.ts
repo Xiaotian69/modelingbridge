@@ -8,7 +8,8 @@
  * never offered for download until their licence is verified.
  */
 import { listLocalCases } from "../../data/localCases";
-import { classicProblems, contestCalendar, getClassicProblemPracticeLink, recentTrainingCases } from "../../data/modelingContent";
+import { classicProblems, getClassicProblemPracticeLink, recentTrainingCases } from "../../data/modelingContent";
+import { ALL_EDITIONS, contestCatalog } from "../contests";
 
 export const RESOURCE_KINDS = ["官方赛事与规则", "近年赛题（官方链接）", "原创教学案例", "原创改编练习", "课程与工具"] as const;
 export type ResourceKind = (typeof RESOURCE_KINDS)[number];
@@ -35,17 +36,24 @@ export type ResourceItem = {
 };
 
 export function buildResourceIndex(): ResourceItem[] {
-  const contests: ResourceItem[] = contestCalendar.map((event) => ({
-    id: `res.contest.${event.slug}`,
-    title: event.name,
-    kind: "官方赛事与规则",
-    summary: event.fit,
-    meta: [event.period, event.category, event.status],
-    licenseStatus: "official-link",
-    officialUrl: event.sourceUrl,
-    officialLabel: event.sourceName,
-    to: "/library/calendar",
-  }));
+  const contests: ResourceItem[] = contestCatalog.map((info) => {
+    const latest = ALL_EDITIONS.filter((e) => e.contestId === info.id).sort((x, y) => y.year - x.year)[0];
+    const source = latest?.sources.find((s) => s.type !== "repost") ?? latest?.sources[0];
+    return {
+      id: `res.contest.${info.id}`,
+      title: info.name,
+      kind: "官方赛事与规则",
+      summary: info.fit,
+      meta: [info.category, latest ? `${latest.year} 年${latest.status === "suspended" ? "暂停" : "已收录"}` : "待收录"],
+      licenseStatus: "official-link",
+      // 只外链 https 页面；仅有 http 的官网通过站内日历详情查看来源。
+      ...(() => {
+        const url = [info.website, source?.url].find((u) => u?.startsWith("https://"));
+        return url ? { officialUrl: url, officialLabel: url === info.website ? `${info.short}官网` : source?.publisher } : {};
+      })(),
+      to: `/library/calendar?c=${info.id}`,
+    };
+  });
   const problems: ResourceItem[] = recentTrainingCases.map((item) => ({
     id: `res.${item.contest.toLowerCase()}.${item.year}.${item.problem.toLowerCase()}`,
     title: `${item.contest} ${item.year} ${item.problem} 题 · ${item.title.replace(/^\d{4}[A-F]\s*/, "")}`,
@@ -108,13 +116,13 @@ export function buildResourceIndex(): ResourceItem[] {
       to: "/library/tools",
     },
     {
-      id: "res.prompts",
-      title: "提示词库（原创演示模板）",
+      id: "res.skills",
+      title: "AI 建模技能包（原创）",
       kind: "课程与工具",
-      summary: "读题拆解、方法选择、代码调试、论文自检等模板，可填写变量后一键复制。",
-      meta: ["提示词"],
+      summary: "选题、赛题分析、数据处理、建模求解、检验、论文写作六步任务说明书，按赛事生成，复制给自己的 AI 使用。",
+      meta: ["AI 技能"],
       licenseStatus: "original",
-      to: "/library/prompts",
+      to: "/library/skills",
     },
   ];
   return [...tools, ...cases, ...drills, ...problems, ...contests];
