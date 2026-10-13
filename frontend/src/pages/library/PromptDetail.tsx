@@ -1,45 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { REVIEW_LABEL, fillTemplate, type PromptTemplate } from "../../content/prompts";
+import { PROMPT_CONTESTS, REVIEW_LABEL, RULE_NOTICE, generatePrompt, type PromptTemplate } from "../../content/prompts";
 import { questStages } from "../../quest/stages";
 import { copyText } from "./copyText";
 
-/** Variable values live only in this tab (03 §3.6): never in learning data or exports. */
-const varsKey = (id: string) => `mb.v2.promptVars.${id}`;
-type Stored = { values: Record<string, string>; examples: string[]; prefilled: string[] };
-
-export function readPromptVars(id: string): Stored {
-  try {
-    const raw = sessionStorage.getItem(varsKey(id));
-    const parsed = raw ? (JSON.parse(raw) as Partial<Stored>) : null;
-    if (parsed && typeof parsed.values === "object" && parsed.values)
-      return { values: parsed.values, examples: parsed.examples ?? [], prefilled: parsed.prefilled ?? [] };
-  } catch {
-    /* unavailable or malformed: start empty */
-  }
-  return { values: {}, examples: [], prefilled: [] };
-}
-
-function writePromptVars(id: string, stored: Stored) {
-  try {
-    sessionStorage.setItem(varsKey(id), JSON.stringify(stored));
-  } catch {
-    /* session storage blocked: values stay in memory */
-  }
-}
-
-/** Pre-fill public training-problem fields (never the student's own answers) if still empty. */
-export function prefillPromptVars(prompt: PromptTemplate, source: { problemText: string }) {
-  const stored = readPromptVars(prompt.id);
-  let changed = false;
-  for (const v of prompt.variables) {
-    if (v.prefillFrom === "quest.problemText" && !stored.values[v.key]?.trim() && source.problemText) {
-      stored.values[v.key] = source.problemText;
-      stored.prefilled = [...new Set([...stored.prefilled, v.key])];
-      changed = true;
-    }
-  }
-  if (changed) writePromptVars(prompt.id, stored);
-}
+import { readPromptVars, writePromptVars, type PromptValues as Stored } from "./promptSession";
+// Preserve the interface already consumed by the 七关 module.
+export { readPromptVars, prefillPromptVars } from "./promptSession";
 
 const stageNames = (prompt: PromptTemplate) =>
   prompt.stage
@@ -55,10 +21,15 @@ export function PromptDetail({ prompt, headingLevel = 2 }: { prompt: PromptTempl
   const [result, setResult] = useState<CopyResult>(null);
   const [expanded, setExpanded] = useState(false);
   const fallback = useRef<HTMLTextAreaElement>(null);
+  const revision = useRef(0);
+  const [copying, setCopying] = useState(false);
 
   useEffect(() => {
     setStored(readPromptVars(prompt.id));
     setResult(null);
+    setExpanded(false);
+    setCopying(false);
+    return () => { revision.current += 1; };
   }, [prompt.id]);
   useEffect(() => {
     if (result?.kind === "fail") {
@@ -70,8 +41,11 @@ export function PromptDetail({ prompt, headingLevel = 2 }: { prompt: PromptTempl
     return () => window.clearTimeout(timer);
   }, [result]);
 
-  const filled = useMemo(() => fillTemplate(prompt.templateText, stored.values), [prompt.templateText, stored.values]);
+  const filled = useMemo(() => generatePrompt(prompt, stored.values), [prompt, stored.values]);
   const save = (next: Stored) => {
+    revision.current += 1;
+    setResult(null);
+    setCopying(false);
     setStored(next);
     writePromptVars(prompt.id, next);
   };
@@ -81,22 +55,31 @@ export function PromptDetail({ prompt, headingLevel = 2 }: { prompt: PromptTempl
       examples: stored.examples.filter((k) => k !== key),
       prefilled: stored.prefilled.filter((k) => k !== key),
     });
-  const fillExamples = () =>
+  const fillExamples = () => {
+    const blanks = prompt.variables.filter((v) => !stored.values[v.key]?.trim());
     save({
-      values: Object.fromEntries(prompt.variables.map((v) => [v.key, v.example])),
-      examples: prompt.variables.map((v) => v.key),
-      prefilled: [],
+      values: { ...stored.values, ...Object.fromEntries(blanks.map((v) => [v.key, v.example])) },
+      examples: [...new Set([...stored.examples, ...blanks.map((v) => v.key)])],
+      prefilled: stored.prefilled.filter((k) => !blanks.some((v) => v.key === k)),
     });
+  };
+  const exampleCount = prompt.variables.filter((v) => stored.examples.includes(v.key)).length;
 
   async function copy() {
+    const request = ++revision.current;
+    setCopying(true);
     const ok = await copyText(filled.output);
-    const missing = filled.missing;
+    if (request !== revision.current) return;
+    setCopying(false);
+    const warning = exampleCount ? `仍有 ${exampleCount} 项使用示例，请替换为自己的材料。` : "";
     setResult(
       !ok
-        ? { kind: "fail", message: "复制失败：浏览器不允许写入剪贴板。下面的文本已全选，请按 Ctrl+C（手机长按）手动复制。" }
-        : missing.length
-          ? { kind: "partial", message: `已复制。仍有 ${missing.length} 个占位符未填写：${missing.map((m) => `{${m}}`).join("、")}` }
-          : { kind: "ok", message: "✓ 已复制完整提示词" },
+        ? { kind: "fail", message: "复制失败：浏览器不允许写入剪贴板。下面的文本已全选，请按 Ctrl+C（Mac 使用 ⌘C，手机长按）手动复制。" }
+        : filled.missing.length
+          ? { kind: "partial", message: `已复制。仍有 ${filled.missing.length} 个占位符未填写：${filled.missing.map((m) => `{${m}}`).join("、")}。${warning}` }
+          : warning
+            ? { kind: "partial", message: `已复制。${warning}` }
+            : { kind: "ok", message: "✓ 已复制完整提示词" },
     );
   }
 
@@ -124,7 +107,7 @@ export function PromptDetail({ prompt, headingLevel = 2 }: { prompt: PromptTempl
         </div>
         <div>
           <dt>适用比赛</dt>
-          <dd>通用</dd>
+          <dd>{prompt.contests.map((c) => PROMPT_CONTESTS[c]).join(" · ")}</dd>
         </div>
         <div>
           <dt>来源 · 授权</dt>
@@ -141,7 +124,7 @@ export function PromptDetail({ prompt, headingLevel = 2 }: { prompt: PromptTempl
           <dd>{prompt.reviewStatus === "draft" ? "草稿" : REVIEW_LABEL[prompt.reviewStatus].long}</dd>
         </div>
       </dl>
-      <p className="notice notice-warn">比赛是否允许使用 AI、如何披露，以当届官方规则为准。</p>
+      <p className="notice notice-warn">{RULE_NOTICE}</p>
       <p className="prompt-before">
         <strong>使用前：</strong>
         {prompt.before}
@@ -173,6 +156,7 @@ export function PromptDetail({ prompt, headingLevel = 2 }: { prompt: PromptTempl
                 <textarea
                   id={id}
                   rows={3}
+                  aria-required={v.required}
                   value={stored.values[v.key] ?? ""}
                   placeholder={`例如：${v.example}`}
                   onChange={(e) => setValue(v.key, e.target.value)}
@@ -180,6 +164,7 @@ export function PromptDetail({ prompt, headingLevel = 2 }: { prompt: PromptTempl
               ) : (
                 <input
                   id={id}
+                  aria-required={v.required}
                   value={stored.values[v.key] ?? ""}
                   placeholder={`例如：${v.example}`}
                   onChange={(e) => setValue(v.key, e.target.value)}
@@ -188,7 +173,7 @@ export function PromptDetail({ prompt, headingLevel = 2 }: { prompt: PromptTempl
             </div>
           );
         })}
-        <p className="muted-note">填写内容只保存在当前标签页，关闭后消失；不会进入学习记录。</p>
+        <p className="muted-note">示例只补充空项；可选项留空时生成“未提供”。填写内容仅在当前标签页保存，不进入学习记录；清除浏览器数据可能丢失。</p>
       </section>
 
       <section className="prompt-preview" aria-label="提示词预览">
@@ -215,12 +200,13 @@ export function PromptDetail({ prompt, headingLevel = 2 }: { prompt: PromptTempl
       </section>
 
       <div className="prompt-actions">
-        <button type="button" className="btn btn-primary" onClick={copy}>
-          复制完整提示词
+        <button type="button" className="btn btn-primary" onClick={copy} disabled={copying}>
+          {copying ? "正在复制…" : "复制完整提示词"}
         </button>
         {requiredMissing > 0 && <span className="muted-note">还有 {requiredMissing} 个必填项未填写，也可以先复制再在外部补充。</span>}
+        {exampleCount > 0 && <span className="muted-note">仍有 {exampleCount} 项为示例，请替换后使用。</span>}
       </div>
-      <p className={`copy-result${result ? ` is-${result.kind}` : ""}`} role="status" aria-live="polite">
+      <p aria-label="复制反馈" className={`copy-result${result ? ` is-${result.kind}` : ""}`} role="status" aria-live="polite">
         {result?.message ?? ""}
       </p>
       {result?.kind === "fail" && (

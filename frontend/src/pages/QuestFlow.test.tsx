@@ -2,13 +2,14 @@
 
 import "@testing-library/jest-dom/vitest";
 import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { getCase } from "../api/client";
 import { questStages } from "../quest/stages";
 import { loadQuestDraft } from "../quest/storage";
 import { readPromptVars } from "./library/PromptDetail";
 import { QuestPage } from "./Quest";
+import { PromptsPage } from "./Prompts";
 
 vi.mock("../api/client", () => ({ getCase: vi.fn() }));
 
@@ -88,6 +89,30 @@ describe("七关实战 batch 3", () => {
     expect(vars.values["题目内容"]).toContain("共享单车");
     expect(Object.values(vars.values).join("")).not.toContain("我自己的作答");
     expect(vars.prefilled).toEqual(["题目内容"]);
+  });
+
+  it("returns to the quest draft and refreshes only automatic text for another case", async () => {
+    vi.mocked(getCase).mockRejectedValue(new Error("offline"));
+    render(
+      <MemoryRouter initialEntries={["/quest?case=bike-demand-demo"]} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+        <Routes>
+          <Route path="/quest" element={<QuestPage />} />
+          <Route path="/library/prompts/:promptId" element={<PromptsPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    await screen.findByRole("heading", { name: /校园共享单车/ });
+    fireEvent.change(answerBox(), { target: { value: "我自己的作答必须留在当前案例，不自动带入提示词。" } });
+    fireEvent.click(screen.getByRole("link", { name: "赛题拆解 · 基础版" }));
+    expect((screen.getByLabelText(/题目内容/) as HTMLTextAreaElement).value).toContain("共享单车");
+    fireEvent.change(screen.getByLabelText(/我的初步理解/), { target: { value: "我手工填写的理解" } });
+    fireEvent.click(screen.getByRole("link", { name: "← 回到七关实战" }));
+    expect(answerBox()).toHaveValue("我自己的作答必须留在当前案例，不自动带入提示词。");
+    fireEvent.change(screen.getByRole("combobox", { name: "换一道训练题" }), { target: { value: "wine-evaluation-demo" } });
+    await screen.findByRole("heading", { name: /葡萄酒综合评价/ });
+    fireEvent.click(screen.getByRole("link", { name: "赛题拆解 · 基础版" }));
+    expect((screen.getByLabelText(/题目内容/) as HTMLTextAreaElement).value).toContain("葡萄酒");
+    expect(screen.getByLabelText(/我的初步理解/)).toHaveValue("我手工填写的理解");
   });
 
   it("asks before resetting and keeps everything when cancelled", async () => {
