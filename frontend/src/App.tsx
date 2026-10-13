@@ -1,7 +1,8 @@
 import { RouteScroll } from "./components/motion/RouteScroll";
-import { lazy, useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./layouts/Layout";
+import { PageErrorBoundary } from "./components/ui/PageErrorBoundary";
 import { HomePage } from "./pages/Home";
 import { TrialGate } from "./trial/TrialGate";
 import { PrefsProvider } from "./app/PrefsContext";
@@ -49,6 +50,9 @@ const WorkbenchPage = lazy(() =>
 const LibraryLayout = lazy(() =>
   import("./pages/LibraryLayout").then((m) => ({ default: m.LibraryLayout })),
 );
+const ChallengePage = lazy(() =>
+  import("./challenge/ChallengePage").then((m) => ({ default: m.ChallengePage })),
+);
 const NotFoundPage = lazy(() =>
   import("./pages/NotFound").then((m) => ({ default: m.NotFoundPage })),
 );
@@ -57,6 +61,17 @@ const NotFoundPage = lazy(() =>
 export function AppRoutes() {
   return (
     <Routes>
+      {/* 招新挑战：独立全屏页面，不套站点导航 */}
+      <Route
+        path="challenge"
+        element={
+          <Suspense fallback={null}>
+            <PageErrorBoundary>
+              <ChallengePage />
+            </PageErrorBoundary>
+          </Suspense>
+        }
+      />
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
         {/* 精讲 */}
