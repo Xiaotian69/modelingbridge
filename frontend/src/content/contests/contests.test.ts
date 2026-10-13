@@ -10,7 +10,10 @@ import {
   editionsForYear,
   findEdition,
   parseLocal,
+  predictionShiftDays,
+  remainingText,
   upcomingMilestones,
+  usEasternOffset,
   yearFraction,
 } from ".";
 
@@ -106,10 +109,12 @@ describe("年份与预测", () => {
     const cumcm = y.find((e) => e.info.id === "cumcm")!;
     expect(cumcm.predicted).toBe(true);
     expect(cumcm.basedOn).toBe(2026);
-    expect(cumcm.events.find((e) => e.kind === "contest")!.start).toBe("2027-09-10T18:00");
+    // 2026-09-10 是周四，推算到 2027 年最近的周四 9 月 9 日，而不是同月同日的周五
+    expect(cumcm.events.find((e) => e.kind === "contest")!.start).toBe("2027-09-09T18:00");
+    expect(cumcm.events.find((e) => e.kind === "contest")!.end).toBe("2027-09-12T20:00");
     expect(cumcm.notes[0]).toMatch(/不是官方安排/);
     const huashu = y.find((e) => e.info.id === "huashu-intl")!;
-    expect(huashu.events[0].start).toBe("2026-11-27");
+    expect(huashu.events[0].start).toBe("2026-11-26");
   });
   it("暂停的届次不用来推算；没有可参考数据时显示待公布", () => {
     const sz = editionsForYear(2027).find((e) => e.info.id === "shenzhen")!;
@@ -129,7 +134,7 @@ describe("状态（以 2026-10-13 为“今天”）", () => {
   const phase = (id: string, year = 2026, now = NOW) => editionPhase(findEdition(id, year)!, now);
   it("区分报名中、已结束、暂停、预计", () => {
     expect(phase("apmcm")).toMatchObject({ key: "registering", label: "报名中" });
-    expect(phase("apmcm").detail).toBe("截止 11 月 25 日");
+    expect(phase("apmcm").detail).toBe("截止 11 月 25 日，还有 43 天");
     expect(phase("mathorcup-bigdata").key).toBe("registering");
     expect(phase("cumcm")).toMatchObject({ key: "finished" });
     expect(phase("shenzhen")).toMatchObject({ key: "suspended" });
@@ -163,5 +168,93 @@ describe(".ics 导出", () => {
   });
   it("推算的届次不导出任何事件", () => {
     expect(buildIcs(findEdition("cumcm", 2027)!, NOW)).not.toContain("BEGIN:VEVENT");
+  });
+});
+
+
+describe("夏令时与时区（复查）", () => {
+  it("美国东部时间按夏令时规则区分 EST / EDT", () => {
+    expect(usEasternOffset(2027, 1, 28, 17)).toBe(-300);
+    expect(usEasternOffset(2027, 3, 14, 1, 59)).toBe(-300); // 2027 年 3 月 14 日 2:00 开始夏令时
+    expect(usEasternOffset(2027, 3, 14, 3)).toBe(-240);
+    expect(usEasternOffset(2027, 11, 7, 1)).toBe(-240); // 11 月 7 日 2:00 结束
+    expect(usEasternOffset(2027, 11, 7, 2)).toBe(-300);
+  });
+  it("美赛 5 月的成绩公布按 EDT 换算，1 月的比赛按 EST 换算", () => {
+    const mcm = findEdition("mcm", 2027)!;
+    const results = mcm.events.find((e) => e.kind === "results")!;
+    expect(results.endAt.toISOString()).toBe("2027-05-09T04:00:00.000Z"); // 当地 5 月 8 日 24:00 EDT
+    expect(describeEvent(results, 2027).official).toBe("美东夏令时（EDT） 5 月 8 日");
+    expect(describeEvent(mcm.events.find((e) => e.kind === "contest")!, 2027).official).toMatch(/^美东时间（EST）/);
+  });
+  it("中国赛事按北京时间，结果与运行环境的时区无关", () => {
+    const d = parseLocal("2026-11-26T06:00");
+    expect(d.toISOString()).toBe("2026-11-25T22:00:00.000Z");
+    expect(describeEvent(findEdition("apmcm", 2026)!.events.find((e) => e.kind === "contest")!, 2026).official).toBeNull();
+  });
+});
+
+describe("预测规则（复查）", () => {
+  it("默认对齐星期几，固定节假日的赛事保持月日", () => {
+    expect(predictionShiftDays("2026-09-10T18:00", 2027)).toBe(364);
+    expect(predictionShiftDays("2026-05-01T10:00", 2027, "date")).toBe(365);
+    expect(predictionShiftDays("2028-02-29", 2029, "date")).toBe(365); // 落到平年取 2 月 28 日
+    const y = editionsForYear(2027);
+    const wuyi = y.find((e) => e.info.id === "wuyi")!;
+    expect(wuyi.events.find((e) => e.kind === "contest")!.start).toBe("2027-05-01T10:00");
+    expect(wuyi.notes.join("")).toMatch(/固定在节假日/);
+  });
+  it("按星期几推算的赛事，开赛日与参考年份是同一个星期几", () => {
+    const day = (ev: { startAt?: Date }) => new Date(ev.startAt!.getTime() + 8 * 3_600_000).getUTCDay();
+    for (const ed of editionsForYear(2027).filter((e) => e.predicted && (e.info.predictAnchor ?? "weekday") === "weekday")) {
+      const base = findEdition(ed.info.id, ed.basedOn!)!;
+      const a = ed.events.find((e) => (e.kind === "contest" || e.kind === "stage") && e.startAt);
+      const b = base.events.find((e) => (e.kind === "contest" || e.kind === "stage") && e.startAt);
+      if (a && b) expect(day(a), ed.info.id).toBe(day(b));
+    }
+  });
+  it("推算的届次：全部事件标为预计、时间带“约”、不带往届备注", () => {
+    for (const ed of editionsForYear(2027).filter((e) => e.predicted)) {
+      expect(ed.notes[0]).toMatch(/不是官方安排/);
+      for (const ev of ed.events) {
+        expect(ev.predicted).toBe(true);
+        expect(ev.note).toBeUndefined();
+        expect(describeEvent(ev, 2027).beijing).toMatch(/^(约 |截止 约 )/);
+      }
+    }
+    expect(describeEvent(findEdition("mcm", 2027)!.events[1], 2027).beijing.startsWith("约")).toBe(false);
+    const cumcmReg = editionsForYear(2027).find((e) => e.info.id === "cumcm")!.events[0];
+    expect(describeEvent(cumcmReg, 2027).beijing).toBe("截止 约 9 月 6 日 20:00");
+  });
+});
+
+describe("待核实与倒计时（复查）", () => {
+  it("没能核实的节点作为“待核实”保留，不画成日期", () => {
+    expect(findEdition("shuwei-spring", 2026)!.pending).toEqual([{ kind: "registration", note: "报名截止时间未能在官网再次核对" }]);
+    expect(findEdition("tzmcm", 2026)!.pending[0]).toMatchObject({ label: "第一阶段" });
+  });
+  it("由待核实日期决定的状态会标明“日期待核实”", () => {
+    const p = editionPhase(findEdition("apmcm-cn", 2026)!, new Date("2026-05-01T00:00:00Z"));
+    expect(p.label).toBe("报名中（日期待核实）");
+    expect(upcomingMilestones(new Date("2026-04-01T00:00:00Z"), 50).some((m) => m.contestId === "apmcm-cn" && m.text.startsWith("报名"))).toBe(false);
+  });
+  it("剩余时间：分钟、小时、天", () => {
+    const now = new Date("2026-10-23T03:30:00Z");
+    expect(remainingText(new Date("2026-10-23T04:00:00Z"), now)).toBe("30 分钟");
+    expect(remainingText(new Date("2026-10-23T08:33:00Z"), now)).toBe("5 小时 3 分钟");
+    expect(remainingText(new Date("2026-10-23T09:30:00Z"), now)).toBe("6 小时");
+    expect(remainingText(new Date("2026-10-25T03:30:00Z"), now)).toBe("2 天");
+    expect(remainingText(now, now)).toBe("0 分钟");
+  });
+  it("比赛进行中时，“接下来”给出距比赛结束的时间", () => {
+    const list = upcomingMilestones(new Date("2026-11-27T00:00:00Z"), 3);
+    expect(list[0]).toMatchObject({ contest: "亚太赛", text: "比赛结束", remaining: "3 天" });
+  });
+  it("截止时刻前后状态自动切换", () => {
+    const ed = findEdition("mathorcup-bigdata", 2026)!;
+    expect(editionPhase(ed, new Date("2026-10-23T03:59:00Z")).label).toBe("报名中");
+    expect(editionPhase(ed, new Date("2026-10-23T04:00:30Z")).label).toBe("报名已截止 · 即将开赛");
+    expect(editionPhase(ed, new Date("2026-10-23T10:00:30Z")).label).toBe("初赛进行中");
+    expect(editionPhase(ed, new Date("2026-10-30T12:00:30Z")).label).toBe("待复赛");
   });
 });

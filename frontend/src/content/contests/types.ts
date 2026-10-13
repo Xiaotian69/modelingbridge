@@ -7,7 +7,11 @@
  * - "2026-08"：只到月份（官方原文只写了月份时使用）。
  * 结束时间写 "T24:00" 表示官方原文就是“24 时”。
  */
-export type TzOffset = "+08:00" | "-05:00" | "-04:00";
+/**
+ * 时区：北京时间写 "+08:00"（可省略）；美国东部时间写 "America/New_York"，
+ * 程序按美国夏令时规则自动区分 EST（-05:00）和 EDT（-04:00），不要手写固定偏移。
+ */
+export type TzOffset = "+08:00" | "America/New_York";
 
 export type ContestCategory = "核心赛" | "综合训练赛" | "行业专项赛" | "研究生赛";
 
@@ -41,6 +45,9 @@ export type ContestSource = {
 
 export type EditionStatus = "scheduled" | "suspended" | "cancelled" | "postponed";
 
+/** 已知存在、但没能核实日期的节点：页面显示“待核实”，不画在时间轴上。 */
+export type PendingEvent = { kind: EventKind; label?: string; note: string };
+
 export type ContestEdition = {
   contestId: string;
   year: number;
@@ -49,6 +56,7 @@ export type ContestEdition = {
   status: EditionStatus;
   events: ContestEvent[];
   sources: ContestSource[];
+  pending?: PendingEvent[];
   notes?: string[];
 };
 
@@ -62,6 +70,11 @@ export type ContestInfo = {
   /** 适合谁、练什么：跨年不变的介绍。 */
   fit: string;
   prepFocus: string[];
+  /**
+   * 推算下一届日期的方式：默认 "weekday"（对齐到相同星期几，多数赛事固定在周四/周五开赛）；
+   * 固定在节假日前后的赛事（如五一）用 "date"（保持相同月日）。
+   */
+  predictAnchor?: "weekday" | "date";
 };
 
 /** 页面使用的一届赛事（官方数据，或由程序按往年推算）。 */
@@ -80,5 +93,6 @@ export type ResolvedEdition = {
   title?: string;
   events: ResolvedEvent[];
   sources: ContestSource[];
+  pending: PendingEvent[];
   notes: string[];
 };

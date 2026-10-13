@@ -16,10 +16,10 @@ export const editions2026: ContestEdition[] = [
     year: 2026,
     status: "scheduled",
     events: [
-      { kind: "registration", end: "2026-01-29T15:00", tz: "-05:00", certainty: "official", note: "由指导教师在线注册，截止后不再接受报名" },
-      { kind: "contest", start: "2026-01-29T17:00", end: "2026-02-02T20:00", tz: "-05:00", certainty: "official" },
-      { kind: "submission", end: "2026-02-02T21:00", tz: "-05:00", certainty: "official", note: "论文 PDF 提交截止" },
-      { kind: "results", end: "2026-05-08", tz: "-05:00", certainty: "official" },
+      { kind: "registration", end: "2026-01-29T15:00", tz: "America/New_York", certainty: "official", note: "由指导教师在线注册，截止后不再接受报名" },
+      { kind: "contest", start: "2026-01-29T17:00", end: "2026-02-02T20:00", tz: "America/New_York", certainty: "official" },
+      { kind: "submission", end: "2026-02-02T21:00", tz: "America/New_York", certainty: "official", note: "论文 PDF 提交截止" },
+      { kind: "results", end: "2026-05-08", tz: "America/New_York", certainty: "official" },
     ],
     sources: [
       {
@@ -97,7 +97,7 @@ export const editions2026: ContestEdition[] = [
       { kind: "submission", end: "2026-05-11T10:00", certainty: "official" },
     ],
     sources: [{ title: "2026 年第十一届数维杯大学生数学建模挑战赛（春季赛）题目", url: "https://www.nmmcm.org.cn/Awards/185.html", publisher: "数维杯组委会", type: "organizer", checkedAt: C }],
-    notes: ["报名截止时间未能在官网再次核对，未收录。"],
+    pending: [{ kind: "registration", note: "报名截止时间未能在官网再次核对" }],
   },
   {
     contestId: "tzmcm",
@@ -106,7 +106,7 @@ export const editions2026: ContestEdition[] = [
     status: "scheduled",
     events: [{ kind: "stage", label: "第二阶段", start: "2026-05-14T20:00", end: "2026-05-17T20:00", certainty: "official" }],
     sources: [{ title: "数学中国数学建模网络挑战赛（第二阶段参赛须知）", url: "http://www.tzmcm.cn/", publisher: "数学中国", type: "organizer", checkedAt: C }],
-    notes: ["第一阶段时间未能在官网首页再次核对，未收录。"],
+    pending: [{ kind: "stage", label: "第一阶段", note: "第一阶段时间未能在官网首页再次核对" }],
   },
   {
     contestId: "eecmcm",

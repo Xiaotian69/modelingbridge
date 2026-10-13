@@ -10,10 +10,10 @@ export const editions2027: ContestEdition[] = [
     year: 2027,
     status: "scheduled",
     events: [
-      { kind: "registration", end: "2027-01-28T15:00", tz: "-05:00", certainty: "official", note: "由指导教师在线注册，截止后不再接受报名" },
-      { kind: "contest", start: "2027-01-28T17:00", end: "2027-02-01T20:00", tz: "-05:00", certainty: "official" },
-      { kind: "submission", end: "2027-02-01T21:00", tz: "-05:00", certainty: "official", note: "论文 PDF 提交截止" },
-      { kind: "results", end: "2027-05-08", tz: "-05:00", certainty: "official" },
+      { kind: "registration", end: "2027-01-28T15:00", tz: "America/New_York", certainty: "official", note: "由指导教师在线注册，截止后不再接受报名" },
+      { kind: "contest", start: "2027-01-28T17:00", end: "2027-02-01T20:00", tz: "America/New_York", certainty: "official" },
+      { kind: "submission", end: "2027-02-01T21:00", tz: "America/New_York", certainty: "official", note: "论文 PDF 提交截止" },
+      { kind: "results", end: "2027-05-08", tz: "America/New_York", certainty: "official" },
     ],
     sources: [
       {

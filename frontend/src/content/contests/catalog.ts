@@ -49,6 +49,7 @@ export const contestCatalog: ContestInfo[] = [
     category: "综合训练赛",
     fit: "与五一赛时间相近的春季邀请赛，注意不要与其他比赛撞期。",
     prepFocus: ["限时协作", "中文论文"],
+    predictAnchor: "date", // 固定在五一假期前后
   },
   {
     id: "wuyi",
@@ -58,6 +59,7 @@ export const contestCatalog: ContestInfo[] = [
     category: "综合训练赛",
     fit: "门槛较低，常用于协会训练和第一次完整参赛。",
     prepFocus: ["第一次完整参赛", "基础模型", "团队分工"],
+    predictAnchor: "date", // 固定在五一假期
   },
   {
     id: "shuwei-spring",

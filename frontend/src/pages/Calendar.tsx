@@ -9,6 +9,7 @@ import {
   describeEvent,
   editionPhase,
   editionsForYear,
+  endDay,
   eventLabel,
   upcomingMilestones,
   yearFraction,
@@ -16,20 +17,13 @@ import {
   type ResolvedEdition,
   type ResolvedEvent,
 } from "../content/contests";
+import { useClock } from "./library/useClock";
 import "./library/calendar.css";
 
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 const SOURCE_TYPE = { organizer: "主办方", platform: "官方报名平台", repost: "转载（注明原发布方）" } as const;
 type View = "timeline" | "list";
 
-function useNow() {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const t = window.setInterval(() => setNow(new Date()), 60_000);
-    return () => window.clearInterval(t);
-  }, []);
-  return now;
-}
 
 function firstAt(ed: ResolvedEdition) {
   const contest = ed.events.find((e) => e.kind === "contest" || e.kind === "stage");
@@ -57,7 +51,7 @@ function PhaseChip({ phase }: { phase: Phase }) {
 
 /** 资料 › 赛事日历：全年时间轴（桌面）/ 按月议程（手机），报名与比赛分开，官方与预计分开。 */
 export function CalendarPage() {
-  const now = useNow();
+  const now = useClock();
   const thisYear = bjParts(now).y;
   const [params, setParams] = useSearchParams();
   const requestedYear = Number(params.get("year"));
@@ -97,10 +91,10 @@ export function CalendarPage() {
             {milestones.map((m) => (
               <li key={`${m.contestId}-${m.year}-${m.text}-${m.at.getTime()}`}>
                 <button type="button" onClick={() => setParams(new URLSearchParams({ ...Object.fromEntries(params), year: String(m.year), c: m.contestId }))}>
-                  <span className="cal-next-days">{m.days <= 0 ? "今天" : `${m.days} 天后`}</span>
+                  <span className="cal-next-days">{m.remaining}后</span>
                   <strong>{m.contest}</strong>
                   <span>{m.text}</span>
-                  <span className="cal-next-date">{bjParts(m.at).m} 月 {bjParts(m.at).d} 日</span>
+                  <span className="cal-next-date">{bjParts(endDay(m.at)).m} 月 {bjParts(endDay(m.at)).d} 日</span>
                 </button>
               </li>
             ))}
@@ -247,7 +241,7 @@ function AgendaList({ rows, year, onOpen }: { rows: { ed: ResolvedEdition; phase
   const byMonth = new Map<number, { at: number; ed: ResolvedEdition; ev: ResolvedEvent; phase: Phase }[]>();
   const undated: { ed: ResolvedEdition; phase: Phase }[] = [];
   for (const { ed, phase } of rows) {
-    if (!ed.events.length) undated.push({ ed, phase });
+    if (!ed.events.length || ed.pending.length) undated.push({ ed, phase });
     for (const ev of ed.events) {
       const at = ev.startAt ?? ev.endAt;
       const p = bjParts(at);
@@ -280,14 +274,27 @@ function AgendaList({ rows, year, onOpen }: { rows: { ed: ResolvedEdition; phase
         <section aria-label="暂无日期">
           <h3>暂无日期</h3>
           <ul>
-            {undated.map(({ ed, phase }) => (
-              <li key={ed.info.id} className="cal-item">
-                <button type="button" onClick={() => onOpen(ed.info.id)}>
-                  <strong>{ed.info.short}</strong>
-                  <span className="cal-item-meta"><PhaseChip phase={phase} /></span>
-                </button>
-              </li>
-            ))}
+            {undated.map(({ ed, phase }) =>
+              ed.events.length ? (
+                ed.pending.map((p, i) => (
+                  <li key={`${ed.info.id}-p${i}`} className="cal-item is-unverified">
+                    <button type="button" onClick={() => onOpen(ed.info.id)}>
+                      <span className="cal-item-kind">{p.label ?? KIND_LABEL[p.kind]}</span>
+                      <strong>{ed.info.short}</strong>
+                      <span className="cal-item-time">日期待核实</span>
+                      <span className="cal-item-meta">{p.note}</span>
+                    </button>
+                  </li>
+                ))
+              ) : (
+                <li key={ed.info.id} className="cal-item">
+                  <button type="button" onClick={() => onOpen(ed.info.id)}>
+                    <strong>{ed.info.short}</strong>
+                    <span className="cal-item-meta"><PhaseChip phase={phase} /></span>
+                  </button>
+                </li>
+              ),
+            )}
           </ul>
         </section>
       )}
@@ -319,7 +326,7 @@ function DetailPanel({ ed, phase, onClose }: { ed: ResolvedEdition; phase: Phase
 
         {ed.notes.map((n) => <p key={n} className={`notice${ed.predicted || ed.status !== "scheduled" ? " notice-warn" : ""}`}>{n}</p>)}
 
-        {ed.events.length > 0 && (
+        {(ed.events.length > 0 || ed.pending.length > 0) && (
           <table className="cal-detail-table">
             <thead>
               <tr><th scope="col">阶段</th><th scope="col">北京时间</th><th scope="col">状态</th></tr>
@@ -339,6 +346,16 @@ function DetailPanel({ ed, phase, onClose }: { ed: ResolvedEdition; phase: Phase
                   </tr>
                 );
               })}
+              {ed.pending.map((p, i) => (
+                <tr key={`p${i}`}>
+                  <th scope="row">{p.label ?? KIND_LABEL[p.kind]}</th>
+                  <td>
+                    —
+                    <span className="cal-detail-note">{p.note}</span>
+                  </td>
+                  <td><span className="cal-cert is-unverified">待核实</span></td>
+                </tr>
+              ))}
             </tbody>
           </table>
         )}

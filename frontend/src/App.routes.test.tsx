@@ -64,6 +64,18 @@ describe("V2 routes and legacy URL compatibility", () => {
     expect(screen.getByRole("radio", { name: "审阅已有成果" })).toBeChecked();
   });
 
+  it("sends the old AI usage / AI rules links to drafting the AI section of the paper, with a notice", async () => {
+    renderAt("/library/prompts/pr.ai.rules?back=%2Fquest");
+    expect(await screen.findByRole("heading", { name: /论文写作/ })).toBeInTheDocument();
+    const note = screen.getByRole("note");
+    expect(note).toHaveTextContent("这两个模板已经下线");
+    expect(note).toHaveTextContent("以当届官方规则为准");
+    expect(screen.getByRole("radio", { name: "指定章节" })).toBeChecked();
+    expect(screen.getByLabelText(/章节名称/)).toHaveValue("AI 工具使用说明");
+    expect((screen.getByLabelText("生成的技能全文") as HTMLTextAreaElement).value).toContain("「AI 工具使用说明」");
+    expect(screen.getByRole("link", { name: "← 回到七关实战" })).toHaveAttribute("href", "/quest");
+  });
+
   it("sends the old prompt library list to the skills page", async () => {
     renderAt("/library/prompts");
     expect(await screen.findByRole("heading", { level: 1, name: "AI 建模技能包" })).toBeInTheDocument();

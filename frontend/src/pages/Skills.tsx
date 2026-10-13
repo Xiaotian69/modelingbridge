@@ -49,10 +49,13 @@ export function SkillsPage() {
   const mode: SkillMode = skill && requestedMode && skill.modes.includes(requestedMode) ? requestedMode : "fresh";
   const back = safeBack(params.get("back"));
   const fromQuest = params.get("from") === "quest";
+  const fromLegacyAi = params.get("from") === "legacy-ai";
   const questCase = useMemo(() => (fromQuest ? readQuestCase() : null), [fromQuest]);
   const [prefs, setPrefs] = useState<SkillPrefs>(() => {
     const p = readPrefs();
     const part = params.get("part");
+    const section = params.get("section");
+    if (part === "section" && section) return { ...p, paperPart: part, sectionName: section.slice(0, 60) };
     return part === "abstract" || part === "section" || part === "outline" ? { ...p, paperPart: part } : p;
   });
   const [attachCase, setAttachCase] = useState(true);
@@ -94,10 +97,12 @@ export function SkillsPage() {
     const next = new URLSearchParams(params);
     Object.entries(patch).forEach(([k, v]) => (v === null ? next.delete(k) : next.set(k, v)));
     next.delete("part");
+    next.delete("section");
     return next;
   };
   const goSkill = (id: string) => {
     const next = query({ mode: null });
+    if (next.get("from") === "legacy-ai") next.delete("from");
     navigate(`/library/skills/${id}${next.toString() ? `?${next}` : ""}`);
   };
   const usesDepth = skill.id === "analysis" || skill.id === "model";
@@ -128,6 +133,15 @@ export function SkillsPage() {
           </p>
         )}
       </div>
+
+      {fromLegacyAi && (
+        <p className="notice notice-warn" role="note">
+          你打开的是旧版“AI 使用说明 / AI 规则核对”模板的链接，这两个模板已经下线。这里改为用“论文写作 · 指定章节”起草论文中的 AI 工具使用说明：只如实记录你们用了什么工具、用在哪些环节、人工如何核对，不要编造。是否允许使用 AI、声明放在哪里、写什么格式，以当届官方规则为准（
+          <a className="text-link" href="https://www.mcm.edu.cn/" target="_blank" rel="noreferrer">国赛官网 ↗</a>、
+          <a className="text-link" href="https://www.contest.comap.com/undergraduate/contests/mcm/instructions.php" target="_blank" rel="noreferrer">COMAP 美赛说明 ↗</a>
+          ）；本站不判断是否合规。
+        </p>
+      )}
 
       <ol className="skills-howto" aria-label="使用方法">
         <li><span><strong>选择</strong>赛事、步骤和模式</span></li>

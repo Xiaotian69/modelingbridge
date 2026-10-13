@@ -58,10 +58,11 @@ describe("V2.1 modules in one tree", () => {
   });
 
   it("still opens the AHP course and the LP lab by URL", async () => {
+    // 两个页面都按需加载；全量并行测试时加载可能超过默认的 1 秒
     renderAt("/learn/linear-programming/lab");
-    expect(await screen.findByRole("heading", { level: 1, name: /实验室/ })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: /实验室/ }, { timeout: 3000 })).toBeInTheDocument();
     cleanup();
     renderAt("/learn/ahp");
-    expect(await screen.findByRole("heading", { level: 1, name: /三份实习/ })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: /三份实习/ }, { timeout: 3000 })).toBeInTheDocument();
   });
 });

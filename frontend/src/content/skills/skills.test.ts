@@ -125,6 +125,14 @@ describe("全流程技能包与兼容", () => {
     expect(legacyTarget("pr.code.debug")).toBe("/library/skills/model?mode=review");
     expect(legacyTarget("pr.paper.abstract")).toBe("/library/skills/paper?part=abstract");
     expect(legacyTarget("pr.unknown")).toBe("/library/skills");
+    // 两条旧 AI 模板：落到“论文写作 · 指定章节”，章节预设为 AI 工具使用说明，并带上提示标记
+    for (const id of ["pr.ai.usage", "pr.ai.rules"]) {
+      const q = new URLSearchParams(legacyTarget(id).split("?")[1]);
+      expect(legacyTarget(id).startsWith("/library/skills/paper?")).toBe(true);
+      expect(q.get("part")).toBe("section");
+      expect(q.get("section")).toBe("AI 工具使用说明");
+      expect(q.get("from")).toBe("legacy-ai");
+    }
   });
   it("七关每一关都对应一个技能", () => {
     questStages.forEach((s) => expect(skills.map((k) => k.id)).toContain(QUEST_STAGE_SKILL[s.id]));

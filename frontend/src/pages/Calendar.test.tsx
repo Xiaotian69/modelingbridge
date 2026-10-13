@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import "@testing-library/jest-dom/vitest";
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CalendarPage } from "./Calendar";
@@ -57,7 +57,7 @@ describe("赛事日历", () => {
     expect(screen.getByText(/斜纹条按最近一届官方日期推算/)).toBeInTheDocument();
     expect(row("国赛")).toHaveTextContent("预计 · 参考 2026 年");
     expect(row("美赛")).toHaveTextContent("报名截止前");
-    expect(screen.getByRole("button", { name: /^国赛 比赛：9 月 10 日 18:00 – 9 月 13 日 20:00（预计（参考 2026 年））/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^国赛 比赛：约 9 月 9 日 18:00 – 9 月 12 日 20:00（预计（参考 2026 年））/ })).toBeInTheDocument();
   });
 
   it("详情：北京时间与官方时区、来源、核验日期、日历导出；Esc 关闭", () => {
@@ -103,5 +103,77 @@ describe("赛事日历", () => {
     renderAt("/library/calendar?year=2025");
     expect(screen.getByText(/2025 年只收录了已从主办方原文核对过的赛事/)).toBeInTheDocument();
     expect(screen.getAllByRole("rowheader")).toHaveLength(1);
+  });
+});
+
+describe("倒计时自动更新（不刷新页面）", () => {
+  const setVisibility = (state: "visible" | "hidden") => {
+    Object.defineProperty(document, "visibilityState", { configurable: true, get: () => state });
+    document.dispatchEvent(new Event("visibilitychange"));
+  };
+  beforeEach(() => {
+    vi.useRealTimers();
+    vi.useFakeTimers({ toFake: ["Date", "setTimeout", "clearTimeout", "setInterval", "clearInterval"] });
+    vi.setSystemTime(new Date("2026-10-23T03:59:30Z")); // 北京时间 10-23 11:59:30，报名 12:00 截止
+  });
+  afterEach(() => {
+    setVisibility("visible");
+  });
+
+  const firstCard = () => within(screen.getByRole("region", { name: "接下来" })).getAllByRole("button")[0];
+
+  it("到达截止的那一分钟自动切换倒计时和状态", () => {
+    renderAt();
+    expect(firstCard()).toHaveTextContent("1 分钟后");
+    expect(firstCard()).toHaveTextContent("报名截止");
+    expect(row("MathorCup 大数据")).toHaveTextContent("报名中");
+    act(() => vi.advanceTimersByTime(31_000)); // 跨过 12:00
+    expect(firstCard()).toHaveTextContent("MathorCup 大数据");
+    expect(firstCard()).toHaveTextContent("初赛开始");
+    expect(firstCard()).toHaveTextContent("6 小时后");
+    expect(row("MathorCup 大数据")).toHaveTextContent("报名已截止 · 即将开赛");
+    act(() => vi.advanceTimersByTime(60_000));
+    expect(firstCard()).toHaveTextContent("5 小时 59 分钟后");
+  });
+
+  it("只保留一个对齐整分钟的定时器；标签页隐藏时暂停，恢复时立即校正", () => {
+    renderAt();
+    expect(vi.getTimerCount()).toBe(1);
+    act(() => setVisibility("hidden"));
+    expect(vi.getTimerCount()).toBe(0);
+    vi.setSystemTime(new Date("2026-10-23T10:00:30Z")); // 后台期间时间过去了约 6 小时
+    act(() => setVisibility("visible"));
+    expect(row("MathorCup 大数据")).toHaveTextContent("初赛进行中");
+    expect(firstCard()).toHaveTextContent("初赛结束");
+    expect(vi.getTimerCount()).toBe(1);
+  });
+
+  it("窗口重新获得焦点或从往返缓存恢复时也会校正，且不会叠加定时器", () => {
+    renderAt();
+    vi.setSystemTime(new Date("2026-10-23T04:30:00Z"));
+    act(() => { window.dispatchEvent(new Event("focus")); });
+    expect(row("MathorCup 大数据")).toHaveTextContent("报名已截止");
+    act(() => { window.dispatchEvent(new Event("pageshow")); window.dispatchEvent(new Event("focus")); });
+    expect(vi.getTimerCount()).toBe(1);
+  });
+
+  it("卸载后不留下定时器和监听", () => {
+    const removeDoc = vi.spyOn(document, "removeEventListener");
+    const removeWin = vi.spyOn(window, "removeEventListener");
+    const { unmount } = renderAt();
+    unmount();
+    expect(vi.getTimerCount()).toBe(0);
+    expect(removeDoc).toHaveBeenCalledWith("visibilitychange", expect.any(Function));
+    expect(removeWin).toHaveBeenCalledWith("focus", expect.any(Function));
+    expect(removeWin).toHaveBeenCalledWith("pageshow", expect.any(Function));
+  });
+
+  it("待核实的节点显示为“待核实”，不画成日期", () => {
+    vi.setSystemTime(new Date("2026-10-13T04:00:00Z"));
+    renderAt("/library/calendar?c=shuwei-spring");
+    const dialog = screen.getByRole("dialog");
+    const pendingRow = within(dialog).getAllByRole("row").find((r) => r.textContent?.includes("报名截止时间未能在官网再次核对"))!;
+    expect(pendingRow).toHaveTextContent("待核实");
+    expect(pendingRow).not.toHaveTextContent("官方已公布");
   });
 });
