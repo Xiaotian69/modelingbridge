@@ -69,7 +69,7 @@ export function RegressionFigure({ view }: { view: View }) {
         desc={
           view === "scatter"
             ? `14 天的最高气温与销量，相关系数 r = ${simple.r.toFixed(3)}。四个周末大多位于其他点上方。`
-            : `工作日线：销量 = ${b0.toFixed(2)} + ${b1.toFixed(2)} × 气温；周末线比它整体高 ${b2.toFixed(2)} 杯。虚线是只用气温的一元回归直线，斜率 ${simple.slope.toFixed(2)}，更平。`
+            : `工作日线：销量 = ${b0.toFixed(2).replace(/^-/, "−")} + ${b1.toFixed(2)} × 气温；周末线比它整体高 ${b2.toFixed(2)} 杯。虚线是只用气温的一元回归直线，斜率 ${simple.slope.toFixed(2)}，更平。`
         }
         xLabel="最高气温（℃）"
         yLabel="销量（杯）"

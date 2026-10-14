@@ -50,12 +50,12 @@ export function CampusMap({ edges, title, desc, edgeClass, nodeClass, badge }: M
       })}
       {PLACES.map((pl, v) => (
         <g key={pl.id} className={`campus-node ${nodeClass?.(v) ?? ""}`}>
-          <rect x={pl.x - 44} y={pl.y - 17} width="88" height="34" rx="17" />
-          <text x={pl.x} y={pl.y + 5} textAnchor="middle" className="campus-name">
+          <rect x={pl.x - 50} y={pl.y - 19} width="100" height="38" rx="19" />
+          <text x={pl.x} y={pl.y + 6} textAnchor="middle" className="campus-name">
             {pl.name}
           </text>
           {badge?.(v) && (
-            <text x={pl.x} y={pl.y + 34} textAnchor="middle" className="campus-badge">
+            <text x={pl.x} y={pl.y + 40} textAnchor="middle" className="campus-badge">
               {badge(v)}
             </text>
           )}

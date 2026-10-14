@@ -75,6 +75,11 @@ describe("regression lesson structure", () => {
   it("never leaves a placeholder or an undefined value in the text", () => {
     expect(all).not.toMatch(/undefined|NaN|\$\{/);
   });
+
+  it("writes negative numbers with the minus sign “−”, not a hyphen", () => {
+    expect(all).toContain("−5.98");
+    expect(all).not.toMatch(/(^|[\s（(=，])-\d/);
+  });
 });
 
 describe("numbers in the text are the verified ones", () => {

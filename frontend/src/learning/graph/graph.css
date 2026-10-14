@@ -132,11 +132,14 @@
 }
 
 @media (max-width: 600px) {
+  /* The 640-wide map is drawn at about half size on a phone: keep labels near 11px on screen. */
   .lp-lab svg .campus-name {
-    font-size: 19px;
+    font-size: 23px;
   }
-  .lp-lab svg .campus-weight,
+  .lp-lab svg .campus-weight {
+    font-size: 21px;
+  }
   .lp-lab svg .campus-badge {
-    font-size: 18px;
+    font-size: 20px;
   }
 }

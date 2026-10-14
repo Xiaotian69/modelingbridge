@@ -13,9 +13,12 @@ export type RegressionFigure = "scatter" | "residuals" | "two-lines";
 export type RegressionBlock = Block | BridgeBlock | { type: "regression-figure"; view: RegressionFigure } | { type: "regression-lab" };
 export type RegressionSection = { id: string; title: string; lead: string; blocks: RegressionBlock[] };
 
-const f1 = (x: number) => x.toFixed(1);
-const f2 = (x: number) => x.toFixed(2);
-const f3 = (x: number) => x.toFixed(3);
+/** Prose and tables use the minus sign “−”; KaTeX formulas keep ASCII (tex2). */
+const sign = (s: string) => s.replace(/^-/, "−");
+const f1 = (x: number) => sign(x.toFixed(1));
+const f2 = (x: number) => sign(x.toFixed(2));
+const f3 = (x: number) => sign(x.toFixed(3));
+const tex2 = (x: number) => x.toFixed(2);
 const p = (text: string): RegressionBlock => ({ type: "p", text });
 const note = (text: string): RegressionBlock => ({ type: "note", text });
 const formula = (text: string): RegressionBlock => ({ type: "formula", text });
@@ -43,7 +46,7 @@ const dayName = (i: number) => `第 ${i + 1} 天（周${WEEKDAY_NAMES[i % 7]}）
 const handRows = HAND_X.map((x, i) => {
   const dx = x - hand.xBar;
   const dy = HAND_Y[i] - hand.yBar;
-  return [String(x), String(HAND_Y[i]), String(dx), String(dy), String(dx * dy), String(dx * dx)];
+  return [String(x), String(HAND_Y[i]), sign(String(dx)), sign(String(dy)), sign(String(dx * dy)), String(dx * dx)];
 });
 
 export const regressionSections: RegressionSection[] = [
@@ -140,7 +143,7 @@ export const regressionSections: RegressionSection[] = [
       p(
         `奶茶店的数据也一样算：x̄ = ${f2(simple.xBar)} ℃，ȳ = ${f2(simple.yBar)} 杯，Sxy = ${f2(simple.sxy)}，Sxx = ${f2(simple.sxx)}。得到 b₁ = ${f2(simple.slope)}，b₀ = ${f2(simple.intercept)}：`,
       ),
-      formula(String.raw`\hat y=${f2(simple.intercept)}+${f2(simple.slope)}\,x`),
+      formula(String.raw`\hat y=${tex2(simple.intercept)}+${tex2(simple.slope)}\,x`),
       p(
         `解读：在这两周里，最高气温每高 1 ℃，平均多卖约 ${f1(simple.slope)} 杯。由 b₀ = ȳ − b₁x̄ 可以看出，最小二乘直线一定经过点 (x̄, ȳ)，并且所有残差加起来恰好等于 0。`,
       ),
@@ -187,7 +190,7 @@ export const regressionSections: RegressionSection[] = [
       ),
       formula(String.raw`(X^{\mathsf T}X)\,b=X^{\mathsf T}y`),
       p(
-        "X 是一张 14 行 3 列的表：第一列全是 1（对应截距），第二列是气温，第三列是是否周末；y 是 14 天的销量。不熟悉矩阵也没关系，下一节的 Python 程序一行就能求出结果。",
+        "X 是一张 14 行 3 列的表：第一列全是 1（对应截距），第二列是气温，第三列是是否周末；y 是 14 天的销量。不熟悉矩阵也没关系，第 8 节的 Python 程序一行就能求出结果。",
       ),
       {
         type: "table",
@@ -201,7 +204,7 @@ export const regressionSections: RegressionSection[] = [
           pText(pValues[j]),
         ]),
       },
-      formula(String.raw`\hat y=${f2(b0)}+${f2(b1)}\,x_1+${f2(b2)}\,x_2`),
+      formula(String.raw`\hat y=${tex2(b0)}+${tex2(b1)}\,x_1+${tex2(b2)}\,x_2`),
       p(
         `解读多元回归的系数，要加上“其他变量不变”：在是否周末相同的情况下，气温每高 1 ℃，平均多卖约 ${f1(b1)} 杯；在气温相同的情况下，周末比工作日平均多卖约 ${f1(b2)} 杯。在图上，这相当于两条平行的直线：周末那条整体高出 ${f1(b2)} 杯。`,
       ),
