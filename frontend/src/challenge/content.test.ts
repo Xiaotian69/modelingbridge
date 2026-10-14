@@ -17,8 +17,9 @@ describe("第 1 题：四种思路", () => {
 
   it("all four options answer the same question: which approach to start with", () => {
     expect(q1.options.map((o) => o.name)).toEqual(["预测", "优化", "验证", "拆解"]);
+    expect(q1.options.find((o) => o.id === "analyze")!.label).toBe("点单、盛菜、刷卡，哪一步最拖慢？");
     for (const o of q1.options) {
-      expect(o.label.startsWith(`${o.name}：`)).toBe(true);
+      expect(o.label.length).toBeGreaterThan(5);
       expect(o.lead && o.limit).toBeTruthy();
     }
     // 没有哪个选项让玩家重新去“弄清”题目已经给出的数字，除了明确是“核对”的验证

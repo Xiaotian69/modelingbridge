@@ -106,7 +106,7 @@ export const q1 = {
     {
       id: "analyze",
       name: "拆解",
-      label: "拆解：点单、盛菜、刷卡，哪一步最拖慢？",
+      label: "点单、盛菜、刷卡，哪一步最拖慢？",
       points: { W: 2 },
       style: "express",
       lead: "你在追问“为什么慢”：把打一份饭拆成几步，找出卡在哪。",
