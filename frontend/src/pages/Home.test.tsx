@@ -38,8 +38,9 @@ it("shows only the open stops of the route as links", () => {
   renderHome();
   const lp = screen.getAllByRole("link", { name: "线性规划" });
   expect(lp[0]).toHaveAttribute("href", "/learn/linear-programming");
-  expect(screen.queryByRole("link", { name: "回归预测" })).not.toBeInTheDocument();
-  expect(screen.getByText("回归预测")).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "回归预测" })).toHaveAttribute("href", "/learn/regression");
+  expect(screen.queryByRole("link", { name: "综合项目" })).not.toBeInTheDocument();
+  expect(screen.getByText("综合项目")).toBeInTheDocument();
 });
 
 it("hides 继续学习 for first-time visitors and shows it when local progress exists", () => {

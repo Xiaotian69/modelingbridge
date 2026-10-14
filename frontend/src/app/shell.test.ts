@@ -81,7 +81,9 @@ describe("home search index", () => {
     const topsis = entries.find((e) => e.id === "method:entropy-topsis")!;
     expect(topsis.href).toBe("/learn/topsis");
     expect(topsis.badge).toBe("精讲可学");
-    const others = entries.filter((e) => e.group === "方法速查" && ![lp, ahp, topsis].includes(e));
+    const regression = entries.find((e) => e.id === "method:regression-tree")!;
+    expect(regression.href).toBe("/learn/regression");
+    const others = entries.filter((e) => e.group === "方法速查" && ![lp, ahp, topsis, regression].includes(e));
     expect(others.length).toBeGreaterThan(0);
     for (const e of others) expect(e.href.startsWith("/learn/reference#model-")).toBe(true);
   });

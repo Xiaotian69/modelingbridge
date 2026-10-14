@@ -14,8 +14,8 @@ export const LEARNING_BACKUP_KEY = "mb.v2.learning.corrupt";
 export const META_KEY = "mb.v2.meta";
 export const SCHEMA_VERSION = 2;
 export const LP_LESSON = "lp";
-/** Lessons with a reading position (V2.1 adds AHP, V3.0 TOPSIS; older data simply lacks them). */
-export const LESSON_KEYS = ["lp", "ahp", "topsis"] as const;
+/** Lessons with a reading position (V2.1 adds AHP, V3.0 TOPSIS and regression; older data simply lacks them). */
+export const LESSON_KEYS = ["lp", "ahp", "topsis", "regression"] as const;
 export type LessonKey = (typeof LESSON_KEYS)[number];
 /** Inline thinking question that lived in the V1 practice history; it is a checkpoint. */
 const V1_CHECKPOINT_IDS = ["think-1"];
@@ -276,7 +276,7 @@ export function writeV1Mirror(store: StorageLike, state: LearningState) {
   try {
     const practice = readV1Practice(store);
     for (const [id, e] of Object.entries(state.exercises)) {
-      // V1 only ever had linear programming; later courses (ahp-*, topsis-*) are not mirrored.
+      // V1 only ever had linear programming; later courses (ahp-*, topsis-*, …) are not mirrored.
       if (!V1_QUESTION_ID.test(id) || !e.attempts || !e.lastStatus) continue;
       practice[id] = { correct: e.lastStatus === "correct", attempts: e.attempts, updated: e.updatedAt };
     }

@@ -90,6 +90,31 @@ export function LearnPage() {
           </div>
         </section>
 
+        <section className="learn-feature" aria-labelledby="learn-regression">
+          <div>
+            <p className="page-kicker">新开放 · 第四门精讲 · 约 50–60 分钟</p>
+            <h2 id="learn-regression">回归分析：明天卖多少杯，怎样估计才靠谱？</h2>
+            <p>
+              用一家奶茶店两周的数据，从散点图、相关系数走到最小二乘、R² 与残差图，再用虚拟变量建立多元回归，做出带区间的预测，并认清相关与因果、外推和异常值的边界。
+            </p>
+            <div className="page-head-actions">
+              <Link className="btn btn-primary" to="/learn/regression">
+                开始回归精讲
+              </Link>
+              <Link className="btn btn-secondary" to="/practice/regression">
+                回归专项练习
+              </Link>
+            </div>
+          </div>
+          <div className="learn-equation" aria-label="课程核心公式：y 帽等于 b0 加 b1 x，最小二乘使残差平方和最小">
+            <span>散点图 · 最小二乘 · 残差</span>
+            <b>
+              ŷ = b<sub>0</sub> + b<sub>1</sub>x
+            </b>
+            <span>min Σ(y − ŷ)² · R² = 1 − SSE/SST</span>
+          </div>
+        </section>
+
         <section className="learn-modes" aria-label="三种学习方式">
           <article>
             <h2>精讲</h2>
@@ -109,6 +134,9 @@ export function LearnPage() {
             </Link>{" "}
             <Link className="text-link" to="/practice/topsis">
               12 道 TOPSIS 练习 →
+            </Link>{" "}
+            <Link className="text-link" to="/practice/regression">
+              15 道回归练习 →
             </Link>
           </article>
           <article>

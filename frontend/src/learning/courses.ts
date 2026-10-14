@@ -4,9 +4,10 @@
  */
 import { AHP_CHECKPOINT_IDS, AHP_SECTIONS } from "./ahp/sectionIds";
 import { LP_CHECKPOINT_IDS, LP_SECTIONS } from "./sectionIds";
+import { REGRESSION_CHECKPOINT_IDS, REGRESSION_SECTIONS } from "./regression/sectionIds";
 import { TOPSIS_CHECKPOINT_IDS, TOPSIS_SECTIONS } from "./topsis/sectionIds";
 
-export type LessonId = "lp" | "ahp" | "topsis";
+export type LessonId = "lp" | "ahp" | "topsis" | "regression";
 
 export type CourseInfo = {
   id: LessonId;
@@ -51,6 +52,16 @@ export const COURSES: CourseInfo[] = [
     sections: TOPSIS_SECTIONS,
     checkpointIds: TOPSIS_CHECKPOINT_IDS,
     questionPrefix: "topsis-",
+  },
+  {
+    id: "regression",
+    title: "回归分析",
+    methodSlug: "regression-tree",
+    lessonPath: "/learn/regression",
+    practicePath: "/practice/regression",
+    sections: REGRESSION_SECTIONS,
+    checkpointIds: REGRESSION_CHECKPOINT_IDS,
+    questionPrefix: "regression-",
   },
 ];
 

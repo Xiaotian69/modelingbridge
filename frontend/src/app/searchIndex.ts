@@ -51,6 +51,7 @@ export function staticEntries(): SearchEntry[] {
     lp: "线性规划 专项 练习 刷题 题目 约束 目标函数 整数 灵敏度 lp",
     ahp: "层次分析法 ahp 专项 练习 刷题 判断矩阵 权重 一致性 cr 特征向量 评价",
     topsis: "topsis 综合评价 专项 练习 刷题 理想解 贴近度 标准化 熵权法 熵权 指标方向 评价 排名",
+    regression: "回归分析 回归 线性回归 多元回归 专项 练习 刷题 最小二乘 r² 决定系数 残差 相关系数 预测 虚拟变量",
   };
   const practice = COURSES.map<SearchEntry>((c) => ({
     id: `practice:${c.id}`,
@@ -79,17 +80,36 @@ export function staticEntries(): SearchEntry[] {
     badge: "可操作",
     haystack: norm("topsis 实验 交互 权重 熵权 指标方向 逆序 排名 敏感性 贴近度"),
   };
-  return [...practice, lab, topsisLab, ...methods, ...problems];
+  const regressionLab: SearchEntry = {
+    id: "lab:regression",
+    group: "练习",
+    title: "最小二乘直线实验",
+    meta: "拖动直线比较残差平方和，加入异常值看斜率怎样变化",
+    href: "/learn/regression#least-squares",
+    badge: "可操作",
+    haystack: norm("回归 最小二乘 实验 交互 直线 残差 平方和 sse 异常值 离群 拟合 多元 周末"),
+  };
+  return [...practice, lab, topsisLab, regressionLab, ...methods, ...problems];
 }
 
 /** Lesson sections and AI skills, loaded only when someone starts searching. */
 export async function lessonEntries(): Promise<SearchEntry[]> {
-  const [{ sections }, { skills }, { ahpSections }, { topsisSections }] = await Promise.all([
+  const [{ sections }, { skills }, { ahpSections }, { topsisSections }, { regressionSections }] = await Promise.all([
     import("../learning/content"),
     import("../content/skills"),
     import("../learning/ahp/content"),
     import("../learning/topsis/content"),
+    import("../learning/regression/content"),
   ]);
+  const regression = regressionSections.map<SearchEntry>((s, i) => ({
+    id: `lesson:regression:${s.id}`,
+    group: "精讲",
+    title: s.title,
+    meta: `回归分析 · 第 ${i + 1} 节`,
+    href: `/learn/regression#${s.id}`,
+    badge: "可学",
+    haystack: norm(`回归分析 线性回归 最小二乘 预测 ${s.title} ${s.lead}`),
+  }));
   const topsis = topsisSections.map<SearchEntry>((s, i) => ({
     id: `lesson:topsis:${s.id}`,
     group: "精讲",
@@ -117,7 +137,7 @@ export async function lessonEntries(): Promise<SearchEntry[]> {
     badge: "原创",
     haystack: norm(`ai 技能 skill 提示词 prompt ${s.title} ${s.yields} ${s.purpose}`),
   }));
-  return [...skillEntries, ...ahp, ...topsis, ...sections.map<SearchEntry>((s, i) => ({
+  return [...skillEntries, ...ahp, ...topsis, ...regression, ...sections.map<SearchEntry>((s, i) => ({
     id: `lesson:${s.id}`,
     group: "精讲",
     title: s.title,
