@@ -3,6 +3,8 @@ import { q1, q2, q3, q4, q5, type ScoredOption } from "./config";
 import { evaluateMeal, MEAL_MAX, MEAL_OPTIMUM, MEAL_VERTICES } from "./meal";
 import { ahp, explainConsistency, fraction, JUDGEMENTS, PAIRS, type Judgement } from "./ahp";
 import { explainRecommendation, rank, rateCourse, scoreCourses } from "./courses";
+import { estimate, spread } from "./fermi";
+import { workedStep } from "./q1";
 import type { Answers } from "./scoring";
 
 type Props<K extends keyof Answers> = {
@@ -46,41 +48,49 @@ function Choices({ options, selected, onPick, disabled, name }: { options: reado
 
 // ---------------------------------------------------------------------------
 
-export function Q1Canteen({ value, onAnswer, onNext }: Props<"q1">) {
-  const [picked, setPicked] = useState<string[]>(value ?? []);
-  const done = Boolean(value);
-  const toggle = (id: string) => {
-    if (done) return;
-    setPicked((p) => (p.includes(id) ? p.filter((x) => x !== id) : p.length < q1.pick ? [...p, id] : p));
-  };
+export function Q1Canteen({ value, onAnswer, onNext, last }: Props<"q1">) {
+  // 旧存档（数组或对象）：当作没答过，重新答一次
+  const saved = typeof value === "string" && q1.options.some((o) => o.id === value) ? value : undefined;
+  const [choice, setChoice] = useState(saved);
+  const done = Boolean(saved);
+  const chosen = q1.options.find((o) => o.id === choice);
+  const { ahead, arrive, serve } = q1.scene;
   return (
     <>
-      <p className="cg-prompt">{q1.prompt}</p>
-      <div className="cg-choices cg-grid" role="group" aria-label="食堂排队的因素">
-        {q1.options.map((o) => {
-          const on = picked.includes(o.id);
-          return (
-            <button
-              key={o.id}
-              type="button"
-              aria-pressed={on}
-              className={`cg-choice${on ? " is-on" : ""}`}
-              onClick={() => toggle(o.id)}
-              disabled={done || (!on && picked.length >= q1.pick)}
-            >
-              {o.label}
-            </button>
-          );
-        })}
+      <p className="cg-prompt cg-story">{q1.story}</p>
+      <div className="cg-queue" aria-hidden="true">
+        <span className="cg-queue-window">窗口 · 打 {serve} 份/分钟</span>
+        <span className="cg-queue-line">
+          {Array.from({ length: 12 }, (_, i) => (
+            <i key={i} />
+          ))}
+        </span>
+        <em className="cg-queue-count">{ahead} 人</em>
+        <span className="cg-queue-in">+{arrive} 人/分钟</span>
       </div>
+      <p className="cg-subq cg-q1-ask">{q1.prompt}</p>
+      <Choices options={q1.options} selected={choice} onPick={(id) => !done && setChoice(id)} disabled={done} name={q1.prompt} />
       {!done ? (
-        <button type="button" className="cg-btn cg-btn-primary cg-next" disabled={picked.length !== q1.pick} onClick={() => onAnswer(picked)}>
-          {picked.length === q1.pick ? "确认这三个" : `还要选 ${q1.pick - picked.length} 个`}
+        <button type="button" className="cg-btn cg-btn-primary cg-next" disabled={!choice} onClick={() => choice && onAnswer(choice)}>
+          确认答案
         </button>
       ) : (
-        <Feedback onNext={onNext}>
-          <p>{q1.feedback}</p>
-        </Feedback>
+        chosen && (
+          <div className="cg-feedback" role="status">
+            <p className="cg-feedback-kicker">你选了「{chosen.name}」</p>
+            <p>{chosen.lead}</p>
+            <p className="cg-worked">{workedStep(chosen.id)}</p>
+            <p>
+              <strong>要注意：</strong>
+              {chosen.limit}
+            </p>
+            <p>{q1.together}</p>
+            <p className="cg-aside">{q1.note}</p>
+            <button type="button" className="cg-btn cg-btn-primary cg-next" onClick={onNext}>
+              {last ? "看我的结果" : "下一题"}
+            </button>
+          </div>
+        )
       )}
     </>
   );
@@ -174,9 +184,41 @@ export function Q2Meal({ value, onAnswer, onNext, last }: Props<"q2">) {
   return (
     <>
       <p className="cg-prompt">{q2.story}</p>
+      <table className="cg-rules-card">
+        <caption>点菜规则</caption>
+        <thead>
+          <tr>
+            <th scope="col">每串</th>
+            <th scope="col">价格</th>
+            <th scope="col">吃完要</th>
+            <th scope="col">饱腹值</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[q2.meat, q2.veg].map((f) => (
+            <tr key={f.name}>
+              <th scope="row">
+                {f.name}
+                <small>{f.example}</small>
+              </th>
+              <td>{f.price} 元</td>
+              <td>{f.minutes} 分钟</td>
+              <td>+{f.full}</td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={4}>
+              限制：总共不超过 <b>{q2.budget} 元</b>、<b>{q2.minutes} 分钟</b>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      <p className="cg-goal">{q2.goal}</p>
       <div className="cg-panel">
-        <Stepper label={q2.meat.name} sub={`${q2.meat.example} · ${q2.meat.price} 元 · ${q2.meat.note}`} value={meat} max={MEAL_MAX.meat} onChange={setMeat} disabled={submitted} />
-        <Stepper label={q2.veg.name} sub={`${q2.veg.example} · ${q2.veg.price} 元 · ${q2.veg.note}`} value={veg} max={MEAL_MAX.veg} onChange={setVeg} disabled={submitted} />
+        <Stepper label={q2.meat.name} sub={q2.meat.example} value={meat} max={MEAL_MAX.meat} onChange={setMeat} disabled={submitted} />
+        <Stepper label={q2.veg.name} sub={q2.veg.example} value={veg} max={MEAL_MAX.veg} onChange={setVeg} disabled={submitted} />
         <div className="cg-meters">
           <Meter label="花钱" used={m.cost} cap={q2.budget} unit="元" />
           <Meter label="用时" used={m.minutes} cap={q2.minutes} unit="分钟" />
@@ -202,6 +244,7 @@ export function Q2Meal({ value, onAnswer, onNext, last }: Props<"q2">) {
           <p>
             最优组合：荤菜 {ox} 串 + 素菜 {oy} 串。{q2.feedback}
           </p>
+          <p className="cg-preference">{q2.preference}</p>
           <p className="cg-aside">{q2.assumption}</p>
           <p className="cg-subq">{q2.methodPrompt}</p>
           <Choices options={q2.methods} selected={method} onPick={pick} name={q2.methodPrompt} />
@@ -483,8 +526,12 @@ export function Q4Library({ value, onAnswer, onNext, last }: Props<"q4">) {
 // ---------------------------------------------------------------------------
 
 export function Q5Fermi({ value, onAnswer, onNext, last }: Props<"q5">) {
-  const [choice, setChoice] = useState(value);
-  const done = Boolean(value);
+  // 旧存档里的已删除选项（assume）：当作没答过
+  const saved = value && q5.options.some((o) => o.id === value) ? value : undefined;
+  const [choice, setChoice] = useState(saved);
+  const done = Boolean(saved);
+  const route = q5.options.find((o) => o.id === choice);
+  const range = spread();
   return (
     <>
       <p className="cg-prompt">{q5.prompt}</p>
@@ -494,9 +541,52 @@ export function Q5Fermi({ value, onAnswer, onNext, last }: Props<"q5">) {
           确认答案
         </button>
       ) : (
-        <Feedback onNext={onNext} last={last}>
-          <p>{q5.feedback}</p>
-        </Feedback>
+        route && (
+          <div className="cg-feedback" role="status">
+            <p className="cg-feedback-kicker">你的路线：{route.title}</p>
+            <ol className="cg-fermi">
+              {route.steps.map((s, i) => (
+                <li key={s.label}>
+                  <span className="cg-fermi-op" aria-hidden="true">
+                    {i === 0 ? "" : s.op}
+                  </span>
+                  <span className="cg-fermi-label">{s.label}</span>
+                  <b>{s.show}</b>
+                  <em>假设</em>
+                </li>
+              ))}
+            </ol>
+            <p className="cg-fermi-result">
+              ≈ <b>{estimate(route)}</b> 杯 / 天
+            </p>
+            <dl className="cg-fermi-notes">
+              <dt>好处</dt>
+              <dd>{route.strength}</dd>
+              <dt>局限</dt>
+              <dd>{route.limit}</dd>
+              <dt>容易漏掉</dt>
+              <dd>{route.miss}</dd>
+            </dl>
+            <p className="cg-subq">换条路线会怎样？</p>
+            <ul className="cg-fermi-others">
+              {q5.options
+                .filter((o) => o.id !== route.id)
+                .map((o) => (
+                  <li key={o.id}>
+                    <span>{o.title}</span>
+                    <b>≈ {estimate(o)} 杯</b>
+                  </li>
+                ))}
+            </ul>
+            <p>
+              {q5.feedback}四条路线估出来在 {range.min}–{range.max} 杯之间。{q5.compare}
+            </p>
+            <p className="cg-aside">{q5.note}</p>
+            <button type="button" className="cg-btn cg-btn-primary cg-next" onClick={onNext}>
+              {last ? "看我的结果" : "下一题"}
+            </button>
+          </div>
+        )
       )}
     </>
   );

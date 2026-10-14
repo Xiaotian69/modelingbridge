@@ -63,37 +63,98 @@ export const analytics: {
 };
 
 // ---------------------------------------------------------------------------
-// 第 1 题：食堂排队（6 选 3）
+// 第 1 题：食堂的队越排越长，你从哪儿下手？
+// 题目给出情景数字，四个选项是四种同一层次的建模思路（预测 / 优化 / 验证 / 拆解），没有对错。
+// 选完后的反馈只讲玩家选的那条思路：用题目的数字算一步（q1.ts 计算），再说它的局限。
+
+export type Q1Approach = ScoredOption & { name: string; lead: string; limit: string };
 
 export const q1 = {
-  title: "食堂窗口为什么总在饭点排长队？",
-  prompt: "下面 6 个因素，挑出你觉得最该先研究的 3 个。",
-  pick: 3,
+  title: "食堂的队越排越长，你从哪儿下手？",
+  /** 情景数字：前面已排人数、每分钟来几人、每分钟打几份、预测看多久、拆解时假设的刷卡用时（秒） */
+  scene: { ahead: 24, arrive: 4, serve: 3, horizon: 30, sample: { minutes: 10, came: 37, served: 31 }, payShare: 8 },
+  story: "饭点，食堂一个窗口前已经排了 24 人。每分钟大约来 4 个人，窗口每分钟只能打 3 份，队伍越来越长。",
+  prompt: "如果请你来研究、改善这条队伍，你最想先从哪儿入手？",
   options: [
-    { id: "arrive", label: "下课铃一响，几百人同时涌进来", points: { M: 1 }, style: "abstract" },
-    { id: "window", label: "窗口开得少，打一份菜又慢", points: { M: 1 }, style: "optimize" },
-    { id: "card", label: "刷卡机有每分钟的消费记录，能拿来算", points: { C: 1 }, style: "data" },
-    { id: "camera", label: "数一数每个时刻队伍里有多少人", points: { C: 1 }, style: "data" },
-    { id: "hot", label: "大家都挤那一家“网红窗口”", points: { W: 1 }, style: "express" },
-    { id: "wall", label: "表白墙上一堆吐槽排队的帖子", points: { W: 1 }, style: "express" },
-  ] satisfies ScoredOption[],
-  feedback:
-    "建模第一步，就是从一堆因素里挑出最关键的几个——这叫“做假设”。排队问题最常抓三样：人来得多快、打菜多快、开了几个窗口。",
+    {
+      id: "predict",
+      name: "预测",
+      label: "预测：照这个速度，半小时后队伍会排多长？",
+      points: { M: 2 },
+      style: "abstract",
+      lead: "你在搭一个最简单的预测模型：用已知的速度，推算未来。",
+      limit: "饭点一过，来的人会变少；一直按“来 4 打 3”推下去，会高估。",
+    },
+    {
+      id: "optimize",
+      name: "优化",
+      label: "优化：多开一个窗口，能改善多少？",
+      points: { M: 2 },
+      style: "optimize",
+      lead: "你在比较方案：改一个条件，算出能好多少。",
+      limit: "多开一个窗口要多一个人手。值不值，还要把成本一起算进去。",
+    },
+    {
+      id: "verify",
+      name: "验证",
+      label: "验证：去现场掐表，看看“来 4 打 3”准不准",
+      points: { C: 2 },
+      style: "data",
+      lead: "数字是别人给的，你想先核对再用——模型再漂亮，输入错了也白算。",
+      limit: "一次测量可能碰巧，下课那几分钟和后面差很多，要多测几个时段。",
+    },
+    {
+      id: "analyze",
+      name: "拆解",
+      label: "拆解：点单、盛菜、刷卡，哪一步最拖慢？",
+      points: { W: 2 },
+      style: "express",
+      lead: "你在追问“为什么慢”：把打一份饭拆成几步，找出卡在哪。",
+      limit: "要一步步掐时间、仔细观察，比直接套公式费功夫。",
+    },
+  ] satisfies Q1Approach[],
+  together: "预测、优化、验证、拆解，都是真实建模会走的路，常常要配合着用。",
+  note: "数字是题目设定的，带“比如”“假如”的是举例；真实食堂是不是这样，要实际数过才知道。",
 };
 
+/**
+ * 线上第一版（f02a0de）第 1 题的计分表：本机存的 q1 是 3 个因素的数组，每个 1 分。
+ * 回访时按当时的规则算出同一个结果，不会因为改版变卡片。
+ */
+export const LEGACY_Q1: ScoredOption[] = [
+  { id: "arrive", label: "", points: { M: 1 }, style: "abstract" },
+  { id: "window", label: "", points: { M: 1 }, style: "optimize" },
+  { id: "card", label: "", points: { C: 1 }, style: "data" },
+  { id: "camera", label: "", points: { C: 1 }, style: "data" },
+  { id: "hot", label: "", points: { W: 1 }, style: "express" },
+  { id: "wall", label: "", points: { W: 1 }, style: "express" },
+];
+
+/** 两版只在本机预览过、没上线的第 1 题追问（{ guess | factors, method }），按当时的含义计分。 */
+export const LEGACY_Q1_FOLLOW: ScoredOption[] = [
+  { id: "relation", label: "", points: { M: 2 }, style: "abstract" },
+  { id: "extra", label: "", points: { M: 2 }, style: "optimize" },
+  { id: "data", label: "", points: { C: 2 }, style: "data" },
+  { id: "voice", label: "", points: { W: 2 }, style: "express" },
+];
+
 // ---------------------------------------------------------------------------
-// 第 2 题：20 块钱、30 分钟的麻辣烫（线性规划，最优解由 learning/solver.ts 计算）
+// 第 2 题：20 块钱、25 分钟的串串（线性规划，最优解由 learning/solver.ts 计算）
+// 题目明确说出优化目标：在钱和时间之内，让“题目设定的饱腹值”尽量高；不涉及口味。
 
 export const q2 = {
-  title: "只有 20 块钱和 30 分钟，怎么吃饱又不迟到？",
-  story:
-    "中午去吃串串麻辣烫，离上课还有 30 分钟，走到教学楼要 5 分钟，所以只剩 25 分钟吃饭；兜里还剩 20 块。",
-  meat: { name: "荤菜", example: "丸子、鸡柳", price: 2, minutes: 1, full: 3, note: "一口一个，约 1 分钟一串" },
-  veg: { name: "素菜", example: "青菜、金针菇", price: 1, minutes: 2, full: 2, note: "烫嘴要慢慢吃，约 2 分钟一串" },
+  title: "今天特别饿！20 块、25 分钟，怎么搭配最顶饱？",
+  story: "中午去吃串串。兜里 20 块，留给吃饭的时间只有 25 分钟。今天只有一个目标：尽量吃饱。",
+  meat: { name: "荤菜", example: "丸子、鸡柳", price: 2, minutes: 1, full: 3 },
+  veg: { name: "素菜", example: "青菜、金针菇", price: 1, minutes: 2, full: 2 },
   budget: 20,
   minutes: 25,
+  /** 规则卡下的一句话：把优化目标说清楚 */
+  goal: "目标：在不超钱、不超时的前提下，让饱腹值加起来最高。饱腹值是题目设定的分数，不管口味。",
   /** 反馈里的小字：承认情景是理想化的 */
   assumption: "为了好算，这里假设每串的价格和吃的时间都固定不变。真实建模也常这样先简化，算完再回头检查假设合不合理。",
+  /** 反馈里的一句话：换个目标，答案就会变 */
+  preference: "如果你更爱吃荤，或者更在意味道，最优方案就会不一样——数学建模的第一步，是先说清楚到底要优化什么。",
   methodPrompt: "你刚才是怎么找的？",
   methods: [
     { id: "calc", label: "先算钱和时间各够几串，再在中间找", points: { M: 2 }, style: "optimize" },
@@ -101,7 +162,7 @@ export const q2 = {
     { id: "explain", label: "更想弄明白为什么是这个组合，讲给室友听", points: { W: 2 }, style: "express" },
   ] satisfies ScoredOption[],
   feedback:
-    "这就是线性规划：钱和时间是约束，饱腹值是目标。最优解刚好把钱和时间同时用完，落在可行区域的一个角上。",
+    "这就是线性规划：钱和时间是约束，饱腹值是目标。在这个目标下，最优解刚好把钱和时间同时用完，落在可行区域的一个角上。",
 };
 
 // ---------------------------------------------------------------------------
@@ -188,20 +249,86 @@ export const q4 = {
 };
 
 // ---------------------------------------------------------------------------
-// 第 5 题：费米估算
+// 第 5 题：费米估算。四个选项都是“用什么路线估算”，没有唯一正确答案。
+// 每条路线的数字都是标明“假设”的示例（不是真实数据），结果由 fermi.ts 按算式计算。
+
+export type FermiStep = { label: string; value: number; show: string; op?: "×" | "÷" };
+export type FermiRoute = ScoredOption & { title: string; steps: FermiStep[]; strength: string; limit: string; miss: string };
 
 export const q5 = {
   title: "全校一天大约卖出多少杯奶茶？",
-  prompt: "不用算出准确数字。你会从哪里下手？",
+  prompt: "没人知道准确数字，但可以靠合理假设估个大概。你会走哪条路线？",
   options: [
-    { id: "demand", label: "从人出发：全校人数 × 喝奶茶的比例 × 每人几杯", points: { M: 2 }, style: "abstract" },
-    { id: "supply", label: "从店出发：几家店 × 每小时能做几杯 × 营业几小时", points: { M: 2 }, style: "optimize" },
-    { id: "data", label: "找数据：翻外卖平台各家店的月销量", points: { C: 2 }, style: "data" },
-    { id: "assume", label: "先把每个假设写清楚，方便别人挑错", points: { W: 2 }, style: "express" },
-  ] satisfies ScoredOption[],
-  feedback:
-    "这叫费米估算：把不知道的数，拆成几个能估的数。比如假设 2 万人里每天十分之一买一杯，就是约 2000 杯——数字是假设，思路才是重点。",
+    {
+      id: "demand",
+      title: "从人数估",
+      label: "从人数估：全校多少人 × 多少人会买 × 每人几杯",
+      points: { M: 2 },
+      style: "abstract",
+      steps: [
+        { label: "全校学生", value: 20000, show: "20000 人" },
+        { label: "每天买奶茶的人", value: 0.1, show: "十分之一", op: "×" },
+        { label: "每人买几杯", value: 1, show: "1 杯", op: "×" },
+      ],
+      strength: "拆得清楚，每个数都能单独去查、去问。",
+      limit: "“多少人会买”最难估，这个比例差一倍，结果就差一倍。",
+      miss: "老师和校外的人、一人帮室友带好几杯。",
+    },
+    {
+      id: "supply",
+      title: "从店的产能估",
+      label: "从店估：几家店 × 每小时最多做几杯 × 营业几小时",
+      points: { M: 2 },
+      style: "optimize",
+      steps: [
+        { label: "校内奶茶店", value: 5, show: "5 家" },
+        { label: "每家每小时最多做", value: 60, show: "60 杯", op: "×" },
+        { label: "营业时间", value: 10, show: "10 小时", op: "×" },
+        { label: "平均有多忙（不可能一直满负荷）", value: 1 / 3, show: "三分之一", op: "×" },
+      ],
+      strength: "算的是“最多能卖多少”，有个上限，不会估得离谱。",
+      limit: "店有多忙很难猜，午后和深夜差很多。",
+      miss: "校外店铺、外卖送进学校的奶茶。",
+    },
+    {
+      id: "sample",
+      title: "抽样数一数",
+      label: "去数一数：在一家店门口数一小时，再放大到全校",
+      points: { C: 2 },
+      style: "data",
+      steps: [
+        { label: "午饭后在一家店门口数 1 小时", value: 80, show: "80 杯" },
+        { label: "一天的生意，大约相当于几个这样的小时", value: 4, show: "4 个", op: "×" },
+        { label: "校内奶茶店", value: 5, show: "5 家", op: "×" },
+      ],
+      strength: "看到的是真实发生的事，最接近事实。",
+      limit: "一小时、一家店不一定代表全天全校，换个时段可能差很多。",
+      miss: "各家店生意不一样、周末和工作日不一样。",
+    },
+    {
+      id: "data",
+      title: "用外卖数据倒推",
+      label: "看数据：外卖平台的销量，再推到全部销量",
+      points: { C: 2 },
+      style: "data",
+      steps: [
+        { label: "平台上校内几家店的月销量合计", value: 15000, show: "15000 杯" },
+        { label: "一个月", value: 30, show: "30 天", op: "÷" },
+        { label: "外卖只占全部销量的三分之一，所以再乘", value: 3, show: "3", op: "×" },
+      ],
+      strength: "有现成的数字，不用从零开始猜。",
+      limit: "平台销量不等于全部销量：堂食、自提都不在里面，“外卖占多少”还得再估。",
+      miss: "校外顾客的订单、一单点好几杯。",
+    },
+  ] satisfies FermiRoute[],
+  /** 揭晓后的总结（compare 里的范围由 fermi.ts 算） */
+  feedback: "这叫费米估算：把一个没法直接知道的数，拆成几个能估的小数。",
+  compare: "不同路线差一些很正常。几条路线互相对照，就知道哪个假设最该去核实。",
+  note: "所有数字都是举例用的假设，不是真实数据。",
 };
+
+/** 线上第一版第 5 题里已经删掉的选项，只用于给旧存档计分。 */
+export const LEGACY_Q5: ScoredOption[] = [{ id: "assume", label: "", points: { W: 2 }, style: "express" }];
 
 // ---------------------------------------------------------------------------
 // 结果
