@@ -1,5 +1,5 @@
 """
-第 3 题的独立复核夹具：python -I verify_q3.py > q3-verified.json
+第 3 题的独立复核夹具：python -I verify_q3.py（在本目录写出 q3-verified.json，LF 换行）
 
 刻意不复用前端代码：原始数据、打分规则、Saaty 标度在这里各写一遍，
 权重用 numpy 的特征分解（前端用几何平均），一致性用 λmax 的特征值（前端用 A·w/w 的均值），
@@ -7,6 +7,7 @@
 """
 import itertools
 import json
+import pathlib
 
 import numpy as np
 
@@ -66,13 +67,15 @@ def case(choices):
     }
 
 
-print(
-    json.dumps(
-        {
-            "scores": SCORES.astype(int).tolist(),
-            "cases": [case(c) for c in itertools.product([-2, -1, 0, 1, 2], repeat=3)],
-        },
-        ensure_ascii=False,
-        indent=1,
-    )
+payload = json.dumps(
+    {
+        "scores": SCORES.astype(int).tolist(),
+        "cases": [case(c) for c in itertools.product([-2, -1, 0, 1, 2], repeat=3)],
+    },
+    ensure_ascii=False,
+    indent=1,
 )
+out = pathlib.Path(__file__).with_name("q3-verified.json")
+with open(out, "w", encoding="utf-8", newline="\n") as f:
+    f.write(payload + "\n")
+print(f"wrote {out}")
