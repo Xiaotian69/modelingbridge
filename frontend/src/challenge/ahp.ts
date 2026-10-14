@@ -1,12 +1,12 @@
 /**
- * 第 3 题用的 AHP（层次分析法），3 个准则。
+ * 第 3 题用的 AHP（层次分析法），3 个准则（给分高、作业少、不早八）。
  *
  * 权重部分是标准 AHP：
  * - 判断矩阵 A：a_ij = 准则 i 相对 j 的重要程度（Saaty 1–9 标度里取 1、3、5 三档及其倒数），a_ji = 1/a_ij；
  * - 权重 w = A 的主特征向量（归一化）。n = 3 时，行几何平均法与特征向量法结果完全相同，这里用几何平均算；
  * - 一致性：λmax = mean((A·w)_i / w_i)，CI = (λmax − 3)/2，CR = CI / RI，n = 3 时 RI = 0.58，CR ≤ 0.1 视为通过。
  *
- * 方案层是简化演示：社团在每个准则上的表现用题目给定的印象分（1–5）代替两两比较，
+ * 方案层是简化演示：每门课在每个准则上的表现用题目给定的印象分（1–5）代替两两比较，
  * 按“占该准则总分的比例”换算成局部权重（分配模式），再加权求和：推荐指数_i = Σ_j w_j · p_ij。
  */
 
@@ -14,7 +14,7 @@
 export type Judgement = -2 | -1 | 0 | 1 | 2;
 export const JUDGEMENTS: Judgement[] = [-2, -1, 0, 1, 2];
 
-/** 比较顺序：(0,1) (0,2) (1,2)，即 兴趣-时间、兴趣-氛围、时间-氛围 */
+/** 比较顺序：(0,1) (0,2) (1,2)，即 给分-作业、给分-时间、作业-时间 */
 export const PAIRS: [number, number][] = [
   [0, 1],
   [0, 2],
@@ -46,7 +46,7 @@ function relation(choices: Judgement[], i: number, j: number) {
 
 /**
  * 方向矛盾：找不到任何一种先后顺序（允许并列）能同时满足三句判断。
- * 例如“兴趣>时间、时间>氛围、氛围>兴趣”，或“兴趣>时间、兴趣=氛围、时间=氛围”。
+ * 例如“A>B、B>C、C>A”，或“A>B、A=C、B=C”。
  */
 export function hasContradiction(choices: Judgement[]) {
   for (let a = 0; a < 3; a++)
@@ -75,14 +75,14 @@ export function ahp(choices: Judgement[]) {
   return { matrix, weights, lambdaMax, cr, consistency };
 }
 
-export type Club = { name: string; scores: number[] };
+export type Alternative = { name: string; scores: number[] };
 
-/** 方案层合成：p_ij = 社团 i 在准则 j 的印象分 / 该准则所有社团的印象分之和；推荐指数 = Σ_j w_j · p_ij（三家合计 1）。 */
-export function synthesize(weights: number[], clubs: Club[]) {
-  const columnSums = weights.map((_, j) => clubs.reduce((s, c) => s + c.scores[j], 0));
-  return clubs.map((club, index) => {
-    const parts = weights.map((w, j) => (w * club.scores[j]) / columnSums[j]);
-    return { ...club, index, parts, total: parts.reduce((s, v) => s + v, 0) };
+/** 方案层合成：p_ij = 方案 i 在准则 j 的分数 / 该准则所有方案分数之和；推荐指数 = Σ_j w_j · p_ij（合计 1）。 */
+export function synthesize(weights: number[], options: Alternative[]) {
+  const columnSums = weights.map((_, j) => options.reduce((s, c) => s + c.scores[j], 0));
+  return options.map((option, index) => {
+    const parts = weights.map((w, j) => (w * option.scores[j]) / columnSums[j]);
+    return { ...option, index, parts, total: parts.reduce((s, v) => s + v, 0) };
   });
 }
 
@@ -93,7 +93,7 @@ export const ranking = <T extends { total: number; index: number }>(rows: T[]) =
 // ---------------------------------------------------------------------------
 // 给玩家看的解释文字
 
-/** “兴趣比时间稍微重要” / “兴趣和时间一样重要” */
+/** “给分高比作业少稍微重要” / “给分高和作业少一样重要” */
 export function describe(names: string[], choices: Judgement[], k: number) {
   const [i, j] = PAIRS[k];
   const c = choices[k];

@@ -30,8 +30,6 @@ const renderAt = (path: string) =>
       <AppRoutes />
     </MemoryRouter>,
   );
-/** 推荐榜第 n 名（按 aria-label 里的名次） */
-const rowAt = (n: number) => screen.getByRole("listitem", { name: new RegExp(`^第 ${n + 1} 名`) });
 const click = (name: string | RegExp) => fireEvent.click(screen.getByRole("button", { name }));
 const radio = (name: string | RegExp) => fireEvent.click(screen.getByRole("radio", { name }));
 
@@ -42,7 +40,7 @@ async function playOptimizer(fromIntro = true) {
   click(/几百人同时涌进来/);
   click(/窗口开得少/);
   click(/刷卡机/);
-  click("就这三个");
+  click("确认这三个");
   click("下一题");
 
   expect(screen.getByRole("heading", { name: /20 块钱和 30 分钟/ })).toBeInTheDocument();
@@ -60,17 +58,17 @@ async function playOptimizer(fromIntro = true) {
   radio(/先算钱和时间/);
   click("下一题");
 
-  expect(screen.getByRole("heading", { name: /三个社团/ })).toBeInTheDocument();
-  // 默认三项一样重要：推荐榜第一是羽毛球社；必须三个两难都选过才能继续
+  expect(screen.getByRole("heading", { name: /三门选修课/ })).toBeInTheDocument();
+  expect(screen.getByRole("table", { name: "三门选修课的情况" })).toHaveTextContent("只有期末开卷考");
+  // 必须三个两难都选过才能确认；确认前可以随便改
   expect(screen.getByRole("button", { name: "还有 3 个两难没选" })).toBeDisabled();
-  expect(rowAt(0)).toHaveAccessibleName(/羽毛球社/);
-  fireEvent.click(screen.getAllByRole("radio", { name: "兴趣明显更重要" })[0]);
-  fireEvent.click(screen.getAllByRole("radio", { name: "兴趣明显更重要" })[1]);
-  // 推荐榜随选择实时变化
-  expect(rowAt(0)).toHaveAccessibleName(/摄影社/);
-  fireEvent.click(screen.getAllByRole("radio", { name: "一样重要" })[2]);
-  click("就选摄影社");
-  expect(screen.getByText(/推荐：摄影社/)).toBeInTheDocument();
+  fireEvent.click(screen.getAllByRole("radio", { name: "不早八，明显更重要" })[0]);
+  fireEvent.click(screen.getAllByRole("radio", { name: "给分高，明显更重要" })[0]);
+  fireEvent.click(screen.getAllByRole("radio", { name: "给分高，明显更重要" })[1]);
+  fireEvent.click(screen.getAllByRole("radio", { name: "两个一样重要" })[2]);
+  click("确认，帮我选课");
+  expect(screen.getByText("推荐你选：心理学与生活")).toBeInTheDocument();
+  expect(screen.getByText(/你最看重「给分高」.*正好是这一项最好的那门/)).toBeInTheDocument();
   expect(screen.getByText(/三句判断前后一致/)).toBeInTheDocument();
   expect(screen.getByText("看看是怎么算的")).toBeInTheDocument();
   radio(/就按它选/);
@@ -78,11 +76,15 @@ async function playOptimizer(fromIntro = true) {
 
   expect(screen.getByRole("heading", { name: /图书馆/ })).toBeInTheDocument();
   radio(/快到座位上限/);
-  click("揭晓");
+  click("确认答案");
   click("下一题");
 
   expect(screen.getByRole("heading", { name: /奶茶/ })).toBeInTheDocument();
+  radio(/找数据/); // 点错了，确认前可以改
   radio(/从店出发/);
+  expect(screen.getByRole("radio", { name: /从店出发/ })).toHaveAttribute("aria-checked", "true");
+  expect(screen.getByRole("radio", { name: /找数据/ })).toHaveAttribute("aria-checked", "false");
+  click("确认答案");
   click("看我的结果");
 }
 
@@ -186,16 +188,25 @@ describe("/challenge", () => {
     click(/几百人同时涌进来/);
     click(/窗口开得少/);
     click(/刷卡机/);
-    click("就这三个");
+    click("确认这三个");
     click("下一题");
     fireEvent.click(screen.getByRole("button", { name: "荤菜多一串" }));
     click("就这么吃");
     radio(/先算钱和时间/);
     click("下一题");
-    fireEvent.click(screen.getAllByRole("radio", { name: "兴趣稍微重要" })[0]); // 兴趣 > 时间
-    fireEvent.click(screen.getAllByRole("radio", { name: "氛围稍微重要" })[0]); // 氛围 > 兴趣
-    fireEvent.click(screen.getAllByRole("radio", { name: "时间稍微重要" })[1]); // 时间 > 氛围
-    fireEvent.click(screen.getByRole("button", { name: /^就选/ }));
-    expect(screen.getByText(/这三句没法排出一个先后顺序/)).toHaveTextContent("兴趣比时间稍微重要；氛围比兴趣稍微重要；时间比氛围稍微重要");
+    fireEvent.click(screen.getAllByRole("radio", { name: "给分高，稍微更重要" })[0]); // 给分 > 作业
+    fireEvent.click(screen.getAllByRole("radio", { name: "不早八，稍微更重要" })[0]); // 不早八 > 给分
+    fireEvent.click(screen.getAllByRole("radio", { name: "作业少，稍微更重要" })[1]); // 作业 > 不早八
+    click("确认，帮我选课");
+    expect(screen.getByText(/这三句没法排出一个先后顺序/)).toHaveTextContent("给分高比作业少稍微重要；不早八比给分高稍微重要；作业少比不早八稍微重要");
+
+    // 改改判断：回到可编辑状态，改完推荐跟着变
+    click(/改改判断/);
+    fireEvent.click(screen.getAllByRole("radio", { name: "不早八，明显更重要" })[0]);
+    fireEvent.click(screen.getAllByRole("radio", { name: "不早八，明显更重要" })[1]);
+    fireEvent.click(screen.getAllByRole("radio", { name: "两个一样重要" })[0]);
+    click("确认，帮我选课");
+    expect(screen.getByText("推荐你选：电影鉴赏")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "下一题" })).toBeDisabled(); // 改过判断要重新回答“怎么用”
   });
 });

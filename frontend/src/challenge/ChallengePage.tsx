@@ -7,7 +7,7 @@ import { freshState, loadState, saveState, type ChallengeState, type Step } from
 import { loadAnalytics, sourceFrom, track } from "./analytics";
 import { MEAL_OPTIMUM } from "./meal";
 import { Celebration } from "./Celebration";
-import { Q1Canteen, Q2Meal, Q3Clubs, Q4Library, Q5Fermi } from "./questions";
+import { Q1Canteen, Q2Meal, Q3Courses, Q4Library, Q5Fermi } from "./questions";
 import "./challenge.css";
 
 const TITLE = "3 分钟测出你是建模队里的哪种人 · 模桥";
@@ -94,7 +94,7 @@ export function ChallengePage() {
         </h1>
         {n === 1 && <Q1Canteen value={a.q1} onAnswer={(v) => answer("q1", v)} {...common} />}
         {n === 2 && <Q2Meal value={a.q2} onAnswer={(v) => answer("q2", v)} {...common} />}
-        {n === 3 && <Q3Clubs value={a.q3} onAnswer={(v) => answer("q3", v)} {...common} />}
+        {n === 3 && <Q3Courses value={a.q3} onAnswer={(v) => answer("q3", v)} {...common} />}
         {n === 4 && <Q4Library value={a.q4} onAnswer={(v) => answer("q4", v)} {...common} />}
         {n === 5 && <Q5Fermi value={a.q5} onAnswer={(v) => answer("q5", v)} {...common} />}
         {n > 1 && (
