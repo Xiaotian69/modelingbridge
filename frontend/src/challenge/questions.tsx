@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { q1, q2, q3, q4, q5, type ScoredOption } from "./config";
 import { evaluateMeal, MEAL_MAX, MEAL_OPTIMUM, MEAL_VERTICES } from "./meal";
-import { ahpWeights, PAIRS, rankClubs, type Pairwise } from "./ahp";
+import { ahp, explainConsistency, fraction, JUDGEMENTS, PAIRS, ranking, synthesize, type Judgement } from "./ahp";
 import type { Answers } from "./scoring";
 
 type Props<K extends keyof Answers> = {
@@ -199,8 +199,9 @@ export function Q2Meal({ value, onAnswer, onNext, last }: Props<"q2">) {
           <p className="cg-feedback-kicker">{m.optimal ? "你找到了最优解！" : `你的饱腹值 ${m.full}，最优是 ${MEAL_OPTIMUM.value}`}</p>
           <MealChart you={[meat, veg]} />
           <p>
-            最优组合：荤菜 {ox} 串 + 素菜 {oy} 串，正好花完 {q2.budget} 元、用完 {q2.minutes} 分钟。{q2.feedback}
+            最优组合：荤菜 {ox} 串 + 素菜 {oy} 串。{q2.feedback}
           </p>
+          <p className="cg-aside">{q2.assumption}</p>
           <p className="cg-subq">{q2.methodPrompt}</p>
           <Choices options={q2.methods} selected={method} onPick={pick} name={q2.methodPrompt} />
           <button type="button" className="cg-btn cg-btn-primary cg-next" onClick={onNext} disabled={!method}>
@@ -214,88 +215,163 @@ export function Q2Meal({ value, onAnswer, onNext, last }: Props<"q2">) {
 
 // ---------------------------------------------------------------------------
 
+const CRITERION_CLASS = ["is-interest", "is-time", "is-vibe"];
+const pct = (v: number) => `${Math.round(v * 100)}%`;
+
+/** 一次两难：五档，左端=前者明显更重要，右端=后者明显更重要。 */
+function Tug({ index, left, right, question, value, touched, onChange, locked }: { index: number; left: string; right: string; question: string; value: Judgement; touched: boolean; onChange: (v: Judgement) => void; locked: boolean }) {
+  const words: Record<Judgement, string> = {
+    [-2]: `${left}明显更重要`,
+    [-1]: `${left}稍微重要`,
+    0: "一样重要",
+    1: `${right}稍微重要`,
+    2: `${right}明显更重要`,
+  };
+  return (
+    <div className={`cg-tug${touched ? " is-touched" : ""}`}>
+      <p className="cg-tug-q">
+        <span className="cg-tug-n">{index + 1}</span>
+        {question}
+      </p>
+      <div className="cg-tug-row" role="radiogroup" aria-label={`${left}和${right}，哪个更重要`}>
+        <span className="cg-tug-end">{left}</span>
+        {JUDGEMENTS.map((j) => (
+          <button
+            key={j}
+            type="button"
+            role="radio"
+            aria-checked={touched && value === j}
+            aria-label={words[j]}
+            className={`cg-tug-dot is-${Math.abs(j)}${touched && value === j ? " is-on" : ""}`}
+            onClick={() => onChange(j)}
+            disabled={locked}
+          />
+        ))}
+        <span className="cg-tug-end">{right}</span>
+      </div>
+      <p className="cg-tug-word" aria-hidden="true">{touched ? words[value] : "点一下你的倾向"}</p>
+    </div>
+  );
+}
+
+const ROW_H = 58;
+
 export function Q3Clubs({ value, onAnswer, onNext, last }: Props<"q3">) {
-  const [choices, setChoices] = useState<(Pairwise | undefined)[]>(value?.choices ?? [undefined, undefined, undefined]);
+  const [choices, setChoices] = useState<Judgement[]>((value?.choices as Judgement[]) ?? [0, 0, 0]);
+  const [touched, setTouched] = useState<boolean[]>(value ? [true, true, true] : [false, false, false]);
   const [shown, setShown] = useState(Boolean(value));
   const [use, setUse] = useState(value?.use);
-  const complete = choices.every((c) => c !== undefined);
   const names = q3.criteria.map((c) => c.name);
-  const ahp = complete ? ahpWeights(choices as Pairwise[]) : null;
-  const ranking = ahp ? rankClubs(ahp.weights, q3.clubs) : [];
-  const set = (k: number, c: Pairwise) => !shown && setChoices((cs) => cs.map((x, i) => (i === k ? c : x)));
+  const result = ahp(choices);
+  const rows = synthesize(result.weights, q3.clubs);
+  const order = ranking(rows);
+  const rankOf = (i: number) => order.findIndex((r) => r.index === i);
+  const left = touched.filter((t) => !t).length;
+  const check = explainConsistency(names, choices);
+  const topCrit = result.weights.indexOf(Math.max(...result.weights));
+  const bestInTop = q3.clubs.reduce((best, c, i) => (c.scores[topCrit] > q3.clubs[best].scores[topCrit] ? i : best), 0);
+
+  const set = (k: number, j: Judgement) => {
+    setChoices((cs) => cs.map((c, i) => (i === k ? j : c)));
+    setTouched((ts) => ts.map((t, i) => (i === k ? true : t)));
+  };
+
   return (
     <>
-      <div className="cg-clubs">
-        {q3.clubs.map((c) => (
-          <div key={c.name} className="cg-club">
-            <strong>{c.name}</strong>
-            <span>{c.note}</span>
-          </div>
-        ))}
-      </div>
       <p className="cg-prompt">{q3.prompt}</p>
-      <div className="cg-pairs">
-        {PAIRS.map(([i, j], k) => (
-          <div key={k} className="cg-pair" role="radiogroup" aria-label={`${names[i]}和${names[j]}哪个更重要`}>
-            {([-1, 0, 1] as Pairwise[]).map((c) => (
-              <button
-                key={c}
-                type="button"
-                role="radio"
-                aria-checked={choices[k] === c}
-                className={`cg-chip${choices[k] === c ? " is-on" : ""}`}
-                onClick={() => set(k, c)}
-                disabled={shown && choices[k] !== c}
-              >
-                {c === -1 ? `${names[i]}更重要` : c === 1 ? `${names[j]}更重要` : "一样"}
-              </button>
+
+      <section className="cg-board" aria-label="社团推荐榜">
+        <div className="cg-board-head">
+          <strong>推荐榜</strong>
+          <span className="cg-legend">
+            {names.map((n, i) => (
+              <span key={n} className={CRITERION_CLASS[i]}>
+                <i aria-hidden="true" />
+                {n} {pct(result.weights[i])}
+              </span>
             ))}
-          </div>
+          </span>
+        </div>
+        <ol className="cg-board-list" style={{ height: ROW_H * rows.length }}>
+          {rows.map((r) => (
+            <li key={r.name} className={`cg-board-row${rankOf(r.index) === 0 ? " is-top" : ""}`} style={{ transform: `translateY(${rankOf(r.index) * ROW_H}px)` }} aria-label={`第 ${rankOf(r.index) + 1} 名 ${r.name}，推荐指数 ${pct(r.total)}`}>
+              <div className="cg-board-name">
+                <strong>{r.name}</strong>
+                <small>{q3.clubs[r.index].note}</small>
+              </div>
+              <div className="cg-stack" aria-hidden="true">
+                {r.parts.map((p, j) => (
+                  <i key={j} className={CRITERION_CLASS[j]} style={{ width: `${p * 100 * 1.8}%` }} />
+                ))}
+              </div>
+              <b>{pct(r.total)}</b>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <div className="cg-tugs">
+        {PAIRS.map(([i, j], k) => (
+          <Tug key={k} index={k} left={names[i]} right={names[j]} question={q3.dilemmas[k]} value={choices[k]} touched={touched[k]} onChange={(v) => set(k, v)} locked={shown} />
         ))}
       </div>
+
       {!shown ? (
-        <button type="button" className="cg-btn cg-btn-primary cg-next" disabled={!complete} onClick={() => setShown(true)}>
-          {complete ? "算一算该选谁" : "三组都比完再算"}
+        <button type="button" className="cg-btn cg-btn-primary cg-next" disabled={left > 0} onClick={() => setShown(true)}>
+          {left > 0 ? `还有 ${left} 个两难没选` : `就选${order[0].name}`}
         </button>
       ) : (
-        ahp && (
-          <div className="cg-feedback" role="status">
-            <p className="cg-feedback-kicker">按你的判断，推荐：{ranking[0].name}</p>
-            <div className="cg-weights">
-              {names.map((n, i) => (
-                <div key={n} className="cg-weight">
-                  <span>{n}</span>
-                  <div className="cg-meter-track" aria-hidden="true">
-                    <i style={{ width: `${ahp.weights[i] * 100}%` }} />
-                  </div>
-                  <b>{Math.round(ahp.weights[i] * 100)}%</b>
-                </div>
-              ))}
-            </div>
-            <ol className="cg-rank">
-              {ranking.map((r) => (
-                <li key={r.name}>
-                  {r.name} <small>{r.total.toFixed(2)} 分</small>
-                </li>
-              ))}
-            </ol>
-            {!ahp.consistent && <p className="cg-note">你的三次判断有点“绕圈”（A 比 B 重要、B 比 C 重要、C 又比 A 重要）。AHP 里有专门的“一致性检验”来发现这种情况。</p>}
-            <p>{q3.feedback}</p>
-            <p className="cg-subq">{q3.usePrompt}</p>
-            <Choices
-              options={q3.uses}
-              selected={use}
-              name={q3.usePrompt}
-              onPick={(id) => {
-                setUse(id);
-                onAnswer({ choices: choices as Pairwise[], use: id });
-              }}
-            />
-            <button type="button" className="cg-btn cg-btn-primary cg-next" onClick={onNext} disabled={!use}>
-              {last ? "看我的结果" : "下一题"}
-            </button>
-          </div>
-        )
+        <div className="cg-feedback" role="status">
+          <p className="cg-feedback-kicker">按你的权重，推荐：{order[0].name}</p>
+          <p>
+            你最看重<strong>{names[topCrit]}</strong>（{pct(result.weights[topCrit])}），{order[0].name}{order[0].index === bestInTop ? `正好是${names[topCrit]}最强的那个。` : `的${names[topCrit]}不是最强，但三项加权后总分最高。`}
+            {q3.feedback}
+          </p>
+          <p className={`cg-check is-${check.consistency}`}>{check.text}</p>
+          <details className="cg-math">
+            <summary>看看是怎么算的</summary>
+            <p>① 把三句判断填进“判断矩阵”（行比列重要几倍）：</p>
+            <table>
+              <thead>
+                <tr>
+                  <th />
+                  {names.map((n) => (
+                    <th key={n}>{n}</th>
+                  ))}
+                  <th>权重</th>
+                </tr>
+              </thead>
+              <tbody>
+                {result.matrix.map((row, i) => (
+                  <tr key={names[i]}>
+                    <th>{names[i]}</th>
+                    {row.map((v, j) => (
+                      <td key={j}>{fraction(v)}</td>
+                    ))}
+                    <td>{pct(result.weights[i])}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p>② 权重 = 每行连乘再开三次方，然后归一化（三个准则时，这和标准的特征向量法结果相同）。</p>
+            <p>③ 一致性检验：λmax = {result.lambdaMax.toFixed(3)}，CR = (λmax − 3) ÷ 2 ÷ 0.58 = {result.cr.toFixed(2)}，不超过 0.10 算通过。</p>
+            <p>④ 推荐指数 = Σ 权重 × 社团在该项上的占比。</p>
+            <p className="cg-math-note">简化说明：{q3.simplification}</p>
+          </details>
+          <p className="cg-subq">{q3.usePrompt}</p>
+          <Choices
+            options={q3.uses}
+            selected={use}
+            name={q3.usePrompt}
+            onPick={(id) => {
+              setUse(id);
+              onAnswer({ choices, use: id });
+            }}
+          />
+          <button type="button" className="cg-btn cg-btn-primary cg-next" onClick={onNext} disabled={!use}>
+            {last ? "看我的结果" : "下一题"}
+          </button>
+        </div>
       )}
     </>
   );

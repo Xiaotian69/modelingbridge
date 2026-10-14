@@ -30,12 +30,14 @@ const renderAt = (path: string) =>
       <AppRoutes />
     </MemoryRouter>,
   );
+/** 推荐榜第 n 名（按 aria-label 里的名次） */
+const rowAt = (n: number) => screen.getByRole("listitem", { name: new RegExp(`^第 ${n + 1} 名`) });
 const click = (name: string | RegExp) => fireEvent.click(screen.getByRole("button", { name }));
 const radio = (name: string | RegExp) => fireEvent.click(screen.getByRole("radio", { name }));
 
 /** 一条“建模手 · 优化派”路径，第 2 题找到最优解。 */
-async function playOptimizer() {
-  click("开始挑战");
+async function playOptimizer(fromIntro = true) {
+  if (fromIntro) click("开始挑战");
   expect(await screen.findByRole("heading", { name: /食堂窗口/ })).toBeInTheDocument();
   click(/几百人同时涌进来/);
   click(/窗口开得少/);
@@ -59,12 +61,19 @@ async function playOptimizer() {
   click("下一题");
 
   expect(screen.getByRole("heading", { name: /三个社团/ })).toBeInTheDocument();
-  fireEvent.click(screen.getAllByRole("radio", { name: "兴趣更重要" })[0]);
-  fireEvent.click(screen.getAllByRole("radio", { name: "兴趣更重要" })[1]);
-  fireEvent.click(screen.getAllByRole("radio", { name: "一样" })[2]);
-  click("算一算该选谁");
+  // 默认三项一样重要：推荐榜第一是羽毛球社；必须三个两难都选过才能继续
+  expect(screen.getByRole("button", { name: "还有 3 个两难没选" })).toBeDisabled();
+  expect(rowAt(0)).toHaveAccessibleName(/羽毛球社/);
+  fireEvent.click(screen.getAllByRole("radio", { name: "兴趣明显更重要" })[0]);
+  fireEvent.click(screen.getAllByRole("radio", { name: "兴趣明显更重要" })[1]);
+  // 推荐榜随选择实时变化
+  expect(rowAt(0)).toHaveAccessibleName(/摄影社/);
+  fireEvent.click(screen.getAllByRole("radio", { name: "一样重要" })[2]);
+  click("就选摄影社");
   expect(screen.getByText(/推荐：摄影社/)).toBeInTheDocument();
-  radio(/照着权重选/);
+  expect(screen.getByText(/三句判断前后一致/)).toBeInTheDocument();
+  expect(screen.getByText("看看是怎么算的")).toBeInTheDocument();
+  radio(/就按它选/);
   click("下一题");
 
   expect(screen.getByRole("heading", { name: /图书馆/ })).toBeInTheDocument();
@@ -83,7 +92,9 @@ describe("/challenge", () => {
     expect(await screen.findByRole("heading", { name: /建模队里的哪种人/ })).toBeInTheDocument();
     expect(screen.queryByRole("navigation", { name: "主导航" })).not.toBeInTheDocument();
     expect(screen.getByText(/无需注册/)).toBeInTheDocument();
-    expect(screen.getByText(/不收集个人信息/)).toBeInTheDocument();
+    expect(screen.queryByText(/不收集个人信息/)).not.toBeInTheDocument();
+    expect(screen.getByText(/财大数学建模协会/)).toBeInTheDocument();
+    expect(screen.queryByText(/抽奖/)).not.toBeInTheDocument(); // lottery 默认关闭
     expect(events[0]).toEqual({ name: "challenge_enter", src: "poster" });
   });
 
@@ -94,6 +105,10 @@ describe("/challenge", () => {
     expect(screen.getByRole("heading", { name: /建模手/ })).toHaveTextContent("优化派");
     expect(screen.getByText(/最佳搭档/)).toHaveTextContent("论文手");
     expect(screen.getByText(event.qqGroup)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "加入财大数学建模协会" })).toBeInTheDocument();
+    expect(screen.getByTestId("celebration")).toBeInTheDocument();
+    expect(screen.getByText("挑战完成")).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/抽奖|不收集个人信息|(?<!财大)数学建模协会 QQ/);
     expect(screen.getByText(/趣味倾向，不是能力测评/)).toBeInTheDocument();
     expect(screen.getByText(/就是线性规划的最优解/)).toBeInTheDocument();
     for (const link of screen.getAllByRole("link").filter((l) => l.getAttribute("href")?.startsWith("/learn")))
@@ -105,7 +120,18 @@ describe("/challenge", () => {
     expect(await screen.findByText(/已复制/)).toBeInTheDocument();
     expect(writeText).toHaveBeenCalledWith(event.qqGroup);
 
-    expect(events.map((e) => e.name)).toEqual(["challenge_enter", "challenge_start", "challenge_complete", "challenge_copy_group"]);
+    // 协会介绍：默认收起，展开后分三组，并能从里面直接复制群号
+    const disclose = screen.getByRole("button", { name: /在协会能做什么/ });
+    expect(disclose).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(disclose);
+    expect(disclose).toHaveAttribute("aria-expanded", "true");
+    for (const label of ["现在就有", "可以一起做", "计划开展"]) expect(screen.getByRole("region", { name: label })).toBeInTheDocument();
+    expect(screen.getByText("以群通知为准")).toBeInTheDocument();
+    expect(screen.getAllByText("适合你").length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole("button", { name: "复制群号，进群看看" }));
+    await vi.waitFor(() => expect(writeText).toHaveBeenCalledTimes(2));
+
+    expect(events.map((e) => e.name)).toEqual(["challenge_enter", "challenge_start", "challenge_complete", "challenge_copy_group", "challenge_society_open", "challenge_copy_group"]);
     expect(events[2]).toMatchObject({ src: "booth", result: "optimize" });
     // 不带任何个人信息：只有事件名、渠道、结果类型
     for (const e of events) expect(Object.keys(e).every((k) => ["name", "src", "result"].includes(k))).toBe(true);
@@ -119,6 +145,8 @@ describe("/challenge", () => {
 
     renderAt("/challenge");
     expect(await screen.findByRole("heading", { name: /建模手/ })).toBeInTheDocument();
+    // 刷新后恢复结果，但不再放庆祝动画
+    expect(screen.queryByTestId("celebration")).not.toBeInTheDocument();
     click("再测一次");
     expect(screen.getByRole("heading", { name: /食堂窗口/ })).toBeInTheDocument();
   });
@@ -128,5 +156,45 @@ describe("/challenge", () => {
     renderAt("/challenge?src=<script>");
     expect(await screen.findByRole("button", { name: "开始挑战" })).toBeInTheDocument();
     expect(events[0]).toEqual({ name: "challenge_enter", src: "direct" });
+  });
+
+  it("celebrates once per finish, clears itself, and restarts cleanly", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    renderAt("/challenge");
+    await playOptimizer();
+    expect(screen.getByTestId("celebration")).toBeInTheDocument();
+    await vi.advanceTimersByTimeAsync(2500);
+    expect(screen.queryByTestId("celebration")).not.toBeInTheDocument(); // 截图时不残留
+    click("再测一次"); // 直接回到第 1 题
+    await playOptimizer(false);
+    expect(screen.getByTestId("celebration")).toBeInTheDocument(); // 第二次完成照样有
+    vi.useRealTimers();
+  });
+
+  it("skips the confetti when the system asks for reduced motion", async () => {
+    vi.stubGlobal("matchMedia", (q: string) => ({ matches: q.includes("reduce"), media: q, addEventListener() {}, removeEventListener() {} }));
+    renderAt("/challenge");
+    await playOptimizer();
+    expect(screen.getByRole("heading", { name: /建模手/ })).toBeInTheDocument();
+    expect(screen.queryByTestId("celebration")).not.toBeInTheDocument();
+  });
+
+  it("Q3 reports a contradiction using the player's own words", async () => {
+    renderAt("/challenge");
+    click("开始挑战");
+    click(/几百人同时涌进来/);
+    click(/窗口开得少/);
+    click(/刷卡机/);
+    click("就这三个");
+    click("下一题");
+    fireEvent.click(screen.getByRole("button", { name: "荤菜多一串" }));
+    click("就这么吃");
+    radio(/先算钱和时间/);
+    click("下一题");
+    fireEvent.click(screen.getAllByRole("radio", { name: "兴趣稍微重要" })[0]); // 兴趣 > 时间
+    fireEvent.click(screen.getAllByRole("radio", { name: "氛围稍微重要" })[0]); // 氛围 > 兴趣
+    fireEvent.click(screen.getAllByRole("radio", { name: "时间稍微重要" })[1]); // 时间 > 氛围
+    fireEvent.click(screen.getByRole("button", { name: /^就选/ }));
+    expect(screen.getByText(/这三句没法排出一个先后顺序/)).toHaveTextContent("兴趣比时间稍微重要；氛围比兴趣稍微重要；时间比氛围稍微重要");
   });
 });

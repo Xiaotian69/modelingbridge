@@ -21,15 +21,23 @@ export type ResultId = "abstract" | "optimize" | "data" | "express" | "allround"
 
 export const CHALLENGE_STORAGE_KEY = "mb.challenge.v1";
 
-/** 活动开关与联系方式。活动结束后把 active 改成 false：入口文案变“关注协会”，/challenge 链接继续可用。 */
+/**
+ * 活动开关与联系方式。
+ * - active：招新进行中。改成 false 后，“加入协会”变“关注协会”，/challenge 链接继续可用。
+ * - lottery：摊位抽奖确认开展后才改成 true；为 false 时页面上不出现任何抽奖字样。
+ */
 export const event = {
   active: true,
-  societyName: "数学建模协会",
+  lottery: false,
+  societyName: "财大数学建模协会",
   qqGroup: "566983524",
-  /** 活动进行中显示在开始页的小字 */
-  activeNote: "招新进行中 · 测完到摊位凭结果页抽奖",
+  /** 开始页顶部小字 */
+  activeNote: "财大数学建模协会 · 招新进行中",
+  lotteryNote: "财大数学建模协会 · 测完到摊位凭结果页抽奖",
+  /** 结果页“截图保存”后面接的话（仅 lottery 为 true 时显示） */
+  lotteryHint: "，到招新摊位出示就能抽奖",
   /** 活动结束后，结果页联系卡片的说明 */
-  afterNote: "招新已结束，欢迎加群关注下一次活动和入门培训。",
+  afterNote: "招新已结束，欢迎加群关注协会的后续活动。",
 };
 
 /** 扫码渠道：只认这几个值，其他一律记为 direct。 */
@@ -38,7 +46,8 @@ export const SOURCES = ["poster", "booth", "flyer", "group"] as const;
 /**
  * 匿名统计（不用 Cookie、不收集个人信息）。
  * provider 为 "none" 时只在页面内派发 `mb:challenge` 事件，不发任何网络请求。
- * 接入 Umami 时：provider 改 "umami"，填 scriptSrc 和 websiteId。
+ * 接入 Umami 时：provider 改 "umami"，填 scriptSrc 和 websiteId，
+ * 并在网站的隐私说明（如“关于”页）写清楚统计了什么；小游戏界面本身不放这类说明。
  */
 export const analytics: {
   provider: "none" | "umami";
@@ -66,7 +75,7 @@ export const q1 = {
     { id: "wall", label: "表白墙上一堆吐槽排队的帖子", points: { W: 1 }, style: "express" },
   ] satisfies ScoredOption[],
   feedback:
-    "你刚才在做建模的第一步：做假设、抓主要因素。排队问题最常用的三个量是“人来得多快、打菜多快、开几个窗口”；记录和计数是给模型喂数据，吐槽和观察能帮你发现真正的痛点——不同的人会从不同的地方下手。",
+    "建模第一步，就是从一堆因素里挑出最关键的几个——这叫“做假设”。排队问题最常抓三样：人来得多快、打菜多快、开了几个窗口。",
 };
 
 // ---------------------------------------------------------------------------
@@ -80,6 +89,8 @@ export const q2 = {
   veg: { name: "素菜", example: "青菜、金针菇", price: 1, minutes: 2, full: 2, note: "烫嘴要慢慢吃，约 2 分钟一串" },
   budget: 20,
   minutes: 25,
+  /** 反馈里的小字：承认情景是理想化的 */
+  assumption: "为了好算，这里假设每串的价格和吃的时间都固定不变。真实建模也常这样先简化，算完再回头检查假设合不合理。",
   methodPrompt: "你刚才是怎么找的？",
   methods: [
     { id: "calc", label: "先算钱和时间各够几串，再在中间找", points: { M: 2 }, style: "optimize" },
@@ -87,15 +98,15 @@ export const q2 = {
     { id: "explain", label: "更想弄明白为什么是这个组合，讲给室友听", points: { W: 2 }, style: "express" },
   ] satisfies ScoredOption[],
   feedback:
-    "这就是线性规划：钱和时间是两条约束，饱腹值是目标。最优解恰好把 20 块钱和 25 分钟同时用完——它总是落在可行区域的某个角上。",
+    "这就是线性规划：钱和时间是约束，饱腹值是目标。最优解刚好把钱和时间同时用完，落在可行区域的一个角上。",
 };
 
 // ---------------------------------------------------------------------------
-// 第 3 题：选社团（两两比较 → AHP 权重）
+// 第 3 题：选社团（三次两难 → AHP 权重 → 推荐榜，算法见 ahp.ts）
 
 export const q3 = {
   title: "三个社团都想去，只能选一个",
-  prompt: "两两比较：选社团时，哪一项对你更重要？",
+  prompt: "三个社团各有长处。回答三个“两难”，看看哪个最适合你。",
   criteria: [
     { id: "interest", name: "兴趣" },
     { id: "time", name: "时间" },
@@ -103,18 +114,25 @@ export const q3 = {
   ],
   /** 每个社团在三项上的印象分（1–5），顺序同 criteria。只是情景设定。 */
   clubs: [
-    { name: "摄影社", scores: [5, 2, 3], note: "最想玩，但每周两次外拍" },
-    { name: "羽毛球社", scores: [3, 3, 5], note: "一般喜欢，学长学姐很热情" },
-    { name: "读书会", scores: [2, 5, 3], note: "兴趣一般，时间最自由" },
+    { name: "摄影社", scores: [5, 2, 3], note: "最想玩，但很占时间" },
+    { name: "羽毛球社", scores: [3, 3, 5], note: "一般喜欢，氛围最好" },
+    { name: "读书会", scores: [2, 5, 3], note: "兴趣一般，最自由" },
   ],
-  usePrompt: "算出来的排名，你会怎么用？",
+  /** 三个两难，顺序与 ahp.ts 的 PAIRS 一致：兴趣-时间、兴趣-氛围、时间-氛围 */
+  dilemmas: [
+    "超想玩，但每周占掉两个晚上——还是选个时间宽松的？",
+    "超喜欢但一个熟人都没有，还是一般喜欢但大家很热情？",
+    "活动多但氛围很好，还是时间自由但有点冷清？",
+  ],
+  usePrompt: "推荐出来了，你会怎么用它？",
   uses: [
-    { id: "follow", label: "照着权重选，判断过程清楚就行", points: { M: 2 }, style: "abstract" },
+    { id: "follow", label: "就按它选，判断过程清楚就行", points: { M: 2 }, style: "abstract" },
     { id: "check", label: "先去三个社团群里翻翻活动记录，再验证一下", points: { C: 2 }, style: "data" },
     { id: "write", label: "把理由写下来，讲给室友听再决定", points: { W: 2 }, style: "express" },
   ] satisfies ScoredOption[],
-  feedback:
-    "你刚才做的两两比较，就是层次分析法（AHP）的判断矩阵：把“哪个更重要”变成权重，再给每个选项打分加权。比赛里评价类题目最常用它。",
+  feedback: "你刚才用的就是层次分析法（AHP）：两两比较 → 算出权重 → 加权打分。比赛里的评价类题目最常用它。",
+  /** 简化说明（放在“看看是怎么算的”里） */
+  simplification: "权重用标准 AHP 计算；社团在三项上的表现直接用题目给的印象分，按占比换算（完整 AHP 还要再把社团两两比较一遍）。",
 };
 
 // ---------------------------------------------------------------------------
@@ -138,7 +156,7 @@ export const q4 = {
   ] satisfies (ScoredOption & { guess: number | null })[],
   actual: 92,
   feedback:
-    "座位有上限，曲线不会一直直线上升，而是越来越平——这就是数据预测里的“饱和”（logistic 增长）。照这条示意曲线，想稳稳占到座，最好 7:30 前到。问清楚“今天是不是考试周”也很重要：预测之前先确认条件没变。",
+    "座位有上限，曲线会越涨越慢，不会一直往上冲——这叫“饱和”。照这条示意曲线，想稳稳有座，7:30 前到。先问清“是不是考试周”也很对：条件变了，曲线就不一样。",
 };
 
 // ---------------------------------------------------------------------------
@@ -154,7 +172,7 @@ export const q5 = {
     { id: "assume", label: "先把每个假设写清楚，方便别人挑错", points: { W: 2 }, style: "express" },
   ] satisfies ScoredOption[],
   feedback:
-    "这叫费米估算：把一个“没法直接知道”的数拆成几个能估的数。比如假设全校 2 万人、每天约十分之一的人买一杯，就是约 2000 杯——数字是假设，重要的是每一步都写得清楚、能被检查。",
+    "这叫费米估算：把不知道的数，拆成几个能估的数。比如假设 2 万人里每天十分之一买一杯，就是约 2000 杯——数字是假设，思路才是重点。",
 };
 
 // ---------------------------------------------------------------------------
@@ -167,6 +185,8 @@ export type ResultCopy = {
   line: string;
   detail: string;
   partner: string;
+  /** 结果页“加入协会”里的一句话，把人格结果和协会连起来 */
+  societyHook: string;
   /** 推荐的第一课：只链到线上已有的页面，带 ?from=challenge 方便统计 */
   course: { label: string; hint: string; to: string };
 };
@@ -178,6 +198,7 @@ export const results: Record<ResultId, ResultCopy> = {
     tag: "抽象派",
     line: "擅长抓住问题本质、做合理假设。",
     detail: "别人还在纠结细节，你已经在想“这件事最关键的是哪几个量”。比赛里，这决定了整支队伍往哪个方向走。",
+    societyHook: "协会里有一起啃题的人：你负责想清楚问题，也能遇到把模型写成代码的编程手。",
     partner: "编程手",
     course: {
       label: "线性规划精讲",
@@ -191,6 +212,7 @@ export const results: Record<ResultId, ResultCopy> = {
     tag: "优化派",
     line: "天生会算“怎样最划算”。",
     detail: "有限的钱、有限的时间，你本能地想找最优组合。线性规划、整数规划这些优化模型，是你最顺手的武器。",
+    societyHook: "优化题是比赛常客。来协会找能把你的方案写成代码、写进论文的队友。",
     partner: "论文手",
     course: {
       label: "线性规划精讲 · 可行域",
@@ -204,6 +226,7 @@ export const results: Record<ResultId, ResultCopy> = {
     tag: "数据派",
     line: "看到数据就想画图找规律。",
     detail: "你相信“试一试就知道”，也愿意把数据翻个底朝天。队里把模型变成能跑的代码和图表，靠的就是你。",
+    societyHook: "会写代码的人在建模队里很抢手。来群里交流 Python、MATLAB，也找找需要你的建模手。",
     partner: "建模手",
     course: {
       label: "线性规划精讲 · Python",
@@ -217,6 +240,7 @@ export const results: Record<ResultId, ResultCopy> = {
     tag: "表达派",
     line: "能把复杂思路讲清楚。",
     detail: "你在意“为什么”，也在意别人能不能看懂。比赛最后交的是一篇论文，评委读到的每一句话都要经过你。",
+    societyHook: "好论文是练出来的。来协会和大家一起读优秀论文、互相改稿，也找找你的建模搭档。",
     partner: "建模手",
     course: {
       label: "七关实战",
@@ -230,6 +254,7 @@ export const results: Record<ResultId, ResultCopy> = {
     tag: "均衡派",
     line: "三项比较均衡。",
     detail: "建模、编程、写作你都能搭把手，是队里最好的“粘合剂”——哪个位置缺人，你都能顶上。",
+    societyHook: "哪个位置都能顶上的人，最适合当队伍的粘合剂。来协会认识更多队友吧。",
     partner: "任何人",
     course: {
       label: "线性规划精讲",
@@ -241,4 +266,50 @@ export const results: Record<ResultId, ResultCopy> = {
 
 /** 结果页底部固定说明 */
 export const DISCLAIMER = "这是趣味倾向，不是能力测评。真正的建模能力，练出来的。";
-export const PRIVACY_NOTE = "我们只统计匿名访问次数，不收集个人信息。";
+
+// ---------------------------------------------------------------------------
+// 结果页“在协会能做什么”：按确定程度分三组，未确认的事只放“计划中”，不写成承诺。
+
+export type SocietyStatus = "now" | "together" | "planned";
+
+export const society: {
+  title: string;
+  lead: string;
+  groups: { status: SocietyStatus; label: string; note: string; items: { icon: string; title: string; text: string; roles?: ResultId[] }[] }[];
+  footnote: string;
+} = {
+  title: "在协会能做什么？",
+  lead: "不只是进一个群——是找到一群一起学建模、组队比赛的人。",
+  groups: [
+    {
+      status: "now",
+      label: "现在就有",
+      note: "已经能用",
+      items: [
+        { icon: "📚", title: "模桥学习平台", text: "线性规划精讲、刷题和七关实战，随时可以自学。", roles: ["abstract", "optimize", "allround"] },
+        { icon: "💬", title: "协会 QQ 群", text: "比赛动态、学习问题，在群里随时问、随时聊。" },
+      ],
+    },
+    {
+      status: "together",
+      label: "可以一起做",
+      note: "看大家参与",
+      items: [
+        { icon: "🤝", title: "找队友", text: "建模比赛三人一队，在这里认识志同道合的人。", roles: ["allround", "abstract"] },
+        { icon: "🎓", title: "问学长学姐", text: "选题、分工、熬夜赶论文的经验，过来人最清楚。" },
+        { icon: "💻", title: "编程交流", text: "Python、MATLAB 卡住了，一起看看。", roles: ["data"] },
+        { icon: "✍️", title: "论文与表达", text: "读优秀论文、互相改稿，把思路讲清楚。", roles: ["express"] },
+      ],
+    },
+    {
+      status: "planned",
+      label: "计划开展",
+      note: "以群通知为准",
+      items: [
+        { icon: "🧭", title: "建模方法分享", text: "优化、评价、预测等方法的专题分享。", roles: ["optimize", "abstract"] },
+        { icon: "🏁", title: "趣味活动与练习赛", text: "像今天这样的小挑战，以及赛前练手。" },
+      ],
+    },
+  ],
+  footnote: "具体活动和时间以协会群通知为准。",
+};

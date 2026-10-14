@@ -6,6 +6,7 @@
  * 3. 否则取最高的一项；并列时按 建模 → 编程 → 写作 的顺序取。
  * 4. 建模手再看风格：“优化”风格分多于“抽象” → 优化派，否则抽象派。
  */
+import type { Judgement } from "./ahp";
 import { q1, q2, q3, q4, q5, type Dimension, type ResultId, type ScoredOption, type Style } from "./config";
 
 export const ALLROUND_GAP = 1;
@@ -13,7 +14,7 @@ export const ALLROUND_GAP = 1;
 export type Answers = {
   q1: string[];
   q2: { meat: number; veg: number; optimal: boolean; method: string };
-  q3: { choices: (-1 | 0 | 1)[]; use: string };
+  q3: { choices: Judgement[]; use: string };
   q4: string;
   q5: string;
 };

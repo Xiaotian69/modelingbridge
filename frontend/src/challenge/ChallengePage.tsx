@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Brand } from "../components/ui/Brand";
-import { DISCLAIMER, event, PRIVACY_NOTE, q1, q2, q3, q4, q5, results, type Dimension, type ResultId } from "./config";
+import { DISCLAIMER, event, q1, q2, q3, q4, q5, results, society, type Dimension, type ResultId } from "./config";
 import { computeResult, type Answers } from "./scoring";
 import { freshState, loadState, saveState, type ChallengeState, type Step } from "./storage";
 import { loadAnalytics, sourceFrom, track } from "./analytics";
 import { MEAL_OPTIMUM } from "./meal";
+import { Celebration } from "./Celebration";
 import { Q1Canteen, Q2Meal, Q3Clubs, Q4Library, Q5Fermi } from "./questions";
 import "./challenge.css";
 
@@ -19,6 +20,8 @@ export function ChallengePage() {
   const [state, setState] = useState<ChallengeState>(loadState);
   const heading = useRef<HTMLHeadingElement>(null);
   const first = useRef(true);
+  /** 刚答完最后一题时才放庆祝动画；刷新、查看上次结果都不放。每次完成换一个值，动画状态随之重置。 */
+  const [celebration, setCelebration] = useState(0);
 
   useEffect(() => {
     const previous = document.title;
@@ -48,6 +51,7 @@ export function ChallengePage() {
 
   const start = () => {
     track("challenge_start", { src });
+    setCelebration(0);
     setState({ ...freshState(), step: 1 });
   };
   const finish = () => {
@@ -59,13 +63,14 @@ export function ChallengePage() {
       return;
     }
     track("challenge_complete", { src, result });
+    setCelebration((c) => c + 1);
     setState((s) => ({ ...s, step: "result", result }));
   };
   const next = (n: number) => (n === TOTAL ? finish() : go((n + 1) as Step));
 
   if (state.step === "intro") return <Intro onStart={start} heading={heading} previous={state.result} onShowPrevious={() => go("result")} />;
   if (state.step === "result" && state.result)
-    return <ResultView id={state.result} answers={state.answers as Answers} heading={heading} src={src} onRestart={start} />;
+    return <ResultView key={celebration} celebrate={celebration > 0} id={state.result} answers={state.answers as Answers} heading={heading} src={src} onRestart={start} />;
 
   const n = state.step as number;
   const a = state.answers;
@@ -123,7 +128,7 @@ function Intro({ onStart, heading, previous, onShowPrevious }: { onStart: () => 
         </Link>
       </header>
       <main className="cg-main">
-        {event.active && <p className="cg-pill">{event.activeNote}</p>}
+        {event.active && <p className="cg-pill">{event.lottery ? event.lotteryNote : event.activeNote}</p>}
         <h1 className="cg-hero-title" ref={heading} tabIndex={-1}>
           3 分钟，测出你是
           <br />
@@ -156,7 +161,6 @@ function Intro({ onStart, heading, previous, onShowPrevious }: { onStart: () => 
             </button>
           </p>
         )}
-        <p className="cg-fine">{PRIVACY_NOTE}</p>
       </main>
     </div>
   );
@@ -189,11 +193,51 @@ async function copyText(text: string) {
 
 const DIM_LABEL: Record<Dimension, string> = { M: "建模", C: "编程", W: "写作" };
 
-function ResultView({ id, answers, heading, src, onRestart }: { id: ResultId; answers: Answers; heading: React.RefObject<HTMLHeadingElement>; src: string; onRestart: () => void }) {
+function SocietyPanel({ id, onCopy }: { id: ResultId; onCopy: () => void }) {
+  return (
+    <div className="cg-society" id="cg-society">
+      <p className="cg-society-lead">{society.lead}</p>
+      {society.groups.map((g) => (
+        <section key={g.status} className={`cg-society-group is-${g.status}`} aria-label={g.label}>
+          <h3>
+            {g.label}
+            <span>{g.note}</span>
+          </h3>
+          <ul>
+            {g.items.map((item) => {
+              const mine = item.roles?.includes(id);
+              return (
+                <li key={item.title} className={mine ? "is-mine" : undefined}>
+                  <span className="cg-society-icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                  <div>
+                    <strong>
+                      {item.title}
+                      {mine && <em>适合你</em>}
+                    </strong>
+                    <p>{item.text}</p>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))}
+      <button type="button" className="cg-btn cg-btn-primary cg-society-cta" onClick={onCopy}>
+        复制群号，进群看看
+      </button>
+      <p className="cg-society-foot">{society.footnote}</p>
+    </div>
+  );
+}
+
+function ResultView({ id, answers, heading, src, onRestart, celebrate }: { id: ResultId; answers: Answers; heading: React.RefObject<HTMLHeadingElement>; src: string; onRestart: () => void; celebrate: boolean }) {
   const r = results[id];
   const { totals } = computeResult(answers);
   const sum = totals.M + totals.C + totals.W || 1;
   const [copied, setCopied] = useState<"" | "ok" | "fail">("");
+  const [open, setOpen] = useState(false);
   const wechat = typeof navigator !== "undefined" && /MicroMessenger/i.test(navigator.userAgent);
   const meal = answers.q2;
   const [ox, oy] = MEAL_OPTIMUM.point;
@@ -201,6 +245,10 @@ function ResultView({ id, answers, heading, src, onRestart }: { id: ResultId; an
   const copy = async () => {
     track("challenge_copy_group", { src, result: id });
     setCopied((await copyText(event.qqGroup)) ? "ok" : "fail");
+  };
+  const toggleSociety = () => {
+    if (!open) track("challenge_society_open", { src, result: id });
+    setOpen((o) => !o);
   };
   const courseClick = () => track("challenge_course_click", { src, result: id });
 
@@ -215,49 +263,85 @@ function ResultView({ id, answers, heading, src, onRestart }: { id: ResultId; an
         </button>
       </header>
       <main className="cg-main">
-        <section className="cg-card" aria-labelledby="cg-role">
-          <p className="cg-card-kicker">我在建模队里是</p>
-          <h1 id="cg-role" className="cg-card-role" ref={heading} tabIndex={-1}>
-            {r.role}
-            <span> · {r.tag}</span>
-          </h1>
-          <p className="cg-card-line">{r.line}</p>
-          <p className="cg-card-detail">{r.detail}</p>
-          <div className="cg-bars" aria-label="三项倾向">
-            {(["M", "C", "W"] as Dimension[]).map((d) => {
-              const pct = Math.round((totals[d] / sum) * 100);
-              return (
-                <div key={d} className="cg-bar">
-                  <span>{DIM_LABEL[d]}</span>
-                  <div className="cg-meter-track" aria-hidden="true">
-                    <i style={{ width: `${pct}%` }} />
+        <div className={`cg-card-wrap${celebrate ? " is-celebrating" : ""}`}>
+          {celebrate && <Celebration />}
+          {celebrate && (
+            <p className="cg-done" aria-hidden="true">
+              挑战完成
+            </p>
+          )}
+          <section className="cg-card" aria-labelledby="cg-role">
+            <p className="cg-card-kicker">我在建模队里是</p>
+            <h1 id="cg-role" className="cg-card-role" ref={heading} tabIndex={-1}>
+              {r.role}
+              <span> · {r.tag}</span>
+            </h1>
+            <p className="cg-card-line">{r.line}</p>
+            <p className="cg-card-detail">{r.detail}</p>
+            <p className="cg-bars-label">这次答题的思考倾向</p>
+            <div className="cg-bars">
+              {(["M", "C", "W"] as Dimension[]).map((d) => {
+                const pct = Math.round((totals[d] / sum) * 100);
+                return (
+                  <div key={d} className="cg-bar">
+                    <span>{DIM_LABEL[d]}</span>
+                    <div className="cg-meter-track" aria-hidden="true">
+                      <i style={{ width: `${pct}%` }} />
+                    </div>
+                    <b>{pct}%</b>
                   </div>
-                  <b>{pct}%</b>
-                </div>
-              );
-            })}
-          </div>
-          <p className="cg-card-partner">
-            最佳搭档：<strong>{r.partner}</strong>
-            {r.partner !== "任何人" ? "，拉个室友测测？" : "——哪个位置缺人你都能顶上"}
-          </p>
-          <p className="cg-card-foot">模桥 ModelingBridge · www.modelingbridge.cc/challenge</p>
-        </section>
+                );
+              })}
+            </div>
+            <p className="cg-card-partner">
+              最佳搭档：<strong>{r.partner}</strong>
+              {r.partner !== "任何人" ? "，拉个室友测测？" : "——哪个位置缺人你都能顶上"}
+            </p>
+            <p className="cg-card-foot">
+              {event.societyName} · 模桥 ModelingBridge
+              <br />
+              www.modelingbridge.cc/challenge
+            </p>
+          </section>
+        </div>
 
-        <p className="cg-save">📸 截图保存这张卡片{event.active ? "，到招新摊位出示就能抽奖" : ""}</p>
+        <p className="cg-save">📸 截图保存这张卡片{event.active && event.lottery ? event.lotteryHint : "，发给室友比一比"}</p>
 
         <div className="cg-actions">
-          <section className="cg-action">
-            <h2>{event.active ? "加入协会" : "关注协会"}</h2>
-            <p>{event.active ? `${event.societyName} QQ 群` : event.afterNote}</p>
-            <p className="cg-qq" aria-label={`QQ 群号 ${event.qqGroup.split("").join(" ")}`}>
-              {event.qqGroup}
-            </p>
-            <button type="button" className="cg-btn cg-btn-primary" onClick={copy}>
-              复制群号
+          <section className="cg-action cg-join">
+            <h2>{event.active ? `加入${event.societyName}` : `关注${event.societyName}`}</h2>
+            <p>{event.active ? r.societyHook : event.afterNote}</p>
+            <div className="cg-qq-row">
+              <div>
+                <small>QQ 群号</small>
+                <p className="cg-qq" aria-label={`QQ 群号 ${event.qqGroup.split("").join(" ")}`}>
+                  {event.qqGroup}
+                </p>
+              </div>
+              <button type="button" className="cg-btn cg-btn-primary" onClick={copy}>
+                复制群号
+              </button>
+            </div>
+            {copied === "ok" && (
+              <p className="cg-ok" role="status">
+                已复制，打开 QQ 搜索群号即可
+              </p>
+            )}
+            {copied === "fail" && (
+              <p className="cg-warn" role="status">
+                没复制成功，请长按上面的群号手动复制
+              </p>
+            )}
+            <button type="button" className={`cg-disclose${open ? " is-open" : ""}`} aria-expanded={open} aria-controls="cg-society" onClick={toggleSociety}>
+              <span className="cg-disclose-text">
+                <strong>{society.title}</strong>
+                <small>学建模 · 找队友 · 一起比赛</small>
+              </span>
+              <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true">
+                <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </button>
-            {copied === "ok" && <p className="cg-ok" role="status">已复制，打开 QQ 搜索群号即可</p>}
-            {copied === "fail" && <p className="cg-warn" role="status">没复制成功，请长按上面的群号手动复制</p>}
+            {open && <SocietyPanel id={id} onCopy={copy} />}
           </section>
           <section className="cg-action">
             <h2>继续探索</h2>
@@ -281,7 +365,6 @@ function ResultView({ id, answers, heading, src, onRestart }: { id: ResultId; an
 
         <p className="cg-tip">{wechat ? "点右上角 ··· 选“在浏览器打开”，下次直接继续学。" : "收藏这个网站，下次直接继续学。"}</p>
         <p className="cg-fine">{DISCLAIMER}</p>
-        <p className="cg-fine">{PRIVACY_NOTE}</p>
       </main>
     </div>
   );
