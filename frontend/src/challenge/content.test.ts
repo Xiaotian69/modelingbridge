@@ -1,36 +1,63 @@
 /** 题干、选项、反馈里的数字必须和题目设定一致；第 5 题的估算用独立的算术再核一遍。 */
 import { describe, expect, it } from "vitest";
 import { q1, q2, q5 } from "./config";
+import { analyze, optimize, predict, verify, workedStep } from "./q1";
 import { estimate, formula, spread } from "./fermi";
 import { MEAL_OPTIMUM } from "./meal";
 
-describe("第 1 题：排队估算", () => {
-  const { ahead, perMinute, arrivals } = q1.scene;
+describe("第 1 题：四种思路", () => {
+  const { ahead, arrive, serve, horizon } = q1.scene;
 
-  it("the story states the same numbers the scene uses", () => {
-    expect(q1.story).toContain(`${ahead} 个人`);
-    expect(q1.story).toContain(`每分钟打 ${perMinute} 份`);
+  it("the story states the scene's numbers, and the queue really grows", () => {
+    expect(q1.story).toContain(`${ahead} 人`);
+    expect(q1.story).toContain(`每分钟大约来 ${arrive} 个人`);
+    expect(q1.story).toContain(`每分钟只能打 ${serve} 份`);
+    expect(arrive).toBeGreaterThan(serve);
   });
 
-  it("exactly one guess equals ahead ÷ per-minute, and every reply shows that division", () => {
-    const answer = ahead / perMinute;
-    expect(answer).toBe(8);
-    const minutes = q1.guesses.map((g) => Number(/大约 (\d+) 分钟/.exec(g.label)?.[1] ?? NaN));
-    expect(minutes.filter((m) => m === answer)).toHaveLength(1);
-    for (const g of q1.guesses) expect(g.reply).toMatch(new RegExp(`${ahead} ÷ ${perMinute} [=≈] ${answer} 分钟`));
-    // 错误选项各自对应一种常见算法：一人一分钟、乘反了
-    expect(minutes).toContain(ahead);
-    expect(minutes).toContain(ahead * perMinute);
+  it("all four options answer the same question: which approach to start with", () => {
+    expect(q1.options.map((o) => o.name)).toEqual(["预测", "优化", "验证", "拆解"]);
+    for (const o of q1.options) {
+      expect(o.label.startsWith(`${o.name}：`)).toBe(true);
+      expect(o.lead && o.limit).toBeTruthy();
+    }
+    // 没有哪个选项让玩家重新去“弄清”题目已经给出的数字，除了明确是“核对”的验证
+    for (const o of q1.options.filter((x) => x.id !== "verify")) expect(o.label).not.toMatch(/每分钟来多少|打多少份/);
   });
 
-  it("the twist matches the scene: arrivals minus service is how fast the line grows", () => {
-    expect(q1.twist).toContain(`每分钟会来 ${arrivals} 个人`);
-    expect(q1.twist).toContain(`只打 ${perMinute} 份`);
-    expect(q1.twist).toContain(`每分钟长 ${arrivals - perMinute} 人`);
-    expect(arrivals).toBeGreaterThan(perMinute);
+  it("predict: arithmetic checked by hand", () => {
+    expect(predict()).toEqual({ growth: 1, later: 54, wait: 18 }); // 24 + 1×30 = 54；54 ÷ 3 = 18
+    expect(workedStep("predict")).toContain(`${ahead} + 1 × ${horizon} = 54 人`);
+    expect(workedStep("predict")).toContain("54 ÷ 3 = 18 分钟");
   });
 
-  it("does not claim the scenario is the real cause in the real canteen", () => {
+  it("optimize: a second window turns growth into shrinkage", () => {
+    expect(optimize()).toEqual({ served: 6, shrink: 2, clear: 12 }); // 6 − 4 = 2；24 ÷ 2 = 12
+    expect(workedStep("optimize")).toContain("24 ÷ 2 = 12 分钟");
+  });
+
+  it("verify: the example count is close to the stated rates, and is marked as an example", () => {
+    const v = verify();
+    expect(v.came).toBeCloseTo(3.7, 10);
+    expect(v.served).toBeCloseTo(3.1, 10);
+    expect(Math.abs(v.came - arrive)).toBeLessThan(0.5);
+    expect(Math.abs(v.served - serve)).toBeLessThan(0.5);
+    expect(workedStep("verify")).toMatch(/^比如/);
+  });
+
+  it("analyze: 3 servings a minute is 20 seconds each; the payment share is a hypothetical", () => {
+    expect(analyze()).toEqual({ perServing: 20, pay: 8, rest: 12 });
+    expect(workedStep("analyze")).toContain("60 ÷ 3 = 20 秒");
+    expect(workedStep("analyze")).toContain("假如");
+  });
+
+  it("each approach gets its own worked step, never the same text", () => {
+    const steps = q1.options.map((o) => workedStep(o.id));
+    expect(new Set(steps).size).toBe(4);
+    for (const t of steps) expect(t.length).toBeGreaterThan(20);
+  });
+
+  it("does not claim the scenario is the real canteen", () => {
     expect(q1.note).toMatch(/题目设定/);
     expect(q1.note).toMatch(/实际数过才知道/);
   });

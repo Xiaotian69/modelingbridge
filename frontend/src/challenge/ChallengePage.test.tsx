@@ -41,18 +41,17 @@ const radio = (name: string | RegExp) => fireEvent.click(screen.getByRole("radio
 /** 一条“建模手 · 优化派”路径，第 2 题找到最优解。 */
 async function playOptimizer(fromIntro = true) {
   if (fromIntro) click("开始挑战");
-  expect(await screen.findByRole("heading", { name: /饭点排队，你要等多久/ })).toBeInTheDocument();
+  expect(await screen.findByRole("heading", { name: /食堂的队越排越长/ })).toBeInTheDocument();
   // 先选一个，确认前改主意
-  radio("大约 24 分钟");
-  radio("大约 8 分钟");
-  expect(screen.getByRole("radio", { name: "大约 24 分钟" })).toHaveAttribute("aria-checked", "false");
+  radio(/预测/);
+  radio(/优化/);
+  expect(screen.getByRole("radio", { name: /预测/ })).toHaveAttribute("aria-checked", "false");
   click("确认答案");
-  expect(screen.getByText("猜对了！")).toBeInTheDocument();
-  expect(screen.getByText(/24 ÷ 3 = 8 分钟/)).toBeInTheDocument();
-  expect(screen.getByText(/来的比打得快，队伍就会越排越长/)).toBeInTheDocument();
-  expect(screen.getByText(/要实际数过才知道/)).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "下一题" })).toBeDisabled(); // 还没回答“先做什么”
-  radio(/多开一个窗口/);
+  // 反馈只讲“优化”这一条：用题目的数字算一步，再说局限
+  expect(screen.getByText("你选了「优化」")).toBeInTheDocument();
+  expect(screen.getByText(/24 ÷ 2 = 12 分钟就能消化掉/)).toBeInTheDocument();
+  expect(screen.getByText(/多开一个窗口要多一个人手/)).toBeInTheDocument();
+  expect(screen.queryByText(/54 人/)).not.toBeInTheDocument(); // 不混入“预测”的讲解
   click("下一题");
 
   expect(screen.getByRole("heading", { name: /20 块、25 分钟/ })).toBeInTheDocument();
@@ -171,7 +170,7 @@ describe("/challenge", () => {
     // 刷新后恢复结果，但不再放庆祝动画
     expect(screen.queryByTestId("celebration")).not.toBeInTheDocument();
     click("再测一次");
-    expect(screen.getByRole("heading", { name: /饭点排队/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /食堂的队越排越长/ })).toBeInTheDocument();
   });
 
   it("a result saved by the first live version (old Q1 format) still shows the same card", async () => {
@@ -224,10 +223,10 @@ describe("/challenge", () => {
   it("Q3 reports a contradiction using the player's own words", async () => {
     renderAt("/challenge");
     click("开始挑战");
-    radio("说不准，得看阿姨手速");
+    radio(/验证/);
     click("确认答案");
-    expect(screen.getByText("很实在的想法")).toBeInTheDocument(); // 不打击人，也不影响人格计分
-    radio(/蹲一个饭点/);
+    expect(screen.getByText("你选了「验证」")).toBeInTheDocument();
+    expect(screen.getByText(/每分钟约 3\.7 人、3\.1 份/)).toBeInTheDocument();
     click("下一题");
     fireEvent.click(screen.getByRole("button", { name: "荤菜多一串" }));
     click("就这么吃");

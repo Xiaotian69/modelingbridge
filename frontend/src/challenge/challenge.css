@@ -251,16 +251,14 @@
   border: 1px solid var(--border);
   font-size: 12px;
 }
-.cg-queue-you {
+.cg-queue-in {
   flex: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: var(--brand);
-  color: var(--brand-ink);
-  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--bad) 12%, var(--surface));
+  color: var(--bad);
+  font-weight: 700;
+  white-space: nowrap;
 }
 .cg-queue-line {
   flex: 1;
@@ -295,19 +293,12 @@
 .cg-q1-ask {
   margin: 0 0 10px !important;
 }
-.cg-eq {
+.cg-worked {
   padding: 10px 12px;
   border-radius: var(--radius-md);
   background: var(--surface-sunken);
-  text-align: center;
-  font-size: 15px !important;
+  font-size: 14px !important;
   font-variant-numeric: tabular-nums;
-}
-.cg-eq b {
-  color: var(--brand);
-}
-.cg-eq-flow b {
-  color: var(--text);
 }
 
 /* 第 2 题：规则卡 */

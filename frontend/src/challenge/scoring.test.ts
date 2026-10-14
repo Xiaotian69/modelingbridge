@@ -2,16 +2,16 @@ import { describe, expect, it } from "vitest";
 import { q1, q2, q3, q4, q5, results, type Dimension, type ResultId, type ScoredOption } from "./config";
 import { ALLROUND_GAP, computeResult, type Answers } from "./scoring";
 
-/** 枚举所有计分相关的答案组合（第 1 题的估算、第 3 题的两两比较都不计分，固定即可）。 */
-function* everyAnswer(guess = "w8"): Generator<Answers> {
-  for (const follow of q1.follow)
+/** 枚举所有计分相关的答案组合（第 3 题的两两比较不计分，固定即可）。 */
+function* everyAnswer(): Generator<Answers> {
+  for (const approach of q1.options)
     for (const method of q2.methods)
       for (const optimal of [true, false])
         for (const use of q3.uses)
           for (const o4 of q4.options)
             for (const o5 of q5.options)
               yield {
-                q1: { guess, method: follow.id },
+                q1: approach.id,
                 q2: { meat: 0, veg: 0, optimal, method: method.id },
                 q3: { choices: [0, 0, 0], use: use.id },
                 q4: o4.id,
@@ -19,7 +19,7 @@ function* everyAnswer(guess = "w8"): Generator<Answers> {
               };
 }
 
-const base: Answers = { q1: { guess: "w8", method: "relation" }, q2: { meat: 0, veg: 0, optimal: false, method: "calc" }, q3: { choices: [0, 0, 0], use: "follow" }, q4: "saturate", q5: "demand" };
+const base: Answers = { q1: "predict", q2: { meat: 0, veg: 0, optimal: false, method: "calc" }, q3: { choices: [0, 0, 0], use: "follow" }, q4: "saturate", q5: "demand" };
 
 describe("challenge scoring", () => {
   const counts = new Map<ResultId, number>();
@@ -42,49 +42,45 @@ describe("challenge scoring", () => {
     for (const a of everyAnswer()) expect(computeResult(structuredClone(a))).toEqual(computeResult(a));
   });
 
-  it("Q1: whether your wait-time guess is right never changes the result", () => {
-    for (const a of everyAnswer()) {
-      const r = computeResult(a);
-      for (const g of q1.guesses) {
-        const q = a.q1 as { guess: string; method: string };
-        expect(computeResult({ ...a, q1: { guess: g.id, method: q.method } })).toEqual(r);
-      }
-    }
-  });
-
   it("every scored option in a question carries the same weight (2 points), so no reasonable answer is favoured", () => {
     const sum = (o: ScoredOption) => Object.values(o.points).reduce((a, b) => a + (b ?? 0), 0);
-    for (const list of [q1.follow, q2.methods, q3.uses, q4.options, q5.options] as ScoredOption[][]) for (const o of list) expect(sum(o)).toBe(2);
+    for (const list of [q1.options, q2.methods, q3.uses, q4.options, q5.options] as ScoredOption[][]) for (const o of list) expect(sum(o)).toBe(2);
   });
 
   it("each option moves the dimension its wording describes", () => {
     const delta = (patch: Partial<Answers>, dim: Dimension) => computeResult({ ...base, ...patch }).totals[dim] - computeResult(base).totals[dim];
-    // 第 1 题：理清关系 / 算窗口 → 建模；掐表记录 → 编程；问同学 → 写作
-    expect(delta({ q1: { guess: "w8", method: "extra" } }, "M")).toBe(0);
-    expect(delta({ q1: { guess: "w8", method: "data" } }, "C")).toBe(2);
-    expect(delta({ q1: { guess: "w8", method: "voice" } }, "W")).toBe(2);
+    // 第 1 题：预测、优化 → 建模（抽象 / 优化）；现场验证数据 → 编程（数据）；拆解流程找“为什么慢” → 写作（表达）
+    expect(delta({ q1: "optimize" }, "M")).toBe(0);
+    expect(delta({ q1: "verify" }, "C")).toBe(2);
+    expect(delta({ q1: "analyze" }, "W")).toBe(2);
+    expect(q1.options.map((o) => [o.id, o.style])).toEqual([
+      ["predict", "abstract"],
+      ["optimize", "optimize"],
+      ["verify", "data"],
+      ["analyze", "express"],
+    ]);
     // 第 5 题：人数、产能 → 建模；抽样、外卖数据 → 编程（数据派）
     expect(delta({ q5: "supply" }, "M")).toBe(0);
     expect(delta({ q5: "sample" }, "C")).toBe(2);
     expect(delta({ q5: "data" }, "C")).toBe(2);
     const style = (patch: Partial<Answers>) => computeResult({ ...base, ...patch }).styles;
-    expect(style({ q1: { guess: "w8", method: "extra" } }).optimize - style({}).optimize).toBe(1);
+    expect(style({ q1: "optimize" }).optimize - style({}).optimize).toBe(1);
     expect(style({ q5: "supply" }).optimize - style({}).optimize).toBe(1);
   });
 
   it.each<[ResultId, Answers]>([
     ["abstract", base],
-    ["optimize", { q1: { guess: "w8", method: "extra" }, q2: { meat: 5, veg: 10, optimal: true, method: "calc" }, q3: { choices: [0, 0, 0], use: "follow" }, q4: "saturate", q5: "supply" }],
-    ["data", { q1: { guess: "w24", method: "data" }, q2: { meat: 0, veg: 0, optimal: false, method: "try" }, q3: { choices: [0, 0, 0], use: "check" }, q4: "extend", q5: "sample" }],
-    ["express", { q1: { guess: "unsure", method: "voice" }, q2: { meat: 0, veg: 0, optimal: false, method: "explain" }, q3: { choices: [0, 0, 0], use: "write" }, q4: "context", q5: "demand" }],
-    ["allround", { q1: { guess: "w8", method: "data" }, q2: { meat: 0, veg: 0, optimal: false, method: "calc" }, q3: { choices: [0, 0, 0], use: "write" }, q4: "context", q5: "data" }],
+    ["optimize", { q1: "optimize", q2: { meat: 5, veg: 10, optimal: true, method: "calc" }, q3: { choices: [0, 0, 0], use: "follow" }, q4: "saturate", q5: "supply" }],
+    ["data", { q1: "verify", q2: { meat: 0, veg: 0, optimal: false, method: "try" }, q3: { choices: [0, 0, 0], use: "check" }, q4: "extend", q5: "sample" }],
+    ["express", { q1: "analyze", q2: { meat: 0, veg: 0, optimal: false, method: "explain" }, q3: { choices: [0, 0, 0], use: "write" }, q4: "context", q5: "demand" }],
+    ["allround", { q1: "verify", q2: { meat: 0, veg: 0, optimal: false, method: "calc" }, q3: { choices: [0, 0, 0], use: "write" }, q4: "context", q5: "data" }],
   ])("a typical %s path", (expected, answers) => {
     expect(computeResult(answers).id).toBe(expected);
   });
 
   it("rejects malformed answers instead of guessing", () => {
     expect(() => computeResult(base)).not.toThrow();
-    expect(() => computeResult({ ...base, q1: { guess: "w99", method: "relation" } })).toThrow();
+    expect(() => computeResult({ ...base, q1: "nope" })).toThrow();
     expect(() => computeResult({ ...base, q1: { guess: "w8", method: "nope" } })).toThrow();
     expect(() => computeResult({ ...base, q5: "nope" })).toThrow();
   });
@@ -110,9 +106,13 @@ describe("saves made before this revision", () => {
     expect(computeResult(answers).id).toBe(expected);
   });
 
-  it("the intermediate { factors, method } shape (local preview only) is still scored by its method", () => {
-    const old = { ...base, q1: { factors: ["arrive", "window", "hot"], method: "voice" } };
-    expect(computeResult(old)).toEqual(computeResult({ ...base, q1: { guess: "w8", method: "voice" } }));
+  it("the two preview-only shapes are still scored by what their follow-up meant", () => {
+    // relation→建模抽象，extra→建模优化，data→编程，voice→写作，和现在的四种思路一一对应
+    const pairs: [string, string][] = [["relation", "predict"], ["extra", "optimize"], ["data", "verify"], ["voice", "analyze"]];
+    for (const [old, now] of pairs) {
+      expect(computeResult({ ...base, q1: { factors: ["arrive", "window", "hot"], method: old } })).toEqual(computeResult({ ...base, q1: now }));
+      expect(computeResult({ ...base, q1: { guess: "w8", method: old } })).toEqual(computeResult({ ...base, q1: now }));
+    }
   });
 
   it("old saves are still validated", () => {

@@ -4,6 +4,7 @@ import { evaluateMeal, MEAL_MAX, MEAL_OPTIMUM, MEAL_VERTICES } from "./meal";
 import { ahp, explainConsistency, fraction, JUDGEMENTS, PAIRS, type Judgement } from "./ahp";
 import { explainRecommendation, rank, rateCourse, scoreCourses } from "./courses";
 import { estimate, spread } from "./fermi";
+import { workedStep } from "./q1";
 import type { Answers } from "./scoring";
 
 type Props<K extends keyof Answers> = {
@@ -48,74 +49,44 @@ function Choices({ options, selected, onPick, disabled, name }: { options: reado
 // ---------------------------------------------------------------------------
 
 export function Q1Canteen({ value, onAnswer, onNext, last }: Props<"q1">) {
-  // 旧版本机存档（数组，或改版前的 factors）：当作没答过，重新答一次
-  const saved = value && !Array.isArray(value) && "guess" in value ? value : undefined;
-  const [guess, setGuess] = useState(saved?.guess);
-  const [done, setDone] = useState(Boolean(saved));
-  const [method, setMethod] = useState(saved?.method);
-  const chosen = q1.guesses.find((g) => g.id === guess);
-  const { ahead, perMinute, arrivals } = q1.scene;
+  // 旧存档（数组或对象）：当作没答过，重新答一次
+  const saved = typeof value === "string" && q1.options.some((o) => o.id === value) ? value : undefined;
+  const [choice, setChoice] = useState(saved);
+  const done = Boolean(saved);
+  const chosen = q1.options.find((o) => o.id === choice);
+  const { ahead, arrive, serve } = q1.scene;
   return (
     <>
       <p className="cg-prompt cg-story">{q1.story}</p>
       <div className="cg-queue" aria-hidden="true">
-        <span className="cg-queue-you">你</span>
+        <span className="cg-queue-window">窗口 · 打 {serve} 份/分钟</span>
         <span className="cg-queue-line">
           {Array.from({ length: 12 }, (_, i) => (
             <i key={i} />
           ))}
         </span>
-        <em className="cg-queue-count">共 {ahead} 人</em>
-        <span className="cg-queue-window">窗口 · {perMinute} 份/分钟</span>
+        <em className="cg-queue-count">{ahead} 人</em>
+        <span className="cg-queue-in">+{arrive} 人/分钟</span>
       </div>
       <p className="cg-subq cg-q1-ask">{q1.prompt}</p>
-      <div className="cg-choices cg-grid" role="radiogroup" aria-label={q1.prompt}>
-        {q1.guesses.map((g) => (
-          <button
-            key={g.id}
-            type="button"
-            role="radio"
-            aria-checked={guess === g.id}
-            className={`cg-choice${guess === g.id ? " is-on" : ""}`}
-            onClick={() => !done && setGuess(g.id)}
-            disabled={done && guess !== g.id}
-          >
-            {g.label}
-          </button>
-        ))}
-      </div>
+      <Choices options={q1.options} selected={choice} onPick={(id) => !done && setChoice(id)} disabled={done} name={q1.prompt} />
       {!done ? (
-        <button type="button" className="cg-btn cg-btn-primary cg-next" disabled={!guess} onClick={() => setDone(true)}>
+        <button type="button" className="cg-btn cg-btn-primary cg-next" disabled={!choice} onClick={() => choice && onAnswer(choice)}>
           确认答案
         </button>
       ) : (
         chosen && (
           <div className="cg-feedback" role="status">
-            <p className="cg-feedback-kicker">{chosen.kicker}</p>
-            <p>{chosen.reply}</p>
-            <p className="cg-eq" aria-label={`${ahead} 人除以每分钟 ${perMinute} 份，等于 ${ahead / perMinute} 分钟`}>
-              <b>{ahead} 人</b> ÷ <b>{perMinute} 份/分钟</b> = <b>{ahead / perMinute} 分钟</b>
-            </p>
-            <p>{q1.insight}</p>
-            <p className="cg-eq cg-eq-flow" aria-label={`每分钟来 ${arrivals} 人，打走 ${perMinute} 人，队伍每分钟长 ${arrivals - perMinute} 人`}>
-              每分钟 <b>来 {arrivals} 人</b> − <b>打走 {perMinute} 人</b> = 队伍 <b>+{arrivals - perMinute} 人</b>
-            </p>
+            <p className="cg-feedback-kicker">你选了「{chosen.name}」</p>
+            <p>{chosen.lead}</p>
+            <p className="cg-worked">{workedStep(chosen.id)}</p>
             <p>
-              {q1.twist}
-              {q1.takeaway}
+              <strong>要注意：</strong>
+              {chosen.limit}
             </p>
+            <p>{q1.together}</p>
             <p className="cg-aside">{q1.note}</p>
-            <p className="cg-subq">{q1.followPrompt}</p>
-            <Choices
-              options={q1.follow}
-              selected={method}
-              name={q1.followPrompt}
-              onPick={(id) => {
-                setMethod(id);
-                if (guess) onAnswer({ guess, method: id });
-              }}
-            />
-            <button type="button" className="cg-btn cg-btn-primary cg-next" onClick={onNext} disabled={!method}>
+            <button type="button" className="cg-btn cg-btn-primary cg-next" onClick={onNext}>
               {last ? "看我的结果" : "下一题"}
             </button>
           </div>

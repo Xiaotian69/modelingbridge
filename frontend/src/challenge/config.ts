@@ -63,40 +63,62 @@ export const analytics: {
 };
 
 // ---------------------------------------------------------------------------
-// 第 1 题：饭点排队要等多久（两步）
-// ① 估一估：前面 24 人、窗口每分钟打 3 份，要等多久？答案 24 ÷ 3 = 8 分钟有明确依据；
-//    这一步只用于进入状态和引出“关键变量”，不计分（算得对不对不该决定你是哪种人）。
-// ② 追问“想让队伍变短，你先做什么”：四个选项都是同一层次的“第一步行动”，这一步计分。
+// 第 1 题：食堂的队越排越长，你从哪儿下手？
+// 题目给出情景数字，四个选项是四种同一层次的建模思路（预测 / 优化 / 验证 / 拆解），没有对错。
+// 选完后的反馈只讲玩家选的那条思路：用题目的数字算一步（q1.ts 计算），再说它的局限。
 
-export type Q1Guess = { id: string; label: string; kicker: string; reply: string };
+export type Q1Approach = ScoredOption & { name: string; lead: string; limit: string };
 
 export const q1 = {
-  title: "饭点排队，你要等多久？",
-  scene: { ahead: 24, perMinute: 3, arrivals: 4 },
-  story: "你排在队尾，前面还有 24 个人。这个窗口平均每分钟打 3 份饭。",
-  prompt: "猜猜你大概要等多久？",
-  guesses: [
-    { id: "w8", label: "大约 8 分钟", kicker: "猜对了！", reply: "24 个人，每分钟打走 3 个：24 ÷ 3 = 8 分钟。" },
-    { id: "w24", label: "大约 24 分钟", kicker: "差一点", reply: "这是按“一人一分钟”算的。其实每分钟能打 3 份，所以是 24 ÷ 3 = 8 分钟。" },
-    { id: "w72", label: "大约 72 分钟", kicker: "差一点", reply: "24 × 3 乘反啦。打得越快，等得越短：24 ÷ 3 = 8 分钟。" },
-    { id: "unsure", label: "说不准，得看阿姨手速", kicker: "很实在的想法", reply: "确实会忽快忽慢。不过按平均每分钟 3 份，可以先估个大概：24 ÷ 3 ≈ 8 分钟。" },
-  ] satisfies Q1Guess[],
-  /** 揭晓后的道理（与 scene 的数字对应，测试会核对） */
-  insight: "你要等多久，只看两个数：前面有几个人、窗口打得多快。排在你身后的人再多，也不影响你。",
-  twist: "可饭点每分钟会来 4 个人，窗口只打 3 份——你身后的队伍每分钟长 1 人。来的比打得快，队伍就会越排越长。",
-  takeaway: "从一堆现象里找出真正起作用的量，再把它们的关系写清楚，这就是建模的第一步。",
-  note: "数字是题目设定的；真实食堂是不是这样，要实际数过才知道。",
-  followPrompt: "想让这条队伍变短，你会先做什么？",
-  follow: [
-    { id: "relation", label: "先理清：每分钟来多少人、打多少份，差在哪", points: { M: 2 }, style: "abstract" },
-    { id: "extra", label: "算一算：多开一个窗口，能少等几分钟", points: { M: 2 }, style: "optimize" },
-    { id: "data", label: "蹲一个饭点，掐表记下来人和打饭的速度", points: { C: 2 }, style: "data" },
-    { id: "voice", label: "问问排队的同学，最难受的到底是什么", points: { W: 2 }, style: "express" },
-  ] satisfies ScoredOption[],
+  title: "食堂的队越排越长，你从哪儿下手？",
+  /** 情景数字：前面已排人数、每分钟来几人、每分钟打几份、预测看多久、拆解时假设的刷卡用时（秒） */
+  scene: { ahead: 24, arrive: 4, serve: 3, horizon: 30, sample: { minutes: 10, came: 37, served: 31 }, payShare: 8 },
+  story: "饭点，食堂一个窗口前已经排了 24 人。每分钟大约来 4 个人，窗口每分钟只能打 3 份，队伍越来越长。",
+  prompt: "如果请你来研究、改善这条队伍，你最想先从哪儿入手？",
+  options: [
+    {
+      id: "predict",
+      name: "预测",
+      label: "预测：照这个速度，半小时后队伍会排多长？",
+      points: { M: 2 },
+      style: "abstract",
+      lead: "你在搭一个最简单的预测模型：用已知的速度，推算未来。",
+      limit: "饭点一过，来的人会变少；一直按“来 4 打 3”推下去，会高估。",
+    },
+    {
+      id: "optimize",
+      name: "优化",
+      label: "优化：多开一个窗口，能改善多少？",
+      points: { M: 2 },
+      style: "optimize",
+      lead: "你在比较方案：改一个条件，算出能好多少。",
+      limit: "多开一个窗口要多一个人手。值不值，还要把成本一起算进去。",
+    },
+    {
+      id: "verify",
+      name: "验证",
+      label: "验证：去现场掐表，看看“来 4 打 3”准不准",
+      points: { C: 2 },
+      style: "data",
+      lead: "数字是别人给的，你想先核对再用——模型再漂亮，输入错了也白算。",
+      limit: "一次测量可能碰巧，下课那几分钟和后面差很多，要多测几个时段。",
+    },
+    {
+      id: "analyze",
+      name: "拆解",
+      label: "拆解：点单、盛菜、刷卡，哪一步最拖慢？",
+      points: { W: 2 },
+      style: "express",
+      lead: "你在追问“为什么慢”：把打一份饭拆成几步，找出卡在哪。",
+      limit: "要一步步掐时间、仔细观察，比直接套公式费功夫。",
+    },
+  ] satisfies Q1Approach[],
+  together: "预测、优化、验证、拆解，都是真实建模会走的路，常常要配合着用。",
+  note: "数字是题目设定的，带“比如”“假如”的是举例；真实食堂是不是这样，要实际数过才知道。",
 };
 
 /**
- * 线上第一版（2026-10-14 上线）第 1 题的计分表。已在线上答过题的人，本机存的 q1 是因素数组，
+ * 线上第一版（f02a0de）第 1 题的计分表：本机存的 q1 是 3 个因素的数组，每个 1 分。
  * 回访时按当时的规则算出同一个结果，不会因为改版变卡片。
  */
 export const LEGACY_Q1: ScoredOption[] = [
@@ -106,6 +128,14 @@ export const LEGACY_Q1: ScoredOption[] = [
   { id: "camera", label: "", points: { C: 1 }, style: "data" },
   { id: "hot", label: "", points: { W: 1 }, style: "express" },
   { id: "wall", label: "", points: { W: 1 }, style: "express" },
+];
+
+/** 两版只在本机预览过、没上线的第 1 题追问（{ guess | factors, method }），按当时的含义计分。 */
+export const LEGACY_Q1_FOLLOW: ScoredOption[] = [
+  { id: "relation", label: "", points: { M: 2 }, style: "abstract" },
+  { id: "extra", label: "", points: { M: 2 }, style: "optimize" },
+  { id: "data", label: "", points: { C: 2 }, style: "data" },
+  { id: "voice", label: "", points: { W: 2 }, style: "express" },
 ];
 
 // ---------------------------------------------------------------------------
