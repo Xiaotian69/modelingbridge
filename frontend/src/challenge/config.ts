@@ -30,14 +30,17 @@ export const event = {
   active: true,
   lottery: false,
   societyName: "财大数学建模协会",
+  /** 结果页给的是招新群（不是协会大群）：先进招新群了解、报名，加入协会后再进协会群 */
   qqGroup: "566983524",
+  groupName: "QQ 招新群",
+  joinNote: "先进招新群，了解协会、报名加入。",
   /** 开始页顶部小字 */
   activeNote: "财大数学建模协会 · 招新进行中",
   lotteryNote: "财大数学建模协会 · 测完到摊位凭结果页抽奖",
   /** 结果页“截图保存”后面接的话（仅 lottery 为 true 时显示） */
   lotteryHint: "，到招新摊位出示就能抽奖",
   /** 活动结束后，结果页联系卡片的说明 */
-  afterNote: "招新已结束，欢迎加群关注协会的后续活动。",
+  afterNote: "招新已结束，欢迎进群了解协会的后续活动。",
 };
 
 /** 扫码渠道：只认这几个值，其他一律记为 direct。 */
@@ -226,7 +229,7 @@ export const results: Record<ResultId, ResultCopy> = {
     tag: "数据派",
     line: "看到数据就想画图找规律。",
     detail: "你相信“试一试就知道”，也愿意把数据翻个底朝天。队里把模型变成能跑的代码和图表，靠的就是你。",
-    societyHook: "会写代码的人在建模队里很抢手。来群里交流 Python、MATLAB，也找找需要你的建模手。",
+    societyHook: "会写代码的人在建模队里很抢手。来协会交流 Python、MATLAB，也找找需要你的建模手。",
     partner: "建模手",
     course: {
       label: "线性规划精讲 · Python",
@@ -283,11 +286,11 @@ export const society: {
   groups: [
     {
       status: "now",
-      label: "现在就有",
-      note: "已经能用",
+      label: "加入就有",
+      note: "已经在运行",
       items: [
         { icon: "📚", title: "模桥学习平台", text: "线性规划精讲、刷题和七关实战，随时可以自学。", roles: ["abstract", "optimize", "allround"] },
-        { icon: "💬", title: "协会 QQ 群", text: "比赛动态、学习问题，在群里随时问、随时聊。" },
+        { icon: "💬", title: "协会群", text: "加入协会后进协会群，比赛动态、学习问题都在群里交流。" },
       ],
     },
     {
@@ -298,7 +301,7 @@ export const society: {
         { icon: "🤝", title: "找队友", text: "建模比赛三人一队，在这里认识志同道合的人。", roles: ["allround", "abstract"] },
         { icon: "🎓", title: "问学长学姐", text: "选题、分工、熬夜赶论文的经验，过来人最清楚。" },
         { icon: "💻", title: "编程交流", text: "Python、MATLAB 卡住了，一起看看。", roles: ["data"] },
-        { icon: "✍️", title: "论文与表达", text: "读优秀论文、互相改稿，把思路讲清楚。", roles: ["express"] },
+        { icon: "✍️", title: "论文与表达", text: "论文怎么写、思路怎么讲清楚，可以和同学、学长学姐一起讨论。", roles: ["express"] },
       ],
     },
     {

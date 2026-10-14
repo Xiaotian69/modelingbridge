@@ -117,7 +117,8 @@ describe("/challenge", () => {
     const writeText = vi.fn(() => Promise.resolve());
     Object.assign(navigator, { clipboard: { writeText } });
     click("复制群号");
-    expect(await screen.findByText(/已复制/)).toBeInTheDocument();
+    expect(await screen.findByText(/已复制招新群号/)).toBeInTheDocument();
+    expect(screen.getByText("QQ 招新群")).toBeInTheDocument();
     expect(writeText).toHaveBeenCalledWith(event.qqGroup);
 
     // 协会介绍：默认收起，展开后分三组，并能从里面直接复制群号
@@ -125,10 +126,10 @@ describe("/challenge", () => {
     expect(disclose).toHaveAttribute("aria-expanded", "false");
     fireEvent.click(disclose);
     expect(disclose).toHaveAttribute("aria-expanded", "true");
-    for (const label of ["现在就有", "可以一起做", "计划开展"]) expect(screen.getByRole("region", { name: label })).toBeInTheDocument();
+    for (const label of ["加入就有", "可以一起做", "计划开展"]) expect(screen.getByRole("region", { name: label })).toBeInTheDocument();
     expect(screen.getByText("以群通知为准")).toBeInTheDocument();
     expect(screen.getAllByText("适合你").length).toBeGreaterThan(0);
-    fireEvent.click(screen.getByRole("button", { name: "复制群号，进群看看" }));
+    fireEvent.click(screen.getByRole("button", { name: "复制招新群号，进群了解" }));
     await vi.waitFor(() => expect(writeText).toHaveBeenCalledTimes(2));
 
     expect(events.map((e) => e.name)).toEqual(["challenge_enter", "challenge_start", "challenge_complete", "challenge_copy_group", "challenge_society_open", "challenge_copy_group"]);

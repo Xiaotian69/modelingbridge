@@ -225,7 +225,7 @@ function SocietyPanel({ id, onCopy }: { id: ResultId; onCopy: () => void }) {
         </section>
       ))}
       <button type="button" className="cg-btn cg-btn-primary cg-society-cta" onClick={onCopy}>
-        复制群号，进群看看
+        复制招新群号，进群了解
       </button>
       <p className="cg-society-foot">{society.footnote}</p>
     </div>
@@ -311,10 +311,11 @@ function ResultView({ id, answers, heading, src, onRestart, celebrate }: { id: R
           <section className="cg-action cg-join">
             <h2>{event.active ? `加入${event.societyName}` : `关注${event.societyName}`}</h2>
             <p>{event.active ? r.societyHook : event.afterNote}</p>
+            {event.active && <p className="cg-join-note">{event.joinNote}</p>}
             <div className="cg-qq-row">
               <div>
-                <small>QQ 群号</small>
-                <p className="cg-qq" aria-label={`QQ 群号 ${event.qqGroup.split("").join(" ")}`}>
+                <small>{event.groupName}</small>
+                <p className="cg-qq" aria-label={`${event.groupName}群号 ${event.qqGroup.split("").join(" ")}`}>
                   {event.qqGroup}
                 </p>
               </div>
@@ -324,7 +325,7 @@ function ResultView({ id, answers, heading, src, onRestart, celebrate }: { id: R
             </div>
             {copied === "ok" && (
               <p className="cg-ok" role="status">
-                已复制，打开 QQ 搜索群号即可
+                已复制招新群号，打开 QQ 搜索即可
               </p>
             )}
             {copied === "fail" && (

@@ -1057,6 +1057,11 @@
 }
 
 /* 加入协会 */
+.cg-action .cg-join-note {
+  margin-top: 10px;
+  color: var(--text);
+  font-weight: 700;
+}
 .cg-qq-row {
   display: flex;
   align-items: center;
