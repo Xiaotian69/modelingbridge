@@ -4,7 +4,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AppRoutes } from "../App";
-import { CHALLENGE_STORAGE_KEY, event } from "./config";
+import { CHALLENGE_STORAGE_KEY, event, q3 } from "./config";
 
 const events: { name: string; [k: string]: string }[] = [];
 const listener = (e: Event) => events.push((e as CustomEvent).detail);
@@ -59,16 +59,17 @@ async function playOptimizer(fromIntro = true) {
   click("下一题");
 
   expect(screen.getByRole("heading", { name: /三门选修课/ })).toBeInTheDocument();
-  expect(screen.getByRole("table", { name: "三门选修课的情况" })).toHaveTextContent("只有期末开卷考");
+  expect(screen.getByRole("table", { name: "三门选修课的情况" })).toHaveTextContent("无平时作业，期末开卷");
   // 必须三个两难都选过才能确认；确认前可以随便改
   expect(screen.getByRole("button", { name: "还有 3 个两难没选" })).toBeDisabled();
-  fireEvent.click(screen.getAllByRole("radio", { name: "不早八，明显更重要" })[0]);
+  fireEvent.click(screen.getAllByRole("radio", { name: "避开早八，明显更重要" })[0]);
   fireEvent.click(screen.getAllByRole("radio", { name: "给分高，明显更重要" })[0]);
   fireEvent.click(screen.getAllByRole("radio", { name: "给分高，明显更重要" })[1]);
   fireEvent.click(screen.getAllByRole("radio", { name: "两个一样重要" })[2]);
   click("确认，帮我选课");
   expect(screen.getByText("推荐你选：心理学与生活")).toBeInTheDocument();
-  expect(screen.getByText(/你最看重「给分高」.*正好是这一项最好的那门/)).toBeInTheDocument();
+  expect(screen.getByText(/你最看重「给分高」（权重 71%），这一项最好的是心理学与生活。心理学与生活综合 4\.57 分，第二名电影鉴赏 4\.14 分/)).toBeInTheDocument();
+  expect(screen.getByText(q3.simulatedNote)).toBeInTheDocument();
   expect(screen.getByText(/三句判断前后一致/)).toBeInTheDocument();
   expect(screen.getByText("看看是怎么算的")).toBeInTheDocument();
   radio(/就按它选/);
@@ -195,15 +196,15 @@ describe("/challenge", () => {
     radio(/先算钱和时间/);
     click("下一题");
     fireEvent.click(screen.getAllByRole("radio", { name: "给分高，稍微更重要" })[0]); // 给分 > 作业
-    fireEvent.click(screen.getAllByRole("radio", { name: "不早八，稍微更重要" })[0]); // 不早八 > 给分
-    fireEvent.click(screen.getAllByRole("radio", { name: "作业少，稍微更重要" })[1]); // 作业 > 不早八
+    fireEvent.click(screen.getAllByRole("radio", { name: "避开早八，稍微更重要" })[0]); // 避开早八 > 给分
+    fireEvent.click(screen.getAllByRole("radio", { name: "作业少，稍微更重要" })[1]); // 作业 > 避开早八
     click("确认，帮我选课");
-    expect(screen.getByText(/这三句没法排出一个先后顺序/)).toHaveTextContent("给分高比作业少稍微重要；不早八比给分高稍微重要；作业少比不早八稍微重要");
+    expect(screen.getByText(/这三句没法排出一个先后顺序/)).toHaveTextContent("给分高比作业少稍微重要；避开早八比给分高稍微重要；作业少比避开早八稍微重要");
 
     // 改改判断：回到可编辑状态，改完推荐跟着变
     click(/改改判断/);
-    fireEvent.click(screen.getAllByRole("radio", { name: "不早八，明显更重要" })[0]);
-    fireEvent.click(screen.getAllByRole("radio", { name: "不早八，明显更重要" })[1]);
+    fireEvent.click(screen.getAllByRole("radio", { name: "避开早八，明显更重要" })[0]);
+    fireEvent.click(screen.getAllByRole("radio", { name: "避开早八，明显更重要" })[1]);
     fireEvent.click(screen.getAllByRole("radio", { name: "两个一样重要" })[0]);
     click("确认，帮我选课");
     expect(screen.getByText("推荐你选：电影鉴赏")).toBeInTheDocument();

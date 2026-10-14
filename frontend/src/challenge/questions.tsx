@@ -1,7 +1,8 @@
 import { useState, type ReactNode } from "react";
 import { q1, q2, q3, q4, q5, type ScoredOption } from "./config";
 import { evaluateMeal, MEAL_MAX, MEAL_OPTIMUM, MEAL_VERTICES } from "./meal";
-import { ahp, explainConsistency, fraction, JUDGEMENTS, PAIRS, ranking, synthesize, type Judgement } from "./ahp";
+import { ahp, explainConsistency, fraction, JUDGEMENTS, PAIRS, type Judgement } from "./ahp";
+import { explainRecommendation, rank, rateCourse, scoreCourses } from "./courses";
 import type { Answers } from "./scoring";
 
 type Props<K extends keyof Answers> = {
@@ -270,14 +271,12 @@ export function Q3Courses({ value, onAnswer, onNext, last }: Props<"q3">) {
   const [use, setUse] = useState(value?.use);
   const names = q3.criteria.map((c) => c.name);
   const result = ahp(choices);
-  const rows = synthesize(result.weights, q3.courses);
-  const order = ranking(rows);
+  const rows = scoreCourses(result.weights);
+  const order = rank(rows);
   const left = touched.filter((t) => !t).length;
   const check = explainConsistency(names, choices);
-  const topCrit = result.weights.indexOf(Math.max(...result.weights));
-  const even = Math.max(...result.weights) - Math.min(...result.weights) < 0.01;
-  const tie = order[0].total - order[1].total < 0.005;
-  const bestInTop = q3.courses.reduce((best, c, i) => (c.scores[topCrit] > q3.courses[best].scores[topCrit] ? i : best), 0);
+  const why = explainRecommendation(names, result.weights, rows);
+  const tie = why.tie;
 
   const set = (k: number, j: Judgement) => {
     setChoices((cs) => cs.map((c, i) => (i === k ? j : c)));
@@ -287,12 +286,6 @@ export function Q3Courses({ value, onAnswer, onNext, last }: Props<"q3">) {
     setShown(false);
     setUse(undefined);
   };
-
-  const why = even
-    ? "三项你看得一样重，所以按三项的总表现排。"
-    : order[0].index === bestInTop
-      ? `你最看重「${names[topCrit]}」（${pct(result.weights[topCrit])}），而${order[0].name}正好是这一项最好的那门。`
-      : `你最看重「${names[topCrit]}」（${pct(result.weights[topCrit])}），但它没有大到压过另外两项，所以三项加起来${order[0].name}最划算。`;
 
   return (
     <>
@@ -307,18 +300,23 @@ export function Q3Courses({ value, onAnswer, onNext, last }: Props<"q3">) {
             </span>
           ))}
         </div>
-        {q3.courses.map((c) => (
-          <div key={c.name} className="cg-course-row" role="row">
-            <strong role="rowheader">{c.name}</strong>
-            {c.facts.map((f, j) => (
-              <span key={f} role="cell" className={CRITERION_CLASS[j]}>
-                {f}
-                <Stars n={c.scores[j]} />
-              </span>
-            ))}
-          </div>
-        ))}
+        {q3.courses.map((c) => {
+          const scores = rateCourse(c);
+          const facts = [`往届均分 ${c.avgScore}`, c.homeworkText, c.startHour < q3.rules.time.earlyBefore ? `${c.slot} 早八` : c.slot];
+          return (
+            <div key={c.name} className="cg-course-row" role="row">
+              <strong role="rowheader">{c.name}</strong>
+              {facts.map((f, j) => (
+                <span key={f} role="cell" className={CRITERION_CLASS[j]}>
+                  {f}
+                  <Stars n={scores[j]} />
+                </span>
+              ))}
+            </div>
+          );
+        })}
       </div>
+      <p className="cg-caption cg-sim-note">{q3.simulatedNote}</p>
 
       <div className="cg-tugs">
         {PAIRS.map(([i, j], k) => (
@@ -343,29 +341,33 @@ export function Q3Courses({ value, onAnswer, onNext, last }: Props<"q3">) {
             ))}
           </div>
           <ol className="cg-rank">
-            {order.map((r, rank) => (
-              <li key={r.name} className={rank === 0 && !tie ? "is-top" : undefined}>
+            {order.map((r, place) => (
+              <li key={r.name} className={place === 0 && !tie ? "is-top" : undefined}>
                 <span className="cg-rank-name">{r.name}</span>
                 <span className="cg-stack" aria-hidden="true">
                   {r.parts.map((p, j) => (
-                    <i key={j} className={CRITERION_CLASS[j]} style={{ width: `${p * 100 * 1.8}%` }} />
+                    <i key={j} className={CRITERION_CLASS[j]} style={{ width: `${(p / 5) * 100}%` }} />
                   ))}
                 </span>
-                <b>{pct(r.total)}</b>
+                <b>{r.total.toFixed(2)}</b>
               </li>
             ))}
           </ol>
-          <p>
-            {tie ? "按你的权重，这两门分不出高下——真实建模里，这时就该再加一条标准了。" : why}
-            {q3.feedback}
-          </p>
+          <p className="cg-why">{why.text}</p>
+          <p>{q3.feedback}</p>
           <p className={`cg-check is-${check.consistency}`}>{check.text}</p>
           <button type="button" className="cg-link cg-reopen" onClick={reopen}>
             ↺ 改改判断，看推荐怎么变
           </button>
           <details className="cg-math">
             <summary>看看是怎么算的</summary>
-            <p>① 把三句判断填进“判断矩阵”（行比列重要几倍）：</p>
+            <p>① 课程打分规则（三门课同一套）：</p>
+            <ul className="cg-rules">
+              {q3.ruleText.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+            <p>② 把三句判断填进“判断矩阵”（行比列重要几倍，Saaty 标度 1、3、5）：</p>
             <table>
               <thead>
                 <tr>
@@ -388,10 +390,15 @@ export function Q3Courses({ value, onAnswer, onNext, last }: Props<"q3">) {
                 ))}
               </tbody>
             </table>
-            <p>② 权重 = 每行连乘再开三次方，然后归一化（三项时，这和标准的特征向量法结果相同）。</p>
-            <p>③ 一致性检验：λmax = {result.lambdaMax.toFixed(3)}，CR = (λmax − 3) ÷ 2 ÷ 0.58 = {result.cr.toFixed(2)}，不超过 0.10 算通过。</p>
-            <p>④ 推荐指数 = Σ 权重 × 这门课在该项上的分数占比。</p>
-            <p className="cg-math-note">简化说明：{q3.simplification}</p>
+            <p>③ 权重 = 判断矩阵的主特征向量，归一化后三项加起来是 100%（三项时，每行连乘再开三次方得到的结果与它相同）。</p>
+            <p>
+              ④ 一致性检验：λmax = {result.lambdaMax.toFixed(3)}，CI = (λmax − 3) ÷ 2 = {((result.lambdaMax - 3) / 2).toFixed(3)}，CR = CI ÷ 0.58 = {result.cr.toFixed(2)}，不超过 0.10 算通过。
+            </p>
+            <p>
+              ⑤ 综合分 = Σ 权重 × 该项得分（满分 5）。例如{order[0].name} ={" "}
+              {order[0].scores.map((sc, j) => `${result.weights[j].toFixed(2)}×${sc}`).join(" + ")} ≈ {order[0].total.toFixed(2)}（权重显示时四舍五入到两位）。
+            </p>
+            <p className="cg-math-note">方法说明：{q3.method}</p>
           </details>
           <p className="cg-subq">{q3.usePrompt}</p>
           <Choices

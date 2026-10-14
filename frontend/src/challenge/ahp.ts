@@ -6,8 +6,7 @@
  * - 权重 w = A 的主特征向量（归一化）。n = 3 时，行几何平均法与特征向量法结果完全相同，这里用几何平均算；
  * - 一致性：λmax = mean((A·w)_i / w_i)，CI = (λmax − 3)/2，CR = CI / RI，n = 3 时 RI = 0.58，CR ≤ 0.1 视为通过。
  *
- * 方案层是简化演示：每门课在每个准则上的表现用题目给定的印象分（1–5）代替两两比较，
- * 按“占该准则总分的比例”换算成局部权重（分配模式），再加权求和：推荐指数_i = Σ_j w_j · p_ij。
+ * 课程的综合评分不在这里：见 courses.ts（按规则打 1–5 分后加权求和，属于简化综合评分，不是完整的层次总排序）。
  */
 
 /** 一次比较的五档：-2 = 前者明显更重要，-1 = 前者稍微重要，0 = 一样，1 = 后者稍微重要，2 = 后者明显更重要 */
@@ -74,21 +73,6 @@ export function ahp(choices: Judgement[]) {
   const consistency: Consistency = hasContradiction(choices) ? "contradiction" : cr > 0.1 ? "magnitude" : "ok";
   return { matrix, weights, lambdaMax, cr, consistency };
 }
-
-export type Alternative = { name: string; scores: number[] };
-
-/** 方案层合成：p_ij = 方案 i 在准则 j 的分数 / 该准则所有方案分数之和；推荐指数 = Σ_j w_j · p_ij（合计 1）。 */
-export function synthesize(weights: number[], options: Alternative[]) {
-  const columnSums = weights.map((_, j) => options.reduce((s, c) => s + c.scores[j], 0));
-  return options.map((option, index) => {
-    const parts = weights.map((w, j) => (w * option.scores[j]) / columnSums[j]);
-    return { ...option, index, parts, total: parts.reduce((s, v) => s + v, 0) };
-  });
-}
-
-/** 从高到低的名次（同分按原顺序）。 */
-export const ranking = <T extends { total: number; index: number }>(rows: T[]) =>
-  [...rows].sort((a, b) => b.total - a.total || a.index - b.index);
 
 // ---------------------------------------------------------------------------
 // 给玩家看的解释文字

@@ -649,6 +649,19 @@
   height: 100%;
   background: var(--cg-c);
 }
+.cg-sim-note {
+  margin: -8px 0 14px;
+  text-align: left;
+}
+.cg-why {
+  font-weight: 600;
+}
+.cg-rules {
+  margin: 0;
+  padding-left: 1.2em;
+  font-size: 13px;
+  line-height: 1.6;
+}
 .cg-reopen {
   display: block;
   margin: -2px 0 8px;
