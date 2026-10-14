@@ -40,7 +40,7 @@ const radio = (name: string | RegExp) => fireEvent.click(screen.getByRole("radio
 
 /** 一条“建模手 · 优化派”路径，第 2 题找到最优解。 */
 async function playOptimizer(fromIntro = true) {
-  if (fromIntro) fireEvent.click(await screen.findByRole("button", { name: "开始挑战" }, { timeout: 3000 }));
+  if (fromIntro) click("开始挑战");
   expect(await screen.findByRole("heading", { name: /食堂窗口/ })).toBeInTheDocument();
   click(/几百人同时涌进来/);
   click(/窗口开得少/);
