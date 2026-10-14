@@ -46,6 +46,23 @@ function describe(left: string, right: string, position: number) {
     : `${right}比${left}${SCALE_WORDS[value]}（${value}）`;
 }
 
+/**
+ * 3 个准则时，三对判断与权重的偏离程度在数学上完全相同（|ln a12 − ln a13 + ln a23| / 3），
+ * 说不出“最矛盾的是哪一对”。这里改为指出三个判断首尾对不上：a13 应约等于 a12 × a23。
+ */
+function CycleNote({ names, matrix }: { names: string[]; matrix: number[][] }) {
+  const chained = matrix[0][1] * matrix[1][2];
+  const offScale = chained > 9 || chained < 1 / 9;
+  return (
+    <p>
+      三个判断首尾对不上：「{names[0]}与{names[1]}」填的是 {formatJudgment(matrix[0][1])}，「{names[1]}与{names[2]}」填的是{" "}
+      {formatJudgment(matrix[1][2])}，两者相乘，「{names[0]}与{names[2]}」应约为 {formatJudgment(chained)}
+      {offScale ? "（已超出 1–9 标度）" : `（最接近的标度是 ${formatJudgment(nearestScaleValue(chained))}）`}，你填的却是{" "}
+      {formatJudgment(matrix[0][2])}。3 个准则时，三对判断偏离的程度相同，说不出是哪一对错了：先回想哪个判断最没把握，再修改它。
+    </p>
+  );
+}
+
 export function MatrixLab() {
   const id = useId();
   const [size, setSize] = useState<Size>(3);
@@ -238,6 +255,8 @@ export function MatrixLab() {
           <p>
             CR = {cr.toFixed(3)}，小于 0.1：判断中的小偏差可以接受，这组权重可以用于下一步合成。
           </p>
+        ) : size === 3 ? (
+          <CycleNote names={names} matrix={matrix} />
         ) : (
           <p>
             最矛盾的是「{names[pair.i]}与{names[pair.j]}」：你填的是 {formatJudgment(pair.given)}，按其余判断推算应约为{" "}

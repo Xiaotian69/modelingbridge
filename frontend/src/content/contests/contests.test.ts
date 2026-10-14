@@ -13,6 +13,7 @@ import {
   predictionShiftDays,
   remainingText,
   upcomingMilestones,
+  milestoneWhen,
   usEasternOffset,
   yearFraction,
 } from ".";
@@ -155,6 +156,19 @@ describe("状态（以 2026-10-13 为“今天”）", () => {
     expect(list[0]).toMatchObject({ contest: "MathorCup 大数据", text: "报名截止", days: 10 });
     for (let i = 1; i < list.length; i++) expect(list[i].at.getTime()).toBeGreaterThanOrEqual(list[i - 1].at.getTime());
     expect(list.every((m) => m.year !== 2027 || m.contestId === "mcm")).toBe(true);
+  });
+  it("“接下来”每个赛事只列最近的一个节点，并写出非整日的时刻", () => {
+    const list = upcomingMilestones(new Date("2026-10-14T02:00:00Z"), 5);
+    expect(new Set(list.map((m) => m.contestId)).size).toBe(list.length);
+    expect(list.map((m) => `${m.contest}:${m.text}`)).toEqual([
+      "MathorCup 大数据:报名截止",
+      "数维杯秋季:报名截止",
+      "亚太赛:报名截止",
+      "美赛:报名截止",
+    ]);
+    expect(milestoneWhen(list[0].at)).toBe("10 月 23 日 12:00");
+    expect(milestoneWhen(list[2].at)).toBe("11 月 25 日"); // 只写日期的截止（当天 24:00）
+    expect(milestoneWhen(list[3].at)).toBe("1 月 29 日 04:00"); // 美东 1 月 28 日 15:00
   });
 });
 

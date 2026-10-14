@@ -262,7 +262,10 @@ export function editionPhase(ed: ResolvedEdition, now: Date): Phase {
 
 export type Milestone = { at: Date; contest: string; contestId: string; year: number; text: string; days: number; remaining: string };
 
-/** 跨年份的“接下来”节点：只用官方数据，不含推算。 */
+/**
+ * 跨年份的“接下来”节点：只用官方数据，不含推算。每个赛事只取最近的一个节点，
+ * 避免同一赛事的报名、开赛、提交挤满列表，把其他赛事挤出去。
+ */
 export function upcomingMilestones(now: Date, limit = 5, editions = ALL_EDITIONS): Milestone[] {
   const t = now.getTime();
   const out: Milestone[] = [];
@@ -282,10 +285,22 @@ export function upcomingMilestones(now: Date, limit = 5, editions = ALL_EDITIONS
       }
     }
   }
+  const seen = new Set<string>();
   return out
     .sort((a, b) => a.at.getTime() - b.at.getTime())
+    .filter((m) => !seen.has(m.contestId) && !!seen.add(m.contestId))
     .slice(0, limit)
     .map((m) => ({ ...m, days: daysUntil(endDay(m.at), now), remaining: remainingText(m.at, now) }));
+}
+
+/** 节点的北京时间：整点 0:00（含 24:00 截止）只写日期，否则带上时刻，例如“10 月 23 日 12:00”。 */
+export function milestoneWhen(at: Date) {
+  const p = bjParts(at);
+  if (p.h === 0 && p.min === 0) {
+    const d = bjParts(endDay(at));
+    return `${d.m} 月 ${d.d} 日`;
+  }
+  return `${p.m} 月 ${p.d} 日 ${pad(p.h)}:${pad(p.min)}`;
 }
 
 /** 在年度时间轴上的位置（0–1，按北京时间）。 */

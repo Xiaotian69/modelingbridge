@@ -138,3 +138,20 @@ describe("全流程技能包与兼容", () => {
     questStages.forEach((s) => expect(skills.map((k) => k.id)).toContain(QUEST_STAGE_SKILL[s.id]));
   });
 });
+
+describe("生成日期与代码去向", () => {
+  it("生成日期按本地日历，不因 UTC 变成前一天", () => {
+    const earlyMorning = new Date(2026, 9, 14, 1, 30); // 本地时间 10 月 14 日 01:30
+    expect(buildSkill({ skill: "analysis", contest: "cumcm", mode: "fresh" }, earlyMorning).markdown).toContain("2026-10-14");
+    expect(buildWorkflowPack("mcm", earlyMorning).markdown).toContain("2026-10-14");
+  });
+  it("代码要求与赛事的论文规范一致：国赛附录放全部源程序，美赛只放关键片段", () => {
+    const cumcm = buildSkill({ skill: "model", contest: "cumcm", mode: "fresh" }, DAY).markdown;
+    const mcm = buildSkill({ skill: "model", contest: "mcm", mode: "fresh" }, DAY).markdown;
+    const other = buildSkill({ skill: "model", contest: "general", mode: "fresh" }, DAY).markdown;
+    expect(cumcm).toContain("完整放进论文附录");
+    expect(mcm).toContain("只放关键片段，因为附录和代码都计入 25 页");
+    expect(other).not.toMatch(/完整放进论文附录|计入 25 页/);
+    expect(buildSkill({ skill: "model", contest: "mcm", mode: "fresh", codeLanguage: "none" }, DAY).markdown).not.toContain("关键片段，因为");
+  });
+});

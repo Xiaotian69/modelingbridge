@@ -137,6 +137,16 @@ describe("teaching facts used in the lesson", () => {
     expect(columnNormalisedWeights(a).reduce((s, v) => s + v, 0)).toBeCloseTo(1, 12);
   });
 
+  it("for 3 × 3 matrices every pair deviates equally, so no single pair is “most” inconsistent", () => {
+    for (const upper of [CIRCULAR_UPPER, CRITERIA_UPPER, [9, 2, 5], [1 / 7, 3, 1 / 2]]) {
+      const a = fromUpperTriangle(3, upper);
+      const w = analyse(a).weights;
+      const devs = [[0, 1], [0, 2], [1, 2]].map(([i, j]) => Math.abs(Math.log((a[i][j] * w[j]) / w[i])));
+      const closed = Math.abs(Math.log(upper[0]) - Math.log(upper[1]) + Math.log(upper[2])) / 3;
+      for (const d of devs) expect(d).toBeCloseTo(closed, 9);
+    }
+  });
+
   it("uses Saaty's RI table and treats n ≤ 2 as always consistent", () => {
     expect(RANDOM_INDEX[3]).toBe(0.58);
     expect(RANDOM_INDEX[4]).toBe(0.9);

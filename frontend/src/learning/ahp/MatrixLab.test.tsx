@@ -43,7 +43,10 @@ describe("判断矩阵实验", () => {
     // This judgment contradicts the others strongly: the lab says so and names the conflicting pair.
     expect(expected.acceptable).toBe(false);
     expect(screen.getByText("判断前后矛盾，需要修改")).toBeInTheDocument();
-    expect(screen.getByText(/最矛盾的是/)).toBeInTheDocument();
+    // With 3 criteria all three pairs deviate equally, so the lab explains the broken chain instead
+    // of naming one pair: 薪资:成长 = 9, 成长:通勤 = 5 ⇒ 薪资:通勤 should be about 45, the student wrote 2.
+    expect(screen.getByText(/三个判断首尾对不上/)).toHaveTextContent(/应约为 45（已超出 1–9 标度），你填的却是 2/);
+    expect(screen.queryByText(/最矛盾的是/)).not.toBeInTheDocument();
     // Ranking follows the same weights.
     const local = ["C1", "C2", "C3"].map((c) => analyse(fromUpperTriangle(3, LOCAL_UPPER[c])).weights);
     const scores = synthesise(expected.weights, local);
@@ -59,7 +62,8 @@ describe("判断矩阵实验", () => {
     expect(screen.getByText("λmax").nextSibling).toHaveTextContent("3.0000");
     fireEvent.click(screen.getByRole("button", { name: "前后矛盾的判断" }));
     expect(crCell()).toHaveTextContent("≥ 0.1 ✕");
-    expect(screen.getByText(/最矛盾的是/)).toHaveTextContent(/最接近的标度/);
+    // circular preset 3, 1/3, 3: 3 × 3 = 9 expected for C1:C3, but 1/3 was given.
+    expect(screen.getByText(/三个判断首尾对不上/)).toHaveTextContent(/应约为 9（最接近的标度是 9），你填的却是 1\/3/);
     expect(screen.getByText(/不应作为结论/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "小林的判断" }));
     expect(weightOf("成长空间")).toBe("0.648");
@@ -73,5 +77,7 @@ describe("判断矩阵实验", () => {
     expect(weightOf("团队氛围")).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "前后矛盾的判断" }));
     expect(crCell()).toHaveTextContent("≥ 0.1 ✕");
+    // With 4 criteria the deviations differ, so naming the single most inconsistent pair is meaningful.
+    expect(screen.getByText(/最矛盾的是/)).toHaveTextContent(/最接近的标度/);
   });
 });

@@ -5,19 +5,14 @@ export function CoachPanel({
   mode,
   stage,
   answer,
-  caseTitle,
-  problemText,
   stageSeed,
 }: {
   mode: CoachMode;
   stage: QuestStage;
   answer: string;
-  caseTitle: string;
-  problemText: string;
   stageSeed?: QuestStageSeed | null;
 }) {
   const prompt = getCoachPrompt(stage.id, mode);
-  const promptContext = prompt ? `${caseTitle} · ${stage.title} · ${problemText.slice(0, 36)}${problemText.length > 36 ? "..." : ""}` : "";
 
   if (mode === "example") {
     return (
@@ -54,7 +49,6 @@ export function CoachPanel({
           {hint}
         </p>
       ))}
-      {prompt && <p className="rounded-xl border border-slate-200 bg-white p-3 text-xs leading-5 text-slate-500">提示模板：{prompt.promptId} · {promptContext}</p>}
     </div>
   );
 }

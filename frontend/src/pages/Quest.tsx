@@ -5,7 +5,7 @@ import { PageHead } from "../components/ui/PageHead";
 import { getCase } from "../api/client";
 import { QUEST_STAGE_SKILL, findSkill } from "../content/skills";
 import { getLocalCase, listLocalCases } from "../data/localCases";
-import { getCaseQuestSeed, getModelCardsForCase, getStageSeed } from "../quest/content";
+import { getModelCardsForCase, getStageSeed } from "../quest/content";
 import {
   buildQuestReportMarkdown,
   getQuestProgress,
@@ -82,7 +82,6 @@ export function QuestPage() {
 
   const activeStage = questStages.find((stage) => stage.id === activeStageId) ?? questStages[0];
   const activeState = states.find((state) => state.stageId === activeStage.id) ?? states[0];
-  const caseSeed = getCaseQuestSeed(caseSlug);
   const activeSeed = getStageSeed(caseSlug, activeStage.id);
   const modelCards = activeStage.id === "model" ? getModelCardsForCase(caseSlug) : [];
   const progress = getQuestProgress(states);
@@ -351,8 +350,6 @@ export function QuestPage() {
                 mode={coachMode}
                 stage={activeStage}
                 answer={activeState.answer}
-                caseTitle={caseSeed?.title ?? title}
-                problemText={problemText}
                 stageSeed={activeSeed}
               />
             </section>

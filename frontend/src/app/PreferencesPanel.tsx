@@ -32,7 +32,7 @@ export function PreferencesPanel() {
           ))}
         </div>
         <p className="prefs-note">
-          深色主题已用于首页、线性规划精讲与专项练习；其余页面在后续批次迁移前保持浅色显示。
+          深色主题适用于全站页面；选“跟随系统”时，随手机或电脑的深浅色设置自动切换。
         </p>
       </fieldset>
       <label className="switch-row" htmlFor={splashId}>

@@ -78,6 +78,9 @@ export function LearnPage() {
             <p>按难度专项训练。错题诊断、分层提示、错题重练，记录保存在本机。</p>
             <Link className="text-link" to="/practice/linear-programming">
               6 道线性规划练习 →
+            </Link>{" "}
+            <Link className="text-link" to="/practice/ahp">
+              8 道 AHP 练习 →
             </Link>
           </article>
           <article>

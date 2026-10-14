@@ -23,6 +23,9 @@ const DEPTH_TEXT = {
 } as const;
 
 const clean = (v?: string) => (v ?? "").trim();
+/** 生成日期按使用者本地日历（toISOString 是 UTC，北京时间 0–8 点会变成前一天）。 */
+const localDate = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 const bullet = (items: string[]) => items.map((t) => `- ${t}`).join("\n");
 const numbered = (items: string[]) => items.map((t, i) => `${i + 1}. ${t}`).join("\n");
 
@@ -49,10 +52,16 @@ function languageRule(skill: SkillDefinition, contest: ContestProfile) {
     : "用中文回答。";
 }
 
-function codeRule(lang: CodeLanguage | undefined, skill: SkillDefinition) {
+/** 完整代码最终怎样进入论文：与第 4 节的官方要求保持一致。 */
+const CODE_IN_PAPER: Partial<Record<ContestProfile["id"], string>> = {
+  cumcm: "这些代码最终要完整放进论文附录（国赛要求附录包含全部可运行的源程序）。",
+  mcm: "完整代码供我们自己运行；写进论文时只放关键片段，因为附录和代码都计入 25 页。",
+};
+
+function codeRule(lang: CodeLanguage | undefined, skill: SkillDefinition, contest: ContestProfile) {
   if (!skill.extraOptions.includes("codeLanguage")) return null;
   if (lang === "none") return "本次不需要代码，只需要方法、步骤和公式；需要计算的地方写清计算方法。";
-  return `代码使用 ${lang ?? "Python"}，给出完整可运行的版本（不是片段），注明依赖库和运行方式。`;
+  return `代码使用 ${lang ?? "Python"}，给出完整可运行的版本（不是片段），注明依赖库和运行方式。${CODE_IN_PAPER[contest.id] ?? ""}`;
 }
 
 function contextLines(config: SkillConfig, skill: SkillDefinition) {
@@ -77,7 +86,7 @@ function principles(skill: SkillDefinition, contest: ContestProfile, config: Ski
     "公式用 LaTeX 并编号，变量第一次出现时说明含义和单位。",
     languageRule(skill, contest),
   ];
-  const code = codeRule(config.codeLanguage, skill);
+  const code = codeRule(config.codeLanguage, skill, contest);
   if (code) items.push(code);
   items.push("比赛规则（包括是否以及如何使用 AI）以当届官方文件为准；第 4 节与官方最新文件冲突时，以官方为准。");
   return items;
@@ -180,7 +189,7 @@ export function buildSkill(config: SkillConfig, today = new Date()): BuiltSkill 
   const contest = contestProfiles[config.contest];
   const mode: SkillMode = skill.modes.includes(config.mode) ? config.mode : "fresh";
   const cfg = { ...config, mode };
-  const date = today.toISOString().slice(0, 10);
+  const date = localDate(today);
   const title = `数学建模技能｜${skill.title}（${contest.short}）`;
 
   const task = [
@@ -215,7 +224,7 @@ export function buildSkill(config: SkillConfig, today = new Date()): BuiltSkill 
 /** 全流程技能包：放进 AI 的“项目指令 / 知识库”长期使用。共用部分只写一次。 */
 export function buildWorkflowPack(contestId: SkillConfig["contest"], today = new Date()): BuiltSkill {
   const contest = contestProfiles[contestId];
-  const date = today.toISOString().slice(0, 10);
+  const date = localDate(today);
   const paper = findSkill("paper")!;
   const head = [
     `# 数学建模全流程技能包（${contest.short}）`,

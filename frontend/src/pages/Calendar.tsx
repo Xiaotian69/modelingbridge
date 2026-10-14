@@ -9,8 +9,8 @@ import {
   describeEvent,
   editionPhase,
   editionsForYear,
-  endDay,
   eventLabel,
+  milestoneWhen,
   upcomingMilestones,
   yearFraction,
   type Phase,
@@ -94,7 +94,7 @@ export function CalendarPage() {
                   <span className="cal-next-days">{m.remaining}后</span>
                   <strong>{m.contest}</strong>
                   <span>{m.text}</span>
-                  <span className="cal-next-date">{bjParts(endDay(m.at)).m} 月 {bjParts(endDay(m.at)).d} 日</span>
+                  <span className="cal-next-date">{milestoneWhen(m.at)}</span>
                 </button>
               </li>
             ))}
