@@ -4,7 +4,8 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { AppRoutes } from "../App";
-import { CHALLENGE_STORAGE_KEY, event, q3 } from "./config";
+import { LP_SECTION_IDS } from "../learning/sectionIds";
+import { CHALLENGE_STORAGE_KEY, event, q3, results } from "./config";
 
 const events: { name: string; [k: string]: string }[] = [];
 const listener = (e: Event) => events.push((e as CustomEvent).detail);
@@ -246,5 +247,24 @@ describe("/challenge", () => {
     click("确认，帮我选课");
     expect(screen.getByText("推荐你选：电影鉴赏")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "下一题" })).toBeDisabled(); // 改过判断要重新回答“怎么用”
+  });
+
+  it("every result recommends a page that really exists, tagged from=challenge", async () => {
+    const landing: Record<string, RegExp> = {
+      abstract: /三份实习/, // AHP 精讲
+      optimize: /交互实验室/,
+      data: /有限资源/, // LP 精讲，落在 #python
+      express: /七关实战/,
+      allround: /精讲目录/,
+    };
+    for (const r of Object.values(results)) {
+      const url = new URL(r.course.to, "https://www.modelingbridge.cc");
+      expect(url.searchParams.get("from")).toBe("challenge");
+      if (url.hash) expect(LP_SECTION_IDS).toContain(url.hash.slice(1));
+      const view = renderAt(r.course.to);
+      expect(await screen.findByRole("heading", { level: 1, name: landing[r.id] }, { timeout: 5000 })).toBeInTheDocument();
+      expect(screen.queryByText("没有找到这个页面")).not.toBeInTheDocument();
+      view.unmount();
+    }
   });
 });

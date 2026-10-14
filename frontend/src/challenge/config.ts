@@ -342,7 +342,7 @@ export type ResultCopy = {
   partner: string;
   /** 结果页“加入协会”里的一句话，把人格结果和协会连起来 */
   societyHook: string;
-  /** 推荐的第一课：只链到线上已有的页面，带 ?from=challenge 方便统计 */
+  /** 推荐的第一课：只链到站内已有的页面（ChallengePage.test 逐条检查），带 ?from=challenge 方便统计 */
   course: { label: string; hint: string; to: string };
 };
 
@@ -356,9 +356,9 @@ export const results: Record<ResultId, ResultCopy> = {
     societyHook: "协会里有一起啃题的人：你负责想清楚问题，也能遇到把模型写成代码的编程手。",
     partner: "编程手",
     course: {
-      label: "线性规划精讲",
-      hint: "从一个生产计划问题开始，完整走一遍“假设 → 建模 → 求解”",
-      to: "/learn/linear-programming?from=challenge",
+      label: "层次分析法（AHP）精讲",
+      hint: "第 3 题帮你选课用的就是它：把决策拆成层次、两两比较，再检查判断前后是否自洽",
+      to: "/learn/ahp?from=challenge",
     },
   },
   optimize: {
@@ -370,9 +370,9 @@ export const results: Record<ResultId, ResultCopy> = {
     societyHook: "优化题是比赛常客。来协会找能把你的方案写成代码、写进论文的队友。",
     partner: "论文手",
     course: {
-      label: "线性规划精讲 · 可行域",
-      hint: "看第 3 节“看见所有允许的计划”：最优解为什么总在角上",
-      to: "/learn/linear-programming?from=challenge",
+      label: "线性规划交互实验室",
+      hint: "像第 2 题拖滑块一样，拖动利润和资源，看最优解为什么总落在可行区域的角上",
+      to: "/learn/linear-programming/lab?from=challenge",
     },
   },
   data: {
@@ -385,8 +385,8 @@ export const results: Record<ResultId, ResultCopy> = {
     partner: "建模手",
     course: {
       label: "线性规划精讲 · Python",
-      hint: "看第 5 节“让 Python 重现你的推导”：几行代码解出最优解",
-      to: "/learn/linear-programming?from=challenge",
+      hint: "直接从第 5 节“让 Python 重现你的推导”开始：几行代码解出最优解",
+      to: "/learn/linear-programming?from=challenge#python",
     },
   },
   express: {
@@ -399,7 +399,7 @@ export const results: Record<ResultId, ResultCopy> = {
     partner: "建模手",
     course: {
       label: "七关实战",
-      hint: "跟着一道真实赛题走到第 7 关“论文框架”",
+      hint: "从第 1 关“读题破冰”开始，用自己的话讲清一道真实赛题，一路走到第 7 关搭出论文框架",
       to: "/quest?from=challenge",
     },
   },
@@ -412,9 +412,9 @@ export const results: Record<ResultId, ResultCopy> = {
     societyHook: "哪个位置都能顶上的人，最适合当队伍的粘合剂。来协会认识更多队友吧。",
     partner: "任何人",
     course: {
-      label: "线性规划精讲",
-      hint: "从第一课开始，把建模的完整流程走一遍",
-      to: "/learn/linear-programming?from=challenge",
+      label: "零基础学习路线",
+      hint: "先学线性规划（优化），再学层次分析法（评价），最后到七关完整走一道题",
+      to: "/learn?from=challenge",
     },
   },
 };

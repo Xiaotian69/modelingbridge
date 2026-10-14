@@ -358,7 +358,7 @@ function ResultView({ id, answers, heading, src, onRestart, celebrate }: { id: R
             {meal.optimal
               ? `第 2 题你找到的“荤 ${ox} 串 + 素 ${oy} 串”就是线性规划的最优解。为什么它总在可行区域的角上？`
               : `第 2 题你拿到了 ${MEAL_OPTIMUM.value} 分里的 ${meal.meat * q2.meat.full + meal.veg * q2.veg.full} 分，离最优解只差一步。`}{" "}
-            <Link to="/learn/linear-programming?from=challenge" onClick={courseClick}>
+            <Link to="/learn/linear-programming?from=challenge#geometry" onClick={courseClick}>
               30 秒看看为什么 →
             </Link>
           </p>
