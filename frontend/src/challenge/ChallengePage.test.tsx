@@ -36,11 +36,20 @@ const radio = (name: string | RegExp) => fireEvent.click(screen.getByRole("radio
 /** 一条“建模手 · 优化派”路径，第 2 题找到最优解。 */
 async function playOptimizer(fromIntro = true) {
   if (fromIntro) click("开始挑战");
-  expect(await screen.findByRole("heading", { name: /食堂窗口/ })).toBeInTheDocument();
-  click(/几百人同时涌进来/);
-  click(/窗口开得少/);
-  click(/刷卡机/);
+  expect(await screen.findByRole("heading", { name: /食堂一到饭点/ })).toBeInTheDocument();
+  // 先选错一个，确认前取消、换一个
+  click(/同时涌进食堂/);
+  click(/窗口太少/);
+  click(/查刷卡记录/);
+  expect(screen.getByRole("button", { name: /热门窗口/ })).toBeDisabled(); // 已选满 3 个
+  click(/查刷卡记录/);
+  click(/热门窗口/);
   click("确认这三个");
+  expect(screen.getByText("三个直接原因都找到了！")).toBeInTheDocument();
+  expect(screen.getByText(/不是排队的原因，却是下一步验证判断时离不开的工具/)).toBeInTheDocument();
+  expect(screen.getByText(/要收集数据才知道/)).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "下一题" })).toBeDisabled(); // 还没回答“怎么验证”
+  radio(/多开一个窗口/);
   click("下一题");
 
   expect(screen.getByRole("heading", { name: /20 块钱和 30 分钟/ })).toBeInTheDocument();
@@ -152,7 +161,16 @@ describe("/challenge", () => {
     // 刷新后恢复结果，但不再放庆祝动画
     expect(screen.queryByTestId("celebration")).not.toBeInTheDocument();
     click("再测一次");
-    expect(screen.getByRole("heading", { name: /食堂窗口/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /食堂一到饭点/ })).toBeInTheDocument();
+  });
+
+  it("a result saved by the first live version (old Q1 format) still shows the same card", async () => {
+    localStorage.setItem(
+      CHALLENGE_STORAGE_KEY,
+      JSON.stringify({ v: 1, step: "result", result: "optimize", answers: { q1: ["arrive", "window", "card"], q2: { meat: 5, veg: 10, optimal: true, method: "calc" }, q3: { choices: [0, 0, 0], use: "follow" }, q4: "saturate", q5: "supply" } }),
+    );
+    renderAt("/challenge");
+    expect(await screen.findByRole("heading", { name: /建模手/ })).toHaveTextContent("优化派");
   });
 
   it("ignores unknown sources and broken saved data", async () => {
@@ -186,10 +204,12 @@ describe("/challenge", () => {
   it("Q3 reports a contradiction using the player's own words", async () => {
     renderAt("/challenge");
     click("开始挑战");
-    click(/几百人同时涌进来/);
-    click(/窗口开得少/);
-    click(/刷卡机/);
+    click(/同时涌进食堂/);
+    click(/表白墙/);
+    click(/观察不同时间/);
     click("确认这三个");
+    expect(screen.getByText("找到了 1 个直接原因")).toBeInTheDocument(); // 不打击人，也不影响人格计分
+    radio(/查刷卡记录，再去现场/);
     click("下一题");
     fireEvent.click(screen.getByRole("button", { name: "荤菜多一串" }));
     click("就这么吃");

@@ -46,17 +46,38 @@ function Choices({ options, selected, onPick, disabled, name }: { options: reado
 
 // ---------------------------------------------------------------------------
 
-export function Q1Canteen({ value, onAnswer, onNext }: Props<"q1">) {
-  const [picked, setPicked] = useState<string[]>(value ?? []);
-  const done = Boolean(value);
+export function Q1Canteen({ value, onAnswer, onNext, last }: Props<"q1">) {
+  // 旧版本机存档里的 q1 是数组：当作没答过，重新答一次
+  const saved = value && !Array.isArray(value) ? value : undefined;
+  const [picked, setPicked] = useState<string[]>(saved?.factors ?? []);
+  const [done, setDone] = useState(Boolean(saved));
+  const [method, setMethod] = useState(saved?.method);
   const toggle = (id: string) => {
     if (done) return;
     setPicked((p) => (p.includes(id) ? p.filter((x) => x !== id) : p.length < q1.pick ? [...p, id] : p));
   };
+  const hits = picked.filter((id) => q1.options.find((o) => o.id === id)?.kind === "cause").length;
+  const kicker = hits === 3 ? "三个直接原因都找到了！" : hits === 0 ? "换个角度看看" : `找到了 ${hits} 个直接原因`;
+  const group = (kind: "cause" | "method") => (
+    <ul className="cg-sort">
+      {q1.options
+        .filter((o) => o.kind === kind)
+        .map((o) => {
+          const mine = picked.includes(o.id);
+          return (
+            <li key={o.id} className={mine ? "is-mine" : undefined}>
+              <span className="cg-sort-tag">{o.tag}</span>
+              <span className="cg-sort-text">{o.label}</span>
+              {mine && <span className="cg-sort-mine">你选了</span>}
+            </li>
+          );
+        })}
+    </ul>
+  );
   return (
     <>
       <p className="cg-prompt">{q1.prompt}</p>
-      <div className="cg-choices cg-grid" role="group" aria-label="食堂排队的因素">
+      <div className="cg-choices cg-grid" role="group" aria-label="造成排队的因素">
         {q1.options.map((o) => {
           const on = picked.includes(o.id);
           return (
@@ -74,13 +95,35 @@ export function Q1Canteen({ value, onAnswer, onNext }: Props<"q1">) {
         })}
       </div>
       {!done ? (
-        <button type="button" className="cg-btn cg-btn-primary cg-next" disabled={picked.length !== q1.pick} onClick={() => onAnswer(picked)}>
+        <button type="button" className="cg-btn cg-btn-primary cg-next" disabled={picked.length !== q1.pick} onClick={() => setDone(true)}>
           {picked.length === q1.pick ? "确认这三个" : `还要选 ${q1.pick - picked.length} 个`}
         </button>
       ) : (
-        <Feedback onNext={onNext}>
-          <p>{q1.feedback}</p>
-        </Feedback>
+        <div className="cg-feedback" role="status">
+          <p className="cg-feedback-kicker">{kicker}</p>
+          <p className="cg-sort-head">{q1.causeLabel}</p>
+          {group("cause")}
+          <p className="cg-sort-head">{q1.methodLabel}</p>
+          {group("method")}
+          <p className="cg-aside">{q1.methodNote}</p>
+          <p>
+            {q1.explain}
+            {q1.feedback}
+          </p>
+          <p className="cg-subq">{q1.verifyPrompt}</p>
+          <Choices
+            options={q1.verify}
+            selected={method}
+            name={q1.verifyPrompt}
+            onPick={(id) => {
+              setMethod(id);
+              onAnswer({ factors: picked, method: id });
+            }}
+          />
+          <button type="button" className="cg-btn cg-btn-primary cg-next" onClick={onNext} disabled={!method}>
+            {last ? "看我的结果" : "下一题"}
+          </button>
+        </div>
       )}
     </>
   );

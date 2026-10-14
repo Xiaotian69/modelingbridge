@@ -63,23 +63,53 @@ export const analytics: {
 };
 
 // ---------------------------------------------------------------------------
-// 第 1 题：食堂排队（6 选 3）
+// 第 1 题：食堂排队（两步）
+// ① 6 选 3：找出最直接造成排队的因素。3 个是影响因素，3 个是调查方法或反馈。这一步只用于教学，不计分；
+//    “选对几个”不影响人格结果，避免把对错算进性格里。
+// ② 追问“要验证你的判断，先做什么”：这一步计分，和第 2、3 题的追问同一结构。
+
+export type Q1Option = { id: string; label: string; kind: "cause" | "method"; tag: string };
 
 export const q1 = {
-  title: "食堂窗口为什么总在饭点排长队？",
-  prompt: "下面 6 个因素，挑出你觉得最该先研究的 3 个。",
+  title: "为什么食堂一到饭点就排长队？",
+  prompt: "下面有的是造成排队的原因，有的是调查方法或大家的反馈。找出最直接造成排队的 3 个。",
   pick: 3,
   options: [
-    { id: "arrive", label: "下课铃一响，几百人同时涌进来", points: { M: 1 }, style: "abstract" },
-    { id: "window", label: "窗口开得少，打一份菜又慢", points: { M: 1 }, style: "optimize" },
-    { id: "card", label: "刷卡机有每分钟的消费记录，能拿来算", points: { C: 1 }, style: "data" },
-    { id: "camera", label: "数一数每个时刻队伍里有多少人", points: { C: 1 }, style: "data" },
-    { id: "hot", label: "大家都挤那一家“网红窗口”", points: { W: 1 }, style: "express" },
-    { id: "wall", label: "表白墙上一堆吐槽排队的帖子", points: { W: 1 }, style: "express" },
-  ] satisfies ScoredOption[],
+    { id: "arrive", label: "一下课，大批人同时涌进食堂", kind: "cause", tag: "人来得多快" },
+    { id: "window", label: "窗口太少，每分钟只能打几份", kind: "cause", tag: "窗口打得多快" },
+    { id: "hot", label: "大家都挤同一个热门窗口", kind: "cause", tag: "人挤在哪" },
+    { id: "card", label: "查刷卡记录，统计消费", kind: "method", tag: "数据" },
+    { id: "watch", label: "观察不同时间的队伍长度", kind: "method", tag: "观察" },
+    { id: "wall", label: "表白墙上一堆排队吐槽", kind: "method", tag: "反馈" },
+  ] satisfies Q1Option[],
+  causeLabel: "直接原因",
+  methodLabel: "调查方法和反馈",
+  methodNote: "它们不是排队的原因，却是下一步验证判断时离不开的工具。",
+  explain:
+    "来排队的人，比窗口能及时打完饭的人还多，队伍就会越排越长；热门窗口又让人挤在一处。",
   feedback:
-    "建模第一步，就是从一堆因素里挑出最关键的几个——这叫“做假设”。排队问题最常抓三样：人来得多快、打菜多快、开了几个窗口。",
+    "你刚才做的是数学建模的重要一步：从一堆现象里找出关键因素。不过这还只是判断，你们食堂是不是这样，要收集数据才知道。",
+  verifyPrompt: "要验证你的判断，你最想先做什么？",
+  verify: [
+    { id: "relation", label: "先写清楚：每分钟来几个人、能打几份饭", points: { M: 2 }, style: "abstract" },
+    { id: "extra", label: "算一算：多开一个窗口，队伍能短多少", points: { M: 2 }, style: "optimize" },
+    { id: "data", label: "查刷卡记录，再去现场数数队伍", points: { C: 2 }, style: "data" },
+    { id: "voice", label: "整理表白墙的吐槽，听听大家怎么说", points: { W: 2 }, style: "express" },
+  ] satisfies ScoredOption[],
 };
+
+/**
+ * 旧版第 1 题（2026-10-14 上线的版本）的计分表。已经在线上答过题的人，本机存的 q1 是字符串数组，
+ * 刷新或回访时仍按当时的规则算出同一个结果，不会因为改版变卡片。
+ */
+export const LEGACY_Q1: ScoredOption[] = [
+  { id: "arrive", label: "", points: { M: 1 }, style: "abstract" },
+  { id: "window", label: "", points: { M: 1 }, style: "optimize" },
+  { id: "card", label: "", points: { C: 1 }, style: "data" },
+  { id: "camera", label: "", points: { C: 1 }, style: "data" },
+  { id: "hot", label: "", points: { W: 1 }, style: "express" },
+  { id: "wall", label: "", points: { W: 1 }, style: "express" },
+];
 
 // ---------------------------------------------------------------------------
 // 第 2 题：20 块钱、30 分钟的麻辣烫（线性规划，最优解由 learning/solver.ts 计算）
