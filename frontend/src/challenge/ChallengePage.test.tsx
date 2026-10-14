@@ -2,12 +2,17 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { AppRoutes } from "../App";
 import { CHALLENGE_STORAGE_KEY, event, q3 } from "./config";
 
 const events: { name: string; [k: string]: string }[] = [];
 const listener = (e: Event) => events.push((e as CustomEvent).detail);
+
+// 页面是懒加载的：先把模块载入缓存，全量并行跑测试时首屏不会因加载慢而超时
+beforeAll(async () => {
+  await import("./ChallengePage");
+});
 
 beforeEach(() => {
   localStorage.clear();
@@ -36,23 +41,23 @@ const radio = (name: string | RegExp) => fireEvent.click(screen.getByRole("radio
 /** 一条“建模手 · 优化派”路径，第 2 题找到最优解。 */
 async function playOptimizer(fromIntro = true) {
   if (fromIntro) click("开始挑战");
-  expect(await screen.findByRole("heading", { name: /食堂一到饭点/ })).toBeInTheDocument();
-  // 先选错一个，确认前取消、换一个
-  click(/同时涌进食堂/);
-  click(/窗口太少/);
-  click(/查刷卡记录/);
-  expect(screen.getByRole("button", { name: /热门窗口/ })).toBeDisabled(); // 已选满 3 个
-  click(/查刷卡记录/);
-  click(/热门窗口/);
-  click("确认这三个");
-  expect(screen.getByText("三个直接原因都找到了！")).toBeInTheDocument();
-  expect(screen.getByText(/不是排队的原因，却是下一步验证判断时离不开的工具/)).toBeInTheDocument();
-  expect(screen.getByText(/要收集数据才知道/)).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "下一题" })).toBeDisabled(); // 还没回答“怎么验证”
+  expect(await screen.findByRole("heading", { name: /饭点排队，你要等多久/ })).toBeInTheDocument();
+  // 先选一个，确认前改主意
+  radio("大约 24 分钟");
+  radio("大约 8 分钟");
+  expect(screen.getByRole("radio", { name: "大约 24 分钟" })).toHaveAttribute("aria-checked", "false");
+  click("确认答案");
+  expect(screen.getByText("猜对了！")).toBeInTheDocument();
+  expect(screen.getByText(/24 ÷ 3 = 8 分钟/)).toBeInTheDocument();
+  expect(screen.getByText(/来的比打得快，队伍就会越排越长/)).toBeInTheDocument();
+  expect(screen.getByText(/要实际数过才知道/)).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "下一题" })).toBeDisabled(); // 还没回答“先做什么”
   radio(/多开一个窗口/);
   click("下一题");
 
-  expect(screen.getByRole("heading", { name: /20 块钱和 30 分钟/ })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: /20 块、25 分钟/ })).toBeInTheDocument();
+  expect(screen.getByRole("table", { name: "点菜规则" })).toHaveTextContent("+3");
+  expect(screen.getByText(/饱腹值是题目设定的分数，不管口味/)).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "拖动滑块点菜" })).toBeDisabled();
   fireEvent.change(screen.getByRole("slider", { name: /^荤菜/ }), { target: { value: "10" } });
   fireEvent.change(screen.getByRole("slider", { name: /^素菜/ }), { target: { value: "5" } });
@@ -63,6 +68,7 @@ async function playOptimizer(fromIntro = true) {
   expect(screen.getByText("35")).toBeInTheDocument();
   click("就这么吃");
   expect(screen.getByText("你找到了最优解！")).toBeInTheDocument();
+  expect(screen.getByText(/如果你更爱吃荤.*最优方案就会不一样/)).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "下一题" })).toBeDisabled();
   radio(/先算钱和时间/);
   click("下一题");
@@ -90,18 +96,22 @@ async function playOptimizer(fromIntro = true) {
   click("下一题");
 
   expect(screen.getByRole("heading", { name: /奶茶/ })).toBeInTheDocument();
-  radio(/找数据/); // 点错了，确认前可以改
-  radio(/从店出发/);
-  expect(screen.getByRole("radio", { name: /从店出发/ })).toHaveAttribute("aria-checked", "true");
-  expect(screen.getByRole("radio", { name: /找数据/ })).toHaveAttribute("aria-checked", "false");
+  radio(/看数据/); // 点错了，确认前可以改
+  radio(/从店估/);
+  expect(screen.getByRole("radio", { name: /从店估/ })).toHaveAttribute("aria-checked", "true");
+  expect(screen.getByRole("radio", { name: /看数据/ })).toHaveAttribute("aria-checked", "false");
   click("确认答案");
+  expect(screen.getByText("你的路线：从店的产能估")).toBeInTheDocument();
+  expect(screen.getAllByText("假设")).toHaveLength(4); // 每个数字都标成假设
+  expect(screen.getByText(/四条路线估出来在 1000–2000 杯之间/)).toBeInTheDocument();
+  expect(screen.getByText(/不是真实数据/)).toBeInTheDocument();
   click("看我的结果");
 }
 
 describe("/challenge", () => {
   it("opens directly as a standalone page (deep link with a source parameter)", async () => {
     renderAt("/challenge?src=poster");
-    expect(await screen.findByRole("heading", { name: /建模队里的哪种人/ })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /建模队里的哪种人/ }, { timeout: 3000 })).toBeInTheDocument();
     expect(screen.queryByRole("navigation", { name: "主导航" })).not.toBeInTheDocument();
     expect(screen.getByText(/无需注册/)).toBeInTheDocument();
     expect(screen.queryByText(/不收集个人信息/)).not.toBeInTheDocument();
@@ -161,7 +171,7 @@ describe("/challenge", () => {
     // 刷新后恢复结果，但不再放庆祝动画
     expect(screen.queryByTestId("celebration")).not.toBeInTheDocument();
     click("再测一次");
-    expect(screen.getByRole("heading", { name: /食堂一到饭点/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /饭点排队/ })).toBeInTheDocument();
   });
 
   it("a result saved by the first live version (old Q1 format) still shows the same card", async () => {
@@ -171,6 +181,16 @@ describe("/challenge", () => {
     );
     renderAt("/challenge");
     expect(await screen.findByRole("heading", { name: /建模手/ })).toHaveTextContent("优化派");
+  });
+
+  it("a first-version save that used a removed Q5 option keeps its card", async () => {
+    localStorage.setItem(
+      CHALLENGE_STORAGE_KEY,
+      JSON.stringify({ v: 1, step: "result", result: "express", answers: { q1: ["hot", "wall", "arrive"], q2: { meat: 0, veg: 0, optimal: false, method: "explain" }, q3: { choices: [0, 0, 0], use: "write" }, q4: "context", q5: "assume" } }),
+    );
+    renderAt("/challenge");
+    expect(await screen.findByRole("heading", { name: /论文手/ })).toHaveTextContent("表达派");
+    expect(screen.getByText("写作").parentElement).toHaveTextContent("82%"); // 倾向条按旧规则重算：W9 / M2 / C0
   });
 
   it("ignores unknown sources and broken saved data", async () => {
@@ -204,12 +224,10 @@ describe("/challenge", () => {
   it("Q3 reports a contradiction using the player's own words", async () => {
     renderAt("/challenge");
     click("开始挑战");
-    click(/同时涌进食堂/);
-    click(/表白墙/);
-    click(/观察不同时间/);
-    click("确认这三个");
-    expect(screen.getByText("找到了 1 个直接原因")).toBeInTheDocument(); // 不打击人，也不影响人格计分
-    radio(/查刷卡记录，再去现场/);
+    radio("说不准，得看阿姨手速");
+    click("确认答案");
+    expect(screen.getByText("很实在的想法")).toBeInTheDocument(); // 不打击人，也不影响人格计分
+    radio(/蹲一个饭点/);
     click("下一题");
     fireEvent.click(screen.getByRole("button", { name: "荤菜多一串" }));
     click("就这么吃");

@@ -2,19 +2,22 @@
  * 确定性计分：同一组答案永远得到同一结果。
  * 规则（写给审核者看）：
  * 1. 把每题所选选项的 M / C / W 分加起来；第 2 题找到最优解额外记 1 个“优化”风格分。
- *    第 1 题只算“怎么验证”这一问；选了哪 3 个因素不计分（选得准不准不该决定你是哪种人）。
+ *    第 1 题只算“想让队伍变短先做什么”这一问；估算排队时间算得对不对不计分（对错不该决定你是哪种人）。
  * 2. 三项最高分与最低分相差不超过 ALLROUND_GAP → 全能型。
  * 3. 否则取最高的一项；并列时按 建模 → 编程 → 写作 的顺序取。
  * 4. 建模手再看风格：“优化”风格分多于“抽象” → 优化派，否则抽象派。
  */
 import type { Judgement } from "./ahp";
-import { LEGACY_Q1, q1, q2, q3, q4, q5, type Dimension, type ResultId, type ScoredOption, type Style } from "./config";
+import { LEGACY_Q1, LEGACY_Q5, q1, q2, q3, q4, q5, type Dimension, type ResultId, type ScoredOption, type Style } from "./config";
 
 export const ALLROUND_GAP = 1;
 
 export type Answers = {
-  /** factors：第 1 题选出的 3 个因素（教学用，不计分）；method：验证方法（计分）。旧存档是字符串数组。 */
-  q1: { factors: string[]; method: string } | string[];
+  /**
+   * 第 1 题：guess 是估算排队时间的选项（不计分），method 是“想让队伍变短先做什么”（计分）。
+   * 兼容两种旧存档：线上第一版的因素数组；改版过程中的 { factors, method }（method 的含义与现在相同）。
+   */
+  q1: { guess: string; method: string } | { factors: string[]; method: string } | string[];
   q2: { meat: number; veg: number; optimal: boolean; method: string };
   q3: { choices: Judgement[]; use: string };
   q4: string;
@@ -41,19 +44,22 @@ export function tally(answers: Answers): Tally {
   };
   if (Array.isArray(answers.q1)) {
     // 旧版存档：按旧版规则计分，回访时结果不变
-    if (new Set(answers.q1).size !== q1.pick) throw new Error(`第 1 题需要选 ${q1.pick} 个不同的因素`);
+    if (new Set(answers.q1).size !== 3) throw new Error("第 1 题需要选 3 个不同的因素");
     answers.q1.forEach((id) => add(find(LEGACY_Q1, id)));
   } else {
-    const { factors, method } = answers.q1;
-    if (new Set(factors).size !== q1.pick || factors.some((id) => !q1.options.some((o) => o.id === id)))
-      throw new Error(`第 1 题需要选 ${q1.pick} 个不同的因素`);
-    add(find(q1.verify, method));
+    const a1 = answers.q1;
+    if ("guess" in a1) {
+      if (!q1.guesses.some((g) => g.id === a1.guess)) throw new Error(`未知选项：${a1.guess}`);
+    } else if (!Array.isArray(a1.factors) || new Set(a1.factors).size !== 3) {
+      throw new Error("第 1 题存档不完整");
+    }
+    add(find(q1.follow, a1.method));
   }
   add(find(q2.methods, answers.q2.method));
   if (answers.q2.optimal) styles.optimize += 1;
   add(find(q3.uses, answers.q3.use));
   add(find(q4.options, answers.q4));
-  add(find(q5.options, answers.q5));
+  add(find([...q5.options, ...LEGACY_Q5], answers.q5));
   return { totals, styles };
 }
 

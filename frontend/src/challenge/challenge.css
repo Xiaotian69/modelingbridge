@@ -235,22 +235,152 @@
   font-size: 14px;
 }
 
-/* 第 1 题：确认后把 6 项分成两组 */
-.cg-sort-head {
-  margin: 10px 0 6px !important;
-  font-size: 13px !important;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+/* 第 1 题：排队示意 + 算式 */
+.cg-story {
+  color: var(--text) !important;
+  font-weight: 600;
 }
-.cg-sort {
+.cg-queue {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 12px;
+}
+.cg-queue-you {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-weight: 800;
+}
+.cg-queue-line {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  overflow: hidden;
+}
+.cg-queue-line i {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  opacity: 0.55;
+}
+.cg-queue-count {
+  flex: none;
+  font-style: normal;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.cg-queue-window {
+  flex: none;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.cg-q1-ask {
+  margin: 0 0 10px !important;
+}
+.cg-eq {
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  text-align: center;
+  font-size: 15px !important;
+  font-variant-numeric: tabular-nums;
+}
+.cg-eq b {
+  color: var(--brand);
+}
+.cg-eq-flow b {
+  color: var(--text);
+}
+
+/* 第 2 题：规则卡 */
+.cg-rules-card {
+  width: 100%;
+  margin: 0 0 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.cg-rules-card caption {
+  caption-side: top;
+  text-align: left;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 0 0 6px;
+}
+.cg-rules-card th,
+.cg-rules-card td {
+  padding: 7px 8px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+.cg-rules-card thead th {
+  border-top: 0;
+  background: var(--surface-sunken);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.cg-rules-card tbody th {
+  text-align: left;
+  font-weight: 800;
+}
+.cg-rules-card tbody th small {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.cg-rules-card tfoot td {
+  text-align: left;
+  background: var(--surface-sunken);
+}
+.cg-goal {
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.cg-preference {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--brand) 9%, var(--surface));
+  font-size: 14px !important;
+}
+
+/* 第 5 题：算式卡 */
+.cg-fermi {
   list-style: none;
-  margin: 0;
+  margin: 4px 0 6px;
   padding: 0;
   display: grid;
   gap: 6px;
 }
-.cg-sort li {
-  display: flex;
+.cg-fermi li {
+  display: grid;
+  grid-template-columns: 1.2em 1fr auto auto;
   align-items: center;
   gap: 8px;
   padding: 8px 10px;
@@ -259,29 +389,65 @@
   font-size: 14px;
   line-height: 1.4;
 }
-.cg-sort li.is-mine {
-  background: color-mix(in srgb, var(--brand) 12%, var(--surface));
-  box-shadow: inset 3px 0 0 var(--brand);
+.cg-fermi-op {
+  font-weight: 800;
+  color: var(--brand);
+  text-align: center;
 }
-.cg-sort-tag {
-  flex: none;
-  width: 6.4em;
-  font-size: 12px;
-  font-weight: 700;
+.cg-fermi li b {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.cg-fermi li em {
+  font-style: normal;
+  font-size: 11px;
+  padding: 0 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.cg-fermi-result {
+  margin: 0 0 10px !important;
+  text-align: right;
+  font-size: 15px !important;
+}
+.cg-fermi-result b {
+  font-size: 26px;
+  color: var(--brand);
+  font-variant-numeric: tabular-nums;
+}
+.cg-fermi-notes {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 10px;
+  margin: 0 0 6px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.cg-fermi-notes dt {
+  font-weight: 800;
   color: var(--brand);
 }
-.cg-sort-text {
-  flex: 1;
-  min-width: 0;
+.cg-fermi-notes dd {
+  margin: 0;
 }
-.cg-sort-mine {
-  flex: none;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 1px 7px;
-  border-radius: 999px;
-  background: var(--brand);
-  color: var(--brand-ink);
+.cg-fermi-others {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+  font-size: 14px;
+}
+.cg-fermi-others li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--border);
+}
+.cg-fermi-others b {
+  font-variant-numeric: tabular-nums;
 }
 
 /* 第 2 题 */
