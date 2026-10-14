@@ -14,8 +14,8 @@ export const LEARNING_BACKUP_KEY = "mb.v2.learning.corrupt";
 export const META_KEY = "mb.v2.meta";
 export const SCHEMA_VERSION = 2;
 export const LP_LESSON = "lp";
-/** Lessons with a reading position (V2.1 adds AHP, V3.0 TOPSIS and regression; older data simply lacks them). */
-export const LESSON_KEYS = ["lp", "ahp", "topsis", "regression"] as const;
+/** Lessons with a reading position (V2.1 adds AHP; V3.0 TOPSIS, regression, graph; older data simply lacks them). */
+export const LESSON_KEYS = ["lp", "ahp", "topsis", "regression", "graph"] as const;
 export type LessonKey = (typeof LESSON_KEYS)[number];
 /** Inline thinking question that lived in the V1 practice history; it is a checkpoint. */
 const V1_CHECKPOINT_IDS = ["think-1"];

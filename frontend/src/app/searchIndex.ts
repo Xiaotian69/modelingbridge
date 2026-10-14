@@ -52,6 +52,7 @@ export function staticEntries(): SearchEntry[] {
     ahp: "层次分析法 ahp 专项 练习 刷题 判断矩阵 权重 一致性 cr 特征向量 评价",
     topsis: "topsis 综合评价 专项 练习 刷题 理想解 贴近度 标准化 熵权法 熵权 指标方向 评价 排名",
     regression: "回归分析 回归 线性回归 多元回归 专项 练习 刷题 最小二乘 r² 决定系数 残差 相关系数 预测 虚拟变量",
+    graph: "图论 网络优化 图 专项 练习 刷题 最短路 dijkstra 最小生成树 kruskal prim 邻接矩阵 度 路径 网络",
   };
   const practice = COURSES.map<SearchEntry>((c) => ({
     id: `practice:${c.id}`,
@@ -89,18 +90,38 @@ export function staticEntries(): SearchEntry[] {
     badge: "可操作",
     haystack: norm("回归 最小二乘 实验 交互 直线 残差 平方和 sse 异常值 离群 拟合 多元 周末"),
   };
-  return [...practice, lab, topsisLab, regressionLab, ...methods, ...problems];
+  const graphLab: SearchEntry = {
+    id: "lab:graph",
+    group: "练习",
+    title: "最短路与最小生成树实验",
+    meta: "在校园地图上一步一步运行 Dijkstra 和 Kruskal，模拟道路施工",
+    href: "/learn/graph#dijkstra",
+    badge: "可操作",
+    haystack: norm("图论 实验 交互 最短路 dijkstra 最小生成树 kruskal 施工 断路 地图 网络"),
+  };
+  return [...practice, lab, topsisLab, regressionLab, graphLab, ...methods, ...problems];
 }
 
 /** Lesson sections and AI skills, loaded only when someone starts searching. */
 export async function lessonEntries(): Promise<SearchEntry[]> {
-  const [{ sections }, { skills }, { ahpSections }, { topsisSections }, { regressionSections }] = await Promise.all([
-    import("../learning/content"),
-    import("../content/skills"),
-    import("../learning/ahp/content"),
-    import("../learning/topsis/content"),
-    import("../learning/regression/content"),
-  ]);
+  const [{ sections }, { skills }, { ahpSections }, { topsisSections }, { regressionSections }, { graphSections }] =
+    await Promise.all([
+      import("../learning/content"),
+      import("../content/skills"),
+      import("../learning/ahp/content"),
+      import("../learning/topsis/content"),
+      import("../learning/regression/content"),
+      import("../learning/graph/content"),
+    ]);
+  const graph = graphSections.map<SearchEntry>((s, i) => ({
+    id: `lesson:graph:${s.id}`,
+    group: "精讲",
+    title: s.title,
+    meta: `图论与网络优化 · 第 ${i + 1} 节`,
+    href: `/learn/graph#${s.id}`,
+    badge: "可学",
+    haystack: norm(`图论 网络 最短路 最小生成树 ${s.title} ${s.lead}`),
+  }));
   const regression = regressionSections.map<SearchEntry>((s, i) => ({
     id: `lesson:regression:${s.id}`,
     group: "精讲",
@@ -137,7 +158,7 @@ export async function lessonEntries(): Promise<SearchEntry[]> {
     badge: "原创",
     haystack: norm(`ai 技能 skill 提示词 prompt ${s.title} ${s.yields} ${s.purpose}`),
   }));
-  return [...skillEntries, ...ahp, ...topsis, ...regression, ...sections.map<SearchEntry>((s, i) => ({
+  return [...skillEntries, ...ahp, ...topsis, ...regression, ...graph, ...sections.map<SearchEntry>((s, i) => ({
     id: `lesson:${s.id}`,
     group: "精讲",
     title: s.title,

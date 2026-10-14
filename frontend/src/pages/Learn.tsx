@@ -115,6 +115,29 @@ export function LearnPage() {
           </div>
         </section>
 
+        <section className="learn-feature" aria-labelledby="learn-graph">
+          <div>
+            <p className="page-kicker">新开放 · 第五门精讲 · 约 45–55 分钟</p>
+            <h2 id="learn-graph">图论与网络优化：招新日，怎么走最近、怎么连最省？</h2>
+            <p>
+              把校园地图抽象成赋权图，写出邻接矩阵，一步一步运行 Dijkstra 算法求最短路、Kruskal 算法求最小生成树，再用道路施工情景检验结论是否稳定。
+            </p>
+            <div className="page-head-actions">
+              <Link className="btn btn-primary" to="/learn/graph">
+                开始图论精讲
+              </Link>
+              <Link className="btn btn-secondary" to="/practice/graph">
+                图论专项练习
+              </Link>
+            </div>
+          </div>
+          <div className="learn-equation" aria-label="课程核心公式：松弛 d(v) 取 d(v) 与 d(u) 加 w(u,v) 中的较小者；生成树有 n 减 1 条边">
+            <span>顶点 · 边 · 权</span>
+            <b>d(v) ← min(d(v), d(u) + w)</b>
+            <span>最小生成树：n − 1 条边，总长最小</span>
+          </div>
+        </section>
+
         <section className="learn-modes" aria-label="三种学习方式">
           <article>
             <h2>精讲</h2>
@@ -137,6 +160,9 @@ export function LearnPage() {
             </Link>{" "}
             <Link className="text-link" to="/practice/regression">
               15 道回归练习 →
+            </Link>{" "}
+            <Link className="text-link" to="/practice/graph">
+              15 道图论练习 →
             </Link>
           </article>
           <article>

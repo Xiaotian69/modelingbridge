@@ -4,10 +4,11 @@
  */
 import { AHP_CHECKPOINT_IDS, AHP_SECTIONS } from "./ahp/sectionIds";
 import { LP_CHECKPOINT_IDS, LP_SECTIONS } from "./sectionIds";
+import { GRAPH_CHECKPOINT_IDS, GRAPH_SECTIONS } from "./graph/sectionIds";
 import { REGRESSION_CHECKPOINT_IDS, REGRESSION_SECTIONS } from "./regression/sectionIds";
 import { TOPSIS_CHECKPOINT_IDS, TOPSIS_SECTIONS } from "./topsis/sectionIds";
 
-export type LessonId = "lp" | "ahp" | "topsis" | "regression";
+export type LessonId = "lp" | "ahp" | "topsis" | "regression" | "graph";
 
 export type CourseInfo = {
   id: LessonId;
@@ -62,6 +63,16 @@ export const COURSES: CourseInfo[] = [
     sections: REGRESSION_SECTIONS,
     checkpointIds: REGRESSION_CHECKPOINT_IDS,
     questionPrefix: "regression-",
+  },
+  {
+    id: "graph",
+    title: "图论与网络优化",
+    methodSlug: "network-flow",
+    lessonPath: "/learn/graph",
+    practicePath: "/practice/graph",
+    sections: GRAPH_SECTIONS,
+    checkpointIds: GRAPH_CHECKPOINT_IDS,
+    questionPrefix: "graph-",
   },
 ];
 

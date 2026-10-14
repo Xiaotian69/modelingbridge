@@ -83,7 +83,9 @@ describe("home search index", () => {
     expect(topsis.badge).toBe("精讲可学");
     const regression = entries.find((e) => e.id === "method:regression-tree")!;
     expect(regression.href).toBe("/learn/regression");
-    const others = entries.filter((e) => e.group === "方法速查" && ![lp, ahp, topsis, regression].includes(e));
+    const graph = entries.find((e) => e.id === "method:network-flow")!;
+    expect(graph.href).toBe("/learn/graph");
+    const others = entries.filter((e) => e.group === "方法速查" && ![lp, ahp, topsis, regression, graph].includes(e));
     expect(others.length).toBeGreaterThan(0);
     for (const e of others) expect(e.href.startsWith("/learn/reference#model-")).toBe(true);
   });

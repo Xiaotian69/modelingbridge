@@ -5,7 +5,7 @@
  */
 import type { Question } from "./questions";
 
-export type ModelId = Question["model"] | "ahp" | "topsis" | "regression";
+export type ModelId = Question["model"] | "ahp" | "topsis" | "regression" | "graph";
 export type CourseQuestion = Question extends infer Q
   ? Q extends unknown
     ? Omit<Q, "model"> & { model: ModelId }

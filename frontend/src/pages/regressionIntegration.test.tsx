@@ -100,7 +100,7 @@ describe("practice loop", () => {
     );
   });
 
-  it("lists all four topics on the practice page", async () => {
+  it("lists every topic on the practice page", async () => {
     renderAt("/practice/regression");
     const nav = await screen.findByRole("navigation", { name: "选择专题" }, LAZY);
     expect(within(nav).getAllByRole("link").map((a) => a.textContent)).toEqual([
@@ -108,6 +108,7 @@ describe("practice loop", () => {
       "层次分析法（AHP）",
       "TOPSIS 综合评价",
       "回归分析",
+      "图论与网络优化",
     ]);
   });
 });
