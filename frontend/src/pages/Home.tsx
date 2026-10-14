@@ -11,7 +11,7 @@ const route: RouteStop[] = [
   { title: "认识建模", detail: "3–5 分钟导论 · 筹备中" },
   { title: "线性规划", detail: "精讲 · 刷题 · 实战", href: "/learn/linear-programming" },
   { title: "回归预测", detail: "筹备中" },
-  { title: "评价决策", detail: "层次分析法 · 精讲 · 刷题", href: "/learn/ahp" },
+  { title: "评价决策", detail: "AHP · TOPSIS · 精讲 · 刷题", href: "/learn/ahp" },
   { title: "综合项目", detail: "筹备中" },
 ];
 

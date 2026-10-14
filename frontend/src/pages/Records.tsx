@@ -5,7 +5,7 @@ import { Collapse } from "../components/motion/Collapse";
 import { PageHead } from "../components/ui/PageHead";
 import { getLocalCase } from "../data/localCases";
 import { practiceBankOf } from "../learning/courseBanks";
-import { COURSES, sectionIndex, sectionTitleIn } from "../learning/courses";
+import { COURSES, localQuestionId, sectionIndex, sectionTitleIn } from "../learning/courses";
 import { PRACTICE_KEY, READING_KEY } from "../learning/storage";
 import { learning, useLearning } from "../state/learning";
 import { LEARNING_KEY, type ExerciseRecord } from "../state/learningStore";
@@ -42,7 +42,7 @@ const STATUS: Record<Status, { mark: string; text: string }> = {
 const HELP = ["", "看过启发", "看过线索", "看过完整解析"];
 
 function exerciseLabel(id: string) {
-  const m = /^(?:ahp-)?(self|practice)-(\d+)$/.exec(id);
+  const m = /^(self|practice)-(\d+)$/.exec(localQuestionId(id));
   return m ? `${m[1] === "self" ? "自测" : "练习"} ${m[2]}` : id;
 }
 

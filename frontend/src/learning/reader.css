@@ -1030,3 +1030,29 @@
   border: 1px dashed var(--brand);
   font-size: 14px;
 }
+
+/* ---------- Course bridge (links one lesson to the course it builds on) ---------- */
+.course-bridge {
+  display: grid;
+  gap: 4px;
+  margin: 16px 0;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--brand);
+  background: var(--surface);
+  font-size: 15px;
+}
+.course-bridge p {
+  margin: 0;
+}
+.course-bridge .kicker {
+  margin: 0;
+}
+.course-bridge-title {
+  font-weight: 750;
+}
+.course-bridge .btn {
+  justify-self: start;
+  margin-top: 6px;
+}

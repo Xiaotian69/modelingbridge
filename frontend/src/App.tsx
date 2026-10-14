@@ -29,6 +29,7 @@ const LearnPage = lazy(() =>
 );
 const CoursePage = lazy(() => import("./pages/Course").then(m => ({ default: m.CoursePage })));
 const AhpCoursePage = lazy(() => import("./pages/AhpCourse").then((m) => ({ default: m.AhpCoursePage })));
+const TopsisCoursePage = lazy(() => import("./pages/TopsisCourse").then((m) => ({ default: m.TopsisCoursePage })));
 const LpLabPage = lazy(() => import("./pages/LpLab").then((m) => ({ default: m.LpLabPage })));
 const PracticePage = lazy(() => import("./pages/Practice").then(m => ({ default: m.PracticePage })));
 const ModelReferencePage = lazy(() => import("./pages/ModelReference").then(m => ({ default: m.ModelReferencePage })));
@@ -91,6 +92,7 @@ export function AppRoutes() {
         <Route path="learn" element={<LearnPage />} />
         <Route path="learn/linear-programming" element={<CoursePage />} />
         <Route path="learn/ahp" element={<AhpCoursePage />} />
+        <Route path="learn/topsis" element={<TopsisCoursePage />} />
         <Route path="learn/linear-programming/lab" element={<LpLabPage />} />
         <Route path="learn/reference" element={<ModelReferencePage />} />
         {/* 刷题 */}
@@ -99,6 +101,8 @@ export function AppRoutes() {
         <Route path="practice/linear-programming/:exerciseId" element={<PracticePage />} />
         <Route path="practice/ahp" element={<PracticePage topic="ahp" />} />
         <Route path="practice/ahp/:exerciseId" element={<PracticePage topic="ahp" />} />
+        <Route path="practice/topsis" element={<PracticePage topic="topsis" />} />
+        <Route path="practice/topsis/:exerciseId" element={<PracticePage topic="topsis" />} />
         {/* 实战 */}
         <Route path="quest" element={<QuestPage />} />
         <Route path="cases" element={<CasesPage />} />

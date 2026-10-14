@@ -65,6 +65,31 @@ export function LearnPage() {
           </div>
         </section>
 
+        <section className="learn-feature" aria-labelledby="learn-topsis">
+          <div>
+            <p className="page-kicker">新开放 · 第三门精讲 · 约 45–55 分钟 · 建议先学 AHP</p>
+            <h2 id="learn-topsis">TOPSIS 综合评价：五套房子，怎样排出先后？</h2>
+            <p>
+              接着 AHP 的故事：用 AHP 求出的权重给有数据的方案排序。学会指标方向、向量标准化、正负理想解和贴近度，再用熵权法和排名实验检验结论是否稳健。
+            </p>
+            <div className="page-head-actions">
+              <Link className="btn btn-primary" to="/learn/topsis">
+                开始 TOPSIS 精讲
+              </Link>
+              <Link className="btn btn-secondary" to="/practice/topsis">
+                TOPSIS 专项练习
+              </Link>
+            </div>
+          </div>
+          <div className="learn-equation" aria-label="课程核心公式：贴近度 C 等于 D 减除以 D 加与 D 减之和">
+            <span>标准化 · 理想解 · 贴近度</span>
+            <b>
+              C = D<sup>−</sup> / (D<sup>+</sup> + D<sup>−</sup>)
+            </b>
+            <span>AHP 定权重 · 数据定排名</span>
+          </div>
+        </section>
+
         <section className="learn-modes" aria-label="三种学习方式">
           <article>
             <h2>精讲</h2>
@@ -81,6 +106,9 @@ export function LearnPage() {
             </Link>{" "}
             <Link className="text-link" to="/practice/ahp">
               8 道 AHP 练习 →
+            </Link>{" "}
+            <Link className="text-link" to="/practice/topsis">
+              12 道 TOPSIS 练习 →
             </Link>
           </article>
           <article>

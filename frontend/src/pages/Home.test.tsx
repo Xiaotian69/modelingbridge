@@ -66,9 +66,12 @@ it("searches methods locally and marks methods without a lesson as 速查", () =
   renderHome();
   const box = screen.getByRole("combobox");
   fireEvent.focus(box);
-  fireEvent.change(box, { target: { value: "TOPSIS" } });
+  fireEvent.change(box, { target: { value: "ARIMA" } });
   const list = screen.getByRole("listbox", { name: "搜索结果" });
   expect(within(list).getByText("速查 · 精讲筹备中")).toBeInTheDocument();
+  // TOPSIS has had a lesson since V3.0.
+  fireEvent.change(box, { target: { value: "TOPSIS" } });
+  expect(within(screen.getByRole("listbox")).getAllByText("精讲可学").length).toBeGreaterThan(0);
   fireEvent.change(box, { target: { value: "线性规划" } });
   expect(within(screen.getByRole("listbox")).getAllByText("精讲可学").length).toBeGreaterThan(0);
 });

@@ -50,6 +50,7 @@ export function staticEntries(): SearchEntry[] {
   const keywords: Record<string, string> = {
     lp: "线性规划 专项 练习 刷题 题目 约束 目标函数 整数 灵敏度 lp",
     ahp: "层次分析法 ahp 专项 练习 刷题 判断矩阵 权重 一致性 cr 特征向量 评价",
+    topsis: "topsis 综合评价 专项 练习 刷题 理想解 贴近度 标准化 熵权法 熵权 指标方向 评价 排名",
   };
   const practice = COURSES.map<SearchEntry>((c) => ({
     id: `practice:${c.id}`,
@@ -69,16 +70,35 @@ export function staticEntries(): SearchEntry[] {
     badge: "可操作",
     haystack: norm("线性规划 交互 实验室 实验 可行域 最优解 无界 无可行解 多重最优 灵敏度 参数 lp"),
   };
-  return [...practice, lab, ...methods, ...problems];
+  const topsisLab: SearchEntry = {
+    id: "lab:topsis",
+    group: "练习",
+    title: "TOPSIS 排名实验",
+    meta: "换权重、改指标方向、加入新方案，看排名怎样变化",
+    href: "/learn/topsis#closeness",
+    badge: "可操作",
+    haystack: norm("topsis 实验 交互 权重 熵权 指标方向 逆序 排名 敏感性 贴近度"),
+  };
+  return [...practice, lab, topsisLab, ...methods, ...problems];
 }
 
 /** Lesson sections and AI skills, loaded only when someone starts searching. */
 export async function lessonEntries(): Promise<SearchEntry[]> {
-  const [{ sections }, { skills }, { ahpSections }] = await Promise.all([
+  const [{ sections }, { skills }, { ahpSections }, { topsisSections }] = await Promise.all([
     import("../learning/content"),
     import("../content/skills"),
     import("../learning/ahp/content"),
+    import("../learning/topsis/content"),
   ]);
+  const topsis = topsisSections.map<SearchEntry>((s, i) => ({
+    id: `lesson:topsis:${s.id}`,
+    group: "精讲",
+    title: s.title,
+    meta: `TOPSIS 综合评价 · 第 ${i + 1} 节`,
+    href: `/learn/topsis#${s.id}`,
+    badge: "可学",
+    haystack: norm(`topsis 综合评价 理想解 贴近度 熵权法 ${s.title} ${s.lead}`),
+  }));
   const ahp = ahpSections.map<SearchEntry>((s, i) => ({
     id: `lesson:ahp:${s.id}`,
     group: "精讲",
@@ -97,7 +117,7 @@ export async function lessonEntries(): Promise<SearchEntry[]> {
     badge: "原创",
     haystack: norm(`ai 技能 skill 提示词 prompt ${s.title} ${s.yields} ${s.purpose}`),
   }));
-  return [...skillEntries, ...ahp, ...sections.map<SearchEntry>((s, i) => ({
+  return [...skillEntries, ...ahp, ...topsis, ...sections.map<SearchEntry>((s, i) => ({
     id: `lesson:${s.id}`,
     group: "精讲",
     title: s.title,

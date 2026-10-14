@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { publishedQuestions } from "../learning/questions";
 import { practiceBankOf } from "../learning/courseBanks";
-import { COURSES, courseById, type LessonId } from "../learning/courses";
+import { COURSES, courseById, localQuestionId, type LessonId } from "../learning/courses";
 import { ExerciseView } from "../practice/ExerciseView";
 import { useLearning } from "../state/learning";
 import type { ExerciseRecord } from "../state/learningStore";
@@ -14,7 +14,7 @@ const difficulties = ["全部", "基础", "进阶", "挑战"] as const;
 
 export function practiceLabel(id: string) {
   // Other courses prefix their ids ("ahp-self-1"); the label is per course anyway.
-  id = id.replace(/^ahp-/, "");
+  id = localQuestionId(id);
   const self = /^self-(\d+)$/.exec(id);
   if (self) return `自测 ${self[1]}`;
   const practice = /^practice-(\d+)$/.exec(id);

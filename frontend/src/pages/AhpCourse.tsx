@@ -1,4 +1,5 @@
 import { ahpSections, type AhpBlock } from "../learning/ahp/content";
+import { CourseBridge } from "../learning/CourseBridge";
 import { Hierarchy } from "../learning/ahp/Hierarchy";
 import { MatrixLab } from "../learning/ahp/MatrixLab";
 import { LessonReader, type LessonDefinition } from "../learning/LessonReader";
@@ -10,7 +11,13 @@ const ahp: LessonDefinition<AhpBlock> = {
   name: "层次分析法",
   sections: ahpSections,
   renderExtra: (block) =>
-    block.type === "ahp-hierarchy" ? <Hierarchy /> : block.type === "ahp-lab" ? <MatrixLab /> : undefined,
+    block.type === "ahp-hierarchy" ? (
+      <Hierarchy />
+    ) : block.type === "ahp-lab" ? (
+      <MatrixLab />
+    ) : block.type === "course-bridge" ? (
+      <CourseBridge to={block.to} kicker={block.kicker} title={block.title} text={block.text} />
+    ) : undefined,
   codeLabel: "Python · NumPy · 可在本机运行",
   cover: {
     kicker: "精讲 · 评价与决策入门 · 层次分析法（AHP）",
@@ -35,7 +42,7 @@ const ahp: LessonDefinition<AhpBlock> = {
     title: "会算权重，也要会解释权重。",
     text: "专项练习包括权重计算、一致性检验、层次总排序和结果解释。答错会告诉你错在哪里、该回看哪一节，但不会直接给出答案。",
     practiceLabel: "开始 AHP 专项",
-    note: "这是第二门精讲。下一门（回归与预测）筹备中。",
+    note: "这是第二门精讲。下一门：TOPSIS 综合评价，用这里求出的权重给有数据的方案排序。",
   },
   symbols: [
     ["aᵢⱼ", "第 i 个比第 j 个重要几倍"],

@@ -21,11 +21,11 @@ const inRouter = (ui: JSX.Element) =>
   render(<MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>{ui}</MemoryRouter>);
 
 describe("AHP is findable", () => {
-  it("opens 评价决策 on the home route and counts two open lessons", () => {
+  it("opens 评价决策 on the home route and counts three open lessons", () => {
     inRouter(<HomePage />);
     const route = screen.getByRole("heading", { name: "一条路线，三种练法" }).parentElement!;
     expect(within(route).getByRole("link", { name: "评价决策" })).toHaveAttribute("href", "/learn/ahp");
-    expect(screen.getByText(/已开放 2 篇精讲/)).toBeInTheDocument();
+    expect(screen.getByText(/已开放 3 篇精讲/)).toBeInTheDocument();
   });
 
   it("offers the course and its practice in 精讲目录, and the method index points to it", () => {

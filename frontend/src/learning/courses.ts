@@ -4,8 +4,9 @@
  */
 import { AHP_CHECKPOINT_IDS, AHP_SECTIONS } from "./ahp/sectionIds";
 import { LP_CHECKPOINT_IDS, LP_SECTIONS } from "./sectionIds";
+import { TOPSIS_CHECKPOINT_IDS, TOPSIS_SECTIONS } from "./topsis/sectionIds";
 
-export type LessonId = "lp" | "ahp";
+export type LessonId = "lp" | "ahp" | "topsis";
 
 export type CourseInfo = {
   id: LessonId;
@@ -16,6 +17,8 @@ export type CourseInfo = {
   practicePath: string;
   sections: readonly { id: string; title: string }[];
   checkpointIds: string[];
+  /** Question id prefix (“ahp-self-1”); the original LP bank has none. */
+  questionPrefix: string;
 };
 
 export const COURSES: CourseInfo[] = [
@@ -27,6 +30,7 @@ export const COURSES: CourseInfo[] = [
     practicePath: "/practice/linear-programming",
     sections: LP_SECTIONS,
     checkpointIds: LP_CHECKPOINT_IDS,
+    questionPrefix: "",
   },
   {
     id: "ahp",
@@ -36,14 +40,28 @@ export const COURSES: CourseInfo[] = [
     practicePath: "/practice/ahp",
     sections: AHP_SECTIONS,
     checkpointIds: AHP_CHECKPOINT_IDS,
+    questionPrefix: "ahp-",
+  },
+  {
+    id: "topsis",
+    title: "TOPSIS 综合评价",
+    methodSlug: "entropy-topsis",
+    lessonPath: "/learn/topsis",
+    practicePath: "/practice/topsis",
+    sections: TOPSIS_SECTIONS,
+    checkpointIds: TOPSIS_CHECKPOINT_IDS,
+    questionPrefix: "topsis-",
   },
 ];
 
 export const LESSON_IDS = COURSES.map((c) => c.id);
 export const courseById = (id: LessonId) => COURSES.find((c) => c.id === id)!;
 export const courseByMethod = (slug: string) => COURSES.find((c) => c.methodSlug === slug) ?? null;
-/** AHP question ids are prefixed; everything else belongs to the original LP bank. */
-export const courseOfQuestion = (questionId: string) => courseById(questionId.startsWith("ahp-") ? "ahp" : "lp");
+/** Later courses prefix their question ids; everything else belongs to the original LP bank. */
+export const courseOfQuestion = (questionId: string) =>
+  COURSES.find((c) => c.questionPrefix && questionId.startsWith(c.questionPrefix)) ?? courseById("lp");
+/** “ahp-self-1” → “self-1”: the per-course part of a question id. */
+export const localQuestionId = (questionId: string) => questionId.slice(courseOfQuestion(questionId).questionPrefix.length);
 
 export const sectionIndex = (course: CourseInfo, sectionId: string) => course.sections.findIndex((s) => s.id === sectionId);
 export const sectionTitleIn = (course: CourseInfo, sectionId: string) =>

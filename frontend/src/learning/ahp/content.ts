@@ -4,6 +4,7 @@
  */
 import python from "./examples/ahp_internship.py?raw";
 import type { Block } from "../content";
+import type { BridgeBlock } from "../CourseBridge";
 import { ALTERNATIVES, CRITERIA, CRITERIA_UPPER, LOCAL_UPPER } from "./data";
 import {
   RANDOM_INDEX,
@@ -16,7 +17,7 @@ import {
 } from "./math";
 import { AHP_SECTIONS } from "./sectionIds";
 
-export type AhpBlock = Block | { type: "ahp-hierarchy" } | { type: "ahp-lab" };
+export type AhpBlock = Block | BridgeBlock | { type: "ahp-hierarchy" } | { type: "ahp-lab" };
 export type AhpSection = { id: string; title: string; lead: string; blocks: AhpBlock[] };
 
 const f3 = (x: number) => x.toFixed(3);
@@ -266,6 +267,13 @@ export const ahpSections: AhpSection[] = [
       p(
         "有客观数据时。如果指标有大量客观数据（如城市人均 GDP、空气质量），可以用熵权法等由数据确定权重，再用 TOPSIS 等方法对方案排序；也可以把 AHP 的主观权重与熵权法的客观权重组合使用，并说明组合方式。",
       ),
+      {
+        type: "course-bridge",
+        to: "/learn/topsis",
+        kicker: "下一门精讲 · TOPSIS 综合评价",
+        title: "小林选定研究所之后：五套房子怎么排？",
+        text: "用这里学会的 AHP 求准则权重，再用 TOPSIS 根据真实数据给方案排序；也会学到熵权法，以及怎样检验排名是否稳健。",
+      },
       note(
         "常见错误：不做一致性检验；判断矩阵不满足互反；把某个准则下的局部权重当成最终结果；为了让 CR < 0.1 随意改判断而不说明理由；准则之间含义重叠。",
       ),

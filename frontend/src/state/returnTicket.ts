@@ -4,6 +4,7 @@
  * (sessionStorage), so it survives a refresh of the lesson but not closing the tab.
  */
 import type { ScrollRestore } from "../components/motion/RouteScroll";
+import type { LessonId } from "../learning/courses";
 
 export const RETURN_KEY = "mb.v2.return";
 
@@ -11,7 +12,7 @@ export type ReturnTicket = {
   /** `restore`: where the learner was on the exercise page, to land back there. */
   from: { kind: "exercise"; id: string; path: string; label: string; restore?: ScrollRestore };
   /** lessonId absent on tickets written before V2.1: those always meant linear programming. */
-  to: { sectionId: string; lessonId?: "lp" | "ahp" };
+  to: { sectionId: string; lessonId?: LessonId };
   createdAt: string;
 };
 
