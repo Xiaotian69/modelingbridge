@@ -1,5 +1,6 @@
 /** App-facing learning state: one in-memory copy, persisted locally, observable from React. */
 import { useSyncExternalStore } from "react";
+import { courseById } from "../learning/courses";
 import { LP_SECTION_IDS } from "../learning/sectionIds";
 import { PRACTICE_KEY, READING_KEY } from "../learning/storage";
 import { clearReturnTicket } from "./returnTicket";
@@ -16,6 +17,7 @@ import {
   type Answer,
   type ExerciseRecord,
   type HelpLevel,
+  type LessonKey,
   type LearningState,
   type LoadResult,
   type SubmitStatus,
@@ -115,16 +117,17 @@ export const learning = {
     listeners.add(listener);
     return () => listeners.delete(listener);
   },
-  setReading(sectionId: string) {
-    if (!LP_SECTION_IDS.includes(sectionId)) return;
+  /** Reading position of one lesson; only linear programming is mirrored to the V1 key. */
+  setReading(sectionId: string, lesson: LessonKey = "lp") {
+    if (!courseById(lesson).sections.some((s) => s.id === sectionId)) return;
     update(
       (s) => {
-        const prev = s.reading.lp;
+        const prev = s.reading[lesson];
         if (prev?.lastSectionId === sectionId) return s;
         const visited = prev?.visited.includes(sectionId) ? prev.visited : [...(prev?.visited ?? []), sectionId];
         return {
           ...s,
-          reading: { ...s.reading, lp: { lastSectionId: sectionId, visited, updatedAt: now() } },
+          reading: { ...s.reading, [lesson]: { lastSectionId: sectionId, visited, updatedAt: now() } },
           lastActivity: { kind: "lesson", id: sectionId, at: now() },
         };
       },

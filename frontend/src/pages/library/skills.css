@@ -1,0 +1,312 @@
+/* 资料 › AI 技能包。只使用 design/tokens.css 中的变量（深浅主题自动适配）。 */
+.skills-page {
+  padding-bottom: var(--space-8);
+}
+.skills-howto {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-4) 0 var(--space-5);
+  padding: 0;
+  list-style: none;
+  counter-reset: howto;
+}
+.skills-howto li {
+  counter-increment: howto;
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.skills-howto li::before {
+  content: counter(howto);
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+.skills-howto strong {
+  color: var(--text);
+}
+
+.skills-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+.skills-config {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.skills-field {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.skills-field legend {
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 750;
+}
+.skills-field .muted-note {
+  margin: 8px 0 0;
+}
+.skills-segmented {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+.skills-segmented label {
+  flex: 1 1 auto;
+}
+.skills-segmented span {
+  text-align: center;
+  min-height: 40px;
+  display: grid !important;
+  place-items: center;
+}
+
+.skills-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.skills-steps button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 8px;
+  width: 100%;
+  height: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.skills-steps button:hover {
+  border-color: var(--brand);
+}
+.skills-steps button[aria-pressed="true"] {
+  border-color: var(--brand);
+  box-shadow: inset 0 0 0 1px var(--brand);
+  background: color-mix(in srgb, var(--brand) 7%, var(--surface));
+}
+.skills-steps button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.skills-step-no {
+  grid-row: span 2;
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.skills-steps button[aria-pressed="true"] .skills-step-no {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: var(--brand-ink);
+}
+.skills-steps strong {
+  font-size: 15px;
+}
+.skills-steps button span:last-child {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.skills-input {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 650;
+}
+.skills-input input,
+.skills-input select,
+.skills-input textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 400;
+}
+.skills-input textarea {
+  resize: vertical;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+.skills-input input:focus-visible,
+.skills-input select:focus-visible,
+.skills-input textarea:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 1px;
+}
+.skills-case {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+}
+.skills-case input {
+  margin-top: 4px;
+}
+.skills-advanced {
+  border-top: 1px solid var(--line, var(--border));
+  padding-top: var(--space-3);
+}
+.skills-advanced summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+}
+.skills-advanced summary:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.skills-advanced-body {
+  display: grid;
+  gap: 2px;
+  padding-top: 4px;
+}
+.skills-advanced-body .link-button {
+  justify-self: start;
+  margin-top: 10px;
+}
+
+.skills-output {
+  position: sticky;
+  top: calc(var(--header-h, 60px) + 16px);
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+.skills-output-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+.skills-output-head h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.4;
+}
+.skills-output-head .muted-note {
+  margin: 4px 0 0;
+}
+.skills-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.skills-feedback {
+  min-height: 1.5em;
+  margin: 0;
+  font-size: 14px;
+}
+.skills-feedback.is-ok {
+  color: var(--ok);
+}
+.skills-feedback.is-fail {
+  color: var(--attend);
+}
+.skills-preview {
+  width: 100%;
+  min-height: 420px;
+  height: calc(100vh - var(--header-h, 60px) - 300px);
+  max-height: 760px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  resize: vertical;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.skills-preview:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 1px;
+}
+.skills-output .notice {
+  margin: 0;
+}
+
+@media (max-width: 1023px) {
+  .skills-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .skills-output {
+    position: static;
+  }
+  .skills-preview {
+    height: 60vh;
+  }
+}
+@media (max-width: 699px) {
+  .skills-howto {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .skills-steps {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(150px, 46%);
+    grid-template-columns: none;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
+  }
+  .skills-steps li {
+    scroll-snap-align: start;
+  }
+  .skills-output {
+    padding: var(--space-3);
+  }
+  .skills-actions .btn {
+    flex: 1 1 100%;
+  }
+}

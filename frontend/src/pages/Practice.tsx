@@ -1,17 +1,20 @@
 import { useMemo, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { publishedQuestions } from "../learning/questions";
+import { practiceBankOf } from "../learning/courseBanks";
+import { COURSES, courseById, type LessonId } from "../learning/courses";
 import { ExerciseView } from "../practice/ExerciseView";
 import { useLearning } from "../state/learning";
 import type { ExerciseRecord } from "../state/learningStore";
 import "../learning/reader.css";
 
-const BASE = "/practice/linear-programming";
 /** Same bank as V1: everything except the inline thinking question. IDs unchanged. */
 export const practiceBank = publishedQuestions.filter((q) => q.placement !== "inline");
 const difficulties = ["全部", "基础", "进阶", "挑战"] as const;
 
 export function practiceLabel(id: string) {
+  // Other courses prefix their ids ("ahp-self-1"); the label is per course anyway.
+  id = id.replace(/^ahp-/, "");
   const self = /^self-(\d+)$/.exec(id);
   if (self) return `自测 ${self[1]}`;
   const practice = /^practice-(\d+)$/.exec(id);
@@ -33,7 +36,10 @@ const statusMark: Record<Status, { mark: string; text: string }> = {
   new: { mark: "○", text: "未做" },
 };
 
-export function PracticePage() {
+export function PracticePage({ topic = "lp" }: { topic?: LessonId }) {
+  const course = courseById(topic);
+  const BASE = course.practicePath;
+  const practiceBank = useMemo(() => practiceBankOf(topic), [topic]);
   const { exerciseId } = useParams();
   const navigate = useNavigate();
   const { state, persistent } = useLearning();
@@ -50,7 +56,7 @@ export function PracticePage() {
           (difficulty === "全部" || q.difficulty === difficulty) &&
           (!wrongOnly || statusOf(state.exercises[q.id]) === "wrong" || q.id === exerciseId),
       ),
-    [difficulty, wrongOnly, state.exercises, exerciseId],
+    [difficulty, wrongOnly, state.exercises, exerciseId, practiceBank],
   );
 
   if (!exerciseId) {
@@ -72,9 +78,16 @@ export function PracticePage() {
           <nav className="crumbs" aria-label="位置">
             <Link to="/practice">刷题</Link>
             <span>/</span>
-            <span>线性规划</span>
+            <span>{course.title}</span>
           </nav>
-          <h1>线性规划专项练习</h1>
+          <h1>{course.title}专项练习</h1>
+          <nav className="topic-switch" aria-label="选择专题">
+            {COURSES.map((c) => (
+              <Link key={c.id} to={c.practicePath} aria-current={c.id === topic ? "page" : undefined}>
+                {c.title}
+              </Link>
+            ))}
+          </nav>
           <p className="practice-summary">
             <span>
               {correct} / {practiceBank.length} 题最近一次正确
@@ -85,7 +98,9 @@ export function PracticePage() {
         </header>
         <div className="practice-layout">
           <aside className="q-nav" aria-label="题目导航">
-            <p className="kicker">线性规划 · {practiceBank.length} 题</p>
+            <p className="kicker">
+              {course.title} · {practiceBank.length} 题
+            </p>
             <ol>
               {list.map((q) => {
                 const s = status(q.id);
@@ -124,7 +139,7 @@ export function PracticePage() {
               </label>
             </div>
             <p className="q-legend">✓ 正确　✕ 待重练　◐ 有草稿　○ 未做</p>
-            <Link to="/learn/linear-programming">回到精讲 →</Link>
+            <Link to={course.lessonPath}>回到精讲 →</Link>
           </aside>
 
           <div>
@@ -158,7 +173,7 @@ export function PracticePage() {
               <div className="empty-state" role="alert">
                 没有找到这道题（{exerciseId}）。
                 <p>
-                  <Link to={BASE}>回到线性规划专项练习</Link>
+                  <Link to={BASE}>回到{course.title}专项练习</Link>
                 </p>
               </div>
             )}

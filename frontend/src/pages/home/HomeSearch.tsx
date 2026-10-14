@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "../../components/ui/Icon";
 import { modelMethods } from "../../data/modelingContent";
+import { COURSES } from "../../learning/courses";
 import {
   lessonEntries,
   searchEntries,
@@ -103,7 +104,7 @@ export function HomeSearch() {
           </button>
         ))}
       </div>
-      <p className="door-note">已开放 1 篇精讲 · {modelMethods.length} 种方法速查</p>
+      <p className="door-note">已开放 {COURSES.length} 篇精讲 · {modelMethods.length} 种方法速查</p>
       {show && (
         <ul className="search-results" id={listId} role="listbox" aria-label="搜索结果">
           {results.length === 0 && (

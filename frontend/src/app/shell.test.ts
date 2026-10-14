@@ -75,7 +75,10 @@ describe("home search index", () => {
   it("links taught methods to the lesson and the rest to the quick reference", () => {
     const lp = entries.find((e) => e.id === "method:linear-programming")!;
     expect(lp.href).toBe("/learn/linear-programming");
-    const others = entries.filter((e) => e.group === "方法速查" && e !== lp);
+    const ahp = entries.find((e) => e.id === "method:ahp")!;
+    expect(ahp.href).toBe("/learn/ahp");
+    expect(ahp.badge).toBe("精讲可学");
+    const others = entries.filter((e) => e.group === "方法速查" && e !== lp && e !== ahp);
     expect(others.length).toBeGreaterThan(0);
     for (const e of others) expect(e.href.startsWith("/learn/reference#model-")).toBe(true);
   });

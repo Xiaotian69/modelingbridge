@@ -2,12 +2,17 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { AppRoutes } from "../App";
 import { CHALLENGE_STORAGE_KEY, event, q3 } from "./config";
 
 const events: { name: string; [k: string]: string }[] = [];
 const listener = (e: Event) => events.push((e as CustomEvent).detail);
+
+// 页面是懒加载的：先把模块载入缓存，全量并行跑测试时首屏不会因加载慢而超时
+beforeAll(async () => {
+  await import("./ChallengePage");
+});
 
 beforeEach(() => {
   localStorage.clear();
@@ -35,7 +40,7 @@ const radio = (name: string | RegExp) => fireEvent.click(screen.getByRole("radio
 
 /** 一条“建模手 · 优化派”路径，第 2 题找到最优解。 */
 async function playOptimizer(fromIntro = true) {
-  if (fromIntro) click("开始挑战");
+  if (fromIntro) fireEvent.click(await screen.findByRole("button", { name: "开始挑战" }, { timeout: 3000 }));
   expect(await screen.findByRole("heading", { name: /食堂窗口/ })).toBeInTheDocument();
   click(/几百人同时涌进来/);
   click(/窗口开得少/);
@@ -92,7 +97,7 @@ async function playOptimizer(fromIntro = true) {
 describe("/challenge", () => {
   it("opens directly as a standalone page (deep link with a source parameter)", async () => {
     renderAt("/challenge?src=poster");
-    expect(await screen.findByRole("heading", { name: /建模队里的哪种人/ })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /建模队里的哪种人/ }, { timeout: 3000 })).toBeInTheDocument();
     expect(screen.queryByRole("navigation", { name: "主导航" })).not.toBeInTheDocument();
     expect(screen.getByText(/无需注册/)).toBeInTheDocument();
     expect(screen.queryByText(/不收集个人信息/)).not.toBeInTheDocument();

@@ -995,3 +995,38 @@
     flex: 1;
   }
 }
+
+/* ---------- Practice: topic switch (V2.1, more than one course) ---------- */
+.topic-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 4px;
+}
+.topic-switch a {
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text) !important;
+  font-size: 14px;
+  text-decoration: none;
+}
+.topic-switch a[aria-current="page"] {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: var(--brand-ink) !important;
+  font-weight: 700;
+}
+
+/* ---------- Entry to the LP interactive lab (V2.1) ---------- */
+.lab-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 14px 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--brand);
+  font-size: 14px;
+}

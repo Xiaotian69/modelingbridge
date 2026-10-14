@@ -3,8 +3,8 @@
  * grading.ts only; this file adds partial credit for multi-select and mistake diagnosis.
  */
 import { grade, type Answer } from "./grading";
-import type { Question } from "./questions";
-import { metaFor } from "./exerciseMeta";
+import { asGradable, type CourseQuestion } from "./courseQuestion";
+import { metaForQuestion } from "./courseBanks";
 
 export type Evaluation =
   | { status: "invalid" }
@@ -12,11 +12,11 @@ export type Evaluation =
   | { status: "partial"; message: string }
   | { status: "incorrect"; tag?: string; message?: string };
 
-export function evaluate(q: Question, answer: Answer): Evaluation {
-  const result = grade(q, answer);
+export function evaluate(q: CourseQuestion, answer: Answer): Evaluation {
+  const result = grade(asGradable(q), answer);
   if (result === "invalid") return { status: "invalid" };
   if (result === "correct") return { status: "correct" };
-  const errors = metaFor(q.id).errors;
+  const errors = metaForQuestion(q.id).errors;
   if (q.type === "numeric") {
     const value = Number(answer);
     const hit = errors.find((e) => "value" in e && Math.abs(e.value - value) <= q.tolerance + 1e-9);
@@ -35,6 +35,6 @@ export function evaluate(q: Question, answer: Answer): Evaluation {
 }
 
 /** Three help levels: 启发, 线索, 完整解析 (design doc §5.3, D-016). */
-export function helpLevels(q: Question): [string, string | null, { answer: string; explanation: string }] {
-  return [q.hints[0], q.hints[1] ?? metaFor(q.id).clue ?? null, { answer: q.answerLabel, explanation: q.explanation }];
+export function helpLevels(q: CourseQuestion): [string, string | null, { answer: string; explanation: string }] {
+  return [q.hints[0], q.hints[1] ?? metaForQuestion(q.id).clue ?? null, { answer: q.answerLabel, explanation: q.explanation }];
 }

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageHead } from "../components/ui/PageHead";
+import { courseByMethod } from "../learning/courses";
 import { classicProblems, codingTips, getClassicProblemPracticeLink, learningTracks, modelMethods, recentTrainingCases, writingTips } from "../data/modelingContent";
 
 const tabs = ["全部", "预测", "优化", "评价", "统计", "机理", "网络"] as const;
@@ -125,6 +126,11 @@ export function ModelReferencePage() {
                     </div>
                     <h3 className="mt-4 text-2xl font-semibold text-slate-950">{method.name}</h3>
                     <p className="mt-3 text-sm leading-7 text-slate-600">{method.intuition}</p>
+                    {courseByMethod(method.slug) && (
+                      <Link to={courseByMethod(method.slug)!.lessonPath} className="btn btn-secondary mt-4">
+                        进入{courseByMethod(method.slug)!.title}精讲 →
+                      </Link>
+                    )}
                     <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
                       <p className="text-xs font-semibold text-slate-400">什么时候用</p>
                       <p className="mt-2 text-sm leading-6 text-slate-700">{method.when}</p>

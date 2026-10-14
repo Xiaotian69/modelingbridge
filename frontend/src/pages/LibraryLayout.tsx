@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 /** 资料中心 shell: one heading, four sub-tabs (design doc §5.5, 03 §3.1). */
 const tabs = [
   { to: "/library", label: "资料索引" },
-  { to: "/library/prompts", label: "提示词库" },
+  { to: "/library/skills", label: "AI 技能包" },
   { to: "/library/tools", label: "模板与工具" },
   { to: "/library/calendar", label: "赛事日历" },
 ];

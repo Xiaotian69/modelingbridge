@@ -1,5 +1,5 @@
 import type { Answer } from "./grading";
-import type { Question } from "./questions";
+import type { CourseQuestion as Question } from "./courseQuestion";
 
 export const emptyAnswer = (q: Question): Answer => (q.type === "multiple" ? [] : "");
 
