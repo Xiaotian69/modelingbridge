@@ -65,6 +65,8 @@ describe("判断矩阵实验", () => {
     // circular preset 3, 1/3, 3: 3 × 3 = 9 expected for C1:C3, but 1/3 was given.
     expect(screen.getByText(/三个判断首尾对不上/)).toHaveTextContent(/应约为 9（最接近的标度是 9），你填的却是 1\/3/);
     expect(screen.getByText(/不应作为结论/)).toBeInTheDocument();
+    // The circular judgments give every criterion the same weight: say so for all three, not two.
+    expect(screen.getByText(/权重几乎相同/)).toHaveTextContent("三个准则的权重几乎相同（都约为 0.333）");
     fireEvent.click(screen.getByRole("button", { name: "小林的判断" }));
     expect(weightOf("成长空间")).toBe("0.648");
   });

@@ -97,6 +97,8 @@ export function MatrixLab() {
   const byWeight = rank(analysis.weights);
   const top = byWeight[0];
   const runnerUp = byWeight[1];
+  /** Criteria whose weight is within 5 % of the largest (all of them for the circular preset). */
+  const tied = byWeight.filter((i) => analysis.weights[top] / analysis.weights[i] < 1.05);
   const cr = analysis.cr ?? 0;
   const ok = analysis.acceptable;
   const changedWinner = order[0] !== courseOrder[0];
@@ -244,7 +246,13 @@ export function MatrixLab() {
       <div className="lab-result" aria-live="polite">
         <strong>{ok ? "一致性可以接受" : "判断前后矛盾，需要修改"}</strong>
         {analysis.weights[top] / analysis.weights[runnerUp] < 1.05 ? (
-          <p>当前判断下，{names[top]}和{names[runnerUp]}的权重几乎相同（{f3(analysis.weights[top])}），判断没有分出主次。</p>
+          <p>
+            当前判断下，
+            {tied.length === names.length
+              ? `${names.length === 3 ? "三" : "四"}个准则的权重几乎相同（都约为 ${f3(analysis.weights[top])}）`
+              : `${tied.map((i) => names[i]).join("、")}的权重几乎相同（约 ${f3(analysis.weights[top])}）`}
+            ，判断没有分出主次。
+          </p>
         ) : (
           <p>
             当前判断下，{names[top]}的权重最大（{f3(analysis.weights[top])}），约是{names[runnerUp]}的{" "}
