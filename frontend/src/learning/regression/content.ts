@@ -78,7 +78,7 @@ export const regressionSections: RegressionSection[] = [
   {
     id: "scatter",
     title: REGRESSION_SECTIONS[1].title,
-    lead: "画图永远是第一步",
+    lead: "先画图，再计算",
     blocks: [
       p(
         "以气温为横轴、销量为纵轴，每一天画成一个点，这样的图叫散点图。我们想预测或解释的量（销量）叫因变量，记作 y；用来解释它的量（气温）叫自变量，记作 x。",
@@ -165,6 +165,9 @@ export const regressionSections: RegressionSection[] = [
       formula(String.raw`\underbrace{\sum_i(y_i-\bar y)^2}_{\text{SST}}=\underbrace{\sum_i(\hat y_i-\bar y)^2}_{\text{SSR}}+\underbrace{\sum_i(y_i-\hat y_i)^2}_{\text{SSE}},\qquad R^2=1-\frac{\text{SSE}}{\text{SST}}`),
       p(
         `决定系数 R² 就是“被直线解释的波动占总波动的比例”，在 0 到 1 之间。奶茶店的一元回归 SST = ${f1(simple.sst)}，SSE = ${f1(simple.sse)}，R² = ${f3(simple.r2)}：气温大约解释了销量波动的 ${Math.round(simple.r2 * 100)}%。在一元线性回归中，R² 恰好等于相关系数的平方：${f3(simple.r)}² = ${f3(simple.r * simple.r)}。`,
+      ),
+      note(
+        "R² 衡量的是模型对这 14 天的拟合程度。拟合得好，不等于预测新的日子同样准确：数据越少、变量越多，越可能把偶然的波动也“拟合”进去。要评估预测能力，应该用模型没有见过的数据检验，例如按时间先后留出最后几天，或者在比赛中做交叉验证。",
       ),
       p(
         "R² 只给出一个总的数字，要知道漏掉了什么，还得看残差。把每天的残差画出来（横轴仍是气温），这叫残差图。如果模型已经抓住了主要规律，残差应该在 0 附近随机地上下散开，看不出任何模式。",
@@ -307,6 +310,16 @@ export const regressionSections: RegressionSection[] = [
         kicker: "相关精讲 · 线性规划",
         title: "预测之后：在有限资源下做最优安排",
         text: "线性规划第 2 节讨论了回归与优化的分工：回归从数据估计关系，优化在约束下选出最好的决策。",
+      },
+      p(
+        "比赛附件里的真实数据，往往还有缺失、重复、单位不一致和异常值。动手回归之前，先把数据诊断清楚：第 9 节“查清原因再处理异常值”的原则，就是数据预处理的一部分。",
+      ),
+      {
+        type: "course-bridge",
+        to: "/library/skills/data",
+        kicker: "AI 技能包 · 第 3 步",
+        title: "数据诊断与处理",
+        text: "清点字段和单位、诊断缺失与异常、写出可复现的预处理代码，并防止数据泄露；之后的“结果分析与检验”一步会讲怎样留出数据检验预测。",
       },
       p("想练完整流程，可以用七关实战中的“校园共享单车：需求预测与调度建议”教学案例，从读题、建立预测模型一直走到调度方案和论文框架。"),
       p("本课只讲线性回归。关系明显弯曲、变量很多或需要更高的预测精度时，比赛中也常用随机森林等机器学习方法，可以先在方法速查的“回归 / 随机森林”中了解，并始终用线性回归作为对照的基准。"),

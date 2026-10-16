@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { MathNetwork } from "../components/motion/MathNetwork";
 import { Icon } from "../components/ui/Icon";
@@ -10,6 +10,7 @@ type RouteStop = { title: string; detail: string; href?: string };
 const route: RouteStop[] = [
   { title: "认识建模", detail: "3–5 分钟导论 · 筹备中" },
   { title: "线性规划", detail: "精讲 · 刷题 · 实战", href: "/learn/linear-programming" },
+  { title: "网络优化", detail: "图论 · 最短路 · 生成树", href: "/learn/graph" },
   { title: "回归预测", detail: "回归分析 · 精讲 · 刷题", href: "/learn/regression" },
   { title: "评价决策", detail: "AHP · TOPSIS · 精讲 · 刷题", href: "/learn/ahp" },
   { title: "综合项目", detail: "筹备中" },
@@ -116,7 +117,7 @@ export function HomePage() {
 
       <section className="site-container home-route" aria-labelledby="route-title">
         <h2 id="route-title">一条路线，三种练法</h2>
-        <ol className="route-track">
+        <ol className="route-track" style={{ "--stops": route.length } as CSSProperties}>
           {route.map((stop) => (
             <li key={stop.title} className={stop.href ? "is-open" : "is-planned"}>
               <span className="route-dot" aria-hidden="true" />

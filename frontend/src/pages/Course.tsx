@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { CourseBridge } from "../learning/CourseBridge";
 import { sections, type Block } from "../learning/content";
 import { Graph } from "../learning/Graph";
 import { LessonReader, type LessonDefinition } from "../learning/LessonReader";
@@ -32,6 +33,13 @@ const lp: LessonDefinition<Block> = {
   afterSection: (id) =>
     id === "sensitivity" ? (
       <LabEntry from="sensitivity" text="在实验室里拖动利润和工时，观察最优点在什么范围内保持不变。" />
+    ) : id === "variables" ? (
+      <CourseBridge
+        to="/learn/regression"
+        kicker="相关精讲 · 回归分析"
+        title="单位工时、单位利润从哪里来？"
+        text="本节的参数是题目给定的。真实问题里，它们常常要先用回归从历史数据中估计出来，再交给优化模型做决策。"
+      />
     ) : null,
   codeLabel: "Python · SciPy · 可在本机运行",
   cover: {
@@ -57,7 +65,7 @@ const lp: LessonDefinition<Block> = {
     title: "会看懂，也要会自己做。",
     text: "专项练习提交后判分，答错会告诉你错在哪里、该回看哪一节，但不会直接给出答案。",
     practiceLabel: "开始线性规划专项",
-    note: "学完这一章，可以继续第二门精讲：层次分析法（AHP）。",
+    note: "学完这一章，可以接着学同属“优化”的图论与网络优化，也可以按兴趣进入“预测”（回归分析）或“评价”（层次分析法 → TOPSIS）。",
   },
   symbols: [
     ["x", "A 产量，m²"],

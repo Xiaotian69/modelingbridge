@@ -981,6 +981,106 @@
   font-size: 24px;
   font-family: "Cambria Math", "Times New Roman", serif;
 }
+/* 从哪里开始：three tracks with local progress (Learn.tsx). */
+.learn-start {
+  margin-bottom: 28px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.learn-start h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 750;
+}
+.learn-start-head p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.75;
+}
+.learn-start-head a {
+  color: var(--brand);
+  font-weight: 650;
+}
+.learn-tracks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0 10px;
+  padding: 0;
+  list-style: none;
+}
+.learn-tracks > li {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+}
+.learn-tracks .muted-note {
+  margin: 0;
+  font-size: 13px;
+}
+.learn-track-name {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+}
+.learn-track-name b {
+  font-size: 17px;
+}
+.learn-track-name span {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.learn-track-courses {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0 0 0 18px;
+}
+.learn-track-courses li {
+  display: grid;
+  gap: 1px;
+}
+.learn-track-courses li > a {
+  color: var(--brand);
+  font-weight: 700;
+}
+.learn-progress {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.learn-progress.is-reading {
+  color: var(--brand);
+}
+.learn-progress.is-done {
+  color: var(--ok);
+}
+.learn-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: 28px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.learn-group b {
+  font-size: 18px;
+}
+.learn-group span {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+@media (max-width: 899px) {
+  .learn-tracks {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 .learn-feature + .learn-feature {
   margin-top: 16px;
 }

@@ -42,7 +42,7 @@ const topsis: LessonDefinition<TopsisBlock> = {
     title: "会排名，也要会解释排名。",
     text: "专项练习包括指标方向、向量标准化、贴近度、熵权法和结果解释。答错会告诉你错在哪里、该回看哪一节，但不会直接给出答案。",
     practiceLabel: "开始 TOPSIS 专项",
-    note: "这是第三门精讲，与层次分析法组成“评价与决策”单元。",
+    note: "TOPSIS 与层次分析法组成“评价”这条线。想把评价做完整，可以到七关实战做一道评价题。",
   },
   symbols: [
     ["xᵢⱼ", "方案 i 在指标 j 上的原始值"],

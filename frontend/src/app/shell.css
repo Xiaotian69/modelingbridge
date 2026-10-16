@@ -550,7 +550,8 @@
 }
 .route-track {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* One column per stop (Home.tsx sets --stops). */
+  grid-template-columns: repeat(var(--stops, 5), minmax(0, 1fr));
   margin: 0;
   padding: 0;
   list-style: none;

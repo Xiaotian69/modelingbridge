@@ -51,7 +51,7 @@ describe("regression lesson structure", () => {
         if (b.type === "formula") expect(() => katex.renderToString(b.text, { throwOnError: true })).not.toThrow();
   });
 
-  it("embeds every checkpoint once, in order, plus three figures, one lab and the bridge to LP", () => {
+  it("embeds every checkpoint once, in order, plus three figures, one lab and bridges to LP and the data skill", () => {
     const blocks = regressionSections.flatMap((s) => s.blocks);
     const embedded = blocks.filter((b) => b.type === "question").map((b) => (b as { id: string }).id);
     expect(embedded).toEqual(REGRESSION_CHECKPOINT_IDS);
@@ -64,6 +64,7 @@ describe("regression lesson structure", () => {
     ]);
     expect(blocks.filter((b) => b.type === "course-bridge").map((b) => (b as { to: string }).to)).toEqual([
       "/learn/linear-programming#variables",
+      "/library/skills/data",
     ]);
   });
 
