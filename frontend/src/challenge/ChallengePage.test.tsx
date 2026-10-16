@@ -4,7 +4,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { AppRoutes } from "../App";
-import { LP_SECTION_IDS } from "../learning/sectionIds";
+import { COURSES } from "../learning/courses";
 import { CHALLENGE_STORAGE_KEY, event, q3, results } from "./config";
 
 const events: { name: string; [k: string]: string }[] = [];
@@ -117,7 +117,8 @@ describe("/challenge", () => {
     expect(screen.queryByText(/不收集个人信息/)).not.toBeInTheDocument();
     expect(screen.getByText(/财大数学建模协会/)).toBeInTheDocument();
     expect(screen.queryByText(/抽奖/)).not.toBeInTheDocument(); // lottery 默认关闭
-    expect(events[0]).toEqual({ name: "challenge_enter", src: "poster" });
+    // challenge_enter is sent from a passive effect, which can run after the heading appears: wait for it.
+    await vi.waitFor(() => expect(events[0]).toEqual({ name: "challenge_enter", src: "poster" }));
   });
 
   it("plays all five questions to a result with the QQ group and a tracked course link", async () => {
@@ -197,7 +198,7 @@ describe("/challenge", () => {
     localStorage.setItem(CHALLENGE_STORAGE_KEY, JSON.stringify({ v: 1, step: "result", result: "data", answers: { q1: ["x"] } }));
     renderAt("/challenge?src=<script>");
     expect(await screen.findByRole("button", { name: "开始挑战" })).toBeInTheDocument();
-    expect(events[0]).toEqual({ name: "challenge_enter", src: "direct" });
+    await vi.waitFor(() => expect(events[0]).toEqual({ name: "challenge_enter", src: "direct" }));
   });
 
   it("celebrates once per finish, clears itself, and restarts cleanly", async () => {
@@ -253,14 +254,16 @@ describe("/challenge", () => {
     const landing: Record<string, RegExp> = {
       abstract: /三份实习/, // AHP 精讲
       optimize: /交互实验室/,
-      data: /有限资源/, // LP 精讲，落在 #python
+      data: /明天卖多少杯/, // 回归分析精讲
       express: /七关实战/,
       allround: /精讲目录/,
     };
     for (const r of Object.values(results)) {
       const url = new URL(r.course.to, "https://www.modelingbridge.cc");
       expect(url.searchParams.get("from")).toBe("challenge");
-      if (url.hash) expect(LP_SECTION_IDS).toContain(url.hash.slice(1));
+      // An anchor must be a real section of the course the link opens.
+      if (url.hash)
+        expect(COURSES.find((c) => c.lessonPath === url.pathname)?.sections.map((x) => x.id)).toContain(url.hash.slice(1));
       const view = renderAt(r.course.to);
       expect(await screen.findByRole("heading", { level: 1, name: landing[r.id] }, { timeout: 5000 })).toBeInTheDocument();
       expect(screen.queryByText("没有找到这个页面")).not.toBeInTheDocument();

@@ -357,7 +357,7 @@ export const results: Record<ResultId, ResultCopy> = {
     partner: "编程手",
     course: {
       label: "层次分析法（AHP）精讲",
-      hint: "第 3 题帮你选课用的就是它：把决策拆成层次、两两比较，再检查判断前后是否自洽",
+      hint: "第 3 题帮你选课用的就是它：把决策拆成层次、两两比较，再检查判断前后是否自洽；学完可以接着学 TOPSIS，用数据给方案排序",
       to: "/learn/ahp?from=challenge",
     },
   },
@@ -384,9 +384,9 @@ export const results: Record<ResultId, ResultCopy> = {
     societyHook: "会写代码的人在建模队里很抢手。来协会交流 Python、MATLAB，也找找需要你的建模手。",
     partner: "建模手",
     course: {
-      label: "线性规划精讲 · Python",
-      hint: "直接从第 5 节“让 Python 重现你的推导”开始：几行代码解出最优解",
-      to: "/learn/linear-programming?from=challenge#python",
+      label: "回归分析精讲",
+      hint: "从画散点图找规律开始，用最小二乘拟合直线、看残差找出漏掉的因素，最后用 Python 复现全部结果",
+      to: "/learn/regression?from=challenge",
     },
   },
   express: {
@@ -412,8 +412,8 @@ export const results: Record<ResultId, ResultCopy> = {
     societyHook: "哪个位置都能顶上的人，最适合当队伍的粘合剂。来协会认识更多队友吧。",
     partner: "任何人",
     course: {
-      label: "零基础学习路线",
-      hint: "先学线性规划（优化），再学层次分析法（评价），最后到七关完整走一道题",
+      label: "精讲目录 · 从哪里开始",
+      hint: "五门精讲分成优化、预测、评价三条线：先学线性规划，再按兴趣挑一条线学下去，最后到七关完整走一道题",
       to: "/learn?from=challenge",
     },
   },
