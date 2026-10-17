@@ -85,6 +85,10 @@ describe("the lesson page", () => {
     expect(screen.getByRole("heading", { name: "下雨前，伞该怎么调？" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "刚才的每一步，对应建模流程的哪一步" })).toBeInTheDocument();
     expect(document.querySelectorAll("[data-checkpoint]")).toHaveLength(6);
+    // The six scene illustrations, each with its own description.
+    const imgs = [...document.querySelectorAll(".intro-figure img")];
+    expect(imgs).toHaveLength(6);
+    expect(new Set(imgs.map((i) => i.getAttribute("alt"))).size).toBe(6);
   });
 
   it("ends with three routes into the existing courses and the completion card", async () => {

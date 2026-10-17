@@ -88,7 +88,11 @@ a path to a garden with balance scales and ranked podium blocks (evaluation). Si
 boards with only simple icons, no words.
 ```
 
-## 4. 已就绪的接入位置（2026-10-17）
+## 4. 接入状态（2026-10-17）
+
+**已接入：极简版 V2**（负责人选定）。六张 1600 × 900 WebP，每张 28–50 KB，共约 234 KB，懒加载；页面按 2:1 显示，只裁掉上下少量留白。替代文字已按实际画面重写；第 4、9 节的图加了说明文字。
+
+
 
 - 六个位置都已在代码中预留（`illustrations.tsx`），中文替代文字（alt）已写好；图片懒加载、固定 16:9，不会造成页面跳动；
 - 深色主题下图片放在浅底圆角卡片中；

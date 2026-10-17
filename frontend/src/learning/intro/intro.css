@@ -858,7 +858,8 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9;
+  /* The 16:9 scenes have wide empty margins; 2:1 trims a little of the top and bottom only. */
+  aspect-ratio: 2 / 1;
   object-fit: cover;
   border-radius: var(--radius-lg);
   background: #faf9f5;

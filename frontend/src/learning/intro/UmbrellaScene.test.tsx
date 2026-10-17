@@ -117,6 +117,14 @@ describe("illustration slots", () => {
     expect(illustrationSrc("intro-03-map-vs-metro", { "./img/intro-03-map-vs-metro.jpg": "b" })).toBe("b");
   });
 
+  it("all six images are in the repository, as small WebP files", async () => {
+    const fs = (await import(/* @vite-ignore */ "node:fs" as string)) as { statSync(path: string): { size: number } };
+    for (const id of ids) {
+      expect(illustrationSrc(id), id).not.toBeNull();
+      expect(fs.statSync(`src/learning/intro/img/${id}.webp`).size, id).toBeLessThan(150_000);
+    }
+  });
+
   it("six slots, each placed once (the cover holds the first)", () => {
     expect(ids).toHaveLength(6);
     const placed = introSections.flatMap((s) => s.blocks.filter((b) => b.type === "intro-figure").map((b) => (b as { id: string }).id));
