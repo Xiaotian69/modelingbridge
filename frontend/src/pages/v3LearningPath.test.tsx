@@ -6,7 +6,7 @@ import { cleanup, fireEvent, render, screen, within } from "@testing-library/rea
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AppRoutes } from "../App";
-import { COURSES } from "../learning/courses";
+import { COURSES, LESSONS } from "../learning/courses";
 import { practiceBankOf } from "../learning/courseBanks";
 import { PRACTICE_KEY, READING_KEY } from "../learning/storage";
 import { learning } from "../state/learning";
@@ -35,25 +35,29 @@ const renderAt = (path: string) =>
   );
 
 describe("home route", () => {
-  it("has one stop per track, including 网络优化 for the graph course", () => {
+  it("starts at 认识建模 (第零课) and has one stop per track, including 网络优化 for the graph course", () => {
     inRouter(<HomePage />);
     const route = screen.getByRole("heading", { name: "一条路线，三种练法" }).parentElement!;
     const stops = within(route).getAllByRole("listitem").map((li) => li.querySelector("a, b")!.textContent);
     expect(stops).toEqual(["认识建模", "线性规划", "网络优化", "回归预测", "评价决策", "综合项目"]);
     expect(within(route).getByRole("link", { name: "网络优化" })).toHaveAttribute("href", "/learn/graph");
+    expect(within(route).getByRole("link", { name: "认识建模" })).toHaveAttribute("href", "/learn/introduction");
     expect(route.querySelector("ol")!.getAttribute("style")).toContain("--stops: 6");
-    // Every open stop leads to a real course.
+    // Every open stop leads to a real lesson.
     for (const a of within(route).getAllByRole("link"))
-      expect(COURSES.some((c) => c.lessonPath === a.getAttribute("href"))).toBe(true);
+      expect(LESSONS.some((c) => c.lessonPath === a.getAttribute("href"))).toBe(true);
   });
 });
 
 describe("精讲目录: where to start", () => {
   const guide = () => screen.getByRole("heading", { name: "从哪里开始" }).closest("section")!;
 
-  it("recommends linear programming first and lists every course once, in three tracks", () => {
+  it("starts newcomers at 第零课, then lists every course once, in three tracks", () => {
     inRouter(<LearnPage />);
-    expect(within(guide()).getByText(/建议先学/)).toHaveTextContent("线性规划");
+    expect(within(guide()).getByText(/第一次接触数学建模？/)).toHaveTextContent("先从「认识数学建模」开始");
+    expect(within(guide()).getByRole("link", { name: "从第零课开始" })).toHaveAttribute("href", "/learn/introduction");
+    // 第零课 is the common entry, not one of the tracks, and can be skipped.
+    expect(within(guide()).getByText(/可以跳过第零课/)).toBeInTheDocument();
     const tracks = within(guide()).getAllByRole("listitem").filter((li) => li.querySelector(".learn-track-name"));
     expect(tracks.map((t) => t.querySelector("b")!.textContent)).toEqual(["优化", "预测", "评价"]);
     const links = tracks.flatMap((t) => [...t.querySelectorAll(".learn-track-courses > li > a")].map((a) => a.getAttribute("href")));

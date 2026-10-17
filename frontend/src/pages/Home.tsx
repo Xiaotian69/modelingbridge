@@ -8,7 +8,7 @@ import { courseById, sectionIndex, sectionTitleIn } from "../learning/courses";
 
 type RouteStop = { title: string; detail: string; href?: string };
 const route: RouteStop[] = [
-  { title: "认识建模", detail: "3–5 分钟导论 · 筹备中" },
+  { title: "认识建模", detail: "第零课 · 15–20 分钟 · 互动", href: "/learn/introduction" },
   { title: "线性规划", detail: "精讲 · 刷题 · 实战", href: "/learn/linear-programming" },
   { title: "网络优化", detail: "图论 · 最短路 · 生成树", href: "/learn/graph" },
   { title: "回归预测", detail: "回归分析 · 精讲 · 刷题", href: "/learn/regression" },
@@ -92,13 +92,15 @@ export function HomePage() {
                 <p className="door-kicker">我是新手</p>
                 <h2 id="door-new">从一个真实小问题开始</h2>
                 <p className="door-path">
-                  帮一家加工坊安排一周生产 → 学会线性规划 → 用练习检验自己
+                  下雨了，两个雨伞点的伞够不够用？→ 认识数学建模 → 选一条路线学下去
                 </p>
-                <Link className="door-go" to="/learn/linear-programming">
-                  开始第一课
+                <Link className="door-go" to="/learn/introduction">
+                  从第零课开始
                   <Icon name="arrow" size={18} />
                 </Link>
-                <p className="door-note">建模导论（3–5 分钟）筹备中，可以直接开始。</p>
+                <p className="door-note">
+                  已经了解建模？可以直接学<Link to="/learn/linear-programming">线性规划</Link>。
+                </p>
               </section>
               <section className="door" aria-labelledby="door-pro">
                 <p className="door-kicker">我有基础</p>

@@ -5,7 +5,8 @@ import { Collapse } from "../components/motion/Collapse";
 import { PageHead } from "../components/ui/PageHead";
 import { getLocalCase } from "../data/localCases";
 import { practiceBankOf } from "../learning/courseBanks";
-import { COURSES, localQuestionId, sectionIndex, sectionTitleIn } from "../learning/courses";
+import { COURSES, courseById, localQuestionId, sectionIndex, sectionTitleIn } from "../learning/courses";
+import { introStatus } from "../learning/tracks";
 import { PRACTICE_KEY, READING_KEY } from "../learning/storage";
 import { learning, useLearning } from "../state/learning";
 import { LEARNING_KEY, type ExerciseRecord } from "../state/learningStore";
@@ -88,10 +89,15 @@ export function RecordsPage() {
     };
   });
   const totalWrong = courses.reduce((n, c) => n + c.counts.wrong, 0);
-  const readingCount = courses.filter((c) => c.reading).length;
+  const intro = courseById("intro");
+  const zero = introStatus(state);
+  const readingCount = courses.filter((c) => c.reading).length + (zero.reading ? 1 : 0);
   const startedDrafts = drafts.filter((d) => d.started);
   const learningCount =
-    readingCount + Object.keys(state.exercises).length + Object.keys(state.checkpoints).length;
+    readingCount +
+    Object.keys(state.exercises).length +
+    Object.keys(state.checkpoints).length +
+    Object.keys(state.milestones ?? {}).length;
   const hasAnything = learningCount > 0 || drafts.length > 0 || reports.length > 0;
 
   const size = useMemo(
@@ -166,6 +172,36 @@ export function RecordsPage() {
         <section className="records-section" aria-labelledby="rec-course">
           <h2 id="rec-course">课程进度</h2>
           <div className="records-two">
+            <div className="records-card">
+              <div className="records-head">
+                <p className="records-title">第零课 · {intro.title}</p>
+                <Link
+                  className="btn btn-secondary"
+                  to={zero.reading ? `${intro.lessonPath}#${zero.reading.lastSectionId}` : intro.lessonPath}
+                >
+                  {zero.reading ? "继续阅读" : "开始阅读"}
+                </Link>
+              </div>
+              {zero.complete ? (
+                <p>
+                  <b>已完成</b> · 读过 {zero.reading!.visited.length}/{intro.sections.length} 节，雨伞案例已完成
+                </p>
+              ) : zero.reading ? (
+                <p>
+                  上次读到第 {sectionIndex(intro, zero.reading.lastSectionId) + 1} 节「{sectionTitleIn(intro, zero.reading.lastSectionId)}」 ·
+                  读过 {zero.reading.visited.length}/{intro.sections.length} 节
+                </p>
+              ) : (
+                <p className="muted-note">还没有阅读记录。</p>
+              )}
+              {zero.reading && (
+                <progress max={intro.sections.length} value={zero.reading.visited.length} aria-label={`${intro.title}已读小节`} />
+              )}
+              <p className="muted-note">
+                雨伞案例：{zero.lab ? `已完成（${formatTime(zero.lab.at)}）` : "未完成"} · 理解检查尝试过 {zero.tried}/
+                {intro.checkpointIds.length}（不计成绩）
+              </p>
+            </div>
             {courses.map(({ course, reading, tried }) => (
               <div className="records-card" key={course.id}>
                 <div className="records-head">

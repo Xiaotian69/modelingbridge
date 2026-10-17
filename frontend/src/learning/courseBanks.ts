@@ -7,6 +7,8 @@ import { metaFor as lpMetaFor, type ExerciseMeta } from "./exerciseMeta";
 import { publishedQuestions } from "./questions";
 import { graphExerciseMeta } from "./graph/exerciseMeta";
 import { graphQuestions } from "./graph/questions";
+import { introExerciseMeta } from "./intro/exerciseMeta";
+import { introQuestions } from "./intro/questions";
 import { regressionExerciseMeta } from "./regression/exerciseMeta";
 import { regressionQuestions } from "./regression/questions";
 import { topsisExerciseMeta } from "./topsis/exerciseMeta";
@@ -18,6 +20,7 @@ const banks: Record<LessonId, CourseQuestion[]> = {
   topsis: topsisQuestions.filter((q) => q.review === "verified"),
   regression: regressionQuestions.filter((q) => q.review === "verified"),
   graph: graphQuestions.filter((q) => q.review === "verified"),
+  intro: introQuestions.filter((q) => q.review === "verified"),
 };
 /** Metadata of the prefixed courses; LP keeps its original lookup and fallback. */
 const metas: Partial<Record<LessonId, Record<string, ExerciseMeta>>> = {
@@ -25,6 +28,7 @@ const metas: Partial<Record<LessonId, Record<string, ExerciseMeta>>> = {
   topsis: topsisExerciseMeta,
   regression: regressionExerciseMeta,
   graph: graphExerciseMeta,
+  intro: introExerciseMeta,
 };
 
 export const questionsOf = (lesson: LessonId) => banks[lesson];

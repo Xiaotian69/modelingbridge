@@ -251,6 +251,7 @@ function ResultView({ id, answers, heading, src, onRestart, celebrate }: { id: R
     setOpen((o) => !o);
   };
   const courseClick = () => track("challenge_course_click", { src, result: id });
+  const introClick = () => track("challenge_course_click", { src, result: id, target: "intro" });
 
   return (
     <div className="cg cg-result">
@@ -350,6 +351,12 @@ function ResultView({ id, answers, heading, src, onRestart, celebrate }: { id: R
             <Link to={r.course.to} className="cg-btn cg-btn-primary" onClick={courseClick}>
               {r.course.label} →
             </Link>
+            <p className="cg-zero">
+              第一次接触数学建模？
+              <Link to="/learn/introduction?from=challenge" onClick={introClick}>
+                从第零课开始 →
+              </Link>
+            </p>
           </section>
         </div>
 

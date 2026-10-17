@@ -1,59 +1,40 @@
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { PageHead } from "../components/ui/PageHead";
 import { modelMethods } from "../data/modelingContent";
-import { courseById, courseByMethod, sectionIndex, type LessonId } from "../learning/courses";
-import { useLearning } from "../state/learning";
+import { courseByMethod } from "../learning/courses";
+import { CourseProgress, TrackList } from "../learning/tracks";
 
-/** 学习路线：三条线，每条线内按先后排列。第一门推荐线性规划（例题最完整，有交互实验室）。 */
-const TRACKS: { id: string; name: string; question: string; courses: LessonId[]; note: string }[] = [
-  { id: "optimize", name: "优化", question: "有限的资源、路线、安排，怎样选最好？", courses: ["lp", "graph"], note: "图论不依赖线性规划，也可以单独学" },
-  { id: "predict", name: "预测", question: "根据已有数据，估计未来会怎样？", courses: ["regression"], note: "预测的结果常常交给优化模型做决策" },
-  { id: "evaluate", name: "评价", question: "多个方案、多项指标，怎样排出先后？", courses: ["ahp", "topsis"], note: "TOPSIS 要用到 AHP 求出的权重，建议按顺序学" },
-];
-
-/** One line of local progress for a course; only what this browser has stored. */
-function Progress({ id }: { id: LessonId }) {
-  const { state } = useLearning();
-  const course = courseById(id);
-  const reading = state.reading[id];
-  if (!reading) return <span className="learn-progress">未开始</span>;
-  if (reading.visited.length >= course.sections.length) return <span className="learn-progress is-done">已读完全部 {course.sections.length} 节</span>;
-  return (
-    <Link className="learn-progress is-reading" to={`${course.lessonPath}#${reading.lastSectionId}`}>
-      上次读到第 {sectionIndex(course, reading.lastSectionId) + 1} 节 · 继续
-    </Link>
-  );
-}
-
+/**
+ * 从哪里开始: 第零课「认识数学建模」 is the general entry (not one of the tracks, and can be skipped);
+ * after it, three tracks in order.
+ */
 function StartGuide() {
   return (
     <section className="learn-start" aria-labelledby="learn-start-title">
       <div className="learn-start-head">
         <h2 id="learn-start-title">从哪里开始</h2>
         <p>
-          五门精讲都从零讲起，不需要先修课。第一次来，建议先学<Link to="/learn/linear-programming">线性规划</Link>
-          ：例题最完整，还有交互实验室；之后按兴趣挑一条线学下去，最后到<Link to="/quest">七关实战</Link>完整走一道题。
+          第一次接触数学建模？先从<Link to="/learn/introduction">「认识数学建模」</Link>开始。学完第零课，再按兴趣选一条路线；五门精讲都从零讲起，不需要先修课，最后可以到
+          <Link to="/quest">七关实战</Link>完整走一道题。
         </p>
       </div>
-      <ol className="learn-tracks">
-        {TRACKS.map((t) => (
-          <li key={t.id}>
-            <p className="learn-track-name">
-              <b>{t.name}</b>
-              <span>{t.question}</span>
-            </p>
-            <ol className="learn-track-courses">
-              {t.courses.map((id) => (
-                <li key={id}>
-                  <Link to={courseById(id).lessonPath}>{courseById(id).title}</Link>
-                  <Progress id={id} />
-                </li>
-              ))}
-            </ol>
-            <p className="muted-note">{t.note}</p>
-          </li>
-        ))}
-      </ol>
+      <div className="learn-zero">
+        <div>
+          <p className="learn-zero-kicker">第零课 · 所有路线的起点 · 约 15–20 分钟</p>
+          <p className="learn-zero-title">
+            <Link to="/learn/introduction">认识数学建模</Link>
+          </p>
+          <p className="learn-zero-text">从一个下雨天的雨伞调配问题开始，体验一次完整的建模：目标、变量、假设、求解、检验与改进。</p>
+        </div>
+        <div className="learn-zero-side">
+          <CourseProgress id="intro" />
+          <Link className="btn btn-primary" to="/learn/introduction">
+            从第零课开始
+          </Link>
+        </div>
+      </div>
+      <p className="learn-start-then">学完第零课，选一条路线（已有基础的同学可以跳过第零课，直接从这里开始）：</p>
+      <TrackList />
       <p className="muted-note">学习进度只保存在此浏览器。阅读位置不代表掌握程度，可以用专项练习检验。</p>
     </section>
   );

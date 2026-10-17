@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { publishedQuestions } from "../learning/questions";
 import { practiceBankOf } from "../learning/courseBanks";
-import { COURSES, courseById, localQuestionId, type LessonId } from "../learning/courses";
+import { COURSES, courseById, localQuestionId, type CourseId } from "../learning/courses";
 import { ExerciseView } from "../practice/ExerciseView";
 import { useLearning } from "../state/learning";
 import type { ExerciseRecord } from "../state/learningStore";
@@ -36,7 +36,7 @@ const statusMark: Record<Status, { mark: string; text: string }> = {
   new: { mark: "○", text: "未做" },
 };
 
-export function PracticePage({ topic = "lp" }: { topic?: LessonId }) {
+export function PracticePage({ topic = "lp" }: { topic?: CourseId }) {
   const course = courseById(topic);
   const BASE = course.practicePath;
   const practiceBank = useMemo(() => practiceBankOf(topic), [topic]);

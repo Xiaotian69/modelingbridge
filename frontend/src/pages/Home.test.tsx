@@ -24,10 +24,9 @@ const renderHome = () =>
 
 it("offers two doors to real pages without presenting AI as online or offering downloads", () => {
   renderHome();
-  expect(screen.getByRole("link", { name: /开始第一课/ })).toHaveAttribute(
-    "href",
-    "/learn/linear-programming",
-  );
+  // V3.0: the newcomer door starts at 第零课, with linear programming one click away.
+  expect(screen.getByRole("link", { name: /从第零课开始/ })).toHaveAttribute("href", "/learn/introduction");
+  expect(screen.getAllByRole("link", { name: "线性规划" })[0]).toHaveAttribute("href", "/learn/linear-programming");
   expect(screen.getByRole("combobox")).toBeInTheDocument();
   expect(screen.getByRole("link", { name: "七关实战" })).toHaveAttribute("href", "/quest");
   expect(screen.queryByText(/AI.*在线/)).not.toBeInTheDocument();

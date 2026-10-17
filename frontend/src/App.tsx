@@ -29,6 +29,7 @@ const LearnPage = lazy(() =>
 );
 const CoursePage = lazy(() => import("./pages/Course").then(m => ({ default: m.CoursePage })));
 const AhpCoursePage = lazy(() => import("./pages/AhpCourse").then((m) => ({ default: m.AhpCoursePage })));
+const IntroCoursePage = lazy(() => import("./pages/IntroCourse").then((m) => ({ default: m.IntroCoursePage })));
 const TopsisCoursePage = lazy(() => import("./pages/TopsisCourse").then((m) => ({ default: m.TopsisCoursePage })));
 const GraphCoursePage = lazy(() => import("./pages/GraphCourse").then((m) => ({ default: m.GraphCoursePage })));
 const RegressionCoursePage = lazy(() =>
@@ -94,6 +95,7 @@ export function AppRoutes() {
         <Route index element={<HomePage />} />
         {/* 精讲 */}
         <Route path="learn" element={<LearnPage />} />
+        <Route path="learn/introduction" element={<IntroCoursePage />} />
         <Route path="learn/linear-programming" element={<CoursePage />} />
         <Route path="learn/ahp" element={<AhpCoursePage />} />
         <Route path="learn/topsis" element={<TopsisCoursePage />} />

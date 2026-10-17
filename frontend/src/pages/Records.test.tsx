@@ -92,12 +92,12 @@ describe("学习记录", () => {
     expect(localStorage.getItem(READING_KEY)).toBeNull();
     expect(Object.keys(localStorage).some((k) => k.startsWith("mb_quest_draft:"))).toBe(false);
     expect(localStorage.getItem("mb_records")).not.toBeNull();
-    // Every course (线性规划, 层次分析法, TOPSIS, 回归分析, 图论) now shows an empty reading position.
-    expect(screen.getAllByText("还没有阅读记录。")).toHaveLength(5);
+    // Every lesson (第零课, 线性规划, 层次分析法, TOPSIS, 回归分析, 图论) now shows an empty reading position.
+    expect(screen.getAllByText("还没有阅读记录。")).toHaveLength(6);
     // A fresh load stays empty (no re-migration from the old keys).
     cleanup();
     renderRecords();
-    expect(screen.getAllByText("还没有阅读记录。")).toHaveLength(5);
+    expect(screen.getAllByText("还没有阅读记录。")).toHaveLength(6);
     expect(screen.getByText(/✓ 0 · ✕ 0 待重练 · ◐ 0 有草稿 · ○ 6 未做/)).toBeInTheDocument();
   });
 

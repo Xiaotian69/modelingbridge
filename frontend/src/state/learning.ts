@@ -140,6 +140,10 @@ export const learning = {
       checkpoints: { ...s.checkpoints, [id]: { tried: true, lastResult: correct ? "correct" : "incorrect", updatedAt: now() } },
     }));
   },
+  /** Records a milestone once (e.g. the 第零课 umbrella case); later calls keep the first time. */
+  markMilestone(id: string) {
+    update((s) => (s.milestones?.[id] ? s : { ...s, milestones: { ...s.milestones, [id]: { at: now() } } }));
+  },
   saveDraft(id: string, draft: Answer) {
     update((s) => withExercise(s, id, (e) => ({ ...e, draft })), { debounce: true });
   },

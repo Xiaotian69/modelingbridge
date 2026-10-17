@@ -366,6 +366,12 @@
   font-size: 12px;
   opacity: 0.75;
 }
+.door-note a {
+  color: inherit;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .door-primary {
   background: var(--mint);
   border-color: var(--mint);

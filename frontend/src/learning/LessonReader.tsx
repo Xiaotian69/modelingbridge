@@ -28,9 +28,19 @@ export type LessonDefinition<B> = {
   renderExtra?: (block: B) => ReactNode | undefined;
   codeLabel: string;
   cover: { kicker: string; title: ReactNode; deck: string; meta: string[]; goal: string };
-  practicePath: string;
-  application: { to: string; label: string; endLabel: string };
-  end: { title: string; text: string; practiceLabel: string; note: string };
+  /**
+   * Method courses have a practice bank, a contest application and the default ending.
+   * 第零课 has none of them: it passes `endSlot` (and `coverActions`) instead.
+   */
+  practicePath?: string;
+  application?: { to: string; label: string; endLabel: string };
+  end?: { title: string; text: string; practiceLabel: string; note: string };
+  /** Replaces the default ending (practice call to action). */
+  endSlot?: ReactNode;
+  /** Extra buttons on the cover, after 开始阅读 / 继续. */
+  coverActions?: ReactNode;
+  /** Heading of the margin list, “符号表” by default. */
+  marginTitle?: string;
   symbols: [string, string][];
   /** Optional extra content at the end of a section (e.g. the LP lab entry). */
   afterSection?: (sectionId: string) => ReactNode;
@@ -163,7 +173,7 @@ export function LessonReader<B extends { type: string }>({ def }: { def: LessonD
   const [target, setTarget] = useState<string | null>(null);
   const [tocOpen, setTocOpen] = useState(true);
   const index = sections.findIndex((s) => s.id === active);
-  const bank = useMemo(() => practiceBankOf(lesson), [lesson]);
+  const bank = useMemo(() => (def.practicePath ? practiceBankOf(lesson) : []), [lesson, def.practicePath]);
   const relatedPractice = useMemo(
     () => bank.filter((q) => metaForQuestion(q.id).sectionId === active),
     [active, bank],
@@ -301,14 +311,24 @@ export function LessonReader<B extends { type: string }>({ def }: { def: LessonD
                   开始阅读
                 </Link>
               )}
-              <Link className="btn btn-secondary" to={def.practicePath}>
-                专项练习（{bank.length} 题）
-              </Link>
-              <Link className="btn btn-secondary" to={def.application.to}>
-                {def.application.label}
-              </Link>
-              <span className="later">进阶拓展（筹备中）</span>
+              {def.coverActions}
+              {def.practicePath && (
+                <Link className="btn btn-secondary" to={def.practicePath}>
+                  专项练习（{bank.length} 题）
+                </Link>
+              )}
+              {def.application && (
+                <Link className="btn btn-secondary" to={def.application.to}>
+                  {def.application.label}
+                </Link>
+              )}
+              {def.practicePath && <span className="later">进阶拓展（筹备中）</span>}
             </div>
+            {lesson !== "intro" && (
+              <p className="topic-intro-link">
+                第一次接触数学建模？可以先读第零课<Link to="/learn/introduction">「认识数学建模」</Link>，约 15–20 分钟。
+              </p>
+            )}
           </header>
           <details className="mobile-toc">
             <summary>
@@ -341,49 +361,63 @@ export function LessonReader<B extends { type: string }>({ def }: { def: LessonD
                 {i > 0 ? <Link to={`#${sections[i - 1].id}`}>← 上一节</Link> : <span>第一节</span>}
                 {i < sections.length - 1 ? (
                   <Link to={`#${sections[i + 1].id}`}>下一节 →</Link>
-                ) : (
+                ) : def.practicePath ? (
                   <Link to={def.practicePath}>进入专项练习 →</Link>
+                ) : (
+                  <Link to="/learn">回到精讲目录 →</Link>
                 )}
               </nav>
             </section>
           ))}
-          <footer className="course-end">
-            <p className="kicker">现在，试着独立完成一次。</p>
-            <h2>{def.end.title}</h2>
-            <p>{def.end.text}</p>
-            <div className="topic-actions">
-              <Link className="btn btn-primary" to={def.practicePath}>
-                {def.end.practiceLabel}
-              </Link>
-              <Link className="btn btn-secondary" to={def.application.to}>
-                {def.application.endLabel}
-              </Link>
-            </div>
-            <p className="muted-note">{def.end.note}</p>
-          </footer>
+          {def.endSlot ? (
+            <footer className="course-end">{def.endSlot}</footer>
+          ) : (
+            def.end &&
+            def.practicePath &&
+            def.application && (
+              <footer className="course-end">
+                <p className="kicker">现在，试着独立完成一次。</p>
+                <h2>{def.end.title}</h2>
+                <p>{def.end.text}</p>
+                <div className="topic-actions">
+                  <Link className="btn btn-primary" to={def.practicePath}>
+                    {def.end.practiceLabel}
+                  </Link>
+                  <Link className="btn btn-secondary" to={def.application.to}>
+                    {def.application.endLabel}
+                  </Link>
+                </div>
+                <p className="muted-note">{def.end.note}</p>
+              </footer>
+            )
+          )}
         </article>
 
         <aside className="reader-margin" aria-label="页边注">
-          <p className="kicker">符号表</p>
+          <p className="kicker">{def.marginTitle ?? "符号表"}</p>
           <dl>
             {def.symbols.map(([term, meaning]) => (
               <SymbolRow key={term} term={term} meaning={meaning} />
             ))}
           </dl>
-          <hr />
-          <p className="kicker">本节相关练习</p>
-          {relatedPractice.length ? (
-            <ul>
-              {relatedPractice.map((q) => (
-                <li key={q.id}>
-                  <Link to={`${def.practicePath}/${q.id}`}>
-                    {q.knowledge}（{q.difficulty}）
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>本节没有单独的练习。</p>
+          {def.practicePath && (
+            <>
+              <hr />
+              <p className="kicker">本节相关练习</p>
+              {relatedPractice.length ? (
+                <ul>
+                  {relatedPractice.map((q) => (
+                    <li key={q.id}>
+                      <Link to={`${def.practicePath}/${q.id}`}>
+                        {q.knowledge}（{q.difficulty}）
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>本节没有单独的练习。</p>
+              )}
+            </>
           )}
           <hr />
           <p>阅读位置自动保存在此浏览器，不代表掌握程度。</p>

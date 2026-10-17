@@ -14,8 +14,11 @@ export const LEARNING_BACKUP_KEY = "mb.v2.learning.corrupt";
 export const META_KEY = "mb.v2.meta";
 export const SCHEMA_VERSION = 2;
 export const LP_LESSON = "lp";
-/** Lessons with a reading position (V2.1 adds AHP; V3.0 TOPSIS, regression, graph; older data simply lacks them). */
-export const LESSON_KEYS = ["lp", "ahp", "topsis", "regression", "graph"] as const;
+/**
+ * Lessons with a reading position (V2.1 adds AHP; V3.0 TOPSIS, regression, graph and 第零课 intro;
+ * older data simply lacks them).
+ */
+export const LESSON_KEYS = ["lp", "ahp", "topsis", "regression", "graph", "intro"] as const;
 export type LessonKey = (typeof LESSON_KEYS)[number];
 /** Inline thinking question that lived in the V1 practice history; it is a checkpoint. */
 const V1_CHECKPOINT_IDS = ["think-1"];
@@ -41,12 +44,19 @@ export type ExerciseRecord = {
 };
 export type CheckpointRecord = { tried: true; lastResult: "correct" | "incorrect"; updatedAt: string };
 export type ReadingRecord = { lastSectionId: string; visited: string[]; updatedAt: string };
+/** Something finished once, e.g. every step of the 第零课 umbrella case. */
+export type MilestoneRecord = { at: string };
 
 export type LearningState = {
   schemaVersion: typeof SCHEMA_VERSION;
   reading: Partial<Record<LessonKey, ReadingRecord>>;
   checkpoints: Record<string, CheckpointRecord>;
   exercises: Record<string, ExerciseRecord>;
+  /**
+   * Optional (added in V3.0 with 第零课), so the schema version stays 2: older versions ignore it,
+   * and state without it is still valid. Only present when something was recorded.
+   */
+  milestones?: Record<string, MilestoneRecord>;
   lastActivity?: { kind: "lesson" | "exercise"; id: string; at: string };
 };
 
@@ -110,6 +120,11 @@ export function sanitizeState(raw: unknown): LearningState | null {
       const clean = sanitizeExercise(e);
       if (clean) state.exercises[id] = clean;
     }
+  if (isObject(raw.milestones)) {
+    const milestones = Object.entries(raw.milestones).filter(([, m]) => isObject(m) && typeof m.at === "string");
+    if (milestones.length)
+      state.milestones = Object.fromEntries(milestones.map(([id, m]) => [id, { at: (m as MilestoneRecord).at }]));
+  }
   if (isObject(raw.lastActivity)) {
     const a = raw.lastActivity;
     if ((a.kind === "lesson" || a.kind === "exercise") && typeof a.id === "string" && typeof a.at === "string")
@@ -300,6 +315,11 @@ export function mergeStates(mine: LearningState, theirs: LearningState): Learnin
   for (const id of ids(mine.exercises, theirs.exercises)) out.exercises[id] = pick(mine.exercises[id], theirs.exercises[id])!;
   for (const id of ids(mine.checkpoints, theirs.checkpoints))
     out.checkpoints[id] = pick(mine.checkpoints[id], theirs.checkpoints[id])!;
+  // A milestone, once reached, stays reached: keep the union, earliest time first.
+  const milestones = { ...(theirs.milestones ?? {}), ...(mine.milestones ?? {}) };
+  for (const [id, m] of Object.entries(theirs.milestones ?? {}))
+    if (milestones[id].at > m.at) milestones[id] = m;
+  if (Object.keys(milestones).length) out.milestones = milestones;
   const acts = [mine.lastActivity, theirs.lastActivity].filter(Boolean) as NonNullable<LearningState["lastActivity"]>[];
   if (acts.length) out.lastActivity = acts.sort((a, b) => (a.at > b.at ? -1 : 1))[0];
   return out;

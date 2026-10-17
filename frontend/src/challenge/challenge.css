@@ -1114,6 +1114,16 @@
 .cg-action p + .cg-btn {
   margin-top: 14px;
 }
+/* Low-key second entry under the recommended course: 第零课 for every result. */
+.cg-action .cg-btn + .cg-zero {
+  margin-top: 10px;
+  font-size: 13px;
+}
+.cg-zero a {
+  color: var(--brand);
+  font-weight: 650;
+  white-space: nowrap;
+}
 .cg-qq {
   font-size: 28px !important;
   font-weight: 800;

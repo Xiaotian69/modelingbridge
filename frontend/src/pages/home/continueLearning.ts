@@ -2,7 +2,7 @@
  * What the learner left unfinished: lesson position and practice from the V2 learning
  * store (which migrates the V1 keys on first load), quest drafts from their own keys.
  */
-import { COURSES, courseOfQuestion, type LessonId } from "../../learning/courses";
+import { LESSONS, courseOfQuestion, type LessonId } from "../../learning/courses";
 import { learning } from "../../state/learning";
 
 const QUEST_PREFIX = "mb_quest_draft:";
@@ -26,7 +26,7 @@ export function readContinueItems(store: Storage | null = safeStorage()): Contin
   const items: ContinueItem[] = [];
   const { state } = learning.get();
   // The most recently read lesson (each course keeps its own position).
-  const latest = COURSES.map((c) => ({ c, r: state.reading[c.id] }))
+  const latest = LESSONS.map((c) => ({ c, r: state.reading[c.id] }))
     .filter((x) => x.r)
     .sort((a, b) => (a.r!.updatedAt > b.r!.updatedAt ? -1 : 1))[0];
   if (latest)
@@ -44,7 +44,7 @@ export function readContinueItems(store: Storage | null = safeStorage()): Contin
       kind: "practice",
       attempted: practiced.length,
       wrong: practiced.filter(([, e]) => e.lastStatus && e.lastStatus !== "correct").length,
-      href: courseOfQuestion(lastId).practicePath,
+      href: courseOfQuestion(lastId).practicePath ?? "/practice",
     });
   }
   let latestQuest: Extract<ContinueItem, { kind: "quest" }> | null = null;

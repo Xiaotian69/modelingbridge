@@ -1003,6 +1003,52 @@
   color: var(--brand);
   font-weight: 650;
 }
+/* 第零课: the entry before the three tracks. */
+.learn-zero {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px 20px;
+  margin: 16px 0 0;
+  padding: 14px 16px;
+  border: 1px solid var(--brand);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--brand) 7%, var(--surface));
+}
+.learn-zero p {
+  margin: 0;
+}
+.learn-zero-kicker {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand);
+  letter-spacing: 0.04em;
+}
+.learn-zero-title {
+  margin: 2px 0 4px !important;
+  font-size: 19px;
+  font-weight: 750;
+}
+.learn-zero-title a {
+  color: var(--text);
+}
+.learn-zero-text {
+  max-width: 46em;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.learn-zero-side {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.learn-start-then {
+  margin: 16px 0 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
 .learn-tracks {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

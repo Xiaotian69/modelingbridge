@@ -4,7 +4,7 @@ import {
   getClassicProblemPracticeLink,
   modelMethods,
 } from "../data/modelingContent";
-import { COURSES, courseByMethod } from "../learning/courses";
+import { COURSES, INTRO_LESSON, courseByMethod } from "../learning/courses";
 
 export type SearchGroup = "精讲" | "练习" | "方法速查" | "AI 技能" | "赛题";
 export type SearchEntry = {
@@ -99,12 +99,24 @@ export function staticEntries(): SearchEntry[] {
     badge: "可操作",
     haystack: norm("图论 实验 交互 最短路 dijkstra 最小生成树 kruskal 施工 断路 地图 网络"),
   };
-  return [...practice, lab, topsisLab, regressionLab, graphLab, ...methods, ...problems];
+  // 第零课 is findable before the lesson text loads: newcomers search for “入门”, “什么是建模”.
+  const intro: SearchEntry = {
+    id: "lesson:intro",
+    group: "精讲",
+    title: `${INTRO_LESSON.title}（第零课）`,
+    meta: "零基础入门 · 约 15–20 分钟 · 雨伞调配互动",
+    href: INTRO_LESSON.lessonPath,
+    badge: "从这里开始",
+    haystack: norm(
+      "认识数学建模 第零课 入门 新手 零基础 什么是数学建模 什么是模型 建模是什么 数学建模 建模流程 模型假设 假设 目标 决策变量 检验 团队 分工 合作 竞赛 比赛 国赛 美赛 论文 学术诚信 学习路线 雨伞 共享雨伞 intro",
+    ),
+  };
+  return [intro, ...practice, lab, topsisLab, regressionLab, graphLab, ...methods, ...problems];
 }
 
 /** Lesson sections and AI skills, loaded only when someone starts searching. */
 export async function lessonEntries(): Promise<SearchEntry[]> {
-  const [{ sections }, { skills }, { ahpSections }, { topsisSections }, { regressionSections }, { graphSections }] =
+  const [{ sections }, { skills }, { ahpSections }, { topsisSections }, { regressionSections }, { graphSections }, { introSections }] =
     await Promise.all([
       import("../learning/content"),
       import("../content/skills"),
@@ -112,7 +124,17 @@ export async function lessonEntries(): Promise<SearchEntry[]> {
       import("../learning/topsis/content"),
       import("../learning/regression/content"),
       import("../learning/graph/content"),
+      import("../learning/intro/content"),
     ]);
+  const intro = introSections.map<SearchEntry>((s, i) => ({
+    id: `lesson:intro:${s.id}`,
+    group: "精讲",
+    title: s.title,
+    meta: `认识数学建模 · 第 ${i + 1} 节`,
+    href: `/learn/introduction#${s.id}`,
+    badge: "可学",
+    haystack: norm(`认识数学建模 第零课 入门 ${s.title} ${s.lead}`),
+  }));
   const graph = graphSections.map<SearchEntry>((s, i) => ({
     id: `lesson:graph:${s.id}`,
     group: "精讲",
@@ -158,7 +180,7 @@ export async function lessonEntries(): Promise<SearchEntry[]> {
     badge: "原创",
     haystack: norm(`ai 技能 skill 提示词 prompt ${s.title} ${s.yields} ${s.purpose}`),
   }));
-  return [...skillEntries, ...ahp, ...topsis, ...regression, ...graph, ...sections.map<SearchEntry>((s, i) => ({
+  return [...skillEntries, ...intro, ...ahp, ...topsis, ...regression, ...graph, ...sections.map<SearchEntry>((s, i) => ({
     id: `lesson:${s.id}`,
     group: "精讲",
     title: s.title,
