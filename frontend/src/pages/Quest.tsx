@@ -1,8 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CoachPanel } from "../components/quest/CoachPanel";
+import { PageHead } from "../components/ui/PageHead";
 import { getCase } from "../api/client";
-import { getCaseQuestSeed, getModelCardsForCase, getStageSeed } from "../quest/content";
+import { QUEST_STAGE_SKILL, findSkill } from "../content/skills";
+import { getLocalCase, listLocalCases } from "../data/localCases";
+import { getModelCardsForCase, getStageSeed } from "../quest/content";
 import {
   buildQuestReportMarkdown,
   getQuestProgress,
@@ -13,19 +16,34 @@ import {
 import { loadQuestDraft, saveQuestDraft } from "../quest/storage";
 import { useQuestState } from "../hooks/useQuestState";
 import type { CaseDetail } from "../types";
-import { saveWorkbenchRecord } from "./Records";
+import { stashQuestCase } from "./library/skillSession";
+import { saveWorkbenchRecord } from "../state/localRecords";
 
 const DEFAULT_PROBLEM =
   "某市共享单车管理部门希望你基于历史订单数据，预测未来一周各区域需求量，并在车辆总数约束下给出调度方案，使缺车率与运营成本综合最优。请建立数学模型并给出求解思路。";
 
+const COACH_MODES = [
+  ["hint", "提示一下"],
+  ["example", "举个例子"],
+  ["check", "检查答案"],
+] as const;
+
+/**
+ * 七关实战 (design doc §5.4). Stage logic, drafts and reports are unchanged;
+ * this page only re-lays them out in the V2 system and applies Q4:
+ * every stage can be previewed and drafted, “确认完成” still goes in order.
+ */
 export function QuestPage() {
   const [params] = useSearchParams();
+  const navigate = useNavigate();
   const caseSlug = params.get("case");
   const sourceId = caseSlug ? `case:${caseSlug}` : "default";
   const [caseDetail, setCaseDetail] = useState<CaseDetail | null>(null);
   const [loadError, setLoadError] = useState("");
   const [questState, dispatch] = useQuestState(sourceId);
   const { states, checks, activeStageId, coachMode, saveStatus, loadedSourceId } = questState;
+  const workArea = useRef<HTMLDivElement>(null);
+  const cases = useMemo(listLocalCases, []);
 
   useEffect(() => {
     if (!caseSlug) {
@@ -40,7 +58,11 @@ export function QuestPage() {
         if (!cancelled) setCaseDetail(res);
       })
       .catch(() => {
-        if (!cancelled) setLoadError("案例加载失败，当前显示默认训练题。");
+        if (cancelled) return;
+        // Static hosting has no case API: the bundled teaching cases are the same content.
+        const local = getLocalCase(caseSlug);
+        if (local) setCaseDetail(local);
+        else setLoadError("没有找到这道训练题，当前显示默认训练题。");
       });
     return () => {
       cancelled = true;
@@ -55,42 +77,40 @@ export function QuestPage() {
 
   useEffect(() => {
     if (loadedSourceId !== sourceId) return;
-    const draft = {
-      activeStageId,
-      states,
-      checks,
-      updatedAt: new Date().toISOString(),
-    };
-    saveQuestDraft(sourceId, draft);
+    saveQuestDraft(sourceId, { activeStageId, states, checks, updatedAt: new Date().toISOString() });
   }, [activeStageId, checks, loadedSourceId, sourceId, states]);
 
   const activeStage = questStages.find((stage) => stage.id === activeStageId) ?? questStages[0];
   const activeState = states.find((state) => state.stageId === activeStage.id) ?? states[0];
-  const caseSeed = getCaseQuestSeed(caseSlug);
   const activeSeed = getStageSeed(caseSlug, activeStage.id);
   const modelCards = activeStage.id === "model" ? getModelCardsForCase(caseSlug) : [];
   const progress = getQuestProgress(states);
-  const title = caseDetail?.title ?? "自定义训练题";
+  const title = caseDetail?.title ?? "默认训练题：共享单车需求与调度";
   const sourceLabel = caseDetail ? `案例训练副本：${caseDetail.title}` : "默认示例题";
   const problemText = useMemo(() => {
     if (!caseDetail) return DEFAULT_PROBLEM;
     return [caseDetail.summary, caseDetail.sections.background].filter(Boolean).join("\n\n");
   }, [caseDetail]);
-  const workbenchHref = useMemo(() => {
-    const query = new URLSearchParams();
-    query.set("problem_text", problemText.slice(0, 1500));
-    query.set("attachment_note", `来自${sourceLabel}。请把 AI 输出作为学习提示，保留人工确认。`);
-    return `/workbench?${query.toString()}`;
-  }, [problemText, sourceLabel]);
+  const unlock = getStageUnlockState(activeStage.id, states);
+  const blockedBy = questStages.find((s) => s.order < activeStage.order && !states.find((x) => x.stageId === s.id)?.completed);
   const checkedConditions = checks[activeStage.id] ?? [];
-  const canComplete = activeState.answer.trim().length >= 20 && checkedConditions.every(Boolean);
+  const answerReady = activeState.answer.trim().length >= 20;
+  const allChecked = checkedConditions.every(Boolean);
+  const canComplete = unlock !== "locked" && answerReady && allChecked;
+  const relatedSkill = findSkill(QUEST_STAGE_SKILL[activeStage.id])!;
+  const here = `/quest${caseSlug ? `?case=${encodeURIComponent(caseSlug)}` : ""}`;
   const report = buildQuestReportMarkdown({
     title,
     sourceLabel,
     states,
     checks,
-    aiUsageNote: "本次闯关第一版使用本地 AI 教练提示卡；如跳转工作台调用大模型，请在最终报告中补充模型、时间和人工确认记录。",
+    aiUsageNote: "本次七关实战使用站内课程预置的教练提示卡，未调用在线 AI。如在外部 AI 工具中使用了 AI 技能包，请在最终报告中补充工具、时间和人工确认记录。",
   });
+
+  function selectStage(stage: QuestStage) {
+    dispatch({ type: "SET_ACTIVE_STAGE", payload: stage.id });
+    if (window.matchMedia?.("(max-width: 899px)").matches) workArea.current?.scrollIntoView({ block: "start" });
+  }
 
   function completeStage(stage: QuestStage) {
     const nextStage = questStages[stage.order];
@@ -99,136 +119,156 @@ export function QuestPage() {
 
   function saveReport() {
     saveWorkbenchRecord({
-      title: `闯关报告：${title}`,
+      title: `七关实战报告：${title}`,
       summary: `完成进度：${progress.completed}/${progress.total}（${progress.percent}%）`,
       fullReport: report,
-      usageLog: "闯关模式：本地提示卡 + 人工确认。未自动生成可提交论文。",
+      usageLog: "七关实战：课程预置教练提示 + 人工确认。未自动生成可提交论文。",
     });
     dispatch({ type: "SET_SAVE_STATUS", payload: "已保存到本机学习记录。" });
   }
 
+  function reset() {
+    if (!window.confirm(`确定重置「${title}」的七关进度吗？本题 7 关的作答和勾选都会清空，已保存的实战报告不受影响。`)) return;
+    dispatch({ type: "RESET", payload: { sourceId } });
+  }
+
   return (
-    <div className="hairline-grid">
-      <div className="mx-auto max-w-7xl px-4 py-8">
-        <header className="premium-shell rounded-3xl p-6 text-white">
-          <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <p className="inline-flex rounded-md border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100">
-                Quest Mode
-              </p>
-              <h1 className="mt-3 text-3xl font-semibold">数模闯关训练营</h1>
-              <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-200">
-                围绕一道题完成 7 个训练关卡：读题、拆问、数据、模型、代码、图表、论文框架。AI 只做教练提示，最终判断由你完成。
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/15 bg-white/10 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100">Progress</p>
-              <p className="mt-2 text-3xl font-semibold">{progress.percent}%</p>
-              <p className="mt-1 text-xs text-slate-300">
-                {progress.completed}/{progress.total} 关已通关
-              </p>
-            </div>
-          </div>
-        </header>
+    <div className="quest-page">
+      <PageHead
+        crumbs={[{ label: "实战", to: "/quest" }, { label: caseDetail ? caseDetail.title : "默认训练题" }]}
+        title="七关实战"
+        lead="围绕一道题走完 7 关：读题、拆解、数据、模型、代码、图表、论文框架。教练提示只给方向，判断由你完成。"
+      >
+        <p className="quest-progress" aria-label={`进度 ${progress.completed} / ${progress.total}`}>
+          <strong>{progress.percent}%</strong>
+          <span>
+            {progress.completed}/{progress.total} 关已通关
+          </span>
+        </p>
+      </PageHead>
 
-        {loadError && <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">{loadError}</p>}
+      <div className="site-container">
+        {loadError && <p className="notice notice-warn">{loadError}</p>}
 
-        <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <section className="quest-problem" aria-labelledby="quest-problem-title">
+          <div className="quest-problem-head">
             <div>
-              <p className="text-xs font-semibold text-bridge-700">{sourceLabel}</p>
-              <h2 className="mt-1 text-xl font-semibold text-slate-950">{title}</h2>
-              <p className="mt-2 max-w-4xl whitespace-pre-wrap text-sm leading-7 text-slate-600">{problemText}</p>
+              <p className="page-kicker">{caseDetail ? "教学案例训练题" : "默认训练题"}</p>
+              <h2 id="quest-problem-title">{title}</h2>
             </div>
-            <Link to={workbenchHref} className="shrink-0 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:border-bridge-400">
-              打开 AI 工作台
-            </Link>
+            <label className="quest-switch">
+              <span>换一道训练题</span>
+              <select
+                value={caseSlug ?? ""}
+                onChange={(e) => navigate(e.target.value ? `/quest?case=${encodeURIComponent(e.target.value)}` : "/quest")}
+              >
+                <option value="">默认训练题：共享单车需求与调度</option>
+                {cases.map((c) => (
+                  <option key={c.slug} value={c.slug}>
+                    {c.title}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
+          <details className="quest-problem-text" open>
+            <summary>题面</summary>
+            <p>{problemText}</p>
+            {caseDetail && (
+              <Link className="text-link" to={`/cases/${caseDetail.slug}`}>
+                查看完整案例拆解 →
+              </Link>
+            )}
+          </details>
         </section>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-[18rem_1fr_20rem]">
-          <aside className="space-y-3 lg:sticky lg:top-24 lg:self-start">
+        <nav className="stage-bar" aria-label="七关进度">
+          <ol>
             {questStages.map((stage) => {
-              const unlock = getStageUnlockState(stage.id, states);
+              const state = getStageUnlockState(stage.id, states);
               const active = stage.id === activeStage.id;
+              const label = state === "completed" ? "已通关" : state === "available" ? "可挑战" : "可预览";
               return (
-                <button
-                  key={stage.id}
-                  type="button"
-                  disabled={unlock === "locked"}
-                  onClick={() => dispatch({ type: "SET_ACTIVE_STAGE", payload: stage.id })}
-                  className={[
-                    "flex w-full items-center gap-3 rounded-lg border px-3 py-3 text-left text-sm transition",
-                    unlock === "locked"
-                      ? "border-slate-100 bg-slate-50 text-slate-400"
-                      : active
-                        ? "border-slate-950 bg-slate-950 text-white"
-                        : unlock === "completed"
-                          ? "border-emerald-200 bg-emerald-50 text-emerald-950"
-                          : "border-slate-200 bg-white text-slate-700 hover:border-slate-400",
-                  ].join(" ")}
-                >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-current/10 text-xs font-bold">{stage.order}</span>
-                  <span>
-                    <span className="block font-semibold">{stage.title}</span>
-                    <span className="block text-xs opacity-70">{unlock === "locked" ? "待解锁" : unlock === "completed" ? "已通关" : "可挑战"}</span>
-                  </span>
-                </button>
+                <li key={stage.id}>
+                  <button
+                    type="button"
+                    className={`stage-step is-${state}`}
+                    aria-current={active ? "step" : undefined}
+                    onClick={() => selectStage(stage)}
+                  >
+                    <span className="stage-num" aria-hidden="true">
+                      {state === "completed" ? "✓" : stage.order}
+                    </span>
+                    <span className="stage-text">
+                      <span className="stage-name">{stage.title}</span>
+                      <span className="stage-state">{label}</span>
+                    </span>
+                  </button>
+                </li>
               );
             })}
-          </aside>
+          </ol>
+        </nav>
 
-          <main className="rounded-2xl border border-slate-200 bg-white p-5">
-            <p className="text-xs font-semibold text-bridge-700">
-              第 {activeStage.order} 关 · {activeStage.outputLabel}
+        <div className="quest-layout">
+          <div className="quest-work" ref={workArea}>
+            <p className="page-kicker">
+              第 {activeStage.order} 关 · 产出：{activeStage.outputLabel}
             </p>
-            <h2 className="mt-2 text-2xl font-semibold text-slate-950">{activeStage.title}</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-600">{activeStage.goal}</p>
+            <h2 className="quest-stage-title">{activeStage.title}</h2>
+            <p className="quest-goal">{activeStage.goal}</p>
+            {unlock === "locked" && blockedBy && (
+              <p className="notice notice-info">
+                预览模式：可以先阅读任务、写草稿；需先完成第 {blockedBy.order} 关「{blockedBy.title}」，才能确认完成本关。
+              </p>
+            )}
 
-            <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-sm font-semibold text-slate-950">当前任务</p>
-              <p className="mt-2 text-sm leading-7 text-slate-700">{activeSeed?.taskBrief ?? activeStage.task}</p>
+            <div className="quest-task">
+              <h3>当前任务</h3>
+              <p>{activeSeed?.taskBrief ?? activeStage.task}</p>
             </div>
 
             {activeSeed && (
-              <div className="mt-5 grid gap-3 md:grid-cols-2">
-                <section className="rounded-2xl border border-slate-200 bg-white p-4">
-                  <p className="text-sm font-semibold text-slate-950">常见错误</p>
-                  <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-700">
+              <div className="quest-two">
+                <section className="quest-box">
+                  <h3>常见错误</h3>
+                  <ul>
                     {activeSeed.commonMistakes.map((item) => (
-                      <li key={item}>· {item}</li>
+                      <li key={item}>{item}</li>
                     ))}
                   </ul>
                 </section>
-                <section className="rounded-2xl border border-slate-200 bg-white p-4">
-                  <p className="text-sm font-semibold text-slate-950">学生必须自己完成</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-700">{activeSeed.mustDoByStudent}</p>
-                  <p className="mt-3 text-xs leading-5 text-amber-700">{activeSeed.complianceNote}</p>
+                <section className="quest-box">
+                  <h3>必须自己完成</h3>
+                  <p>{activeSeed.mustDoByStudent}</p>
+                  <p className="quest-compliance">{activeSeed.complianceNote}</p>
                 </section>
               </div>
             )}
 
             {activeSeed?.outputExample && (
-              <details className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
-                <summary className="cursor-pointer text-sm font-semibold text-slate-950">通关产物示例</summary>
-                <pre className="mt-3 whitespace-pre-wrap rounded-xl bg-slate-50 p-3 text-xs leading-5 text-slate-700">{activeSeed.outputExample}</pre>
+              <details className="quest-box">
+                <summary>通关产物示例</summary>
+                <pre>{activeSeed.outputExample}</pre>
               </details>
             )}
 
             {modelCards.length > 0 && (
-              <section className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
-                <p className="text-sm font-semibold text-slate-950">模型参考卡</p>
-                <div className="mt-3 grid gap-3 md:grid-cols-2">
+              <section className="quest-box">
+                <h3>模型参考卡</h3>
+                <div className="quest-cards">
                   {modelCards.map((card) => (
-                    <article key={card.modelId} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                      <p className="text-sm font-semibold text-slate-950">{card.name}</p>
-                      <p className="mt-1 text-xs text-slate-500">{card.family} · {card.level}</p>
-                      <p className="mt-2 text-sm leading-6 text-slate-700">{card.fitWhen}</p>
-                      <details className="mt-2 text-xs leading-5 text-slate-600">
-                        <summary className="cursor-pointer font-semibold text-slate-700">新手判断问题</summary>
-                        <ul className="mt-2 space-y-1">
+                    <article key={card.modelId}>
+                      <strong>{card.name}</strong>
+                      <span className="muted-note">
+                        {card.family} · {card.level}
+                      </span>
+                      <p>{card.fitWhen}</p>
+                      <details>
+                        <summary>新手判断问题</summary>
+                        <ul>
                           {card.noviceQuestions.slice(0, 3).map((question) => (
-                            <li key={question}>· {question}</li>
+                            <li key={question}>{question}</li>
                           ))}
                         </ul>
                       </details>
@@ -238,97 +278,111 @@ export function QuestPage() {
               </section>
             )}
 
-            <label className="mt-5 block text-sm font-semibold text-slate-800">
-              {activeSeed?.studentPrompt ?? activeStage.userPrompt}
+            <label className="quest-answer">
+              <span>{activeSeed?.studentPrompt ?? activeStage.userPrompt}</span>
               <textarea
-                className="mt-2 min-h-40 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm leading-6 focus:border-bridge-600 focus:outline-none focus:ring-2 focus:ring-bridge-600/20"
                 value={activeState.answer}
+                rows={8}
                 onChange={(e) => dispatch({ type: "SET_ANSWER", payload: { stageId: activeStage.id, answer: e.target.value } })}
               />
+              <span className="muted-note">
+                作答自动保存在本机浏览器 · 已写 {activeState.answer.trim().length} 字（至少 20 字）
+              </span>
             </label>
 
-            <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
-              <p className="text-sm font-semibold text-slate-950">通关条件</p>
-              <div className="mt-3 space-y-2">
-                {activeStage.passConditions.map((condition, index) => (
-                  <label key={condition} className="flex cursor-pointer items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
-                    <input
-                      type="checkbox"
-                      className="mt-1 h-4 w-4 rounded border-slate-300 text-bridge-700"
-                      checked={checkedConditions[index] ?? false}
-                      onChange={(e) => dispatch({ type: "SET_CONDITION", payload: { stageId: activeStage.id, index, value: e.target.checked } })}
-                    />
-                    <span className="text-sm leading-6 text-slate-700">{condition}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
+            <fieldset className="quest-box quest-conditions">
+              <legend>通关条件（自检）</legend>
+              {activeStage.passConditions.map((condition, index) => (
+                <label key={condition}>
+                  <input
+                    type="checkbox"
+                    checked={checkedConditions[index] ?? false}
+                    onChange={(e) => dispatch({ type: "SET_CONDITION", payload: { stageId: activeStage.id, index, value: e.target.checked } })}
+                  />
+                  <span>{condition}</span>
+                </label>
+              ))}
+            </fieldset>
 
-            <div className="mt-5 flex flex-wrap gap-3">
-              <button
-                type="button"
-                disabled={!canComplete}
-                onClick={() => completeStage(activeStage)}
-                className="rounded-lg bg-bridge-700 px-4 py-2 text-sm font-semibold text-white hover:bg-bridge-600 disabled:opacity-40"
-              >
-                通关并进入下一关
+            <div className="quest-actions">
+              <button type="button" className="btn btn-primary" disabled={!canComplete} onClick={() => completeStage(activeStage)}>
+                {unlock === "completed" ? "已通关 · 重新确认" : activeStage.order === questStages.length ? "确认完成最后一关" : "确认完成，进入下一关"}
               </button>
-              <button type="button" onClick={saveReport} className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:border-bridge-400">
-                保存通关报告
+              <button type="button" className="btn btn-secondary" onClick={saveReport}>
+                保存实战报告
               </button>
-              <button
-                type="button"
-                onClick={() => dispatch({ type: "RESET", payload: { sourceId } })}
-                className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:border-amber-400"
-              >
-                重置本次闯关
+              <button type="button" className="btn btn-quiet" onClick={reset}>
+                重置本题进度
               </button>
-              <Link to="/records" className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:border-bridge-400">
-                查看记录
+              <Link to="/records" className="text-link">
+                查看学习记录
               </Link>
             </div>
-            {saveStatus && <p className="mt-3 text-sm text-slate-500">{saveStatus}</p>}
+            <p className="quest-status" role="status">
+              {saveStatus}
+            </p>
             {!canComplete && (
-              <p className="mt-3 text-xs leading-5 text-slate-500">
-                通关需要：回答不少于 20 个字符，并勾选本关全部通关条件。这里不是形式打卡，要留下你自己的判断。
+              <p className="muted-note">
+                {unlock === "locked" && blockedBy
+                  ? `确认完成需要先完成第 ${blockedBy.order} 关。`
+                  : `确认完成需要：${[!answerReady && "作答不少于 20 字", !allChecked && "勾选全部通关条件"].filter(Boolean).join("，")}。这里不是形式打卡，要留下你自己的判断。`}
               </p>
             )}
-          </main>
+          </div>
 
-          <aside className="rounded-2xl border border-slate-200 bg-white p-5 lg:sticky lg:top-24 lg:self-start">
-            <p className="text-sm font-semibold text-slate-950">AI 教练提示</p>
-            <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
-              {[
-                ["hint", "提示一下"],
-                ["example", "举个例子"],
-                ["check", "检查答案"],
-              ].map(([mode, label]) => (
-                <button
-                  key={mode}
-                  type="button"
-                  onClick={() => dispatch({ type: "SET_COACH_MODE", payload: mode as "hint" | "example" | "check" })}
-                  className={[
-                    "rounded-lg border px-2 py-1.5 font-semibold transition",
-                    coachMode === mode ? "border-slate-950 bg-slate-950 text-white" : "border-slate-200 bg-white text-slate-600 hover:border-bridge-400",
-                  ].join(" ")}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-            <CoachPanel
-              mode={coachMode}
-              stage={activeStage}
-              answer={activeState.answer}
-              caseTitle={caseSeed?.title ?? title}
-              problemText={problemText}
-              stageSeed={activeSeed}
-            />
-            <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-5 text-amber-950">
-              AI 可以提示、举例和检查，但不能替你完成最终模型判断，也不会生成可直接提交的论文正文。
-            </div>
+          <aside className="quest-tools" aria-label="本关工具">
+            <section className="quest-box">
+              <h3>教练提示</h3>
+              <p className="muted-note">课程预置内容，不调用在线 AI。</p>
+              <div className="segmented-row" role="group" aria-label="提示方式">
+                {COACH_MODES.map(([mode, label]) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    aria-pressed={coachMode === mode}
+                    onClick={() => dispatch({ type: "SET_COACH_MODE", payload: mode })}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <CoachPanel
+                mode={coachMode}
+                stage={activeStage}
+                answer={activeState.answer}
+                stageSeed={activeSeed}
+              />
+            </section>
+
+            <section className="quest-box">
+              <h3>配套 AI 技能</h3>
+              <ul className="quest-prompts">
+                <li>
+                  <Link
+                    to={`/library/skills/${relatedSkill.id}?from=quest&back=${encodeURIComponent(here)}`}
+                    onClick={() => stashQuestCase({ title, text: problemText })}
+                  >
+                    {relatedSkill.title}
+                  </Link>
+                  <span>{relatedSkill.yields}</span>
+                </li>
+              </ul>
+              <p className="muted-note">生成一份完整的任务说明书，复制给你自己的 AI 使用；会附上本题公开题面，不会带上你的作答。</p>
+            </section>
+
+            <p className="notice notice-warn">
+              提示可以帮你找方向和自查，但不能替你完成最终模型判断，也不会生成可直接提交的论文正文。
+            </p>
           </aside>
         </div>
+
+        <p className="quest-footnote">
+          旧版
+          <Link className="text-link" to="/workbench">
+            AI 工作台（实验）
+          </Link>
+          需要后端服务，线上静态版本暂不可用。
+        </p>
       </div>
     </div>
   );

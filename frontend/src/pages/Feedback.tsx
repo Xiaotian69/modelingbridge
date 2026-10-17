@@ -86,7 +86,7 @@ function feedbackToMarkdown(rows: TrialFeedback[]) {
 export function FeedbackPage() {
   const [rows, setRows] = useState<TrialFeedback[]>([]);
   const [role, setRole] = useState("第一次参赛的新手");
-  const [scene, setScene] = useState("自己试用 AI 工作台");
+  const [scene, setScene] = useState("自己试用七关实战");
   const [usefulness, setUsefulness] = useState("4");
   const [helpful, setHelpful] = useState("");
   const [inaccurate, setInaccurate] = useState("");
@@ -122,13 +122,13 @@ export function FeedbackPage() {
             <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
               <li>是否让新手更清楚下一步该做什么。</li>
               <li>是否能支撑 90-120 分钟协会试点课。</li>
-              <li>AI 输出是否贴题、可解释、可复盘。</li>
+              <li>提示与反馈是否贴题、可解释、可复盘。</li>
             </ul>
             <Link
-              to="/workbench"
+              to="/quest"
               className="mt-5 inline-flex rounded-lg bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
             >
-              先去工作台试用
+              先去体验七关实战
             </Link>
           </div>
         </section>
@@ -149,7 +149,9 @@ export function FeedbackPage() {
             <label className="text-sm font-medium text-slate-700">
               使用场景
               <select className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2" value={scene} onChange={(e) => setScene(e.target.value)}>
-                <option>自己试用 AI 工作台</option>
+                <option>自己试用精讲与刷题</option>
+                <option>自己试用七关实战</option>
+                <option>自己试用 AI 工作台（实验）</option>
                 <option>协会周末课演示</option>
                 <option>赛前训练</option>
                 <option>案例学习</option>
@@ -232,7 +234,7 @@ export function FeedbackPage() {
         <div className="mt-5 space-y-3">
           {rows.length === 0 && (
             <div className="rounded-lg border border-dashed border-slate-300 bg-white p-6 text-sm text-slate-600">
-              暂无反馈。完成一次工作台试用后，回来记录真实感受。
+              暂无反馈。完成一次精讲、刷题或七关实战后，回来记录真实感受。
             </div>
           )}
           {rows.map((row) => (

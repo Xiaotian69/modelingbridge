@@ -77,33 +77,28 @@ export function CaseDetailPage() {
   if (!slug) return null;
 
   return (
-    <div className="hairline-grid">
+    <div className="hairline-grid" data-route-pending={!c && !err || undefined} aria-busy={!c && !err}>
     <div className="mx-auto max-w-7xl px-4 py-10">
       <Link to="/cases" className="text-sm font-semibold text-bridge-700 hover:underline">
-        返回例题库
+        ← 返回教学案例
       </Link>
       {err && <p className="mt-4 text-sm text-red-600">{err}</p>}
+      {!c && !err && <p role="status" className="page-loading">正在加载教学案例…</p>}
       {c && (
         <article className="mt-6">
-          <header className="premium-shell rounded-3xl p-6 text-white">
-            <div className="flex flex-wrap gap-2 text-xs">
-              <span className="rounded-full bg-white px-2 py-0.5 font-medium text-slate-950">{c.difficulty}</span>
-              <span className="rounded-full bg-white/10 px-2 py-0.5 text-slate-200">{c.data_status}</span>
+          <header className="case-head">
+            <div className="case-head-badges">
+              <span className="badge">{c.difficulty}</span>
+              <span className="badge">{c.data_status}</span>
             </div>
-            <h1 className="mt-3 text-3xl font-semibold">{c.title}</h1>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-200">{c.summary}</p>
-            <p className="mt-3 text-sm text-slate-300">适合：{c.audience}</p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Link
-                to={`/quest?case=${encodeURIComponent(c.slug)}`}
-                className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-slate-100"
-              >
-                进入闯关训练
+            <h1>{c.title}</h1>
+            <p className="page-lead">{c.summary}</p>
+            <p className="case-head-audience">适合：{c.audience}</p>
+            <div className="page-head-actions">
+              <Link to={`/quest?case=${encodeURIComponent(c.slug)}`} className="btn btn-primary">
+                用这道题进入七关实战
               </Link>
-              <Link
-                to="/feedback"
-                className="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
-              >
+              <Link to="/feedback" className="btn btn-secondary">
                 试用后反馈
               </Link>
             </div>

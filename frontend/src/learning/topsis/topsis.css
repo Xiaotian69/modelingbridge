@@ -1,0 +1,218 @@
+/* TOPSIS course: ideal-solution plane and lab. Tokens only (both themes). */
+
+/* ---------- Ideal plane ---------- */
+.topsis-plane .segmented-buttons {
+  margin-bottom: 10px;
+}
+.topsis-dist {
+  stroke-width: 2;
+}
+.topsis-dist.is-best {
+  stroke: var(--chart-region-edge);
+}
+.topsis-dist.is-worst {
+  stroke: var(--chart-optimum);
+  stroke-dasharray: 6 5;
+}
+.topsis-room circle {
+  fill: var(--surface);
+  stroke: var(--chart-cut);
+  stroke-width: 2;
+}
+.topsis-room.is-selected circle {
+  fill: var(--chart-cut);
+}
+.lp-lab svg .topsis-room text {
+  fill: var(--text);
+  font-weight: 700;
+}
+.topsis-ideal rect {
+  stroke-width: 2;
+}
+.topsis-ideal.is-best rect {
+  fill: var(--chart-region);
+  stroke: var(--chart-region-edge);
+}
+.topsis-ideal.is-worst rect {
+  fill: color-mix(in srgb, var(--chart-optimum) 18%, transparent);
+  stroke: var(--chart-optimum);
+}
+.lp-lab svg .topsis-ideal text {
+  fill: var(--text);
+  font-weight: 700;
+}
+.legend-best {
+  color: var(--chart-region-edge);
+}
+.legend-worst {
+  color: var(--chart-optimum);
+}
+
+/* ---------- Lab ---------- */
+.topsis-group {
+  margin: 0 0 14px;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.topsis-group legend {
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.topsis-sliders {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 20px;
+  margin: 10px 0 4px;
+  font-size: 14px;
+}
+.topsis-sliders label > span {
+  display: flex;
+  justify-content: space-between;
+}
+.topsis-sliders output {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.topsis-sliders input {
+  width: 100%;
+  accent-color: var(--brand);
+}
+.topsis-sliders .muted-note {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.topsis-bars,
+.topsis-ranking ol {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.topsis-bars li,
+.topsis-ranking li {
+  display: grid;
+  grid-template-columns: 5em minmax(0, 1fr) 3.5em;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+.topsis-bars b,
+.topsis-ranking b {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.topsis-bar-label {
+  white-space: nowrap;
+}
+.topsis-bar {
+  display: block;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+.topsis-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--chart-region-edge);
+  transition: width var(--dur-expand) var(--ease-standard);
+}
+.topsis-bar.is-score i {
+  background: var(--chart-optimum);
+}
+.topsis-ranking li.is-extra .topsis-bar-label {
+  font-style: italic;
+}
+.topsis-directions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 20px;
+}
+.topsis-directions > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 650;
+}
+.topsis-directions > div.is-changed {
+  border-color: var(--attend);
+  background: color-mix(in srgb, var(--attend) 8%, transparent);
+}
+.topsis-extra {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 4px 0 12px;
+  font-size: 14px;
+}
+.topsis-ranking {
+  margin: 8px 0;
+}
+.topsis-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.topsis-table caption {
+  margin-bottom: 6px;
+  text-align: left;
+  color: var(--text-muted);
+}
+.topsis-table th,
+.topsis-table td {
+  padding: 5px 7px;
+  border: 1px solid var(--border);
+  text-align: center;
+  white-space: nowrap;
+}
+.topsis-table td.is-best {
+  background: var(--chart-region);
+  font-weight: 750;
+}
+.topsis-table td.is-worst {
+  background: color-mix(in srgb, var(--chart-optimum) 16%, transparent);
+}
+.topsis-table tr.is-ideal th,
+.topsis-table tr.is-ideal td {
+  background: var(--surface-sunken);
+  color: var(--text-muted);
+}
+
+.topsis-lab .segmented-buttons button,
+.topsis-plane .segmented-buttons button {
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  /* Four weight sources do not fit one row on a phone: two rows of two, never split mid-word. */
+  .topsis-group > .segmented-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .topsis-group > .segmented-buttons button {
+    padding: 7px 8px;
+  }
+  /* The plane scales down with the viewBox; keep its labels readable (≈ 12px on screen). */
+  .lp-lab.topsis-plane svg text {
+    font-size: 19px;
+  }
+  .topsis-sliders,
+  .topsis-directions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .topsis-bars li,
+  .topsis-ranking li {
+    grid-template-columns: 4.5em minmax(0, 1fr) 3.2em;
+  }
+}

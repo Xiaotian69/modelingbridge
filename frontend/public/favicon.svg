@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+  <!-- 模桥 M mark: path and dot from components/ui/Brand.tsx, home-header colours (mint on hero navy).
+       Stroke 2.6 instead of 2 so the line stays solid at 16 px. -->
+  <rect width="36" height="36" rx="8" fill="#0B1D24"/>
+  <path d="M4 27V10l14 12L32 10v17M4 10l14 17L32 10" fill="none" stroke="#91E4C8" stroke-width="2.6" stroke-linejoin="round"/>
+  <circle cx="18" cy="8" r="2" fill="#91E4C8"/>
+</svg>

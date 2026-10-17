@@ -1,0 +1,296 @@
+/* AHP course: hierarchy diagram and judgment-matrix lab. Tokens only (both themes). */
+
+/* ---------- Hierarchy diagram ---------- */
+.ahp-hierarchy {
+  margin: 20px 0;
+}
+.ahp-hierarchy svg {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.ahp-edge {
+  stroke: var(--chart-region-edge);
+  stroke-width: 1.5;
+}
+.ahp-edge.is-faint {
+  stroke: var(--chart-grid);
+}
+.ahp-node rect {
+  fill: var(--surface);
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+.ahp-node.is-goal rect {
+  fill: var(--chart-region);
+  stroke: var(--chart-region-edge);
+}
+.ahp-node.is-criterion rect {
+  stroke: var(--chart-region-edge);
+}
+.ahp-node-label {
+  fill: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+}
+.ahp-node-sub {
+  fill: var(--chart-text);
+  font-size: 12px;
+}
+.ahp-layers {
+  display: none;
+}
+.ahp-hierarchy figcaption {
+  margin-top: 6px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ---------- Lab ---------- */
+.ahp-lab-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.ahp-lab-toolbar .lesson-actions {
+  margin: 8px 0;
+}
+.ahp-pairs {
+  margin: 10px 0 16px;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.ahp-pairs legend {
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.ahp-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: border-color var(--dur-quick) var(--ease-standard), background-color var(--dur-quick) var(--ease-standard);
+}
+.ahp-pair.is-flagged {
+  border-color: var(--attend);
+  background: color-mix(in srgb, var(--attend) 8%, transparent);
+}
+.ahp-pair-names {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 650;
+}
+.ahp-pair input[type="range"] {
+  width: 100%;
+  accent-color: var(--brand);
+}
+.ahp-pair output {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.ahp-lab-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.ahp-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.ahp-matrix caption {
+  margin-bottom: 6px;
+  text-align: left;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.ahp-matrix th,
+.ahp-matrix td {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+.ahp-matrix th {
+  font-weight: 650;
+  white-space: nowrap;
+}
+.ahp-matrix td.is-diagonal {
+  color: var(--text-muted);
+  background: var(--surface-sunken);
+}
+.ahp-matrix td.is-flagged {
+  color: var(--attend);
+  font-weight: 800;
+  background: color-mix(in srgb, var(--attend) 10%, transparent);
+}
+.ahp-weights ul,
+.ahp-ranking ol {
+  display: grid;
+  gap: 8px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ahp-weights li,
+.ahp-ranking li {
+  display: grid;
+  grid-template-columns: 6.5em minmax(0, 1fr) 3.5em;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 14px;
+}
+.ahp-ranking li {
+  grid-template-columns: 8.5em minmax(0, 1fr) 3.5em;
+}
+.ahp-weights small {
+  grid-column: 2 / -1;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.ahp-bar-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ahp-bar {
+  display: block;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+.ahp-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--chart-region-edge);
+  transition: width var(--dur-expand) var(--ease-standard);
+}
+.ahp-bar.is-score i {
+  background: var(--chart-optimum);
+}
+.ahp-weights b,
+.ahp-ranking b {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.ahp-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 16px 0 8px;
+}
+.ahp-stats div {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.ahp-stats dt {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.ahp-stats dd {
+  margin: 2px 0 0;
+  font-size: 17px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+.ahp-stats .is-ok {
+  border-color: color-mix(in srgb, var(--ok) 50%, var(--border));
+}
+.ahp-stats .is-ok dd {
+  color: var(--ok);
+}
+.ahp-stats .is-bad {
+  border-color: var(--bad);
+}
+.ahp-stats .is-bad dd {
+  color: var(--bad);
+}
+.ahp-ranking {
+  margin: 14px 0 6px;
+}
+
+@media (max-width: 600px) {
+  .ahp-hierarchy svg {
+    display: none;
+  }
+  .ahp-layers {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ahp-layers li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-left: 12px;
+    border-left: 3px solid var(--chart-region-edge);
+  }
+  .ahp-layers li + li {
+    margin-left: 12px;
+  }
+  .ahp-layer-name {
+    width: 100%;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .ahp-chip {
+    display: inline-grid;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 14px;
+    font-weight: 650;
+  }
+  .ahp-chip small {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .ahp-chip.is-goal {
+    border-color: var(--chart-region-edge);
+    background: var(--chart-region);
+  }
+  .ahp-chip.is-criterion {
+    border-color: var(--chart-region-edge);
+  }
+}
+@media (max-width: 899px) {
+  .ahp-lab-grid,
+  .ahp-stats {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .ahp-lab-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ahp-weights li {
+    grid-template-columns: 5.5em minmax(0, 1fr) 3.2em;
+  }
+  .ahp-ranking li {
+    grid-template-columns: 7.5em minmax(0, 1fr) 3.2em;
+  }
+  .ahp-node-label {
+    font-size: 17px;
+  }
+  .ahp-node-sub {
+    font-size: 13px;
+  }
+}

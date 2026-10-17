@@ -1,273 +1,250 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { classicProblems, codingTips, getClassicProblemPracticeLink, learningTracks, modelMethods, recentTrainingCases, writingTips } from "../data/modelingContent";
+import { Link, Navigate, useLocation } from "react-router-dom";
+import { PageHead } from "../components/ui/PageHead";
+import { modelMethods } from "../data/modelingContent";
+import { courseByMethod } from "../learning/courses";
+import { CourseProgress, TrackList } from "../learning/tracks";
 
-const tabs = ["全部", "预测", "优化", "评价", "统计", "机理", "网络"] as const;
-
-export function LearnPage() {
-  const [tab, setTab] = useState<(typeof tabs)[number]>("全部");
-  const filtered = useMemo(() => (tab === "全部" ? modelMethods : modelMethods.filter((item) => item.family === tab)), [tab]);
-
+/**
+ * 从哪里开始: 第零课「认识数学建模」 is the general entry (not one of the tracks, and can be skipped);
+ * after it, three tracks in order.
+ */
+function StartGuide() {
   return (
-    <div className="hairline-grid">
-      <section className="premium-shell">
-        <div className="relative mx-auto max-w-7xl px-4 py-14 text-white">
-          <p className="inline-flex rounded-md border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100">
-            Learning Mode
+    <section className="learn-start" aria-labelledby="learn-start-title">
+      <div className="learn-start-head">
+        <h2 id="learn-start-title">从哪里开始</h2>
+        <p>
+          第一次接触数学建模？先从<Link to="/learn/introduction">「认识数学建模」</Link>开始。学完第零课，再按兴趣选一条路线；五门精讲都从零讲起，不需要先修课，最后可以到
+          <Link to="/quest">七关实战</Link>完整走一道题。
+        </p>
+      </div>
+      <div className="learn-zero">
+        <div>
+          <p className="learn-zero-kicker">第零课 · 所有路线的起点 · 约 15–20 分钟</p>
+          <p className="learn-zero-title">
+            <Link to="/learn/introduction">认识数学建模</Link>
           </p>
-          <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
-            基础建模学习台
-          </h1>
-          <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-200 sm:text-base">
-            每张模型卡都按“什么时候用、怎么想、代码怎么写、论文怎么表达、怎么检验”组织。AI 工作台推荐模型后，可以回到这里继续问方法、找例题、补技巧。
-          </p>
-          <div className="mt-8 grid gap-3 md:grid-cols-3">
-            {learningTracks.map((track) => (
-              <article key={track.title} className="glass-panel rounded-2xl p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <h2 className="font-semibold text-white">{track.title}</h2>
-                  <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-emerald-100">{track.duration}</span>
-                </div>
-                <p className="mt-3 text-sm leading-6 text-slate-200">{track.focus}</p>
-              </article>
-            ))}
-          </div>
+          <p className="learn-zero-text">从一个下雨天的雨伞调配问题开始，体验一次完整的建模：目标、变量、假设、求解、检验与改进。</p>
         </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-10">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Recent MCM/ICM</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-950">近三年优先训练</h2>
-          </div>
-          <p className="max-w-2xl text-sm leading-6 text-slate-600">
-            先从题面读懂、数据处理、模型选择和论文表达四件事入手。每个案例都拆成建模、编程、写论文三条线，适合按周推进，也适合赛前集中复盘。
-          </p>
-        </div>
-
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
-          {recentTrainingCases.map((caseItem) => (
-            <article key={caseItem.slug} className="quiet-card interactive-card rounded-2xl p-5">
-              <div className="flex flex-wrap items-center gap-2 text-xs">
-                <span className="rounded-full bg-slate-950 px-2.5 py-1 font-semibold text-white">
-                  {caseItem.year}
-                  {caseItem.problem}
-                </span>
-                <span className="rounded-full bg-bridge-50 px-2.5 py-1 font-semibold text-bridge-800">{caseItem.priority}</span>
-                <span className="rounded-full bg-slate-100 px-2.5 py-1 text-slate-600">{caseItem.difficulty}</span>
-              </div>
-              <h3 className="mt-4 text-xl font-semibold text-slate-950">{caseItem.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-600">{caseItem.positioning}</p>
-
-              <div className="mt-5 grid gap-4 xl:grid-cols-3">
-                <PracticeLine title="建模" items={caseItem.modelingLine.slice(0, 2)} />
-                <PracticeLine title="编程" items={caseItem.codingLine.slice(0, 2)} />
-                <PracticeLine title="论文" items={caseItem.paperLine.slice(0, 2)} />
-              </div>
-
-              <div className="mt-5 border-t border-slate-100 pt-4">
-                <p className="text-xs font-semibold text-slate-400">可对照的获奖论文路线</p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {caseItem.paperRoutes.slice(0, 3).map((route) => (
-                    <span key={route.paperId} className="rounded-full bg-white px-2.5 py-1 text-xs text-slate-600 ring-1 ring-slate-200">
-                      {route.paperId}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                {caseItem.methodSlugs.map((slug) => {
-                  const method = modelMethods.find((item) => item.slug === slug);
-                  return (
-                    <a key={slug} href={`#model-${slug}`} className="rounded-full bg-bridge-50 px-2.5 py-1 text-xs font-semibold text-bridge-800 hover:bg-bridge-100">
-                      {method?.name || slug}
-                    </a>
-                  );
-                })}
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="methods" className="mx-auto max-w-7xl px-4 py-10">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Model Library</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-950">模型方法库</h2>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {tabs.map((item) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() => setTab(item)}
-                className={[
-                  "rounded-full border px-3 py-1.5 text-sm font-semibold transition",
-                  tab === item ? "border-slate-950 bg-slate-950 text-white" : "border-slate-200 bg-white text-slate-600 hover:border-bridge-400",
-                ].join(" ")}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-8 grid gap-5">
-          {filtered.map((method) => {
-            const related = classicProblems.filter((problem) => problem.methods.includes(method.slug)).slice(0, 3);
-            return (
-              <article id={`model-${method.slug}`} key={method.slug} className="quiet-card scroll-mt-24 rounded-3xl p-6">
-                <div className="grid gap-6 lg:grid-cols-[0.78fr_1.22fr]">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full bg-bridge-50 px-3 py-1 text-xs font-semibold text-bridge-800">{method.family}</span>
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">{method.level}</span>
-                    </div>
-                    <h3 className="mt-4 text-2xl font-semibold text-slate-950">{method.name}</h3>
-                    <p className="mt-3 text-sm leading-7 text-slate-600">{method.intuition}</p>
-                    <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
-                      <p className="text-xs font-semibold text-slate-400">什么时候用</p>
-                      <p className="mt-2 text-sm leading-6 text-slate-700">{method.when}</p>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-3 md:grid-cols-2">
-                    <MethodBlock title="输入" items={method.inputs} />
-                    <MethodBlock title="输出" items={method.outputs} />
-                    <MethodBlock title="学习步骤" items={method.learnSteps} />
-                    <MethodBlock title="检验方式" items={method.validation} />
-                    <MethodBlock title="编码技巧" items={method.coding} />
-                    <MethodBlock title="论文写法" items={method.paper} />
-                  </div>
-                </div>
-
-                <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1fr]">
-                  <div className="rounded-2xl border border-rose-100 bg-rose-50 p-4">
-                    <p className="text-sm font-semibold text-rose-900">常见坑</p>
-                    <ul className="mt-2 space-y-1 text-sm leading-6 text-rose-900">
-                      {method.pitfalls.map((item) => (
-                        <li key={item}>· {item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                    <p className="text-sm font-semibold text-slate-950">相关例题</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {related.map((problem) => (
-                        <a key={problem.slug} href={`#problem-${problem.slug}`} className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-bridge-50 hover:text-bridge-800">
-                          {problem.title}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-10">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Classic Problems</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-950">经典题改编练习</h2>
-          </div>
-          <Link to="/cases" className="text-sm font-semibold text-bridge-700 hover:underline">
-            查看案例库
+        <div className="learn-zero-side">
+          <CourseProgress id="intro" />
+          <Link className="btn btn-primary" to="/learn/introduction">
+            从第零课开始
           </Link>
         </div>
-        <div className="mt-8 grid gap-4 md:grid-cols-2">
-          {classicProblems.map((problem) => {
-            const practiceLink = getClassicProblemPracticeLink(problem);
-            return (
-              <article id={`problem-${problem.slug}`} key={problem.slug} className="quiet-card interactive-card scroll-mt-24 rounded-2xl p-5">
-                <div className="flex flex-wrap items-center gap-2 text-xs">
-                  <span className="rounded-full bg-slate-950 px-2 py-0.5 font-semibold text-white">{problem.contest}</span>
-                  <span className="rounded-full bg-slate-100 px-2 py-0.5 text-slate-600">{problem.year}</span>
-                  <span className="rounded-full bg-amber-50 px-2 py-0.5 text-amber-800">{problem.difficulty}</span>
-                </div>
-                <h3 className="mt-3 text-lg font-semibold text-slate-950">{problem.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{problem.value}</p>
-                <p className="mt-3 rounded-xl border border-slate-200 bg-white p-3 text-sm leading-6 text-slate-700">{problem.simplifiedTask}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {problem.methods.map((slug) => {
-                    const method = modelMethods.find((item) => item.slug === slug);
-                    return (
-                      <a key={slug} href={`#model-${slug}`} className="rounded-full bg-bridge-50 px-2.5 py-1 text-xs font-semibold text-bridge-800">
-                        {method?.name || slug}
-                      </a>
-                    );
-                  })}
-                </div>
-                <Link
-                  to={practiceLink.href}
-                  aria-label={practiceLink.ariaLabel}
-                  className="mt-4 inline-flex rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:border-bridge-400 hover:text-bridge-800"
-                >
-                  {practiceLink.label}
-                </Link>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="mx-auto grid max-w-7xl gap-5 px-4 py-10 lg:grid-cols-2">
-        <TipPanel title="编码技巧" items={codingTips} />
-        <TipPanel title="论文写作技巧" items={writingTips} />
-      </section>
-    </div>
-  );
-}
-
-function PracticeLine({ title, items }: { title: string; items: string[] }) {
-  return (
-    <div>
-      <p className="text-sm font-semibold text-slate-950">{title}</p>
-      <ul className="mt-2 space-y-1 text-sm leading-6 text-slate-600">
-        {items.map((item) => (
-          <li key={item}>· {item}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function MethodBlock({ title, items }: { title: string; items: string[] }) {
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4">
-      <p className="text-sm font-semibold text-slate-950">{title}</p>
-      <ul className="mt-2 space-y-1 text-sm leading-6 text-slate-600">
-        {items.map((item) => (
-          <li key={item}>· {item}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function TipPanel({ title, items }: { title: string; items: { title: string; items: string[] }[] }) {
-  return (
-    <section className="quiet-card rounded-3xl p-6">
-      <h2 className="text-2xl font-semibold text-slate-950">{title}</h2>
-      <div className="mt-5 grid gap-3">
-        {items.map((tip) => (
-          <article key={tip.title} className="rounded-2xl border border-slate-200 bg-white p-4">
-            <h3 className="font-semibold text-slate-950">{tip.title}</h3>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {tip.items.map((item) => (
-                <span key={item} className="soft-badge rounded-full px-2.5 py-1 text-xs text-slate-600">
-                  {item}
-                </span>
-              ))}
-            </div>
-          </article>
-        ))}
       </div>
+      <p className="learn-start-then">学完第零课，选一条路线（已有基础的同学可以跳过第零课，直接从这里开始）：</p>
+      <TrackList />
+      <p className="muted-note">学习进度只保存在此浏览器。阅读位置不代表掌握程度，可以用专项练习检验。</p>
     </section>
+  );
+}
+
+const Group = ({ name, text }: { name: string; text: string }) => (
+  <p className="learn-group">
+    <b>{name}</b>
+    <span>{text}</span>
+  </p>
+);
+
+/** 精讲目录 (design doc §3.3): open lessons grouped by track, method quick references, honest “筹备中”. */
+export function LearnPage() {
+  const { hash } = useLocation();
+  if (hash === "#model-linear-programming")
+    return <Navigate replace to="/learn/linear-programming" />;
+  if (hash) return <Navigate replace to={`/learn/reference${hash}`} />;
+  return (
+    <div className="learn-page">
+      <PageHead
+        title="精讲目录"
+        lead="先跟着完整例题学会方法，再用练习检验理解，最后走进开放的赛题。"
+      />
+      <div className="site-container">
+        <StartGuide />
+
+        <Group name="优化" text="线性规划 · 图论与网络优化" />
+        <section className="learn-feature" aria-labelledby="learn-lp">
+          <div>
+            <p className="page-kicker">优化 · 建议第一门 · 约 45–60 分钟</p>
+            <h2 id="learn-lp">线性规划：有限资源，怎样分配才更好？</h2>
+            <p>
+              陪一家加工坊安排一周生产。从变量与约束开始，亲手画出可行域，算出最优计划，再检验它是否可信。
+            </p>
+            <div className="page-head-actions">
+              <Link className="btn btn-primary" to="/learn/linear-programming">
+                开始精讲
+              </Link>
+              <Link className="btn btn-secondary" to="/practice/linear-programming">
+                进入专项练习
+              </Link>
+              <Link className="btn btn-secondary" to="/learn/linear-programming/lab">
+                交互实验室
+              </Link>
+            </div>
+          </div>
+          <div className="learn-equation" aria-label="课程例题：最大化 40x 加 50y，最优计划 A 40、B 20 平方米">
+            <span>两种产品 · 两种资源 · 一个决策</span>
+            <b>max 40x + 50y</b>
+            <span>2x + y ≤ 100 · x + 2y ≤ 80</span>
+          </div>
+        </section>
+
+        <section className="learn-feature" aria-labelledby="learn-graph">
+          <div>
+            <p className="page-kicker">优化 · V3.0 新开放 · 约 45–55 分钟 · 先修：无</p>
+            <h2 id="learn-graph">图论与网络优化：招新日，怎么走最近、怎么连最省？</h2>
+            <p>
+              把校园地图抽象成赋权图，写出邻接矩阵，一步一步运行 Dijkstra 算法求最短路、Kruskal 算法求最小生成树，再用道路施工情景检验结论是否稳定。
+            </p>
+            <div className="page-head-actions">
+              <Link className="btn btn-primary" to="/learn/graph">
+                开始图论精讲
+              </Link>
+              <Link className="btn btn-secondary" to="/practice/graph">
+                图论专项练习
+              </Link>
+            </div>
+          </div>
+          <div className="learn-equation" aria-label="课程核心公式：松弛 d(v) 取 d(v) 与 d(u) 加 w(u,v) 中的较小者；生成树有 n 减 1 条边">
+            <span>顶点 · 边 · 权</span>
+            <b>d(v) ← min(d(v), d(u) + w)</b>
+            <span>最小生成树：n − 1 条边，总长最小</span>
+          </div>
+        </section>
+
+        <Group name="预测" text="回归分析" />
+        <section className="learn-feature" aria-labelledby="learn-regression">
+          <div>
+            <p className="page-kicker">预测 · V3.0 新开放 · 约 50–60 分钟 · 先修：无</p>
+            <h2 id="learn-regression">回归分析：明天卖多少杯，怎样估计才靠谱？</h2>
+            <p>
+              用一家奶茶店两周的数据，从散点图、相关系数走到最小二乘、R² 与残差图，再用虚拟变量建立多元回归，做出带区间的预测，并认清相关与因果、外推和异常值的边界。
+            </p>
+            <div className="page-head-actions">
+              <Link className="btn btn-primary" to="/learn/regression">
+                开始回归精讲
+              </Link>
+              <Link className="btn btn-secondary" to="/practice/regression">
+                回归专项练习
+              </Link>
+            </div>
+          </div>
+          <div className="learn-equation" aria-label="课程核心公式：y 帽等于 b0 加 b1 x，最小二乘使残差平方和最小">
+            <span>散点图 · 最小二乘 · 残差</span>
+            <b>
+              ŷ = b<sub>0</sub> + b<sub>1</sub>x
+            </b>
+            <span>min Σ(y − ŷ)² · R² = 1 − SSE/SST</span>
+          </div>
+        </section>
+
+        <Group name="评价" text="层次分析法 → TOPSIS（按顺序学）" />
+        <section className="learn-feature" aria-labelledby="learn-ahp">
+          <div>
+            <p className="page-kicker">评价 · 约 40–50 分钟 · 先修：无</p>
+            <h2 id="learn-ahp">层次分析法（AHP）：三份实习，怎样选得有理有据？</h2>
+            <p>
+              从一次真实的选择出发，画出层次结构，用两两比较构造判断矩阵，求权重、做一致性检验，再合成最终排序。课程里有可以动手改判断的矩阵实验。
+            </p>
+            <div className="page-head-actions">
+              <Link className="btn btn-primary" to="/learn/ahp">
+                开始 AHP 精讲
+              </Link>
+              <Link className="btn btn-secondary" to="/practice/ahp">
+                AHP 专项练习
+              </Link>
+            </div>
+          </div>
+          <div className="learn-equation" aria-label="课程核心公式：A 乘 w 等于 λmax 乘 w，一致性比率 CR 等于 CI 除以 RI">
+            <span>判断矩阵 · 权重 · 一致性</span>
+            <b>Aw = λ<sub>max</sub>w</b>
+            <span>CR = CI / RI &lt; 0.1</span>
+          </div>
+        </section>
+
+        <section className="learn-feature" aria-labelledby="learn-topsis">
+          <div>
+            <p className="page-kicker">评价 · V3.0 新开放 · 约 45–55 分钟 · 建议先学 AHP</p>
+            <h2 id="learn-topsis">TOPSIS 综合评价：五套房子，怎样排出先后？</h2>
+            <p>
+              接着 AHP 的故事：用 AHP 求出的权重给有数据的方案排序。学会指标方向、向量标准化、正负理想解和贴近度，再用熵权法和排名实验检验结论是否稳健。
+            </p>
+            <div className="page-head-actions">
+              <Link className="btn btn-primary" to="/learn/topsis">
+                开始 TOPSIS 精讲
+              </Link>
+              <Link className="btn btn-secondary" to="/practice/topsis">
+                TOPSIS 专项练习
+              </Link>
+            </div>
+          </div>
+          <div className="learn-equation" aria-label="课程核心公式：贴近度 C 等于 D 减除以 D 加与 D 减之和">
+            <span>标准化 · 理想解 · 贴近度</span>
+            <b>
+              C = D<sup>−</sup> / (D<sup>+</sup> + D<sup>−</sup>)
+            </b>
+            <span>AHP 定权重 · 数据定排名</span>
+          </div>
+        </section>
+
+        <section className="learn-modes" aria-label="三种学习方式">
+          <article>
+            <h2>精讲</h2>
+            <p>连续阅读、手工推导、可操作图表。跟着一个问题，走完建模全过程。</p>
+            <Link className="text-link" to="/learn/linear-programming">
+              阅读线性规划 →
+            </Link>
+          </article>
+          <article>
+            <h2>刷题</h2>
+            <p>按难度专项训练。错题诊断、分层提示、错题重练，记录保存在本机。</p>
+            <Link className="text-link" to="/practice/linear-programming">
+              6 道线性规划练习 →
+            </Link>{" "}
+            <Link className="text-link" to="/practice/graph">
+              15 道图论练习 →
+            </Link>{" "}
+            <Link className="text-link" to="/practice/regression">
+              15 道回归练习 →
+            </Link>{" "}
+            <Link className="text-link" to="/practice/ahp">
+              8 道 AHP 练习 →
+            </Link>{" "}
+            <Link className="text-link" to="/practice/topsis">
+              12 道 TOPSIS 练习 →
+            </Link>
+          </article>
+          <article>
+            <h2>实战</h2>
+            <p>七关训练：从读题走到论文框架，以开放任务练习独立建模。</p>
+            <Link className="text-link" to="/quest">
+              进入七关实战
+            </Link>
+          </article>
+        </section>
+
+        <section className="learn-methods" aria-labelledby="learn-methods">
+          <div className="records-head">
+            <h2 id="learn-methods">方法索引</h2>
+            <Link className="text-link" to="/learn/reference#methods">
+              全部方法速查 →
+            </Link>
+          </div>
+          <ul>
+            {modelMethods.map((method) => (
+              <li key={method.slug}>
+                <Link to={courseByMethod(method.slug)?.lessonPath ?? `/learn/reference#model-${method.slug}`}>
+                  <strong>{method.name}</strong>
+                  <span className="muted-note">
+                    {method.family} ·{" "}
+                    {courseByMethod(method.slug) ? `精讲已开放：${courseByMethod(method.slug)!.title}` : "仅速查 · 精讲筹备中"}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </div>
   );
 }
