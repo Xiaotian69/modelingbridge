@@ -27,7 +27,8 @@ export type LessonDefinition<B> = {
   /** Renders course-specific blocks (interactive labs, diagrams); return undefined for shared ones. */
   renderExtra?: (block: B) => ReactNode | undefined;
   codeLabel: string;
-  cover: { kicker: string; title: ReactNode; deck: string; meta: string[]; goal: string };
+  /** `figure`: an optional illustration under the deck (第零课); renders nothing when absent. */
+  cover: { kicker: string; title: ReactNode; deck: string; meta: string[]; goal: string; figure?: ReactNode };
   /**
    * Method courses have a practice bank, a contest application and the default ending.
    * 第零课 has none of them: it passes `endSlot` (and `coverActions`) instead.
@@ -290,6 +291,7 @@ export function LessonReader<B extends { type: string }>({ def }: { def: LessonD
             <p className="kicker">{def.cover.kicker}</p>
             <h1>{def.cover.title}</h1>
             <p className="deck">{def.cover.deck}</p>
+            {def.cover.figure}
             <div className="topic-meta">
               {def.cover.meta.map((m) => (
                 <span key={m}>{m}</span>

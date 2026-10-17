@@ -9,6 +9,7 @@ import type { Block } from "../content";
 import type { BridgeBlock } from "../CourseBridge";
 import { CLASS_MINUTE, COMMUTE_DAYS, RAIN_DAYS, UMBRELLA, WALK } from "./data";
 import { clock, commuteCheck, latestSafeDeparture, mean, optimum, plan, total, walkMinutes } from "./math";
+import type { IllustrationId } from "./illustrations";
 import { INTRO_SECTIONS } from "./sectionIds";
 
 export type IntroBlock =
@@ -21,11 +22,14 @@ export type IntroBlock =
   | { type: "intro-map" }
   | { type: "intro-umbrella" }
   | { type: "intro-cycle" }
-  | { type: "intro-tracks" };
+  | { type: "intro-tracks" }
+  /** A scene illustration slot; renders nothing until its image file is added. */
+  | { type: "intro-figure"; id: IllustrationId };
 export type IntroSection = { id: string; title: string; lead: string; blocks: IntroBlock[] };
 
 const p = (text: string): IntroBlock => ({ type: "p", text });
 const note = (text: string): IntroBlock => ({ type: "note", text });
+const figure = (id: IllustrationId): IntroBlock => ({ type: "intro-figure", id });
 const fmt = (x: number) => (Number.isInteger(x) ? String(x) : String(Math.round(x * 10) / 10));
 
 // ---- Computed results used in the text ----
@@ -67,6 +71,7 @@ export const introSections: IntroSection[] = [
       p(
         `先看一道应用题：从宿舍到教学楼 ${WALK.metres} 米，步行速度每秒 ${WALK.speed} 米，走过去要多久？${WALK.metres} ÷ ${WALK.speed} = ${WALK.metres / WALK.speed} 秒，也就是 ${fmt(walk.normal)} 分钟。条件都给了，答案只有一个，算对就结束。`,
       ),
+      figure("intro-02-walk-to-class"),
       p(
         "现在换成一个真实的问题：明天早上 8 点有课，我几点出门？这一次没人替你列好条件。你会自然地追问：路上有没有红绿灯？下不下雨？还有一个更关键的问题：你想要的是“一般要走多久”，还是“几乎不会迟到”？目的不同，需要的答案也不同。",
       ),
@@ -87,6 +92,7 @@ export const introSections: IntroSection[] = [
       p(
         "模型是对现实的简化描述，不是现实本身。地铁线路图就是一个好模型：它不按真实比例，弯弯曲曲的轨道被画成直线，可是“在哪站换乘、要坐几站”一清二楚。它丢掉了与乘车无关的细节，所以才好用。数学模型也是这样，它可以是一个公式、一张表、一张图，或一段程序，关键是保留了决定答案的结构。",
       ),
+      figure("intro-03-map-vs-metro"),
       p(
         "简化是必要的，但也有代价。线路图帮不了你估计步行时间；一个忽略了下雨的通勤模型，在雨天可能让你迟到。所以说一个模型的结论时，更准确的说法是“在这些假设下，模型给出……”，而不是“模型证明了……”。",
       ),
@@ -145,6 +151,7 @@ export const introSections: IntroSection[] = [
     title: INTRO_SECTIONS[2].title,
     lead: "跟着“早八几点出门”走一遍完整流程",
     blocks: [
+      figure("intro-04-morning-rush"),
       p(
         "现在把“几点出门”认真做一遍。小周这学期的早八已经迟到了三次，决定花两周时间解决这件事。下面九个步骤是建模中常见的工作。名字不用背，重要的是看清每一步为什么要做、交出了什么结果、下一步怎样用它。点选任意一步查看。",
       ),
@@ -165,6 +172,7 @@ export const introSections: IntroSection[] = [
     title: INTRO_SECTIONS[3].title,
     lead: "分工是为了效率，不是各干各的",
     blocks: [
+      figure("intro-05-team-table"),
       p(
         "真实的建模问题和建模比赛，大多由小组合作完成（每队人数由各赛事规定）。组里的工作大致可以分成三类，下表也写出了每类工作常被误解成什么：",
       ),
@@ -268,6 +276,7 @@ export const introSections: IntroSection[] = [
     title: INTRO_SECTIONS[8].title,
     lead: "挑一条你最感兴趣的路线",
     blocks: [
+      figure("intro-06-three-paths"),
       p(
         "第零课到这里就结束了。接下来的五门精讲都从零讲起，每门围绕一个完整的例题展开，配有交互实验和专项练习。按你最好奇的问题选一条路线：",
       ),

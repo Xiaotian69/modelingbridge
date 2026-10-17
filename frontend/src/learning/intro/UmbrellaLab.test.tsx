@@ -92,6 +92,9 @@ describe("UmbrellaLab", () => {
       fireEvent.change(slider(), { target: { value: String(x) } });
       const p = plan(UMBRELLA, x);
       expect(status()).toContain(`A 点 ${p.a} 把、B 点 ${p.b} 把，借不到伞的有 ${p.shortage} 人`);
+      // The scene follows the same numbers: one dashed slot per person without an umbrella.
+      expect(document.querySelectorAll(".intro-scene rect.is-unmet")).toHaveLength(p.shortage);
+      expect(document.querySelector(".intro-scene")).toHaveTextContent(`伞 ${p.a} · 需要 40`);
     }
     // Not optimal: no way forward yet, a hint instead of a cross.
     fireEvent.change(slider(), { target: { value: "10" } });

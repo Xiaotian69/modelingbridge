@@ -724,3 +724,151 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ---------- §7 umbrella scene (decorative; numbers are stated in text) ---------- */
+.intro-scene {
+  position: relative;
+  margin: 4px 0 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+/* .lp-lab svg caps charts at 520px; the scene uses the full card width. */
+.lp-lab .intro-scene svg {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+}
+.intro-scene-station rect:first-child {
+  fill: var(--surface-sunken);
+}
+.intro-scene svg text {
+  fill: var(--text);
+  font-size: 18px;
+  font-weight: 700;
+}
+.intro-scene svg .intro-scene-count {
+  fill: var(--text-muted);
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.intro-slot {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+.intro-slot.is-unmet {
+  stroke: var(--chart-optimum);
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+  fill: color-mix(in srgb, var(--chart-optimum) 12%, transparent);
+}
+.intro-umbrella {
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  /* A transfer is a short trip: long enough to see which umbrellas moved, instant under reduced motion. */
+  transition:
+    transform calc(650ms * var(--motion-scale)) var(--ease-standard) calc(var(--i, 0) * 14ms * var(--motion-scale)),
+    fill var(--dur-quick) var(--ease-standard),
+    stroke var(--dur-quick) var(--ease-standard);
+}
+.intro-umbrella.is-served {
+  fill: var(--brand);
+  stroke: var(--brand);
+}
+.intro-umbrella.is-spare {
+  fill: var(--chart-grid);
+  stroke: var(--text-muted);
+}
+.intro-scene-route {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 6;
+  opacity: 0.6;
+}
+.intro-scene-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 8px 12px 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.intro-scene-legend span::before {
+  content: "";
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  margin-right: 5px;
+  border-radius: 3px;
+  vertical-align: -1px;
+}
+.intro-scene-legend .is-served::before {
+  background: var(--brand);
+}
+.intro-scene-legend .is-spare::before {
+  background: var(--chart-grid);
+  outline: 1px solid var(--text-muted);
+}
+.intro-scene-legend .is-unmet::before {
+  border: 2px dashed var(--chart-optimum);
+}
+/* Light rain over the scene. Off entirely when the system asks for reduced motion. */
+.intro-scene-rain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image: repeating-linear-gradient(
+    105deg,
+    transparent 0 22px,
+    color-mix(in srgb, var(--info) 55%, transparent) 22px 23px,
+    transparent 23px 47px
+  );
+  background-size: 120px 120px;
+  animation: intro-rain 1.1s linear infinite;
+}
+@keyframes intro-rain {
+  to {
+    background-position: -32px 120px;
+  }
+}
+/* Phones: the counts would be ~9px here; the station cards right below state them. */
+@media (max-width: 640px) {
+  .intro-scene svg .intro-scene-count {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-scene-rain {
+    display: none;
+  }
+}
+
+/* ---------- Illustrations (AI-generated scenes; light card in both themes) ---------- */
+.intro-figure {
+  margin: 20px 0;
+}
+.intro-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  background: #faf9f5;
+  border: 1px solid var(--border);
+}
+.intro-figure figcaption {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.topic-cover .intro-figure {
+  margin: 16px 0 18px;
+}

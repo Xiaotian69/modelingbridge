@@ -3,6 +3,7 @@ import { CourseBridge } from "../learning/CourseBridge";
 import { LessonReader, type LessonDefinition } from "../learning/LessonReader";
 import { CommuteCalculator } from "../learning/intro/CommuteCalculator";
 import { introSections, type IntroBlock } from "../learning/intro/content";
+import { IntroFigure } from "../learning/intro/illustrations";
 import { ContestFlow, ModelingCycle, ModelingMap } from "../learning/intro/Overview";
 import { ProcessExplorer } from "../learning/intro/ProcessExplorer";
 import { INTRO_CHECKPOINT_IDS, INTRO_SECTIONS } from "../learning/intro/sectionIds";
@@ -73,6 +74,8 @@ const intro: LessonDefinition<IntroBlock> = {
       <ModelingCycle />
     ) : block.type === "intro-tracks" ? (
       <TrackList />
+    ) : block.type === "intro-figure" ? (
+      <IntroFigure id={block.id} />
     ) : block.type === "course-bridge" ? (
       <CourseBridge to={block.to} kicker={block.kicker} title={block.title} text={block.text} />
     ) : undefined,
@@ -82,6 +85,7 @@ const intro: LessonDefinition<IntroBlock> = {
     title: "认识数学建模",
     deck: "从一个现实问题开始，学会像建模者一样思考。",
     meta: ["零基础可读", "约 15–20 分钟", "只用四则运算", "不需要任何先修课"],
+    figure: <IntroFigure id="intro-01-rain-umbrellas" />,
     goal: "读完后，你将能说清什么是数学模型、为什么需要假设，按“目标—变量—假设—数据—关系—求解—检验—改进”的思路分析一个小问题，知道建模团队和竞赛是怎样工作的，并选出下一步要学的课程。",
   },
   coverActions: (

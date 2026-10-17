@@ -4,6 +4,7 @@ import { learning, useLearning } from "../../state/learning";
 import { DEMAND_MAX, SCENARIOS, UMBRELLA, type UmbrellaCase } from "./data";
 import { optimum, plan, total, transferProblem, transferRange, type Plan } from "./math";
 import { INTRO_LAB_MILESTONE } from "./sectionIds";
+import { UmbrellaScene } from "./UmbrellaScene";
 
 const N = total(UMBRELLA);
 const RANGE = transferRange(UMBRELLA);
@@ -308,6 +309,7 @@ export function UmbrellaLab() {
 
         {step === 1 && (
           <>
+            <UmbrellaScene x={0} demand={UMBRELLA.demand} />
             <ul className="intro-facts">
               <li>
                 雨伞一共 <b>{N}</b> 把
@@ -451,6 +453,7 @@ export function UmbrellaLab() {
                 {typedProblem}方案保持 x = {x}。
               </p>
             )}
+            <UmbrellaScene x={x} demand={UMBRELLA.demand} />
             <div className="intro-stations">
               <Station name="A 点" place="教学楼" umbrellas={current.a} demand={UMBRELLA.demand.a} />
               <Station name="B 点" place="宿舍区" umbrellas={current.b} demand={UMBRELLA.demand.b} />
@@ -532,6 +535,8 @@ export function UmbrellaLab() {
                 </label>
               ))}
             </div>
+            <p className="intro-lab-sub">你的方案（{moveText(plannedX)}）遇到这组需求时：</p>
+            <UmbrellaScene x={plannedX} demand={demand} />
             <div className="table-scroll">
               <table className="intro-compare">
                 <caption>
