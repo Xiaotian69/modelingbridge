@@ -62,6 +62,7 @@ const LibraryLayout = lazy(() =>
 const ChallengePage = lazy(() =>
   import("./challenge/ChallengePage").then((m) => ({ default: m.ChallengePage })),
 );
+const RolesPage = lazy(() => import("./roles/RolesPage").then((m) => ({ default: m.RolesPage })));
 const NotFoundPage = lazy(() =>
   import("./pages/NotFound").then((m) => ({ default: m.NotFoundPage })),
 );
@@ -103,6 +104,8 @@ export function AppRoutes() {
         <Route path="learn/graph" element={<GraphCoursePage />} />
         <Route path="learn/linear-programming/lab" element={<LpLabPage />} />
         <Route path="learn/reference" element={<ModelReferencePage />} />
+        {/* 建模队伍分工探索：独立于 /challenge 招新小游戏，存档键 mb.roles.v1 */}
+        <Route path="learn/team-roles" element={<RolesPage />} />
         {/* 刷题 */}
         <Route path="practice" element={<Navigate to="/practice/linear-programming" replace />} />
         <Route path="practice/linear-programming" element={<PracticePage />} />

@@ -215,6 +215,12 @@ describe("/challenge", () => {
     await vi.waitFor(() => expect(events[0]).toEqual({ name: "challenge_enter", src: "direct" }));
   });
 
+  it("accepts the homepage notice source (site) instead of folding it into direct", async () => {
+    renderAt("/challenge?src=site");
+    expect(await screen.findByRole("link", { name: "直接进入网站主页" })).toHaveAttribute("href", "/?src=site");
+    await vi.waitFor(() => expect(events[0]).toEqual({ name: "challenge_enter", src: "site" }));
+  });
+
   it("celebrates once per finish, clears itself, and restarts cleanly", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     renderAt("/challenge");

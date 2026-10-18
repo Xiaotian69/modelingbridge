@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { MathNetwork } from "../components/motion/MathNetwork";
 import { Icon } from "../components/ui/Icon";
 import { HomeSearch } from "./home/HomeSearch";
+import { RecruitNotice } from "./home/RecruitNotice";
 import { readContinueItems, type ContinueItem } from "./home/continueLearning";
 import { courseById, sectionIndex, sectionTitleIn } from "../learning/courses";
 
@@ -79,6 +80,7 @@ export function HomePage() {
   return (
     <div className="home-page">
       <section className="home-hero" aria-labelledby="home-title">
+        <RecruitNotice />
         <div className="site-container hero-layout">
           <div className="hero-copy">
             <h1 id="home-title">
@@ -143,6 +145,20 @@ export function HomePage() {
             <b>实战</b> 完整走一次七关
           </span>
         </p>
+      </section>
+
+      <section className="site-container home-roles" aria-labelledby="home-roles-title">
+        <div>
+          <p className="page-kicker">建模队伍分工探索 · 约 6–8 分钟</p>
+          <h2 id="home-roles-title">不确定先学建模、编程还是论文？</h2>
+          <p>
+            在一个校园共享单车案例里做 9 个小任务，体验建模手、编程手、论文手分别做什么。结果分开列出你的兴趣、经验和任务表现，给出可以先尝试的方向和下一步练习，不贴人格标签。
+          </p>
+        </div>
+        <Link className="btn btn-secondary home-roles-go" to="/learn/team-roles">
+          找到你的建模起点
+          <Icon name="arrow" size={16} />
+        </Link>
       </section>
 
       <nav className="site-container home-links" aria-label="更多入口">
