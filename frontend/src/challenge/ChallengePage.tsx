@@ -68,7 +68,7 @@ export function ChallengePage() {
   };
   const next = (n: number) => (n === TOTAL ? finish() : go((n + 1) as Step));
 
-  if (state.step === "intro") return <Intro onStart={start} heading={heading} previous={state.result} onShowPrevious={() => go("result")} />;
+  if (state.step === "intro") return <Intro onStart={start} heading={heading} src={src} previous={state.result} onShowPrevious={() => go("result")} />;
   if (state.step === "result" && state.result)
     return <ResultView key={celebration} celebrate={celebration > 0} id={state.result} answers={state.answers as Answers} heading={heading} src={src} onRestart={start} />;
 
@@ -119,7 +119,7 @@ function RoleIcon({ kind }: { kind: "M" | "C" | "W" }) {
   );
 }
 
-function Intro({ onStart, heading, previous, onShowPrevious }: { onStart: () => void; heading: React.RefObject<HTMLHeadingElement>; previous?: ResultId; onShowPrevious: () => void }) {
+function Intro({ onStart, heading, src, previous, onShowPrevious }: { onStart: () => void; heading: React.RefObject<HTMLHeadingElement>; src: string; previous?: ResultId; onShowPrevious: () => void }) {
   return (
     <div className="cg cg-intro">
       <header className="cg-top">
@@ -153,6 +153,9 @@ function Intro({ onStart, heading, previous, onShowPrevious }: { onStart: () => 
           开始挑战
         </button>
         <p className="cg-meta">5 道题 · 约 3 分钟 · 无需注册 · 没有标准答案</p>
+        <Link to={`/?src=${encodeURIComponent(src)}`} className="cg-btn cg-home-entry">
+          直接进入网站主页
+        </Link>
         {previous && (
           <p className="cg-meta">
             你上次的结果：{results[previous].role} · {results[previous].tag}{" "}
