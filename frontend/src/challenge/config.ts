@@ -1,6 +1,7 @@
 /**
  * 招新挑战「3 分钟测出你是建模队里的哪种人」的全部内容配置。
- * 换群号、改文案、关活动只改这个文件；计分逻辑在 scoring.ts，页面在 ChallengePage.tsx。
+ * 改题目和文案改这个文件；换群号、开关活动改 event.ts（主站招新公告也读它）；
+ * 计分逻辑在 scoring.ts，页面在 ChallengePage.tsx。
  *
  * 说明：结果是“趣味倾向 + 学习建议”，不是能力测评；每个选项给三个维度
  * （建模 M / 编程 C / 写作 W）加分，并带一个思维风格标签。
@@ -21,30 +22,8 @@ export type ResultId = "abstract" | "optimize" | "data" | "express" | "allround"
 
 export const CHALLENGE_STORAGE_KEY = "mb.challenge.v1";
 
-/**
- * 活动开关与联系方式。
- * - active：招新进行中。改成 false 后，“加入协会”变“关注协会”，/challenge 链接继续可用。
- * - lottery：摊位抽奖确认开展后才改成 true；为 false 时页面上不出现任何抽奖字样。
- */
-export const event = {
-  active: true,
-  lottery: false,
-  societyName: "财大数学建模协会",
-  /** 结果页给的是招新群（不是协会大群）：先进招新群了解、报名，加入协会后再进协会群 */
-  qqGroup: "566983524",
-  groupName: "QQ 招新群",
-  joinNote: "先进招新群，了解协会、报名加入。",
-  /** 开始页顶部小字 */
-  activeNote: "财大数学建模协会 · 招新进行中",
-  lotteryNote: "财大数学建模协会 · 测完到摊位凭结果页抽奖",
-  /** 结果页“截图保存”后面接的话（仅 lottery 为 true 时显示） */
-  lotteryHint: "，到招新摊位出示就能抽奖",
-  /** 活动结束后，结果页联系卡片的说明 */
-  afterNote: "招新已结束，欢迎进群了解协会的后续活动。",
-};
-
-/** 扫码渠道：只认这几个值，其他一律记为 direct。 */
-export const SOURCES = ["poster", "booth", "flyer", "group"] as const;
+/** 活动开关、群号和扫码渠道与主站招新公告共用，定义在 event.ts。 */
+export { event, SOURCES } from "./event";
 
 /**
  * 匿名统计（不用 Cookie、不收集个人信息）。

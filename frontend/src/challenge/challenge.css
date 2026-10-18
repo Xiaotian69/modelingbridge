@@ -997,6 +997,16 @@
   color: var(--hero-muted);
   font-size: 14px;
 }
+.cg-home-entry {
+  width: 100%;
+  margin-top: 20px;
+  border: 1px solid rgba(145, 228, 200, 0.4);
+  color: var(--hero-text);
+  background: transparent;
+}
+.cg-home-entry:hover {
+  background: rgba(145, 228, 200, 0.1);
+}
 .cg-intro .cg-link {
   color: var(--mint);
 }

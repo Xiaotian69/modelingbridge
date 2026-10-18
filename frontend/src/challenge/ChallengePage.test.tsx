@@ -109,6 +109,20 @@ async function playOptimizer(fromIntro = true) {
 }
 
 describe("/challenge", () => {
+  it.each(["poster", "booth", "flyer", "group", "", "unknown", "<script>"])("opens home without starting the game and keeps a validated source (%s)", async (source) => {
+    renderAt(`/challenge${source ? `?src=${encodeURIComponent(source)}` : ""}`);
+    const home = await screen.findByRole("link", { name: "直接进入网站主页" });
+    const expectedSource = ["poster", "booth", "flyer", "group"].includes(source) ? source : "direct";
+    expect(home).toHaveAttribute("href", `/?src=${expectedSource}`);
+    expect(screen.getByRole("button", { name: "开始挑战" })).toBeInTheDocument();
+
+    fireEvent.click(home);
+    expect(await screen.findByRole("navigation", { name: "主导航" })).toBeInTheDocument();
+    expect(events.some((e) => e.name === "challenge_start")).toBe(false);
+    expect(events.some((e) => e.name === "challenge_complete")).toBe(false);
+    expect(JSON.parse(localStorage.getItem(CHALLENGE_STORAGE_KEY)!)).toMatchObject({ step: "intro", answers: {} });
+  });
+
   it("opens directly as a standalone page (deep link with a source parameter)", async () => {
     renderAt("/challenge?src=poster");
     expect(await screen.findByRole("heading", { name: /建模队里的哪种人/ }, { timeout: 3000 })).toBeInTheDocument();
@@ -199,6 +213,12 @@ describe("/challenge", () => {
     renderAt("/challenge?src=<script>");
     expect(await screen.findByRole("button", { name: "开始挑战" })).toBeInTheDocument();
     await vi.waitFor(() => expect(events[0]).toEqual({ name: "challenge_enter", src: "direct" }));
+  });
+
+  it("accepts the homepage notice source (site) instead of folding it into direct", async () => {
+    renderAt("/challenge?src=site");
+    expect(await screen.findByRole("link", { name: "直接进入网站主页" })).toHaveAttribute("href", "/?src=site");
+    await vi.waitFor(() => expect(events[0]).toEqual({ name: "challenge_enter", src: "site" }));
   });
 
   it("celebrates once per finish, clears itself, and restarts cleanly", async () => {

@@ -634,6 +634,165 @@
   font-weight: 600;
 }
 
+/* Recruitment notice (top of the hero; hidden when challenge/event.ts active = false) */
+.home-hero {
+  /* keep the notice's top margin inside the dark hero instead of collapsing above it */
+  display: flow-root;
+}
+.recruit-notice {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px 28px;
+  margin-top: 20px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid #91e4c859;
+  background: #91e4c80f;
+  color: var(--hero-text);
+}
+.recruit-notice + .hero-layout {
+  padding-top: 40px;
+}
+.recruit-head h2 {
+  display: inline;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 750;
+}
+.recruit-tag {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--mint);
+  color: var(--mint-ink);
+  font-size: 12px;
+  font-weight: 750;
+  vertical-align: 2px;
+}
+.recruit-note {
+  margin: 4px 0 0;
+  color: var(--hero-muted);
+  font-size: 13px;
+}
+.recruit-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  max-width: 340px;
+}
+.recruit-label {
+  color: var(--hero-muted);
+  font-size: 13px;
+}
+.recruit-qq {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  user-select: all;
+}
+.recruit-copy {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--mint);
+  color: var(--mint-ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.recruit-copy:hover {
+  background: #a9ecd5;
+}
+.recruit-status {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--mint);
+  font-size: 13px;
+}
+.recruit-status.is-fail {
+  color: #f3c98f;
+}
+.recruit-game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 44px;
+  padding-left: 22px;
+  border-left: 1px solid #ffffff26;
+  color: var(--hero-text);
+  text-decoration: none;
+}
+.recruit-game span {
+  color: var(--hero-muted);
+  font-size: 12px;
+}
+.recruit-game b {
+  color: var(--mint);
+  font-size: 15px;
+}
+.recruit-game:hover b {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Team-roles exploration entry */
+.home-roles {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 32px;
+  margin-top: 32px;
+  padding: 20px 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.home-roles h2 {
+  margin: 4px 0 6px;
+  font-size: 19px;
+}
+.home-roles p:not(.page-kicker) {
+  max-width: 640px;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.home-roles-go {
+  flex: none;
+  min-height: 44px;
+}
+@media (max-width: 899px) {
+  .recruit-notice {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 14px;
+    padding: 12px 14px;
+  }
+  .recruit-notice + .hero-layout {
+    padding-top: 24px;
+  }
+  .recruit-group {
+    max-width: none;
+  }
+  .recruit-game {
+    padding: 10px 0 0;
+    border-left: 0;
+    border-top: 1px solid #ffffff1f;
+  }
+  .home-roles {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px;
+  }
+}
+
 /* ---------- Library ---------- */
 .library-head {
   background: var(--surface);
