@@ -23,6 +23,8 @@ export type TransitionDeps = {
   /** A route-level or page-level loading placeholder is showing. */
   isLoading(): boolean;
   setPhase(dir: Direction | null, pending: boolean): void;
+  /** Plays the ordinary page fade when a started transition had to be skipped. */
+  fallback?(): void;
   preloadTimeoutMs?: number;
   settleTimeoutMs?: number;
 };
@@ -74,7 +76,6 @@ export function createTransitionPush(deps: TransitionDeps) {
       return;
     }
     const start = deps.start;
-    const dir: Direction = mode === "lite" ? "fade" : kind;
     // Abandon when a newer push exists or the page changed underneath (back / forward). A replace
     // on the same page (filters, search params) must not swallow the click.
     const stale = () => id !== seq || deps.currentPath() !== from;
@@ -100,6 +101,15 @@ export function createTransitionPush(deps: TransitionDeps) {
         commit();
         return;
       }
+      // Re-read now: reduced motion, a hidden tab or lite mode may have changed while waiting.
+      const modeNow = deps.mode();
+      if (modeNow === "off") {
+        stopCurrent();
+        reset();
+        commit();
+        return;
+      }
+      const dir: Direction = modeNow === "lite" ? "fade" : kind;
       stopCurrent();
       let vt: ViewTransitionLike | null = null;
       let skipEarly = false;
@@ -133,7 +143,12 @@ export function createTransitionPush(deps: TransitionDeps) {
       if (skipEarly) vt.skipTransition();
       current = vt;
       const done = vt;
-      done.ready.catch(() => {});
+      // Skipped after the commit (still loading, scroll not settled, browser gave up): the page
+      // is there but nothing animated it, so play the ordinary fade, once, unless a newer
+      // navigation or back / forward has taken over.
+      done.ready.catch(() => {
+        if (id === seq && committed) deps.fallback?.();
+      });
       void done.finished
         .catch(() => {})
         .finally(() => {
@@ -144,11 +159,12 @@ export function createTransitionPush(deps: TransitionDeps) {
     });
   }
 
-  function dispose() {
+  /** Back / forward or unmount: drop any pending push and stop a running transition now. */
+  function cancel() {
     seq += 1;
     stopCurrent();
     reset();
   }
 
-  return { push, dispose };
+  return { push, cancel, dispose: cancel };
 }

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useRef, type ReactElement, type ReactNode } from "react";
+import { useContext, useEffect, useLayoutEffect, useMemo, useRef, type ReactElement, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 import {
   Navigate,
@@ -6,10 +6,12 @@ import {
   matchRoutes,
   parsePath,
   useLocation,
+  useNavigationType,
   type RouteObject,
   type To,
 } from "react-router-dom";
 import { motionScale } from "../design/motion";
+import { playPageEnter } from "../design/pageEnter";
 import { isPreloadable } from "./lazyPage";
 import { createTransitionPush, type MotionMode, type ViewTransitionLike } from "./transitionPush";
 
@@ -85,9 +87,19 @@ export function TransitionNavigation({ routes, children }: { routes: RouteObject
         if (pending) root.dataset.navPending = "";
         else delete root.dataset.navPending;
       },
+      fallback: () => playPageEnter(document.getElementById("main-content")),
     });
   }, [context, preload]);
   useEffect(() => () => controller.dispose(), [controller]);
+  // Back / forward wins over any click still waiting or animating, even on the same pathname
+  // (e.g. ?tab=new → ?tab=old). The first render's POP is the initial load, not a navigation.
+  const navigationType = useNavigationType();
+  const seenKey = useRef(location.key);
+  useLayoutEffect(() => {
+    if (seenKey.current === location.key) return;
+    seenKey.current = location.key;
+    if (navigationType === "POP") controller.cancel();
+  }, [location.key, navigationType, controller]);
   // Prefetch on intent (hover, touch, focus) so the 300 ms budget at click time is usually met.
   useEffect(() => {
     const prefetch = (event: Event) => {

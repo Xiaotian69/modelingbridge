@@ -76,11 +76,22 @@ function makeDeps(overrides: Partial<TransitionDeps> = {}) {
       return d.promise;
     }),
     start: vi.fn((update: () => Promise<void>) => {
-      const done = Promise.resolve().then(update);
+      // Like the real API: skipping before the update has finished rejects `ready`.
+      let skipped = false;
+      let updated = false;
+      const done = Promise.resolve()
+        .then(update)
+        .then(() => {
+          updated = true;
+        });
       const vt = {
-        ready: done,
+        ready: done.then(() => {
+          if (skipped) throw new DOMException("Transition was skipped", "AbortError");
+        }),
         finished: done.then(() => undefined),
-        skipTransition: vi.fn(),
+        skipTransition: vi.fn(() => {
+          if (!updated) skipped = true;
+        }),
       };
       transitions.push(vt);
       return vt;
@@ -89,6 +100,7 @@ function makeDeps(overrides: Partial<TransitionDeps> = {}) {
     mode: () => mode,
     isLoading: () => loading,
     setPhase: (dir, pending) => phases.push([dir, pending]),
+    fallback: vi.fn(),
     ...overrides,
   };
   return {
@@ -302,6 +314,102 @@ describe("createTransitionPush", () => {
     t.preloads.get("/learn/ahp")!.resolve();
     await settleSoon();
     expect(t.pushed).toEqual(["/learn/ahp"]);
+  });
+
+  it("re-reads the motion mode when the page is ready: reduced motion switched on while waiting", async () => {
+    const t = makeDeps();
+    const { push } = createTransitionPush(t.deps);
+    push("/learn/ahp");
+    t.setMode("off");
+    t.preloads.get("/learn/ahp")!.resolve();
+    await settleSoon();
+    expect(t.pushed).toEqual(["/learn/ahp"]);
+    expect(t.deps.start).not.toHaveBeenCalled();
+    expect(t.phases.at(-1)).toEqual([null, false]);
+  });
+
+  it("full → lite while waiting uses the fade", async () => {
+    const t = makeDeps();
+    const { push } = createTransitionPush(t.deps);
+    push("/learn/ahp");
+    t.setMode("lite");
+    t.preloads.get("/learn/ahp")!.resolve();
+    await settleSoon();
+    expect(t.phases).toContainEqual(["fade", false]);
+    expect(t.phases).not.toContainEqual(["forward", false]);
+  });
+
+  it("cancel() (back / forward, even on the same pathname) abandons a pending push", async () => {
+    const t = makeDeps();
+    const nav = createTransitionPush(t.deps);
+    nav.push("/learn/ahp");
+    nav.cancel();
+    t.preloads.get("/learn/ahp")!.resolve();
+    await settleSoon();
+    await vi.advanceTimersByTimeAsync(400);
+    expect(t.deps.push).not.toHaveBeenCalled();
+    expect(t.phases.at(-1)).toEqual([null, false]);
+  });
+
+  it("cancel() stops a running transition and clears the phase and flag", async () => {
+    const skip = vi.fn();
+    const t = makeDeps({
+      start: vi.fn((update: () => Promise<void>) => {
+        const done = Promise.resolve().then(update);
+        return { ready: done, finished: new Promise(() => {}), skipTransition: skip }; // still animating
+      }),
+    });
+    const nav = createTransitionPush(t.deps);
+    nav.push("/learn/ahp");
+    t.preloads.get("/learn/ahp")!.resolve();
+    await settleSoon();
+    expect(isViewTransitionNavigation()).toBe(true);
+    nav.cancel();
+    expect(skip).toHaveBeenCalledTimes(1);
+    expect(isViewTransitionNavigation()).toBe(false);
+    expect(t.phases.at(-1)).toEqual([null, false]);
+  });
+
+  it.each([
+    ["the page is still loading", "loading"],
+    ["the scroll does not settle in time", "timeout"],
+  ] as const)("falls back to the page fade once when %s", async (_label, why) => {
+    const t = makeDeps();
+    if (why === "loading") t.setLoading(true);
+    const { push } = createTransitionPush(t.deps);
+    push("/learn/ahp");
+    t.preloads.get("/learn/ahp")!.resolve();
+    await vi.advanceTimersByTimeAsync(150);
+    expect(t.deps.fallback).toHaveBeenCalledTimes(1);
+    expect(t.pushed).toEqual(["/learn/ahp"]);
+    await vi.advanceTimersByTimeAsync(500);
+    expect(t.deps.fallback).toHaveBeenCalledTimes(1);
+  });
+
+  it("no fallback when the transition played, or when a newer click took over", async () => {
+    const t = makeDeps();
+    const { push } = createTransitionPush(t.deps);
+    push("/learn/ahp");
+    t.preloads.get("/learn/ahp")!.resolve();
+    await settleSoon();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(t.deps.fallback).not.toHaveBeenCalled();
+
+    let pendingUpdate: (() => Promise<void>) | null = null;
+    const u = makeDeps({
+      start: vi.fn((update: () => Promise<void>) => {
+        pendingUpdate = update;
+        return { ready: Promise.reject(new Error("skipped")), finished: Promise.resolve(), skipTransition: vi.fn() };
+      }),
+    });
+    const nav = createTransitionPush(u.deps);
+    nav.push("/learn/ahp");
+    u.preloads.get("/learn/ahp")!.resolve();
+    await vi.advanceTimersByTimeAsync(0);
+    nav.push("/learn/topsis");
+    await pendingUpdate!();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(u.deps.fallback).not.toHaveBeenCalled();
   });
 
   it("dispose abandons pending", async () => {

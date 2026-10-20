@@ -38,9 +38,11 @@ export function isSamePage(from: string, to: string): boolean {
 }
 
 const isChallenge = (pathname: string) => parts(pathname)[0] === "challenge";
+/** Old prompt links redirect from inside a component: the target is unknown until it renders. */
+const isDynamicRedirect = (pathname: string) => /^\/library\/prompts(\/|$)/.test(normalize(pathname));
 
 export function navKind(from: string, to: string): NavKind {
-  if (isChallenge(from) || isChallenge(to) || isSamePage(from, to)) return "none";
+  if (isChallenge(from) || isChallenge(to) || isDynamicRedirect(to) || isSamePage(from, to)) return "none";
   const a = routeDepth(from);
   const b = routeDepth(to);
   if (a === null || b === null || a === b) return "fade";

@@ -49,6 +49,7 @@ describe("navKind", () => {
     ["/learn", "/learn", "none"],
     ["/learn/", "/learn/ahp", "forward"],
     ["/unknown", "/learn", "fade"],
+    ["/library", "/library/prompts/p1", "none"], // dynamic redirect: cannot be resolved ahead
   ] as const)("%s → %s is %s", (from, to, kind) => {
     expect(navKind(from, to)).toBe(kind);
   });

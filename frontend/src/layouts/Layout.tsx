@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Link, Outlet, useLocation, useNavigationType } from "react-router-dom";
-import { EASING, duration } from "../design/motion";
+import { playPageEnter } from "../design/pageEnter";
 import { PageErrorBoundary } from "../components/ui/PageErrorBoundary";
 import { Brand } from "../components/ui/Brand";
 import { Icon } from "../components/ui/Icon";
@@ -54,18 +54,7 @@ export function Layout() {
   // A View Transition already animates the switch (app/TransitionNavigation): no second fade.
   useEffect(() => {
     if (navigationType === "POP" || isViewTransitionNavigation()) return;
-    const ms = duration("page");
-    if (!ms) return;
-    const lite = document.documentElement.dataset.motion === "lite";
-    const animation = main.current?.animate?.(
-      lite
-        ? [{ opacity: 0.6 }, { opacity: 1 }]
-        : [
-            { opacity: 0.6, transform: "translateY(6px)" },
-            { opacity: 1, transform: "none" },
-          ],
-      { duration: ms, easing: EASING.enter },
-    );
+    const animation = playPageEnter(main.current);
     return () => animation?.cancel(); // rapid switching: the next page starts clean
   }, [location.pathname, navigationType]);
 

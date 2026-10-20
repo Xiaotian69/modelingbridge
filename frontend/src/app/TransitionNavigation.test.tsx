@@ -3,7 +3,15 @@
 // working exactly as before, with or without View Transitions.
 import "@testing-library/jest-dom/vitest";
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { Link, MemoryRouter, Route, Routes, createRoutesFromChildren, useLocation } from "react-router-dom";
+import {
+  Link,
+  MemoryRouter,
+  Route,
+  Routes,
+  createRoutesFromChildren,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App, { AppRoutes } from "../App";
 import { RouteScroll } from "../components/motion/RouteScroll";
@@ -228,5 +236,64 @@ describe("TransitionNavigation", () => {
     await waitFor(() => expect(window.location.pathname).toBe("/learn/introduction"), LAZY);
     expect(start).toHaveBeenCalledTimes(1);
     window.history.replaceState(null, "", "/");
+  });
+
+  describe("back / forward cancels a pending or running transition", () => {
+    function setup() {
+      let release!: () => void;
+      const gate = new Promise<void>((resolve) => (release = resolve));
+      const factory = vi.fn(() => gate.then(() => ({ default: () => <p>ahp page</p> })));
+      const Ahp = lazyPage(factory);
+      const Back = () => {
+        const navigate = useNavigate();
+        return <button onClick={() => navigate(-1)}>back</button>;
+      };
+      const tree = (
+        <>
+          <Route path="/learn" element={<Link to="/learn/ahp">ahp</Link>} />
+          <Route path="/learn/ahp" element={<Ahp />} />
+        </>
+      );
+      render(
+        <MemoryRouter initialEntries={["/learn?tab=old", "/learn?tab=new"]} initialIndex={1}>
+          <TransitionNavigation routes={createRoutesFromChildren(tree)}>
+            <Routes>{tree}</Routes>
+            <Back />
+            <LocationProbe />
+          </TransitionNavigation>
+        </MemoryRouter>,
+      );
+      return { release: () => release() };
+    }
+    const fullProbe = () => screen.getByTestId("probe").textContent!;
+
+    it("same-pathname back while the page loads: stays where back went", async () => {
+      installViewTransitions();
+      const { release } = setup();
+      fireEvent.click(screen.getByRole("link", { name: "ahp" }));
+      fireEvent.click(screen.getByRole("button", { name: "back" }));
+      await act(async () => {
+        release();
+        await new Promise((r) => setTimeout(r, 400));
+      });
+      expect(fullProbe()).toMatch(/^\/learn\|/);
+    });
+
+    it("back during a running transition skips it at once", async () => {
+      const skip = vi.fn();
+      doc.startViewTransition = vi.fn((update: () => Promise<void>) => {
+        const done = Promise.resolve().then(update);
+        return { ready: done, finished: new Promise(() => {}), updateCallbackDone: done, skipTransition: skip };
+      });
+      const { release } = setup();
+      release();
+      fireEvent.click(screen.getByRole("link", { name: "ahp" }));
+      await waitFor(() => expect(fullProbe()).toMatch(/^\/learn\/ahp\|/), LAZY);
+      expect(skip).not.toHaveBeenCalled();
+      fireEvent.click(screen.getByRole("button", { name: "back" }));
+      await waitFor(() => expect(fullProbe()).toMatch(/^\/learn\|/));
+      expect(skip).toHaveBeenCalledTimes(1);
+      expect(document.documentElement.dataset.navDir).toBeUndefined();
+    });
   });
 });
