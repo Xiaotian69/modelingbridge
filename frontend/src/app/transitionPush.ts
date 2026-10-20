@@ -14,8 +14,6 @@ export type TransitionDeps = {
   /** The router's own navigator.push. */
   push(to: To, state?: unknown, opts?: unknown): void;
   currentPath(): string;
-  /** Changes on every navigation, including back / forward while a preload is pending. */
-  locationKey(): string;
   preload(pathname: string): Promise<void>;
   /** document.startViewTransition, bound; undefined where unsupported. */
   start?: (update: () => Promise<void>) => ViewTransitionLike;
@@ -77,8 +75,9 @@ export function createTransitionPush(deps: TransitionDeps) {
     }
     const start = deps.start;
     const dir: Direction = mode === "lite" ? "fade" : kind;
-    const key = deps.locationKey();
-    const stale = () => id !== seq || deps.locationKey() !== key;
+    // Abandon when a newer push exists or the page changed underneath (back / forward). A replace
+    // on the same page (filters, search params) must not swallow the click.
+    const stale = () => id !== seq || deps.currentPath() !== from;
     deps.setPhase(null, true);
 
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -92,7 +91,7 @@ export function createTransitionPush(deps: TransitionDeps) {
     void Promise.race([loaded, timedOut]).then((outcome) => {
       clearTimeout(timer);
       if (stale()) {
-        if (id === seq) reset(); // back / forward or unmount: nothing newer owns the phase
+        if (id === seq) reset(); // back / forward: nothing newer owns the phase
         return;
       }
       if (outcome !== "ready") {

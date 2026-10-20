@@ -8,7 +8,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App, { AppRoutes } from "../App";
 import { RouteScroll } from "../components/motion/RouteScroll";
 import { learning } from "../state/learning";
-import { TransitionNavigation, routePreloader } from "./TransitionNavigation";
+import { TransitionNavigation, resolveRedirect, routePreloader } from "./TransitionNavigation";
+import { lazyPage } from "./lazyPage";
 
 // The fake replaces the real API (whose types the DOM lib already declares).
 const doc = document as unknown as { startViewTransition?: unknown };
@@ -120,6 +121,57 @@ describe("TransitionNavigation", () => {
     );
     expect(stop).toBeGreaterThanOrEqual(0);
     expect(scrollTo.mock.invocationCallOrder[stop]).toBeLessThan(start.mock.invocationCallOrder[0]);
+  });
+
+  it("resolves route redirects to their target", () => {
+    expect(resolveRedirect(APP_ROUTES, "/practice")).toBe("/practice/linear-programming");
+    expect(resolveRedirect(APP_ROUTES, "/calendar")).toBe("/library/calendar");
+    expect(resolveRedirect(APP_ROUTES, "/learn")).toBeNull();
+  });
+
+  it("the 刷题 redirect commits its target inside the transition, not a blank page", async () => {
+    await routePreloader(APP_ROUTES)("/practice/linear-programming");
+    const seenAtSnapshot: string[] = [];
+    doc.startViewTransition = vi.fn((update: () => Promise<void>) => {
+      const done = Promise.resolve()
+        .then(update)
+        .then(() => {
+          seenAtSnapshot.push(probe());
+        });
+      return { ready: done, finished: done, updateCallbackDone: done, skipTransition: vi.fn() };
+    });
+    renderApp("/", <Link to="/practice">practice</Link>);
+    fireEvent.click(screen.getByRole("link", { name: "practice" }));
+    await waitFor(() => expect(seenAtSnapshot).toHaveLength(1), LAZY);
+    expect(seenAtSnapshot[0]).toMatch(/^\/practice\/linear-programming\|/);
+    expect(document.querySelector(".page-loading")).toBeNull();
+  });
+
+  it("prefetches a page's code on hover, touch and focus", async () => {
+    const factory = vi.fn(() => Promise.resolve({ default: () => <p>far</p> }));
+    const Far = lazyPage(factory);
+    const routes = createRoutesFromChildren(
+      <>
+        <Route path="/" element={<Link to="/far">far</Link>} />
+        <Route path="/far" element={<Far />} />
+      </>,
+    );
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <TransitionNavigation routes={routes}>
+          <Routes>
+            <Route path="/" element={<Link to="/far">far</Link>} />
+            <Route path="/far" element={<Far />} />
+          </Routes>
+        </TransitionNavigation>
+      </MemoryRouter>,
+    );
+    const link = screen.getByRole("link", { name: "far" });
+    fireEvent.pointerOver(link);
+    await waitFor(() => expect(factory).toHaveBeenCalledTimes(1));
+    fireEvent.touchStart(link);
+    fireEvent.focusIn(link);
+    expect(factory).toHaveBeenCalledTimes(1); // cached after the first fetch
   });
 
   it("reduced motion never calls startViewTransition", async () => {

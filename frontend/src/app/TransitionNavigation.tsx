@@ -1,6 +1,14 @@
 import { useContext, useEffect, useMemo, useRef, type ReactElement, type ReactNode } from "react";
 import { flushSync } from "react-dom";
-import { UNSAFE_NavigationContext, matchRoutes, useLocation, type RouteObject } from "react-router-dom";
+import {
+  Navigate,
+  UNSAFE_NavigationContext,
+  matchRoutes,
+  parsePath,
+  useLocation,
+  type RouteObject,
+  type To,
+} from "react-router-dom";
 import { motionScale } from "../design/motion";
 import { isPreloadable } from "./lazyPage";
 import { createTransitionPush, type MotionMode, type ViewTransitionLike } from "./transitionPush";
@@ -15,6 +23,20 @@ export function routePreloader(routes: RouteObject[]) {
     return Promise.all(pages.map((page) => page.preload())).then(() => undefined);
   };
 }
+
+/**
+ * Where a static `<Navigate to="…">` route sends a pathname (e.g. 刷题 /practice), else null.
+ * Pushing the target directly leaves the same history as push + redirect, and lets the
+ * transition snapshot the real page instead of the blank redirect.
+ */
+export function resolveRedirect(routes: RouteObject[], pathname: string): string | null {
+  const leaf = matchRoutes(routes, pathname)?.at(-1)?.route.element as ReactElement<{ to?: unknown }> | undefined;
+  return leaf?.type === Navigate && typeof leaf.props.to === "string" && leaf.props.to.startsWith("/")
+    ? leaf.props.to
+    : null;
+}
+
+const pathnameOf = (to: To) => (typeof to === "string" ? parsePath(to).pathname : to.pathname);
 
 function motionMode(): MotionMode {
   if (document.visibilityState === "hidden" || motionScale() === 0) return "off";
@@ -41,7 +63,6 @@ export function TransitionNavigation({ routes, children }: { routes: RouteObject
       push: (to, state, opts) =>
         (navigator.push as (to: unknown, state?: unknown, opts?: unknown) => void)(to, state, opts),
       currentPath: () => latest.current.pathname,
-      locationKey: () => latest.current.key,
       preload,
       start: (() => {
         const doc = document as Document & { startViewTransition?: StartViewTransition };
@@ -67,9 +88,28 @@ export function TransitionNavigation({ routes, children }: { routes: RouteObject
     });
   }, [context, preload]);
   useEffect(() => () => controller.dispose(), [controller]);
-  const value = useMemo(
-    () => ({ ...context, navigator: Object.assign(Object.create(context.navigator), { push: controller.push }) }),
-    [context, controller],
-  );
+  // Prefetch on intent (hover, touch, focus) so the 300 ms budget at click time is usually met.
+  useEffect(() => {
+    const prefetch = (event: Event) => {
+      const link = (event.target as Element | null)?.closest?.("a[href]") as HTMLAnchorElement | null;
+      if (!link || link.target || link.hasAttribute("download") || link.origin !== window.location.origin) return;
+      const path = resolveRedirect(routes, link.pathname) ?? link.pathname;
+      preload(path).catch(() => {}); // a click retries; failures only cost the animation
+    };
+    const options = { capture: true, passive: true };
+    for (const type of ["pointerover", "touchstart", "focusin"]) document.addEventListener(type, prefetch, options);
+    return () => {
+      for (const type of ["pointerover", "touchstart", "focusin"])
+        document.removeEventListener(type, prefetch, options);
+    };
+  }, [routes, preload]);
+  const value = useMemo(() => {
+    const push = (to: To, state?: unknown, opts?: unknown) => {
+      const path = pathnameOf(to);
+      const redirect = path ? resolveRedirect(routes, path) : null;
+      controller.push(redirect ?? to, state, opts);
+    };
+    return { ...context, navigator: Object.assign(Object.create(context.navigator), { push }) };
+  }, [context, controller, routes]);
   return <UNSAFE_NavigationContext.Provider value={value}>{children}</UNSAFE_NavigationContext.Provider>;
 }

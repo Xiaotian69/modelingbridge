@@ -58,7 +58,6 @@ function deferred() {
 
 function makeDeps(overrides: Partial<TransitionDeps> = {}) {
   let path = "/learn";
-  let key = "k0";
   const preloads = new Map<string, ReturnType<typeof deferred>>();
   const transitions: (ViewTransitionLike & { skipTransition: ReturnType<typeof vi.fn> })[] = [];
   const phases: [string | null, boolean][] = [];
@@ -68,11 +67,9 @@ function makeDeps(overrides: Partial<TransitionDeps> = {}) {
   const deps: TransitionDeps = {
     push: vi.fn((to) => {
       path = typeof to === "string" ? to : (to.pathname ?? path);
-      key = `k${pushed.length + 1}`;
       pushed.push(path);
     }),
     currentPath: () => path,
-    locationKey: () => key,
     preload: vi.fn((pathname: string) => {
       const d = deferred();
       preloads.set(pathname, d);
@@ -104,7 +101,10 @@ function makeDeps(overrides: Partial<TransitionDeps> = {}) {
     setMode: (m: MotionMode) => (mode = m),
     popTo: (p: string) => {
       path = p;
-      key = "pop";
+    },
+    /** e.g. setSearchParams(..., { replace: true }): a new history entry, same page. */
+    replaceSearch: () => {
+      path = `${path}`;
     },
   };
 }
@@ -292,6 +292,16 @@ describe("createTransitionPush", () => {
     await vi.advanceTimersByTimeAsync(400);
     expect(t.deps.push).not.toHaveBeenCalled();
     expect(t.phases.at(-1)).toEqual([null, false]);
+  });
+
+  it("a replace on the current page while preloading does not drop the click", async () => {
+    const t = makeDeps();
+    const { push } = createTransitionPush(t.deps);
+    push("/learn/ahp");
+    t.replaceSearch();
+    t.preloads.get("/learn/ahp")!.resolve();
+    await settleSoon();
+    expect(t.pushed).toEqual(["/learn/ahp"]);
   });
 
   it("dispose abandons pending", async () => {
