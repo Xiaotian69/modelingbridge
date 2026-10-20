@@ -48,6 +48,9 @@
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-enter: cubic-bezier(0.05, 0.7, 0.1, 1);
   --ease-exit: cubic-bezier(0.3, 0, 0.8, 0.15);
+  /* Springs (damped step response); real curves only where linear() exists, see @supports below. */
+  --ease-spring: var(--ease-standard);
+  --ease-spring-bouncy: var(--ease-enter);
   --dur-quick: calc(140ms * var(--motion-scale));
   --dur-page: calc(220ms * var(--motion-scale));
   --dur-expand: calc(220ms * var(--motion-scale));
@@ -111,6 +114,14 @@
 
 :root[data-motion="lite"] {
   --motion-scale: 0.6;
+}
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    /* zeta 0.82: settles with about 1 percent overshoot. Panels, collapse, page slide. */
+    --ease-spring: linear(0, 0.051, 0.167, 0.31, 0.454, 0.586, 0.699, 0.79, 0.86, 0.913, 0.951, 0.977, 0.993, 1.003, 1.009, 1.011, 1.011, 1.01, 1.009, 1.007, 1.006, 1.004, 1.003, 1.002, 1);
+    /* zeta 0.6: a visible little bounce. Press release only. */
+    --ease-spring-bouncy: linear(0, 0.071, 0.237, 0.438, 0.635, 0.804, 0.932, 1.02, 1.07, 1.092, 1.093, 1.082, 1.064, 1.045, 1.027, 1.013, 1.002, 0.996, 0.992, 0.991, 0.992, 0.993, 0.995, 0.997, 0.998, 0.999, 1, 1.001, 1);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   :root,

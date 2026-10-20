@@ -41,7 +41,8 @@ describe("tokens: one source, mirrored exactly", () => {
     expect(tokens).toContain(`--dur-${name}: calc(${ms}ms * var(--motion-scale));`);
   });
   it.each(Object.entries(EASING))("--ease-%s matches", (name, curve) => {
-    expect(tokens).toContain(`--ease-${name}: ${curve};`);
+    const cssName = name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+    expect(tokens).toContain(`--ease-${cssName}: ${curve};`);
   });
   it("keeps every duration inside the agreed ranges", () => {
     expect(DURATION.page).toBeGreaterThanOrEqual(180);
@@ -59,6 +60,43 @@ describe("tokens: one source, mirrored exactly", () => {
     expect(isLowEndForMotion({ hardwareConcurrency: 2 })).toBe(true);
     expect(isLowEndForMotion({ connection: { saveData: true } })).toBe(true);
     expect(isLowEndForMotion({ deviceMemory: 8, hardwareConcurrency: 8 })).toBe(false);
+  });
+});
+
+describe("spring tokens", () => {
+  it("defaults to the standard curve where linear() is unsupported", () => {
+    expect(tokens).toContain("--ease-spring: var(--ease-standard);");
+    expect(tokens).toContain("--ease-spring-bouncy: var(--ease-enter);");
+  });
+  it("upgrades inside @supports linear()", () => {
+    expect(tokens).toMatch(
+      /@supports \(transition-timing-function: linear\(0, 1\)\)\s*\{\s*:root\s*\{[^}]*--ease-spring: linear\(/,
+    );
+    expect(EASING.spring.startsWith("linear(0, ")).toBe(true);
+    expect(EASING.springBouncy.endsWith(", 1)")).toBe(true);
+  });
+});
+
+describe("press feedback", () => {
+  let css = "";
+  beforeAll(async () => {
+    const fs = (await import(/* @vite-ignore */ "node:fs" as string)) as {
+      readFileSync(path: string, encoding: string): string;
+    };
+    css = fs.readFileSync("src/design/motion.css", "utf8").split(String.fromCharCode(13)).join("");
+  });
+  it("shrinks pressed buttons and card links slightly", () => {
+    expect(css).toMatch(/a\.interactive-card:active[^{]*\{[^}]*transform: scale\(0\.97\)/);
+    expect(css).toMatch(/\.btn:active[^{]*\{[^}]*transform: scale\(0\.97\)/);
+  });
+  it("lifts cards on hover only for a real pointer", () => {
+    expect(css).toMatch(
+      /@media \(hover: hover\) and \(pointer: fine\)\s*\{[^@]*a\.interactive-card:hover[^{]*\{[^}]*translateY\(-2px\)/,
+    );
+  });
+  it("turns press and hover transforms off for reduced motion", () => {
+    const reducedBlock = css.slice(css.lastIndexOf("@media (prefers-reduced-motion: reduce)"));
+    expect(reducedBlock).toMatch(/a\.interactive-card[\s\S]*transform: none/);
   });
 });
 

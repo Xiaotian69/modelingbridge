@@ -25,10 +25,43 @@
   transition-duration: var(--dur-quick);
   transition-timing-function: var(--ease-standard);
 }
+
+/* ---------- Press feedback (iOS-like): shrink on press, spring back on release ---------- */
+.btn,
+.door-go,
+.lesson-button,
+a.interactive-card {
+  /* Release: a little bounce. Colours keep the quick standard timing above. */
+  transition-property: background-color, color, border-color, box-shadow, opacity, transform;
+  transition-duration: var(--dur-quick), var(--dur-quick), var(--dur-quick), var(--dur-quick),
+    var(--dur-quick), calc(320ms * var(--motion-scale));
+  transition-timing-function: var(--ease-standard), var(--ease-standard), var(--ease-standard),
+    var(--ease-standard), var(--ease-standard), var(--ease-spring-bouncy);
+}
 .btn:active,
 .door-go:active,
-.lesson-button:active {
-  transform: translateY(1px);
+.lesson-button:active,
+a.interactive-card:active {
+  transform: scale(0.97);
+  transition-duration: var(--dur-quick);
+  transition-timing-function: var(--ease-standard);
+}
+/* Hover lift only with a real mouse: on touch, :hover sticks after a tap. */
+@media (hover: hover) and (pointer: fine) {
+  a.interactive-card:hover {
+    transform: translateY(-2px);
+  }
+  a.interactive-card:hover:active {
+    transform: translateY(-2px) scale(0.97);
+  }
+}
+@media not ((hover: hover) and (pointer: fine)) {
+  a.interactive-card:hover {
+    transform: none;
+  }
+  a.interactive-card:active {
+    transform: scale(0.97);
+  }
 }
 
 /* Nav underlines grow instead of popping. */
@@ -87,7 +120,7 @@
   opacity: 1;
   visibility: visible;
   transition:
-    grid-template-rows var(--dur-expand) var(--ease-standard),
+    grid-template-rows var(--dur-expand) var(--ease-spring),
     opacity var(--dur-expand) var(--ease-standard),
     visibility 0s;
 }
@@ -153,7 +186,7 @@ details[open] > :not(summary) {
 /* Open state last and more specific than the per-side closed offsets above. */
 .mb-sheet-layer[data-open="true"][data-side] .mb-sheet-panel {
   transform: none;
-  transition: transform var(--dur-panel) var(--ease-enter);
+  transition: transform var(--dur-panel) var(--ease-spring);
 }
 
 /* ---------- Theme switch: colours cross-fade, briefly, without blocking input ---------- */
@@ -168,6 +201,14 @@ html.theme-transition *::after {
 
 /* ---------- Reduced motion: tokens are 0; also stop keyframes outright ---------- */
 @media (prefers-reduced-motion: reduce) {
+  .btn:active,
+  .door-go:active,
+  .lesson-button:active,
+  a.interactive-card,
+  a.interactive-card:hover,
+  a.interactive-card:active {
+    transform: none;
+  }
   .search-results,
   .mb-enter,
   .mb-fade,
