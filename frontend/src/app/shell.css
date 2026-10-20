@@ -126,6 +126,8 @@
   position: sticky;
   top: 0;
   z-index: 40;
+  /* Stays still while the page below slides (design/viewTransitions.css). */
+  view-transition-name: mb-header;
   background: var(--surface);
   color: var(--text);
   border-bottom: 1px solid var(--border);

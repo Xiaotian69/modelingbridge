@@ -6,6 +6,7 @@ import { Brand } from "../components/ui/Brand";
 import { Icon } from "../components/ui/Icon";
 import { ThemeToggle } from "../app/ThemeToggle";
 import { Sheet } from "../components/motion/Sheet";
+import { isViewTransitionNavigation } from "../app/transitionPush";
 import {
   activeNav,
   footerNav,
@@ -50,8 +51,9 @@ export function Layout() {
   // Page enter (motion system §page): a short fade + rise on forward navigation only.
   // Back / forward (POP) restore a scroll position instantly, so they get no animation;
   // hash-only changes keep the same page and scroll smoothly instead (RouteScroll).
+  // A View Transition already animates the switch (app/TransitionNavigation): no second fade.
   useEffect(() => {
-    if (navigationType === "POP") return;
+    if (navigationType === "POP" || isViewTransitionNavigation()) return;
     const ms = duration("page");
     if (!ms) return;
     const lite = document.documentElement.dataset.motion === "lite";

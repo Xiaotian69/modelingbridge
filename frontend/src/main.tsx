@@ -7,6 +7,7 @@ import "./design/tailwindBridge.css";
 import "./app/shell.css";
 import "./app/pages.css";
 import "./design/motion.css";
+import "./design/viewTransitions.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

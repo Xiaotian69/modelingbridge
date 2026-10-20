@@ -1,0 +1,80 @@
+/*
+ * Page transitions (spec §5.1–5.3), driven by app/TransitionNavigation:
+ * html[data-nav-dir] = forward (deeper: slide in from the right), back (shallower: slide back),
+ * fade (same level). The header has its own name (shell.css) and stays still; the rest of the
+ * page is the root snapshot. Reduced motion never starts a View Transition at all.
+ */
+
+/* Waiting up to 300 ms for the next page's code: show that the click registered. */
+:root[data-nav-pending],
+:root[data-nav-pending] * {
+  cursor: progress;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Clicks pass through to the new page, so a quick second tap is never swallowed. */
+  ::view-transition {
+    pointer-events: none;
+  }
+  ::view-transition-group(mb-header) {
+    animation-duration: calc(240ms * var(--motion-scale));
+  }
+
+  @keyframes mb-slide-to-left {
+    to {
+      transform: translateX(-8%);
+    }
+  }
+  @keyframes mb-slide-from-right {
+    from {
+      transform: translateX(12%);
+    }
+  }
+  @keyframes mb-slide-to-right {
+    to {
+      transform: translateX(12%);
+    }
+  }
+  @keyframes mb-slide-from-left {
+    from {
+      transform: translateX(-8%);
+    }
+  }
+  @keyframes mb-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes mb-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  :root[data-nav-dir="forward"]::view-transition-old(root) {
+    animation:
+      calc(340ms * var(--motion-scale)) var(--ease-spring) both mb-slide-to-left,
+      calc(200ms * var(--motion-scale)) var(--ease-standard) both mb-fade-out;
+  }
+  :root[data-nav-dir="forward"]::view-transition-new(root) {
+    animation:
+      calc(340ms * var(--motion-scale)) var(--ease-spring) both mb-slide-from-right,
+      calc(240ms * var(--motion-scale)) var(--ease-standard) both mb-fade-in;
+  }
+  :root[data-nav-dir="back"]::view-transition-old(root) {
+    animation:
+      calc(340ms * var(--motion-scale)) var(--ease-spring) both mb-slide-to-right,
+      calc(200ms * var(--motion-scale)) var(--ease-standard) both mb-fade-out;
+  }
+  :root[data-nav-dir="back"]::view-transition-new(root) {
+    animation:
+      calc(340ms * var(--motion-scale)) var(--ease-spring) both mb-slide-from-left,
+      calc(240ms * var(--motion-scale)) var(--ease-standard) both mb-fade-in;
+  }
+  :root[data-nav-dir="fade"]::view-transition-old(root) {
+    animation: calc(200ms * var(--motion-scale)) var(--ease-standard) both mb-fade-out;
+  }
+  :root[data-nav-dir="fade"]::view-transition-new(root) {
+    animation: calc(200ms * var(--motion-scale)) var(--ease-standard) both mb-fade-in;
+  }
+}

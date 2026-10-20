@@ -1,7 +1,17 @@
 import { RouteScroll } from "./components/motion/RouteScroll";
 import { Suspense, useEffect } from "react";
 import { lazyPage } from "./app/lazyPage";
-import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
+import { TransitionNavigation } from "./app/TransitionNavigation";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  createRoutesFromChildren,
+  useLocation,
+  useParams,
+  type RouteObject,
+} from "react-router-dom";
 import { legacyTarget } from "./content/skills/legacy";
 import { Layout } from "./layouts/Layout";
 import { PageErrorBoundary } from "./components/ui/PageErrorBoundary";
@@ -148,6 +158,10 @@ export function AppRoutes() {
   );
 }
 
+/** The route table as objects, for preloading a page's code before a transition. */
+let routeObjects: RouteObject[] | null = null;
+const appRoutes = () => (routeObjects ??= createRoutesFromChildren(AppRoutes().props.children));
+
 export default function App() {
   // Lets the inline splash leave once the real page has committed (never before).
   useEffect(() => signalAppReady(), []);
@@ -156,7 +170,9 @@ export default function App() {
       <PrefsProvider>
         <TrialGate>
           <RouteScroll />
-          <AppRoutes />
+          <TransitionNavigation routes={appRoutes()}>
+            <AppRoutes />
+          </TransitionNavigation>
         </TrialGate>
       </PrefsProvider>
     </BrowserRouter>
