@@ -16,7 +16,7 @@ import {
 import { useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
 import { RouteScroll } from "./RouteScroll";
-import { settleGeneration } from "./routeSettled";
+import { runPendingRestore, settleGeneration } from "./routeSettled";
 
 afterEach(() => {
   cleanup();
@@ -101,4 +101,24 @@ it("marks route settled after restoring", async () => {
   expect(settleGeneration()).toBe(before);
   act(() => frame(0));
   expect(settleGeneration()).toBeGreaterThan(before);
+});
+
+it("lets a View Transition run the pending restore without a frame", () => {
+  vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+  vi.stubGlobal("requestAnimationFrame", () => 1);
+  vi.stubGlobal("cancelAnimationFrame", vi.fn());
+  const before = settleGeneration();
+  render(
+    <MemoryRouter initialEntries={["/a"]}>
+      <RouteScroll />
+      <Routes>
+        <Route path="/a" element={<p>page a</p>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+  runPendingRestore();
+  expect(settleGeneration()).toBeGreaterThan(before);
+  expect(window.scrollTo).toHaveBeenCalledTimes(1);
+  runPendingRestore(); // already done: no second scroll
+  expect(window.scrollTo).toHaveBeenCalledTimes(1);
 });

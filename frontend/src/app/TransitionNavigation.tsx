@@ -46,7 +46,12 @@ export function TransitionNavigation({ routes, children }: { routes: RouteObject
       start: (() => {
         const doc = document as Document & { startViewTransition?: StartViewTransition };
         return typeof doc.startViewTransition === "function"
-          ? (update: () => Promise<void>) => doc.startViewTransition!(update)
+          ? (update: () => Promise<void>) => {
+              // An unfinished smooth scroll (TOC, 下一节) would otherwise resume on the new page
+              // after the transition, undoing RouteScroll. Stop it where it is, before the snapshot.
+              window.scrollTo({ top: window.scrollY, behavior: "instant" });
+              return doc.startViewTransition!(update);
+            }
           : undefined;
       })(),
       flush: (fn) => flushSync(fn),

@@ -107,6 +107,21 @@ describe("TransitionNavigation", () => {
     }
   });
 
+  it("stops an in-flight smooth scroll before the old snapshot (else it resumes on the new page)", async () => {
+    await routePreloader(APP_ROUTES)("/learn/introduction");
+    const start = installViewTransitions();
+    renderApp("/");
+    const scrollTo = vi.mocked(window.scrollTo);
+    scrollTo.mockClear();
+    fireEvent.click(screen.getByRole("link", { name: /从第零课开始/ }));
+    await waitFor(() => expect(start).toHaveBeenCalledTimes(1), LAZY);
+    const stop = scrollTo.mock.calls.findIndex(
+      (args) => JSON.stringify(args[0]) === JSON.stringify({ top: window.scrollY, behavior: "instant" }),
+    );
+    expect(stop).toBeGreaterThanOrEqual(0);
+    expect(scrollTo.mock.invocationCallOrder[stop]).toBeLessThan(start.mock.invocationCallOrder[0]);
+  });
+
   it("reduced motion never calls startViewTransition", async () => {
     reduced = true;
     const start = installViewTransitions();

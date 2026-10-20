@@ -7,6 +7,19 @@ const waiters = new Set<() => void>();
 
 export const settleGeneration = () => generation;
 
+/**
+ * RouteScroll's restore for the current navigation, normally run on the next frame. Browsers
+ * pause frames while a View Transition update runs, so the transition runs it right after the
+ * commit instead (it is a no-op once done or while the page is still loading).
+ */
+let pendingRestore: (() => void) | null = null;
+export function registerPendingRestore(restore: (() => void) | null): void {
+  pendingRestore = restore;
+}
+export function runPendingRestore(): void {
+  pendingRestore?.();
+}
+
 export function markRouteSettled(): void {
   generation += 1;
   for (const wake of [...waiters]) wake();

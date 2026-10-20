@@ -1,5 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { markRouteSettled, settleGeneration, waitForRouteSettled } from "../components/motion/routeSettled";
+import {
+  markRouteSettled,
+  registerPendingRestore,
+  settleGeneration,
+  waitForRouteSettled,
+} from "../components/motion/routeSettled";
 import {
   createTransitionPush,
   isViewTransitionNavigation,
@@ -9,7 +14,10 @@ import {
 } from "./transitionPush";
 
 beforeEach(() => vi.useFakeTimers());
-afterEach(() => vi.useRealTimers());
+afterEach(() => {
+  vi.useRealTimers();
+  registerPendingRestore(null);
+});
 
 describe("routeSettled", () => {
   it("resolves true when marked after", async () => {
@@ -123,6 +131,22 @@ describe("createTransitionPush", () => {
     await vi.advanceTimersByTimeAsync(0);
     expect(t.phases.at(-1)).toEqual([null, false]);
     expect(isViewTransitionNavigation()).toBe(false);
+  });
+
+  it("settles without waiting for a frame: the pending scroll restore runs right after the commit", async () => {
+    // Browsers pause rendering (and requestAnimationFrame) while a View Transition update runs.
+    const restore = vi.fn(() => markRouteSettled());
+    const t = makeDeps({
+      push: vi.fn(() => registerPendingRestore(restore)), // RouteScroll registers during the commit
+    });
+    const { push } = createTransitionPush(t.deps);
+    push("/learn/ahp");
+    t.preloads.get("/learn/ahp")!.resolve();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(restore).toHaveBeenCalledTimes(1);
+    expect(t.transitions[0].skipTransition).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(200);
+    expect(t.transitions[0].skipTransition).not.toHaveBeenCalled();
   });
 
   it("latest intent wins: A preloads after B", async () => {

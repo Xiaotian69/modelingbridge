@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 import { prefersReducedMotion } from "../../design/motion";
-import { markRouteSettled } from "./routeSettled";
+import { markRouteSettled, registerPendingRestore } from "./routeSettled";
 
 /** Room for sticky bars above a hash target: its CSS scroll-margin-top, else 90px. */
 function offsetFor(target: HTMLElement) {
@@ -114,6 +114,7 @@ export function RouteScroll() {
       attributeFilter: ["data-route-pending"],
     });
     frame = requestAnimationFrame(restore);
+    registerPendingRestore(restore);
     const record = () => {
       if (!done) return;
       positions.current!.set(positionKey(location), window.scrollY);
@@ -123,6 +124,7 @@ export function RouteScroll() {
     window.addEventListener("pagehide", persist);
     return () => {
       cancelAnimationFrame(frame);
+      registerPendingRestore(null);
       observer.disconnect();
       window.removeEventListener("scroll", record);
       window.removeEventListener("pagehide", persist);

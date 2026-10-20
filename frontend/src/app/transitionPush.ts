@@ -1,5 +1,5 @@
 import { parsePath, type To } from "react-router-dom";
-import { settleGeneration, waitForRouteSettled } from "../components/motion/routeSettled";
+import { runPendingRestore, settleGeneration, waitForRouteSettled } from "../components/motion/routeSettled";
 import { navKind, type NavKind } from "./navMotion";
 
 export type MotionMode = "full" | "lite" | "off";
@@ -118,6 +118,7 @@ export function createTransitionPush(deps: TransitionDeps) {
           }
           const before = settleGeneration();
           deps.flush(commit);
+          runPendingRestore(); // frames are paused during this callback: scroll now, not next frame
           if (deps.isLoading()) {
             skip();
             return;
