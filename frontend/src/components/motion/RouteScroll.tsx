@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 import { prefersReducedMotion } from "../../design/motion";
+import { markRouteSettled } from "./routeSettled";
 
 /** Room for sticky bars above a hash target: its CSS scroll-margin-top, else 90px. */
 function offsetFor(target: HTMLElement) {
@@ -100,6 +101,7 @@ export function RouteScroll() {
       const smooth = samePage && navigation !== "POP" && !!target && !prefersReducedMotion();
       window.scrollTo({ top, behavior: smooth ? "smooth" : "instant" });
       done = true;
+      markRouteSettled(); // a View Transition may now take the new page's snapshot
     };
     const observer = new MutationObserver(() => {
       cancelAnimationFrame(frame);

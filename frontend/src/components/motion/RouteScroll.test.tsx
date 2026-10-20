@@ -16,6 +16,7 @@ import {
 import { useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
 import { RouteScroll } from "./RouteScroll";
+import { settleGeneration } from "./routeSettled";
 
 afterEach(() => {
   cleanup();
@@ -78,4 +79,26 @@ it("waits for asynchronous article content before restoring Back position", asyn
     frame(0);
   });
   expect(scroll).toHaveBeenLastCalledWith({ top: 1200, behavior: "instant" });
+});
+
+it("marks route settled after restoring", async () => {
+  vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+  let frame: FrameRequestCallback = () => {};
+  vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
+    frame = callback;
+    return 1;
+  });
+  vi.stubGlobal("cancelAnimationFrame", vi.fn());
+  const before = settleGeneration();
+  render(
+    <MemoryRouter initialEntries={["/a"]}>
+      <RouteScroll />
+      <Routes>
+        <Route path="/a" element={<p>page a</p>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+  expect(settleGeneration()).toBe(before);
+  act(() => frame(0));
+  expect(settleGeneration()).toBeGreaterThan(before);
 });
