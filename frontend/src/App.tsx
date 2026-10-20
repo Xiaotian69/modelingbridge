@@ -1,5 +1,6 @@
 import { RouteScroll } from "./components/motion/RouteScroll";
-import { lazy, Suspense, useEffect } from "react";
+import { Suspense, useEffect } from "react";
+import { lazyPage } from "./app/lazyPage";
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { legacyTarget } from "./content/skills/legacy";
 import { Layout } from "./layouts/Layout";
@@ -9,61 +10,61 @@ import { TrialGate } from "./trial/TrialGate";
 import { PrefsProvider } from "./app/PrefsContext";
 import { signalAppReady } from "./splash/signal";
 
-const AboutPage = lazy(() =>
+const AboutPage = lazyPage(() =>
   import("./pages/About").then((m) => ({ default: m.AboutPage })),
 );
-const CalendarPage = lazy(() =>
+const CalendarPage = lazyPage(() =>
   import("./pages/Calendar").then((m) => ({ default: m.CalendarPage })),
 );
-const CaseDetailPage = lazy(() =>
+const CaseDetailPage = lazyPage(() =>
   import("./pages/CaseDetail").then((m) => ({ default: m.CaseDetailPage })),
 );
-const CasesPage = lazy(() =>
+const CasesPage = lazyPage(() =>
   import("./pages/Cases").then((m) => ({ default: m.CasesPage })),
 );
-const FeedbackPage = lazy(() =>
+const FeedbackPage = lazyPage(() =>
   import("./pages/Feedback").then((m) => ({ default: m.FeedbackPage })),
 );
-const LearnPage = lazy(() =>
+const LearnPage = lazyPage(() =>
   import("./pages/Learn").then((m) => ({ default: m.LearnPage })),
 );
-const CoursePage = lazy(() => import("./pages/Course").then(m => ({ default: m.CoursePage })));
-const AhpCoursePage = lazy(() => import("./pages/AhpCourse").then((m) => ({ default: m.AhpCoursePage })));
-const IntroCoursePage = lazy(() => import("./pages/IntroCourse").then((m) => ({ default: m.IntroCoursePage })));
-const TopsisCoursePage = lazy(() => import("./pages/TopsisCourse").then((m) => ({ default: m.TopsisCoursePage })));
-const GraphCoursePage = lazy(() => import("./pages/GraphCourse").then((m) => ({ default: m.GraphCoursePage })));
-const RegressionCoursePage = lazy(() =>
+const CoursePage = lazyPage(() => import("./pages/Course").then(m => ({ default: m.CoursePage })));
+const AhpCoursePage = lazyPage(() => import("./pages/AhpCourse").then((m) => ({ default: m.AhpCoursePage })));
+const IntroCoursePage = lazyPage(() => import("./pages/IntroCourse").then((m) => ({ default: m.IntroCoursePage })));
+const TopsisCoursePage = lazyPage(() => import("./pages/TopsisCourse").then((m) => ({ default: m.TopsisCoursePage })));
+const GraphCoursePage = lazyPage(() => import("./pages/GraphCourse").then((m) => ({ default: m.GraphCoursePage })));
+const RegressionCoursePage = lazyPage(() =>
   import("./pages/RegressionCourse").then((m) => ({ default: m.RegressionCoursePage })),
 );
-const LpLabPage = lazy(() => import("./pages/LpLab").then((m) => ({ default: m.LpLabPage })));
-const PracticePage = lazy(() => import("./pages/Practice").then(m => ({ default: m.PracticePage })));
-const ModelReferencePage = lazy(() => import("./pages/ModelReference").then(m => ({ default: m.ModelReferencePage })));
-const QuestPage = lazy(() =>
+const LpLabPage = lazyPage(() => import("./pages/LpLab").then((m) => ({ default: m.LpLabPage })));
+const PracticePage = lazyPage(() => import("./pages/Practice").then(m => ({ default: m.PracticePage })));
+const ModelReferencePage = lazyPage(() => import("./pages/ModelReference").then(m => ({ default: m.ModelReferencePage })));
+const QuestPage = lazyPage(() =>
   import("./pages/Quest").then((m) => ({ default: m.QuestPage })),
 );
-const RecordsPage = lazy(() =>
+const RecordsPage = lazyPage(() =>
   import("./pages/Records").then((m) => ({ default: m.RecordsPage })),
 );
-const ResourcesPage = lazy(() =>
+const ResourcesPage = lazyPage(() =>
   import("./pages/Resources").then((m) => ({ default: m.ResourcesPage })),
 );
-const SkillsPage = lazy(() =>
+const SkillsPage = lazyPage(() =>
   import("./pages/Skills").then((m) => ({ default: m.SkillsPage })),
 );
-const ToolsPage = lazy(() =>
+const ToolsPage = lazyPage(() =>
   import("./pages/Tools").then((m) => ({ default: m.ToolsPage })),
 );
-const WorkbenchPage = lazy(() =>
+const WorkbenchPage = lazyPage(() =>
   import("./pages/Workbench").then((m) => ({ default: m.WorkbenchPage })),
 );
-const LibraryLayout = lazy(() =>
+const LibraryLayout = lazyPage(() =>
   import("./pages/LibraryLayout").then((m) => ({ default: m.LibraryLayout })),
 );
-const ChallengePage = lazy(() =>
+const ChallengePage = lazyPage(() =>
   import("./challenge/ChallengePage").then((m) => ({ default: m.ChallengePage })),
 );
-const RolesPage = lazy(() => import("./roles/RolesPage").then((m) => ({ default: m.RolesPage })));
-const NotFoundPage = lazy(() =>
+const RolesPage = lazyPage(() => import("./roles/RolesPage").then((m) => ({ default: m.RolesPage })));
+const NotFoundPage = lazyPage(() =>
   import("./pages/NotFound").then((m) => ({ default: m.NotFoundPage })),
 );
 
