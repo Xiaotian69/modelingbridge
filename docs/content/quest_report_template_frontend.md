@@ -245,7 +245,7 @@ interface QuestReportInput {
 function buildQuestReportMarkdown(input: QuestReportInput): string
 ```
 
-对应 [Quest.tsx](../../../frontend/src/pages/Quest.tsx) 中已有的 `report` 变量生成逻辑，本模板是其输出格式的规范说明。
+对应 [Quest.tsx](../../frontend/src/pages/Quest.tsx) 中已有的 `report` 变量生成逻辑，本模板是其输出格式的规范说明。
 
 ---
 

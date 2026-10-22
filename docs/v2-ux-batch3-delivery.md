@@ -1,7 +1,7 @@
 # 模桥 V2 · 第三批交付（MVP 基础版）：七关实战、资料中心、提示词库、学习记录、全站统一
 
 日期：2026-10-12 · 分支：`feat/v2-ux-batch3`（基于 `feat/v2-ux-shell` b91387f）· 提交 `495935c`
-状态：**未推送、未合并、未部署**。上线方案见 [v2-release-backup-rollback.md](v2-release-backup-rollback.md)。
+状态：**未推送、未合并、未部署**。上线方案为内部运维文档，未随 V3.0 公开快照发布。
 
 本批按“MVP 先上线、后续迭代”的原则，只做最小必要改动：没有新增教学模型、没有接入任何付费 AI、没有账号体系，`content.ts`、`questions.ts`、`grading.ts`、`solver.ts`、`quest/stages.ts`、`quest/storage.ts`、`hooks/useQuestState.ts` 均未修改。
 

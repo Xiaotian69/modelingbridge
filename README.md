@@ -13,12 +13,16 @@
 ![React 18](https://img.shields.io/badge/React-18-149eca?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178c6?logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
-![Version](https://img.shields.io/badge/version-v3.0.0-2563eb)
+![Version](https://img.shields.io/badge/version-v3.0%20public%20snapshot-2563eb)
 ![Status](https://img.shields.io/badge/status-free%20trial-16a34a)
 
 **Created & Led by [@Xiaotian69](https://github.com/Xiaotian69)**
 
+[![访问官网](https://img.shields.io/badge/%E8%AE%BF%E9%97%AE%E5%AE%98%E7%BD%91-www.modelingbridge.cc-2563eb?style=for-the-badge)](https://www.modelingbridge.cc)
+
 </div>
+
+> 📌 **这是模桥 V3.0 初期公开快照。** 本仓库完整保留 V3.0 初期版本的源代码，供展示与学习参考。模桥仍在持续开发，后续版本不保证继续在此公开；想看最新进展、体验现有功能，请直接访问 **[www.modelingbridge.cc](https://www.modelingbridge.cc)**。
 
 ![模桥品牌视觉：从复杂问题到可检验模型](docs/assets/hero.png)
 
@@ -211,14 +215,13 @@ modelingbridge/
 
 ## ⚡ 本地快速启动
 
-> **注意分支：** 当前 GitHub 默认分支 `main` 仍是早期 MVP。本文描述的 V3.0 功能以正式网站所用的 `feat/edgeone-hk-pilot` 分支为依据。在仓库完成分支整合之前，不能直接把旧 `main` 当作 V3.0。
+> **版本说明：** 默认分支 `main` 即 V3.0 初期公开快照。正式网站之后的版本在独立代码库中开发，线上功能可能与本仓库代码不同。
 
 环境要求：**Node.js 22（LTS）**。前端可独立启动；只有在需要测试 FastAPI 工作流时才需 Python 3.11+。
 
 ```bash
 git clone https://github.com/Xiaotian69/modelingbridge.git
 cd modelingbridge
-git switch feat/edgeone-hk-pilot
 
 cd frontend
 npm ci
@@ -267,14 +270,14 @@ npm run build
 | **智能助教** | 更真实、可追溯、可核验的 AI 教学闭环 | 🧭 规划中 |
 | **真题专属模块** | 在版权、来源及展示规则确认后建设历年题目专属入口 | 🧭 后续阶段 |
 
-**路线图是方向，不是已交付功能承诺。** 每个模块都要经过内容、数学正确性、浏览器测试、移动端体验与发布验收。
+**路线图是方向，不是已交付功能承诺。** 这些方向将在官网持续推进，不代表会同步到本仓库；每个模块都要经过内容、数学正确性、浏览器测试、移动端体验与发布验收。
 
 ## 🤝 贡献、合作与项目原则
 
-模桥希望成为可以不断改进、并由学生团队持续维护的学习项目。欢迎围绕课程内容核验、练习设计、数学正确性、可访问性、前端体验、测试与文档提出建议。
+模桥希望成为可以不断改进的学习项目。欢迎围绕课程内容核验、练习设计、数学正确性、可访问性和文档提出建议。
 
-- 建议先阅读 [贡献指南](CONTRIBUTING.md) 和 [协作手册](docs/TEAM_WORKFLOW.md)。
-- 通过 Issue 讨论问题，通过分支与 Pull Request 提交修改；开发基线以 Issue 中负责人指定的分支为准，不从旧 `main` 开始新版功能。
+- 本仓库现为 V3.0 公开快照，不再作为后续功能的开发基线。
+- 欢迎通过 Issue 反馈快照中的内容错误、数学问题或使用建议；涉及后续版本的修改可能不会合并到本仓库。详见 [贡献指南](CONTRIBUTING.md)。
 - 未经授权的竞赛资料、书籍、论文合集、个人数据和私有凭证不得提交到公开仓库。
 - 公开仓库与内部资料库分工管理；公开可访问不代表任何第三方素材已获得再分发许可。
 - AI 工具可以辅助撰写、开发和审查，但最终内容与发布由项目负责人审核。
@@ -303,6 +306,22 @@ npm run build
 **公开可见 ≠ 已授予开源许可证。** 仓库目前没有适用于整个项目的正式 `LICENSE` 文件，因此在负责人明确选择并发布许可证之前，不将代码宣传为已采用 MIT 或其他开源许可。第三方内容、图片、赛事材料与论文的权利仍属于各自权利人。
 
 模桥是教育与练习工具，不提供代写、代赛或奖项保证。课程和案例应作为学习参考；用户需独立核验数据来源、数学推导、模型假设、代码、引用与最终结论，并遵守所在学校和比赛的 AI 使用规则。
+
+## 🌉 模桥的探索，远不止于此
+
+你在这里看到的，是模桥最早铺下的几块桥板：V3.0 初期公开版本。
+
+桥还在继续向前延伸。课程、练习和工具仍在打磨，学习路线也在根据学习者的反馈不断调整。这些新的进展会优先出现在官网，不一定同步到这个仓库。
+
+如果你也相信，数学建模可以学得更清楚、更有成就感，欢迎到官网走一走，看看模桥现在走到了哪里。
+
+<div align="center">
+
+[![体验最新进展](https://img.shields.io/badge/%E4%BD%93%E9%AA%8C%E6%9C%80%E6%96%B0%E8%BF%9B%E5%B1%95-www.modelingbridge.cc-16a34a?style=for-the-badge)](https://www.modelingbridge.cc)
+
+**[www.modelingbridge.cc](https://www.modelingbridge.cc)** · 了解最新进展 · 体验现有功能
+
+</div>
 
 ---
 

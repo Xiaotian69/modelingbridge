@@ -13,12 +13,16 @@ Learn not only **which model to use**, but **why it fits, how it works, and when
 ![React 18](https://img.shields.io/badge/React-18-149eca?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178c6?logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
-![Version](https://img.shields.io/badge/version-v3.0.0-2563eb)
+![Version](https://img.shields.io/badge/version-v3.0%20public%20snapshot-2563eb)
 ![Status](https://img.shields.io/badge/status-free%20trial-16a34a)
 
 **Created & Led by [@Xiaotian69](https://github.com/Xiaotian69)**
 
+[![Visit the Website](https://img.shields.io/badge/Visit%20the%20Website-www.modelingbridge.cc-2563eb?style=for-the-badge)](https://www.modelingbridge.cc)
+
 </div>
+
+> 📌 **This is the ModelingBridge V3.0 early public snapshot.** The repository preserves the complete source code of the early V3.0 release for showcase and learning. ModelingBridge is still under active development, and future versions are not guaranteed to be published here. For the latest progress and to try what is live today, visit **[www.modelingbridge.cc](https://www.modelingbridge.cc)**.
 
 ![ModelingBridge: from complex problems to testable models](docs/assets/hero.png)
 
@@ -211,14 +215,13 @@ The exact layout may evolve as branches are integrated.
 
 ## ⚡ Run Locally
 
-> **Important branch note:** `main` currently retains an early MVP baseline. The V3.0 description here is based on `feat/edgeone-hk-pilot`, the branch behind the live website. Until the branches are reconciled, do not assume cloning default `main` gives you the current V3.0 website.
+> **Version note:** The default `main` branch is the V3.0 early public snapshot. Later versions of the live website are developed in a separate codebase, so what runs online may differ from the code here.
 
 You will need **Node.js 22 (LTS)** for the frontend. Python 3.11+ is only needed if you also want to run FastAPI locally.
 
 ```bash
 git clone https://github.com/Xiaotian69/modelingbridge.git
 cd modelingbridge
-git switch feat/edgeone-hk-pilot
 
 cd frontend
 npm ci
@@ -267,14 +270,14 @@ For backend tests, install `backend/requirements-dev.txt`, then run `python -m p
 | **Intelligent tutoring** | More realistic, verifiable, trackable AI learning workflows | 🧭 Planned |
 | **Dedicated contest archive** | Dedicated historical-problem experience after rights and provenance checks | 🧭 Future phase |
 
-A roadmap describes intended work, **not features already shipped**. Content correctness, mathematical validity, browser/mobile testing, and release review remain part of the acceptance process.
+A roadmap describes intended work, **not features already shipped**. These directions will continue on the official website and are not guaranteed to land in this repository. Content correctness, mathematical validity, browser/mobile testing, and release review remain part of the acceptance process.
 
 ## 🤝 Contributing and Collaboration
 
-ModelingBridge aims to be a student-maintainable learning project. Thoughtful feedback and contributions are welcome in mathematical review, exercise design, accessibility, frontend UX, tests, and documentation.
+ModelingBridge aims to keep improving as a learning project. Thoughtful feedback is welcome on course accuracy, exercise design, mathematical validity, accessibility, and documentation.
 
-- Start with the [contribution guide](CONTRIBUTING.md) and the [team workflow](docs/TEAM_WORKFLOW.md) (both in Chinese).
-- Discuss through Issues; propose changes using a branch and Pull Request. Use the base branch the maintainer names in the Issue—do not start new work from the legacy `main`.
+- This repository is now the V3.0 public snapshot and is no longer the development baseline for future features.
+- Issues reporting content errors, mathematical problems, or usability feedback on the snapshot are welcome; changes aimed at later versions may not be merged here. See the [contribution guide](CONTRIBUTING.md) (in Chinese).
 - Do not upload private credentials, personal data, or contest/publishing materials without verified permission.
 - Public source and internally reviewed working materials are separated.
 - AI may assist development or writing, but human maintainers review content and authorize releases.
@@ -294,6 +297,22 @@ Genuine human collaboration and contributions remain credited in the appropriate
 **Publicly visible does not mean open-source licensed.** This repository does not currently contain a project-wide `LICENSE` file. Until the maintainer publishes one, this README does not claim an MIT or other open-source license. Original content and third-party materials may be subject to different rights.
 
 ModelingBridge is an educational tool, not a ghostwriting, contest-submission, or award-guarantee service. Learners remain responsible for the provenance of data, mathematical reasoning, code, citations, and final results, and for complying with their school and competition rules on AI use.
+
+## 🌉 The Journey Doesn't End Here
+
+What you see here are the first planks of the bridge: the early public release of ModelingBridge V3.0.
+
+The bridge keeps extending. Courses, exercises, and tools are still being refined, and learning paths keep adjusting to what learners tell us. New progress appears on the official website first and may not be mirrored in this repository.
+
+If you believe mathematical modeling can be learned with more clarity and more joy, come take a walk on the website and see how far ModelingBridge has come.
+
+<div align="center">
+
+[![See What's New](https://img.shields.io/badge/See%20What%27s%20New-www.modelingbridge.cc-16a34a?style=for-the-badge)](https://www.modelingbridge.cc)
+
+**[www.modelingbridge.cc](https://www.modelingbridge.cc)** · Follow the latest progress · Try what's live today
+
+</div>
 
 ---
 
