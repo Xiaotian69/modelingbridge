@@ -22,7 +22,7 @@ Learn not only **which model to use**, but **why it fits, how it works, and when
 
 </div>
 
-> 📌 **This is the ModelingBridge V3.0 early public snapshot.** The repository preserves the complete source code of the early V3.0 release for showcase and learning. ModelingBridge is still under active development, and future versions are not guaranteed to be published here. For the latest progress and to try what is live today, visit **[www.modelingbridge.cc](https://www.modelingbridge.cc)**.
+> 📌 **This is the ModelingBridge V3.0 early public snapshot.** The repository preserves the complete source code of the early V3.0 release for showcase and learning; its AI features run in demo mode, and the real AI service is not included in this public snapshot. ModelingBridge is still under active development, and future versions are not guaranteed to be published here. For the latest progress and to try what is live today, visit **[www.modelingbridge.cc](https://www.modelingbridge.cc)**.
 
 ![ModelingBridge: from complex problems to testable models](docs/assets/hero.png)
 
@@ -59,12 +59,12 @@ Instead of watching an answer appear, learners make—and examine—the decision
 | 🧪 **Hands-on experiments** | Observe how assumptions, constraints, weights, or data can change a conclusion; Linear Programming also has a dedicated interactive lab |
 | 📝 **Topic-focused practice** | Each of the five courses has matching exercises with layered hints, feedback, and retries |
 | 🧭 **Seven-checkpoint modeling quest** | Go from first reading of a problem to a paper outline through a complete, traceable process |
-| 🧠 **AI Skills and a guided workbench** | Use structured prompts and checklists, with clear separation between demo and live AI |
+| 🧠 **AI Skills and a guided workbench** | Use structured prompts and checklists; the workbench runs in teaching-demo mode in this snapshot |
 | 📅 **Competition calendar** | Organize key dates while distinguishing officially announced, unverified, and projected entries |
 | 📁 **Cases and resource index** | Find original learning content and links to official sources |
 | 💾 **Local learning progress** | No sign-up; resume learning on the same browser and revisit your work |
 
-> **Release boundary:** The public website currently delivers a deployed static frontend experience and is in a free trial phase. The repository also contains a FastAPI backend and configurable model integration for local development. Their presence **does not mean live AI tutoring, cloud accounts, or automatically refreshed competition data are available in production**.
+> **Release boundary:** The public website currently delivers a deployed static frontend experience and is in a free trial phase. **AI features in this public version run in demo mode: the real AI service is not included in this public snapshot.** The backend contains no code that calls a paid model, so it returns teaching demo results even if an API key is configured. Cloud accounts and automatically refreshed competition data are not included either.
 
 ## 🧭 Your Modeling Learning Journey
 
@@ -138,7 +138,7 @@ The repository includes AI-oriented skill content and an eight-step guided workb
 
 - **Useful assistance:** explain concepts, compare options, uncover assumptions, suggest verification checks, and support reflection.
 - **Human responsibility:** verify every important dataset, derivation, assumption, citation, and final statement.
-- **Honest deployment boundary:** the online AI service is not yet open on the public website; the workbench there shows teaching demo results. Local FastAPI development can use a configured OpenAI-compatible provider, and also falls back to demo results without a key. Do not mistake a demo response for a verified live-model interaction.
+- **Honest boundary:** AI features in this public snapshot run in demo mode, and the real AI service is not included. The workbench and contest-plan endpoints always return teaching demo results and never call DeepSeek or any other paid model, even when an API key is configured. Do not mistake a demo response for a live-model interaction.
 
 > **AI may be the copilot. The learner remains responsible for the model.**
 
@@ -185,7 +185,6 @@ flowchart LR
     W --> L[("Local browser progress")]
     W -. "Local/configured API" .-> A["Python FastAPI"]
     A --> C["Teaching cases + demo behavior"]
-    A -. "Optional API key" .-> M["OpenAI-compatible Model API"]
 ```
 
 | Layer | Stack |
@@ -195,7 +194,7 @@ flowchart LR
 | Math and code rendering | KaTeX, highlight.js |
 | Routing | React Router |
 | Quality checks | Vitest, Testing Library, TypeScript checking, production build |
-| Optional backend | Python, FastAPI (repository code, not a confirmed live production API) |
+| Optional backend | Python, FastAPI (teaching cases and AI demo endpoints; no real AI service) |
 | Frontend hosting | Tencent Cloud EdgeOne Pages |
 | Progress storage | Browser-local data; no claim of cross-device account sync |
 
@@ -245,7 +244,7 @@ pip install -r requirements.txt
 python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Configure an OpenAI-compatible provider only if you need live model responses: copy `backend/.env.example` to a local `backend/.env` and fill in the connection details. Never commit secrets or put private keys in public `VITE_*` build variables.
+This public snapshot does not include a real AI service, so the backend needs no model keys and should not be given any. To adjust local settings, copy `backend/.env.example` to `backend/.env`. Never commit secrets or put private keys in public `VITE_*` build variables.
 
 ### Tests
 

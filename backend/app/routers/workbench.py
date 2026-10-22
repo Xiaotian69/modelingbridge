@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from app.schemas import ContestPlanInput, ContestPlanOutput, LlmProviderInfo, ProblemInput, WorkbenchAnalysis
 from app.services.analyze_service import run_analysis
-from app.services.llm_client import build_contest_plan_with_llm, build_demo_contest_plan, list_providers
+from app.services.llm_client import build_demo_contest_plan, list_providers
 
 router = APIRouter(prefix="/api", tags=["workbench"])
 
@@ -15,14 +15,11 @@ async def analyze_problem(payload: ProblemInput) -> WorkbenchAnalysis:
 
 @router.get("/llm-providers", response_model=list[LlmProviderInfo])
 def llm_providers() -> list[LlmProviderInfo]:
-    """Return locally configured LLM providers for the trial workbench."""
+    """Public snapshot: lists only the teaching demo, never a live model."""
     return list_providers()
 
 
 @router.post("/contest-plan", response_model=ContestPlanOutput)
 async def contest_plan(payload: ContestPlanInput) -> ContestPlanOutput:
-    """Generate a contest preparation plan. Falls back to a deterministic plan if LLM fails."""
-    try:
-        return await build_contest_plan_with_llm(payload)
-    except Exception:
-        return build_demo_contest_plan(payload)
+    """Public snapshot: always the deterministic teaching plan, never a paid model call."""
+    return build_demo_contest_plan(payload)

@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { analyzeProblem, getPromptVersion, listLlmProviders } from "../api/client";
 import { useWorkbenchState } from "../hooks/useWorkbenchState";
-import type { ProviderId, StudentLevel } from "../types";
+import type { StudentLevel } from "../types";
 import { buildWorkbenchAnalysis, buildWorkbenchSummary, buildWorkbenchUsageLog } from "../utils/markdownBuilder";
 import { saveWorkbenchRecord } from "../state/localRecords";
 import { Step0Problem } from "./workbench/Step0Problem";
@@ -162,7 +162,7 @@ export function WorkbenchPage() {
           <h1>AI 工作台（实验）</h1>
           {!providers.some(p => p.enabled) && (
             <p role="status" className="notice notice-warn">
-              AI 在线服务暂未开放。当前可学习建模流程；演示结果不代表实时 AI 回复。
+              公开快照为演示模式：真实 AI 服务不包含在 V3.0 公开快照中。当前可学习建模流程；演示结果不代表实时 AI 回复。
             </p>
           )}
           <p className="page-lead">
@@ -246,7 +246,6 @@ export function WorkbenchPage() {
                   attachmentNote={attachmentNote}
                   level={level}
                   provider={provider}
-                  providers={providers}
                   loading={loading}
                   error={error}
                   data={data}
@@ -254,7 +253,6 @@ export function WorkbenchPage() {
                   onProblemTextChange={(v) => dispatch({ type: "SET_PROBLEM_TEXT", payload: v })}
                   onAttachmentNoteChange={(v) => dispatch({ type: "SET_ATTACHMENT_NOTE", payload: v })}
                   onLevelChange={(v: StudentLevel) => dispatch({ type: "SET_LEVEL", payload: v })}
-                  onProviderChange={(v: ProviderId) => dispatch({ type: "SET_PROVIDER", payload: v })}
                   onAnalyze={onAnalyze}
                   onCheck={(v) => dispatch({ type: "MARK_CONFIRMED", payload: { index: 0, value: v } })}
                   onConfirm={() => onConfirmStep(0)}
