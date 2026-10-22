@@ -1,199 +1,310 @@
-# ModelingBridge
+<div align="center">
 
-![ModelingBridge — From a messy problem to a testable model](docs/assets/hero.png)
+# ModelingBridge · 模桥
 
-<p align="center">
-  <a href="README.zh-CN.md">简体中文</a> ·
-  <a href="https://www.modelingbridge.cc">Live Demo</a>
-</p>
+### From a question you cannot decode to a model you can defend.
+**From Confusion to Models. From Models to Solutions.**
 
-<p align="center">
-  <img alt="React 18" src="https://img.shields.io/badge/React-18-149eca?logo=react&logoColor=white">
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.6-3178c6?logo=typescript&logoColor=white">
-  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white">
-</p>
+**An interactive learning space built for the next generation of mathematical modelers.**  
+Learn not only **which model to use**, but **why it fits, how it works, and when to question the result**.
 
-ModelingBridge (模桥) is an AI-guided mathematical modeling learning platform for beginners. It turns an open-ended problem into a sequence of decisions the learner can inspect, confirm, and revise—from framing and data requirements to model selection, implementation, validation, and paper structure.
+[🌐 Live Website](https://www.modelingbridge.cc) · [📚 Start Learning](https://www.modelingbridge.cc/learn) · [🧩 Modeling Quest](https://www.modelingbridge.cc/quest) · [🇨🇳 简体中文](README.md)
 
-> The official site is www.modelingbridge.cc. Features below describe repository implementations, not confirmation that every feature is enabled in production. Local backend runs without credentials using demo output.
+![React 18](https://img.shields.io/badge/React-18-149eca?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178c6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
+![Version](https://img.shields.io/badge/version-v3.0.0-2563eb)
+![Status](https://img.shields.io/badge/status-free%20trial-16a34a)
 
-## Learn modeling as a process
+**Created & Led by [@Xiaotian69](https://github.com/Xiaotian69)**
 
-ModelingBridge is built around a simple belief: learning modeling means practicing judgment, not receiving a finished paper. The interface makes the reasoning path visible, asks the learner to confirm each stage, and keeps AI in a coaching role.
+</div>
 
-The current product includes:
+![ModelingBridge: from complex problems to testable models](docs/assets/hero.png)
 
-- a seven-checkpoint quest for deliberate practice;
-- an eight-step AI workbench for problem-to-paper scaffolding;
-- eight guided cases and a searchable modeling-method map;
-- local learning records, exportable summaries, tools, resources, and a contest calendar;
-- explicit reminders to verify data, assumptions, constraints, and conclusions.
+<sub>The interface shown in this cover is the early MVP guided workbench, not the current V3.0 UI. For the latest experience, [open the website](https://www.modelingbridge.cc).</sub>
 
-## Guided workflow
+> **In one sentence:** ModelingBridge turns mathematical modeling from a collection of formulas and templates into a journey of exploration, experimentation, practice, and reflection.
 
-| Stage | Learner output |
+---
+
+## ✨ Why ModelingBridge?
+
+A common first encounter with mathematical modeling looks like this:
+
+- The problem statement is long, and you do not know where to start.
+- You recognize names like linear programming, AHP, and TOPSIS—but not when to use them.
+- Your code runs, yet you cannot confidently defend the assumptions behind it.
+- You have bookmarks, slides, and PDFs everywhere, but no coherent learning path.
+- You want to join a modeling competition, yet struggle to connect theory with practice.
+
+**ModelingBridge is not another pile of resources or a one-click paper generator.**
+
+It is an attempt to connect the learning process end to end:
+
+**Understand → Build Intuition → Experiment → Practice → Model → Validate → Reflect**
+
+Instead of watching an answer appear, learners make—and examine—the decisions along the way.
+
+## 🚀 ModelingBridge V3.0 at a Glance
+
+| What you can explore | Why it matters |
 | --- | --- |
-| Frame | Goals, constraints, subproblems, and expected deliverables |
-| Choose | Candidate model families with assumptions and trade-offs |
-| Build | Data fields, preprocessing plan, and an implementation scaffold |
-| Validate | Error, robustness, sensitivity, and constraint checks |
-| Communicate | A paper outline and traceable learning notes—not a submitted paper |
+| 🎒 **Lesson Zero** | Starting from a rainy-day umbrella allocation problem, walk through objectives, variables, assumptions, solving, validation, and improvement before learning advanced methods |
+| 📐 **Five interactive courses** | Linear Programming, AHP, TOPSIS / Entropy Weighting, Regression, and Graph / Network Optimization |
+| 🧪 **Hands-on experiments** | Observe how assumptions, constraints, weights, or data can change a conclusion; Linear Programming also has a dedicated interactive lab |
+| 📝 **Topic-focused practice** | Each of the five courses has matching exercises with layered hints, feedback, and retries |
+| 🧭 **Seven-checkpoint modeling quest** | Go from first reading of a problem to a paper outline through a complete, traceable process |
+| 🧠 **AI Skills and a guided workbench** | Use structured prompts and checklists, with clear separation between demo and live AI |
+| 📅 **Competition calendar** | Organize key dates while distinguishing officially announced, unverified, and projected entries |
+| 📁 **Cases and resource index** | Find original learning content and links to official sources |
+| 💾 **Local learning progress** | No sign-up; resume learning on the same browser and revisit your work |
 
-## Features
+> **Release boundary:** The public website currently delivers a deployed static frontend experience and is in a free trial phase. The repository also contains a FastAPI backend and configurable model integration for local development. Their presence **does not mean live AI tutoring, cloud accounts, or automatically refreshed competition data are available in production**.
 
-- **Quest mode** — complete a modeling problem through seven learner-owned checkpoints.
-- **Guided workbench** — move through import, task framing, data, model, code, interpretation, validation, and writing.
-- **Case library** — study eight teaching cases without presenting them as official contest solutions.
-- **Method map** — connect recommendations to beginner-friendly cards for optimization, forecasting, evaluation, and simulation methods.
-- **Provider-aware AI** — use configured DeepSeek, MiMo, or another OpenAI-compatible endpoint; fall back to deterministic demo output when credentials are absent or a request fails.
-- **Local progress** — quest state and learning records remain in browser storage unless you export or clear them.
+## 🧭 Your Modeling Learning Journey
 
-## Screenshots
+```mermaid
+flowchart TD
+    A["New to mathematical modeling?"] --> B["Lesson Zero"]
+    B --> C["Choose a learning track"]
+    C --> D["Interactive lessons"]
+    D --> E["Experiments + practice"]
+    E --> F["Seven-checkpoint quest"]
+    F --> G["Cases + validation + reflection"]
+    G --> D
+    E -.-> H["AI Skills / Guided Workbench"]
+    H -.-> E
+```
 
-| Guided workbench | Case library |
+**Best starting point:** [Lesson Zero — Introduction to Mathematical Modeling](https://www.modelingbridge.cc/learn/introduction).
+
+### 01 · Start With Intuition, Not Jargon
+
+Lesson Zero takes about 15–20 minutes and opens with a rainy-day question: how should a limited supply of umbrellas be allocated? Through it, learners meet objectives, decision variables, assumptions, solutions, validation, and iteration—building the modeling mindset before encountering a full toolkit.
+
+No programming language or algorithm is required up front. Learners with some background can skip straight to any course.
+
+### 02 · Five Courses, Five Ways to Think
+
+| Topic | A motivating question | What you learn | Explore |
+| --- | --- | --- | --- |
+| **Linear Programming** | How should scarce resources be allocated? | Objectives, decision variables, constraints, feasible regions, optima; plus an interactive lab | [Course](https://www.modelingbridge.cc/learn/linear-programming) |
+| **Analytic Hierarchy Process (AHP)** | How can subjective priorities become a structured decision? | Hierarchies, pairwise comparisons, weights, consistency checks | [Course](https://www.modelingbridge.cc/learn/ahp) |
+| **TOPSIS / Entropy Weighting** | How should alternatives be ranked against several criteria? | Normalization, ideal solutions, closeness, data-driven weights | [Course](https://www.modelingbridge.cc/learn/topsis) |
+| **Regression Analysis** | What can data tell us about likely outcomes? | Least squares, fit, residuals, interpretation, prediction limits | [Course](https://www.modelingbridge.cc/learn/regression) |
+| **Graph & Network Optimization** | What is the shortest route or cheapest connection? | Graph representation, Dijkstra, Kruskal, network reasoning | [Course](https://www.modelingbridge.cc/learn/graph) |
+
+These are not just static articles: the courses include interactive components designed to turn mathematical concepts into actions learners can explore. Every course starts from zero with no prerequisites; for the evaluation track, AHP is recommended before TOPSIS.
+
+### 03 · Understanding Must Survive Practice
+
+ModelingBridge connects lessons with topic-specific exercises:
+
+- Each of the five courses has its own practice set.
+- Work through questions and receive structured feedback and layered hints.
+- Retry after making mistakes.
+- Keep learning state locally in your browser.
+
+**Lessons build intuition. Practice exposes the gaps.**
+
+[Explore practice](https://www.modelingbridge.cc/practice).
+
+### 04 · The Seven-Checkpoint Quest
+
+A realistic modeling question rarely comes with an obvious method. The quest focuses on a sequence of decisions:
+
+1. **Break the ice:** state the background, goal, constraints, and keywords of the problem.
+2. **Decompose the task:** split it into subproblems with clear inputs, outputs, and evaluation criteria.
+3. **Scout the data:** decide which fields, sources, units, and fallbacks you need.
+4. **Choose a model:** compare baseline and advanced models and justify the choice.
+5. **Start the code:** turn the modeling route into data flow, functions, and pseudocode.
+6. **Plan the figures:** decide which charts you need and which conclusion each one supports.
+7. **Outline the paper:** organize sections, conclusions, validation, and a record of AI use.
+
+Each checkpoint comes with built-in coach hint cards and pass conditions; no online AI is called. **The goal is not a one-click answer. It is a model you understand well enough to defend.**
+
+[Try the modeling quest](https://www.modelingbridge.cc/quest).
+
+## 🧠 AI as a Learning Copilot—not an Answer Vending Machine
+
+Our guiding question is simple: **Can AI help people understand the work instead of bypassing it?**
+
+The repository includes AI-oriented skill content and an eight-step guided workbench covering problem intake, goal decomposition, data planning, model selection, code practice, result interpretation, validation, and paper communication.
+
+- **Useful assistance:** explain concepts, compare options, uncover assumptions, suggest verification checks, and support reflection.
+- **Human responsibility:** verify every important dataset, derivation, assumption, citation, and final statement.
+- **Honest deployment boundary:** the online AI service is not yet open on the public website; the workbench there shows teaching demo results. Local FastAPI development can use a configured OpenAI-compatible provider, and also falls back to demo results without a key. Do not mistake a demo response for a verified live-model interaction.
+
+> **AI may be the copilot. The learner remains responsible for the model.**
+
+## 🗂️ Beyond Courses: The Competition Learning Toolkit
+
+**Teaching cases.** Explore example problems and reasoning patterns without presenting instructional cases as official contest solutions.
+
+**Skills and tools.** Use modeling references, AI Skills, the toolbox, and the guided workbench to bridge the gap between terminology and practical workflow.
+
+**Competition calendar.** Explore a year-view timeline and monthly list. Officially announced milestones, unverified entries, and projections from previous years are labeled distinctly. **The calendar does not yet automatically verify new announcements in real time.** Always consult organizers and your school for authoritative dates.
+
+**Resource index.** The currently deployed foundation focuses on original content and official public-source links, with no file downloads. Curated textbooks, openly available lectures, methodology references, exemplary papers, authorized reading experiences, and a dedicated historical-problem module are future work—not a shipped download library.
+
+**Challenges and team-role exploration.** The website also includes an interactive recruitment challenge and a separate learning activity about roles within a modeling team.
+
+## 🖼️ Preview
+
+For the most up-to-date interface, **[open the live website](https://www.modelingbridge.cc)**. The repository does not yet include V3.0 screenshots.
+
+<details>
+<summary>View legacy MVP screenshots</summary>
+
+The images below depict earlier local demo experiences. **They are not verified screenshots of the V3.0 production UI.**
+
+| Guided workbench (legacy) | Case library (legacy) |
 | --- | --- |
-| ![Eight-step guided workbench with a synthetic bike-demand problem](docs/assets/screenshots/guided-workbench.png) | ![Teaching case library with eight modeling practice cases](docs/assets/screenshots/case-library.png) |
+| ![Legacy workbench](docs/assets/screenshots/guided-workbench.png) | ![Legacy case library](docs/assets/screenshots/case-library.png) |
 
-| Home | Mobile quest |
+| Home (legacy) | Mobile quest (legacy) |
 | --- | --- |
-| ![ModelingBridge home page and modeling-method map](docs/assets/screenshots/home.png) | ![Seven-checkpoint modeling quest on mobile](docs/assets/screenshots/mobile-path.png) |
+| ![Legacy home](docs/assets/screenshots/home.png) | ![Legacy mobile quest](docs/assets/screenshots/mobile-path.png) |
 
-Screenshots were captured from the local application with repository-provided demo content and no model credentials or personal records.
+</details>
 
-## Architecture
+## 🧱 Architecture
+
+The public frontend and the repository's optional backend are intentionally distinguished.
 
 ```mermaid
 flowchart LR
-    B[Browser] --> F[React + Vite frontend]
-    F --> A[FastAPI API]
-    A --> C[Case JSON and local resources]
-    A --> D[Deterministic demo fallback]
-    A -. optional .-> L[OpenAI-compatible provider]
-    F --> S[Browser local storage]
+    U["Browser"] --> E["Tencent Cloud EdgeOne Pages (static hosting)"]
+    E --> W["React 18 + TypeScript + Vite"]
+    W --> I["Lessons · Practice · Quest · Tools"]
+    W --> L[("Local browser progress")]
+    W -. "Local/configured API" .-> A["Python FastAPI"]
+    A --> C["Teaching cases + demo behavior"]
+    A -. "Optional API key" .-> M["OpenAI-compatible Model API"]
 ```
 
-The frontend proxies `/api` to FastAPI during local development. In production, set `VITE_API_BASE_URL` to the deployed API origin.
-
-## Quick start
-
-Requirements: Node.js LTS and Python 3.11+.
-
-1. Start the backend:
-
-   ```bash
-   cd backend
-   python -m venv .venv
-   # Windows: .venv\Scripts\activate
-   # macOS/Linux: source .venv/bin/activate
-   pip install -r requirements.txt
-   uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-   ```
-
-2. In another terminal, start the frontend:
-
-   ```bash
-   cd frontend
-   npm ci
-   npm run dev
-   ```
-
-3. Open `http://127.0.0.1:5173`. The health endpoint is `http://127.0.0.1:8000/api/health`.
-
-On Windows, `启动后端.bat` and `启动前端.bat` provide the same two-process setup.
-
-## Configuration
-
-The backend works without an API key. For live model output, create `backend/.env` and configure an OpenAI-compatible provider:
-
-```dotenv
-LLM_PROVIDER=deepseek
-LLM_API_KEY=your_key_here
-LLM_BASE_URL=https://api.deepseek.com/v1
-LLM_MODEL=deepseek-chat
-```
-
-Optional deployment settings:
-
-| Variable | Purpose |
+| Layer | Stack |
 | --- | --- |
-| `BACKEND_CORS_ORIGINS` | Comma-separated frontend origins allowed by FastAPI |
-| `VITE_API_BASE_URL` | Public backend origin used by the Vite build |
-| `TRIAL_ACCESS_CODE` / `VITE_TRIAL_ACCESS_CODE` | Lightweight trial gate; not a production authentication system |
+| Frontend | React 18, TypeScript 5.6, Vite 5 |
+| UI | Tailwind CSS, responsive layout, interactive components |
+| Math and code rendering | KaTeX, highlight.js |
+| Routing | React Router |
+| Quality checks | Vitest, Testing Library, TypeScript checking, production build |
+| Optional backend | Python, FastAPI (repository code, not a confirmed live production API) |
+| Frontend hosting | Tencent Cloud EdgeOne Pages |
+| Progress storage | Browser-local data; no claim of cross-device account sync |
 
-Never commit `.env` files or real credentials. Model prompts and submitted problem text are sent to the configured provider only when a live provider is selected and available.
+### Repository Layout
 
-## Testing
+```text
+modelingbridge/
+├── frontend/             # Web app, courses, exercises, resources, calendar
+├── backend/              # Optional FastAPI and model integration
+├── cases/                # Teaching-case data
+├── docs/                 # Product, collaboration, deployment, and content docs
+├── README.md             # Simplified Chinese project overview
+└── README.en.md          # English project overview
+```
 
-Frontend:
+The exact layout may evolve as branches are integrated.
+
+## ⚡ Run Locally
+
+> **Important branch note:** `main` currently retains an early MVP baseline. The V3.0 description here is based on `feat/edgeone-hk-pilot`, the branch behind the live website. Until the branches are reconciled, do not assume cloning default `main` gives you the current V3.0 website.
+
+You will need **Node.js 22 (LTS)** for the frontend. Python 3.11+ is only needed if you also want to run FastAPI locally.
 
 ```bash
+git clone https://github.com/Xiaotian69/modelingbridge.git
+cd modelingbridge
+git switch feat/edgeone-hk-pilot
+
 cd frontend
 npm ci
-npm test
-npm run build
+npm run dev
 ```
 
-Backend development dependencies and tests:
+Open the local URL printed by Vite (usually `http://localhost:5173`).
+
+Optional backend, in a second terminal starting from the repository root:
 
 ```bash
 cd backend
 python -m venv .venv
-# activate the environment first
-pip install -r requirements-dev.txt
-python -m pytest tests -q
+
+# Windows PowerShell:
+# .\.venv\Scripts\Activate.ps1
+# macOS / Linux:
+# source .venv/bin/activate
+
+pip install -r requirements.txt
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Some resource-root tests expect the optional, gitignored local archives documented by the resource module. The web app itself skips archive roots that are not present.
+Configure an OpenAI-compatible provider only if you need live model responses: copy `backend/.env.example` to a local `backend/.env` and fill in the connection details. Never commit secrets or put private keys in public `VITE_*` build variables.
 
-## Deployment
+### Tests
 
-- **Frontend:** Tencent Cloud EdgeOne Pages; existing routing configuration is preserved.
-- **Backend:** FastAPI; `render.yaml` is a historical deployment option, not verification of the current production backend.
-- **Guide:** see [`docs/deploy-vercel-render.md`](docs/deploy-vercel-render.md).
+```bash
+cd frontend
+npm ci
+npx tsc --noEmit
+npm test
+npm run build
+```
 
-## Responsible AI and learning boundaries
+For backend tests, install `backend/requirements-dev.txt`, then run `python -m pytest -q` from the repository root. Some resource-directory tests expect optional, untracked local materials and may fail in a clean clone. Report those constraints instead of copying in files without permission.
 
-ModelingBridge is a learning aid, not an answer-submission service. Learners remain responsible for data provenance, mathematical assumptions, code correctness, validation, citations, and final writing. Generated suggestions can be incomplete or wrong; verify them before using them in academic work or decisions.
+## 🛣️ Roadmap
 
-Bundled cases are teaching examples. External archives and source materials are intentionally excluded from Git and retain their original rights and provenance.
+| Stage | Direction | Status |
+| --- | --- | --- |
+| **V3.0** | Intro lesson, five interactive courses, exercises, seven-checkpoint quest, tools, base resource index, calendar | ✅ Implemented / frontend deployed |
+| **Content expansion** | Vetted modeling textbooks, public lectures, method references, exemplary cases/papers, authorized reading | 🔧 In progress |
+| **Competition data** | Automated discovery with human review and source traceability | 🧭 Planned |
+| **Learning continuity** | Accounts, cross-device records, cloud synchronization | 🧭 Planned |
+| **Intelligent tutoring** | More realistic, verifiable, trackable AI learning workflows | 🧭 Planned |
+| **Dedicated contest archive** | Dedicated historical-problem experience after rights and provenance checks | 🧭 Future phase |
 
-## Roadmap
+A roadmap describes intended work, **not features already shipped**. Content correctness, mathematical validity, browser/mobile testing, and release review remain part of the acceptance process.
 
-- Make resource provenance and optional archive setup easier to inspect.
-- Add stronger end-to-end coverage for the frontend/backend learning loop.
-- Improve accessible mobile navigation and export formats.
-- Expand case authoring without turning the library into an answer bank.
+## 🤝 Contributing and Collaboration
 
+ModelingBridge aims to be a student-maintainable learning project. Thoughtful feedback and contributions are welcome in mathematical review, exercise design, accessibility, frontend UX, tests, and documentation.
 
-## Development status and team
+- Start with the [contribution guide](CONTRIBUTING.md) and the [team workflow](docs/TEAM_WORKFLOW.md) (both in Chinese).
+- Discuss through Issues; propose changes using a branch and Pull Request. Use the base branch the maintainer names in the Issue—do not start new work from the legacy `main`.
+- Do not upload private credentials, personal data, or contest/publishing materials without verified permission.
+- Public source and internally reviewed working materials are separated.
+- AI may assist development or writing, but human maintainers review content and authorize releases.
 
-Official name: **模桥 ModelingBridge**, a public-interest platform for mathematical modeling learning, practice, and competition preparation.
-Official site: [www.modelingbridge.cc](https://www.modelingbridge.cc).
+## 👤 Creator & Maintainer
 
-This branch inherits local development commit `7645dbb`, including the refreshed homepage and interactive linear programming lessons and exercises. These implementations are not confirmation of a production release. The overall V2.0 requirements remain under discussion; forums and commercial features are not presented as shipped.
-Screenshots reused from PR #1 show the earlier MVP, not the new homepage or a verified production version.
+| Role | Credit |
+| --- | --- |
+| **Creator / Project Lead / Maintainer** | **[@Xiaotian69](https://github.com/Xiaotian69)** |
+| Project responsibilities | Vision, product and architecture decisions, development oversight, review, verification, and release approval |
+| AI assistance | Claude, Codex, and similar tools may help with writing, coding, and review; tools are not listed as human project owners |
 
-- Project Maintainer: [@Xiaotian69](https://github.com/Xiaotian69), responsible for product, architecture, core development, review, and release.
-- Collaborator / Developer: [@duopuw-web](https://github.com/duopuw-web), initially focusing on content verification, small components, tests, and documentation. This role description does not claim existing commit contributions.
-- AI-assisted Development: Codex, Claude, and similar tools assist implementation and checking; human developers remain responsible for understanding, testing, and review.
+Genuine human collaboration and contributions remain credited in the appropriate commit history, PRs, and acknowledgments. The project's creator/maintainer credit is distinct from GitHub's automatically generated contributor statistics.
 
-Team presentation is separate from GitHub Contributors statistics. Commit with your own account and linked email; do not rewrite history to change the display.
+## 📜 Licensing, Content Rights & Academic Integrity
 
-## Contributing and repository boundaries
+**Publicly visible does not mean open-source licensed.** This repository does not currently contain a project-wide `LICENSE` file. Until the maintainer publishes one, this README does not claim an MIT or other open-source license. Original content and third-party materials may be subject to different rights.
 
-Read the [beginner contribution guide](CONTRIBUTING.md), [team workflow](docs/TEAM_WORKFLOW.md), and [repository boundaries](docs/REPOSITORY_BOUNDARIES.md).
-Use Issue → individual branch → local validation → PR → review → merge. Production deployment requires the maintainer's separate confirmation.
+ModelingBridge is an educational tool, not a ghostwriting, contest-submission, or award-guarantee service. Learners remain responsible for the provenance of data, mathematical reasoning, code, citations, and final results, and for complying with their school and competition rules on AI use.
 
-The public repository contains general code and material approved for public use. The private `modelingbridge-internal` repository contains reviewed drafts, indexes, and tools. Raw local material is not uploaded with development changes. Commercial sales, account top-ups, and payment orders belong to neither repository.
+---
 
-## Current hosting
+<div align="center">
 
-Production uses Tencent Cloud EdgeOne Pages. Existing configuration and historical preparation notes are retained in [the deployment guide](docs/deploy-edgeone-hk-pilot.md). Its historical pre-launch wording is not a statement that today's website is offline.
-Vercel/Render are historical options. The maintainer confirmed Production tracks `feat/edgeone-hk-pilot`, with production automatic deployment enabled and Preview automatic deployment disabled. The V2 development baseline is `feat/modelingbridge-v2-ui` (7645dbb). This work does not push to the production branch or trigger a release; the deployed revision and backend integration require separate verification.
-Static case fallback works without FastAPI; real AI and backend resource endpoints still depend on an API. Demo responses must not be presented as a live AI service.
+### Every great model begins with a better question.
 
-## Code license and content rights
+**Model Better. Think Deeper. Build Your Own Path.**
 
-This work selects no new code license. The MIT draft in unmerged PR #1 is not a declaration that the entire repository is MIT licensed.
-The maintainer must decide the code license separately. Original lessons and exercises require explicit content permission; third-party problems, papers, textbooks, and assets remain subject to their owners' terms and must not be uploaded or relicensed without permission.
-Public visibility alone does not grant unrestricted use, modification, or redistribution rights.
+[🌐 Explore ModelingBridge](https://www.modelingbridge.cc) · [⭐ Star the Repo](https://github.com/Xiaotian69/modelingbridge) · [简体中文](README.md)
+
+*ModelingBridge · Created & Led by [@Xiaotian69](https://github.com/Xiaotian69)*
+
+</div>
