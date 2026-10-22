@@ -1,0 +1,145 @@
+/* Graph theory course: campus map and the Dijkstra / Kruskal lab. Tokens only (both themes). */
+.lp-lab .campus-map {
+  max-width: 640px;
+}
+.campus-edge path {
+  fill: none;
+  /* Plain roads: muted in both themes; state classes below override the colour. */
+  stroke: color-mix(in srgb, var(--text-muted) 45%, transparent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke var(--dur-quick) var(--ease-standard);
+}
+.campus-edge.is-tree path {
+  stroke: var(--chart-region-edge);
+  stroke-width: 5;
+}
+.campus-edge.is-path path {
+  stroke: var(--chart-optimum);
+  stroke-width: 6;
+}
+.campus-edge.is-current path {
+  stroke: var(--chart-cut);
+  stroke-width: 6;
+}
+.campus-edge.is-rejected path {
+  stroke: var(--bad);
+  stroke-dasharray: 8 6;
+}
+.lp-lab svg .campus-weight {
+  fill: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+.campus-node rect {
+  fill: var(--surface);
+  stroke: var(--border);
+  stroke-width: 2;
+}
+.campus-node.is-settled rect {
+  fill: var(--chart-region);
+  stroke: var(--chart-region-edge);
+}
+.campus-node.is-current rect {
+  stroke: var(--chart-cut);
+  stroke-width: 3;
+}
+.campus-node.is-source rect,
+.campus-node.is-target rect {
+  stroke: var(--chart-optimum);
+  stroke-width: 3;
+}
+.lp-lab svg .campus-name {
+  fill: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+}
+.lp-lab svg .campus-badge {
+  fill: var(--chart-cut);
+  font-size: 14px;
+  font-weight: 750;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 4px;
+}
+.graph-legend-current {
+  color: var(--chart-cut);
+}
+.graph-legend-tree {
+  color: var(--chart-region-edge);
+}
+.graph-legend-path {
+  color: var(--chart-optimum);
+}
+.graph-legend-rejected {
+  color: var(--bad);
+}
+.graph-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.graph-toolbar .segmented-buttons button {
+  white-space: nowrap;
+}
+.graph-selects {
+  display: flex;
+  gap: 12px;
+}
+.graph-selects label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.graph-toolbar .lab-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.graph-lab .lesson-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.graph-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.graph-table caption {
+  margin-bottom: 6px;
+  text-align: left;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.graph-table th,
+.graph-table td {
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+.graph-table tr.is-current th,
+.graph-table tr.is-current td {
+  background: color-mix(in srgb, var(--chart-cut) 12%, transparent);
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  /* The 640-wide map is drawn at about half size on a phone: keep labels near 11px on screen. */
+  .lp-lab svg .campus-name {
+    font-size: 23px;
+  }
+  .lp-lab svg .campus-weight {
+    font-size: 21px;
+  }
+  .lp-lab svg .campus-badge {
+    font-size: 20px;
+  }
+}

@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>模桥 V2 线框稿</title>
+<style>
+/* ---------- 评审工具外壳（中性色，不属于设计稿） ---------- */
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#e9ebee;color:#222}
+.tool{position:sticky;top:0;z-index:50;background:#20262c;color:#e8ecef;padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.tool b{font-weight:600;margin-right:4px}
+.seg{display:inline-flex;border:1px solid #4a535c;border-radius:8px;overflow:hidden}
+.seg button{background:transparent;color:#cfd6dc;border:0;padding:5px 10px;font:inherit;cursor:pointer}
+.seg button[aria-pressed=true]{background:#e8ecef;color:#20262c;font-weight:600}
+.statebar{background:#2b3239;color:#cfd6dc;padding:8px 16px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;position:sticky;top:48px;z-index:49}
+.statebar .lbl{opacity:.7;margin-right:6px}
+.chip{border:1px solid #56606a;background:transparent;color:#dfe5ea;border-radius:999px;padding:3px 10px;font:inherit;font-size:12px;cursor:pointer}
+.chip.on{background:#f0c674;color:#222;border-color:#f0c674}
+.stage{display:flex;gap:18px;padding:18px;align-items:flex-start;overflow-x:auto}
+.notes{flex:0 0 300px;background:#fff;border-radius:10px;padding:14px 16px;position:sticky;top:110px;max-height:calc(100vh - 130px);overflow:auto;font-size:13px;box-shadow:0 1px 3px #0001}
+.notes h3{margin:0 0 6px;font-size:14px}
+.notes ol{padding-left:18px;margin:6px 0}
+.notes li{margin:5px 0}
+.notes .tag{display:inline-block;font-size:11px;padding:0 6px;border-radius:4px;background:#fff3cd;color:#6b4e00;margin-right:4px}
+@media (max-width:1100px){.stage{flex-direction:column}.notes{position:static;flex:auto;width:100%;max-height:none}}
+
+/* ---------- 设计 token（设计稿本体） ---------- */
+.frame{--bg:#FAF9F5;--surface:#FFFFFF;--sunken:#F2F1EB;--text:#1B2A2F;--muted:#5B6B70;--border:#DDE3DF;--brand:#157A6E;--brand-ink:#FFFFFF;--attend:#A35A12;--ok:#2F7D32;--bad:#B3261E;--warn:#8A5A00;--info:#2B5FA8;--ai:#5A4FB0;--ln:#D9DDD8;
+  --hero:#0B1D24;--mint:#91E4C8;
+  background:var(--bg);color:var(--text);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px #0002;position:relative;flex:0 0 auto}
+.frame[data-theme=dark]{--bg:#0F171A;--surface:#152126;--sunken:#0B1215;--text:#E4ECEA;--muted:#9FB1B0;--border:#26363B;--brand:#5CC8B2;--brand-ink:#06231E;--attend:#E3A25A;--ok:#7CCB80;--bad:#F2867E;--warn:#E6B65C;--info:#8DB2F0;--ai:#A79DF0;--ln:#2A3A3F}
+.frame.d{width:1180px;min-height:760px}
+.frame.m{width:390px;height:800px;overflow-y:auto;border:10px solid #111;border-radius:34px}
+.frame button,.frame input,.frame textarea,.frame select{font:inherit;color:inherit}
+.frame a{color:var(--brand);cursor:pointer;text-decoration:none}
+.frame a:hover{text-decoration:underline}
+.frame :focus-visible{outline:3px solid var(--attend);outline-offset:2px}
+
+/* 通用 */
+.ln{display:block;height:9px;border-radius:5px;background:var(--ln);margin:9px 0}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.btn{border:1px solid var(--brand);background:var(--brand);color:var(--brand-ink);border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:600}
+.btn.sec{background:transparent;color:var(--brand)}
+.btn.ghost{border-color:var(--border);background:transparent;color:var(--text);font-weight:500}
+.btn.ai{border-color:var(--ai);background:transparent;color:var(--ai)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.badge{display:inline-block;font-size:11px;border:1px solid var(--border);border-radius:4px;padding:0 6px;color:var(--muted);margin-right:4px;white-space:nowrap}
+.badge.ai{border-color:var(--ai);color:var(--ai)}
+.badge.ok{border-color:var(--ok);color:var(--ok)}
+.badge.warn{border-color:var(--warn);color:var(--warn)}
+.badge.preset{border-color:var(--brand);color:var(--brand)}
+.anno{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#f0c674;color:#222;font-size:11px;font-weight:700;margin:0 4px;vertical-align:middle;flex:0 0 auto}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sp{flex:1}
+hr.s{border:0;border-top:1px solid var(--border);margin:14px 0}
+
+/* 顶栏 */
+.hdr{display:flex;align-items:center;gap:18px;height:56px;padding:0 20px;border-bottom:1px solid var(--border);background:var(--surface)}
+.hdr.hero{background:var(--hero);color:#e6f2ef;border-color:#ffffff14}
+.hdr.hero a{color:#cfe7e0}
+.logo{font-weight:800;letter-spacing:.02em;cursor:pointer}
+.logo i{font-style:normal;color:var(--brand)}
+.hdr.hero .logo i{color:var(--mint)}
+.hdr nav{display:flex;gap:18px}
+.hdr nav a{color:inherit;opacity:.8}
+.hdr nav a.cur{opacity:1;font-weight:700;border-bottom:2px solid currentColor;padding-bottom:2px}
+.icon-btn{border:1px solid var(--border);background:transparent;border-radius:8px;padding:4px 9px;cursor:pointer;color:inherit}
+.hdr.hero .icon-btn{border-color:#ffffff30}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--attend);margin-left:3px;vertical-align:top}
+.crumb{font-size:13px;color:var(--muted)}
+.progress{width:120px;height:4px;background:var(--ln);border-radius:2px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--brand)}
+
+/* 首页 */
+.hero{background:var(--hero);color:#E6F2EF;padding:46px 48px 40px;position:relative;overflow:hidden}
+.hero h1{font-size:44px;line-height:1.25;margin:0 0 8px;letter-spacing:-.01em}
+.hero .sub{color:#9fc3bb;margin:0 0 26px}
+.net{position:absolute;right:24px;top:6px;width:420px;height:300px}
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:16px;position:relative}
+.door{border:1px solid #ffffff2a;border-radius:14px;padding:20px 22px;background:#ffffff08}
+.door.primary{background:var(--mint);color:#06231E;border-color:var(--mint)}
+.door h2{margin:2px 0 6px;font-size:22px}
+.door .k{font-size:12px;letter-spacing:.1em;opacity:.75}
+.door .path{font-size:13px;opacity:.85;margin-bottom:14px}
+.door .go{background:#06231E;color:var(--mint);border:0;border-radius:8px;padding:10px 16px;font-weight:700;cursor:pointer}
+.search{display:flex;align-items:center;gap:8px;background:#ffffff12;border:1px solid #ffffff40;border-radius:10px;padding:10px 12px}
+.search input{flex:1;background:transparent;border:0;outline:0;color:#fff}
+.search input::placeholder{color:#9fc3bb}
+.fam{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.fam span{font-size:12px;border:1px solid #ffffff30;border-radius:999px;padding:2px 9px;color:#cfe7e0}
+.results{position:absolute;left:0;right:0;top:100%;margin-top:6px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:8px;z-index:5;box-shadow:0 8px 24px #0003}
+.results .grp{font-size:11px;color:var(--muted);margin:6px 6px 2px;letter-spacing:.08em}
+.results .it{display:flex;justify-content:space-between;padding:6px 8px;border-radius:6px;cursor:pointer}
+.results .it:hover{background:var(--sunken)}
+.results .it.off{opacity:.5;cursor:not-allowed}
+.cont{display:flex;gap:20px;align-items:center;padding:16px 48px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap}
+.route{padding:30px 48px}
+.route h2{margin:0 0 18px;font-size:22px}
+.track{display:flex;align-items:flex-start}
+.node{flex:1;position:relative;text-align:left;padding-right:10px}
+.node:before{content:"";position:absolute;top:8px;left:16px;right:0;height:2px;background:var(--border)}
+.node:last-child:before{display:none}
+.node .c{width:18px;height:18px;border-radius:50%;border:2px solid var(--brand);background:var(--brand);position:relative;z-index:1}
+.node.off .c{background:var(--bg);border-color:var(--border)}
+.node b{display:block;margin-top:8px}
+.node.off{color:var(--muted)}
+.links{padding:0 48px 30px;color:var(--muted)}
+.foot{border-top:1px solid var(--border);padding:16px 48px;font-size:12px;color:var(--muted)}
+
+/* 精讲 */
+.retbar{display:flex;align-items:center;gap:10px;padding:8px 20px;background:color-mix(in srgb,var(--attend) 12%,var(--surface));border-bottom:1px solid var(--attend);font-size:13px}
+.retbar a{font-weight:700;color:var(--attend)}
+.reader{display:grid;grid-template-columns:220px minmax(0,1fr) 260px;gap:32px;padding:26px 28px}
+.reader.notoc{grid-template-columns:40px minmax(0,1fr) 260px}
+.reader.withai{grid-template-columns:200px minmax(0,1fr) 380px}
+.reader.withai.notoc{grid-template-columns:40px minmax(0,1fr) 380px}
+.toc{font-size:13px}
+.toc a{display:block;color:var(--muted);padding:4px 8px;border-left:2px solid transparent}
+.toc a.cur{color:var(--text);font-weight:700;border-color:var(--brand);background:var(--sunken)}
+.article{max-width:680px;font-size:16px;line-height:1.85}
+.article h2{font-size:24px;margin:4px 0 14px}
+.kicker{font-size:12px;color:var(--muted);letter-spacing:.08em}
+.para{position:relative}
+.para.hl{outline:2px solid var(--attend);outline-offset:6px;border-radius:4px;background:color-mix(in srgb,var(--attend) 8%,transparent)}
+.formula{border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:16px 0;display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-size:18px}
+.formula .ask{margin-left:auto;font-family:inherit;font-size:12px}
+.cp{border-left:3px solid var(--attend);background:var(--sunken);padding:12px 16px;margin:18px 0;border-radius:0 8px 8px 0}
+.cp .k{font-size:12px;color:var(--attend);font-weight:700;letter-spacing:.08em}
+.opt{display:flex;gap:8px;align-items:flex-start;padding:7px 10px;border:1px solid var(--border);border-radius:8px;margin:6px 0;cursor:pointer;background:var(--surface)}
+.opt.sel{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+.fb{border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:10px;background:var(--surface)}
+.fb.bad{border-color:var(--bad)}
+.fb.ok{border-color:var(--ok)}
+.fb .t{font-weight:700}
+.fb.bad .t{color:var(--bad)}
+.fb.ok .t{color:var(--ok)}
+.margin{font-size:13px;color:var(--muted);border-left:1px solid var(--border);padding-left:16px}
+.margin dt{font-family:Georgia,serif;color:var(--text);font-weight:700;margin-top:8px}
+.margin dd{margin:0}
+.selpop{position:absolute;top:-38px;left:120px;background:var(--text);color:var(--bg);border-radius:8px;padding:5px 10px;font-size:12px;box-shadow:0 4px 12px #0003;cursor:pointer;white-space:nowrap}
+.mtoc{display:flex;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--border);font-size:13px;background:var(--surface)}
+.cover{border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:26px}
+.cover .row a{font-size:13px}
+
+/* AI 抽屉 */
+.drawer{background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;font-size:13px;min-height:560px}
+.drawer.sheet{position:sticky;bottom:64px;border:1px solid var(--border);border-radius:16px 16px 0 0;box-shadow:0 -8px 24px #0003;min-height:0;max-height:430px;overflow:auto;margin:0 -1px}
+.dr-h{padding:10px 14px;border-bottom:1px solid var(--border)}
+.dr-h .ctx{font-weight:700}
+.dr-b{padding:12px 14px;display:flex;flex-direction:column;gap:10px;flex:1}
+.unavail{border:1px dashed var(--warn);color:var(--warn);border-radius:8px;padding:8px 10px;font-size:12px}
+.levels{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.levels button{flex:1;border:0;background:transparent;padding:6px 4px;cursor:pointer}
+.levels button[aria-pressed=true]{background:var(--ai);color:#fff;font-weight:700}
+.levels button.lock{opacity:.4}
+.consent{border:1px solid var(--border);border-radius:8px;padding:8px 10px}
+.consent label{display:flex;gap:6px;align-items:flex-start;margin:4px 0}
+.consent .pv{font-size:11px;color:var(--muted);margin-left:22px}
+.intents{display:flex;gap:6px;flex-wrap:wrap}
+.intents span{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:2px 8px;cursor:pointer}
+.dr-b textarea{width:100%;min-height:54px;border:1px solid var(--border);border-radius:8px;background:var(--bg);padding:8px}
+.msg{border-radius:8px;padding:8px 10px;background:var(--sunken)}
+.msg.user{background:color-mix(in srgb,var(--brand) 10%,var(--surface))}
+pre.payload{font-size:11px;background:var(--sunken);border-radius:6px;padding:8px;white-space:pre-wrap;margin:6px 0 0;max-height:150px;overflow:auto}
+
+/* 弹层 */
+.scrim{position:absolute;inset:0;background:#0007;display:flex;align-items:center;justify-content:center;z-index:30}
+.frame.m .scrim{align-items:flex-end}
+.dialog{background:var(--surface);color:var(--text);border-radius:14px;padding:18px 20px;width:440px;max-width:94%;box-shadow:0 10px 40px #0005}
+.frame.m .dialog{border-radius:16px 16px 0 0;width:100%;max-width:100%}
+.dialog h3{margin:0 0 8px}
+.dialog textarea{width:100%;min-height:90px;border:1px solid var(--border);border-radius:8px;background:var(--bg);padding:8px}
+.pick{border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin:6px 0;cursor:pointer}
+.pick.sel{border-color:var(--ai);box-shadow:inset 0 0 0 1px var(--ai)}
+
+/* 刷题 */
+.practice{display:grid;grid-template-columns:200px minmax(0,1fr);gap:28px;padding:22px 28px}
+.practice.withai{grid-template-columns:180px minmax(0,1fr) 360px}
+.qnav a{display:flex;gap:8px;padding:6px 8px;border-radius:6px;color:var(--text)}
+.qnav a.cur{background:var(--sunken);font-weight:700}
+.st{width:16px;text-align:center}
+.qcard{max-width:660px}
+.qcard h2{font-size:19px;line-height:1.6;margin:8px 0 14px;font-weight:600}
+.banner{border:1px solid var(--info);color:var(--info);border-radius:8px;padding:7px 12px;font-size:13px;margin-bottom:12px;display:flex;gap:8px;align-items:center}
+.nudge{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;border-top:1px dashed var(--border);margin-top:10px;padding-top:8px}
+.ladder{border:1px solid var(--border);border-radius:10px;margin-top:12px;overflow:hidden}
+.ladder .tabs{display:flex;border-bottom:1px solid var(--border)}
+.ladder .tabs button{flex:1;border:0;background:transparent;padding:8px;cursor:pointer}
+.ladder .tabs button[aria-pressed=true]{background:var(--sunken);font-weight:700;box-shadow:inset 0 -2px 0 var(--brand)}
+.ladder .body{padding:12px 14px}
+.ladder .ai-row{border-top:1px dashed var(--border);padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px}
+.actbar{position:sticky;bottom:0;display:flex;gap:10px;padding:10px 14px;background:var(--surface);border-top:1px solid var(--border);z-index:3}
+.actbar .btn{flex:1}
+
+/* 七关 */
+.stepper{display:flex;gap:4px;padding:12px 24px;border-bottom:1px solid var(--border);background:var(--surface);align-items:center;flex-wrap:wrap}
+.stepper span{font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--border)}
+.stepper span.done{border-color:var(--ok);color:var(--ok)}
+.stepper span.cur{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);font-weight:700}
+.stepper span.soft{opacity:.6}
+.quest{display:grid;grid-template-columns:220px minmax(0,1fr) 260px;gap:24px;padding:20px 24px}
+.quest.withside{grid-template-columns:200px minmax(0,1fr) 380px}
+.editor{border:1px solid var(--border);border-radius:8px;min-height:140px;padding:10px;background:var(--surface)}
+.tools h4{margin:12px 0 6px;font-size:13px}
+.prow{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+
+/* 资料 */
+.libtabs{display:flex;gap:4px;padding:0 24px;border-bottom:1px solid var(--border);background:var(--surface)}
+.libtabs a{padding:12px 12px;color:var(--muted)}
+.libtabs a.cur{color:var(--text);font-weight:700;box-shadow:inset 0 -2px 0 var(--brand)}
+.lib{display:grid;grid-template-columns:170px minmax(0,1fr) 400px;gap:22px;padding:18px 24px}
+.filters a{display:block;padding:4px 8px;border-radius:6px;color:var(--text);font-size:13px}
+.filters a.cur{background:var(--sunken);font-weight:700}
+.pitem{border-bottom:1px solid var(--border);padding:10px 0;cursor:pointer}
+.pitem.cur{box-shadow:inset 3px 0 0 var(--brand);padding-left:10px}
+.detail{border:1px solid var(--border);border-radius:12px;padding:14px 16px;background:var(--surface);font-size:13px}
+.detail input{width:100%;border:1px solid var(--border);border-radius:6px;padding:6px 8px;background:var(--bg);margin-top:3px}
+.preview{background:var(--sunken);border-radius:8px;padding:10px;white-space:pre-wrap;font-size:12.5px;line-height:1.7;margin:10px 0}
+.ph{background:color-mix(in srgb,var(--warn) 25%,transparent);color:var(--warn);border-radius:3px;padding:0 2px}
+.filled{background:color-mix(in srgb,var(--brand) 18%,transparent);border-radius:3px;padding:0 2px}
+.copyres{font-size:12px;margin-top:8px;border-radius:6px;padding:6px 8px}
+.copyres.ok{border:1px solid var(--ok);color:var(--ok)}
+.copyres.warn{border:1px solid var(--warn);color:var(--warn)}
+.copyres.bad{border:1px solid var(--bad);color:var(--bad)}
+
+/* 记录 */
+.rec{padding:22px 32px;max-width:980px}
+.rec h1{font-size:24px;margin:0 0 4px}
+.rec section{border-top:1px solid var(--border);padding:14px 0}
+.rec h2{font-size:16px;margin:0 0 8px}
+.dc{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.dc > div{border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.switch i{width:36px;height:20px;border-radius:10px;background:var(--ln);position:relative;display:inline-block}
+.switch i:after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+.switch.on i{background:var(--brand)}
+.switch.on i:after{left:18px}
+.warnbar{border:1px solid var(--warn);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin:10px 0}
+.empty{border:1px dashed var(--border);border-radius:10px;padding:18px;color:var(--muted);text-align:center}
+
+
+/* ---------- 开屏 D-019（品牌层，始终深色） ---------- */
+.framewrap{position:relative;flex:0 0 auto}
+.splash{position:absolute;inset:0;z-index:40;background:rgba(11,29,36,var(--sp-bg,1));border-radius:10px;overflow:hidden;cursor:pointer;transition:none}
+.splash[hidden]{display:none}
+.framewrap.m .splash{inset:10px;border-radius:24px}
+.splash canvas{position:absolute;inset:0;width:100%;height:100%}
+.sp-word{position:absolute;left:50%;top:calc(50% + var(--sp-wy,70px));transform:translate(-50%,8px);opacity:0;color:#E6F2EF;text-align:center;font-size:30px;letter-spacing:.08em;white-space:nowrap}
+.sp-word span{display:block;font-size:12px;letter-spacing:.32em;color:#91E4C8;margin-top:4px;text-transform:uppercase}
+.sp-hint{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-size:12px;color:#9fc3bb;opacity:0;transition:opacity .3s}
+.sp-load{position:absolute;left:0;right:0;bottom:46px;text-align:center;font-size:12px;color:#9fc3bb;opacity:0}
+.splash.fast{transition:opacity .25s ease-out;opacity:0}
+
+/* 显示可点区域：虚线框 = 线框内可交互；未框出的按钮/链接为静态示意 */
+.frame.showclick [data-act],.frame.showclick [data-go],.frame.showclick input,.frame.showclick textarea,.frame.showclick [contenteditable]{outline:2px dashed #e0a100 !important;outline-offset:1px}
+
+/* 手机覆盖 */
+.frame.m .hdr{padding:0 14px;gap:10px}
+.frame.m .hero{padding:26px 18px 22px}
+.frame.m .hero h1{font-size:28px}
+.frame.m .net{display:none}
+.frame.m .doors{grid-template-columns:1fr}
+.frame.m .cont,.frame.m .route,.frame.m .links,.frame.m .foot{padding-left:18px;padding-right:18px}
+.frame.m .track{flex-direction:column;gap:12px}
+.frame.m .node:before{display:none}
+.frame.m .node{display:flex;gap:10px;align-items:center}
+.frame.m .node b{margin:0}
+.frame.m .reader,.frame.m .practice,.frame.m .quest,.frame.m .lib{display:block;padding:16px}
+.frame.m .toc,.frame.m .margin,.frame.m .qnav,.frame.m .filters{display:none}
+.frame.m .dc{grid-template-columns:1fr}
+.frame.m .rec{padding:16px}
+.frame.m .detail{margin-top:14px}
+.frame.m .libtabs{overflow-x:auto;padding:0 10px}
+.frame.m .selpop{left:20px}
+</style>
+</head>
+<body>
+<div class="tool" role="toolbar" aria-label="评审控制">
+  <span><b>页面</b><span class="seg" id="pages"></span></span>
+  <span><b>设备</b><span class="seg" id="device"></span></span>
+  <span><b>主题</b><span class="seg" id="theme"></span></span>
+  <span><span class="seg"><button id="clicktoggle" data-act="showclick" aria-pressed="false">显示可点区域</button></span></span>
+  <span class="small" style="opacity:.7">低保真线框 · 文案与数据为示意 · AI 均为“未接入”演示态 · v3（2026-10-12 已并入 Q1/Q4/Q6/Q7 与 D-019 开屏）</span>
+</div>
+<div class="statebar" id="statebar"></div>
+<div class="stage">
+  <div class="framewrap" id="framewrap"><div id="frame" class="frame d" data-theme="light"></div>
+    <div id="splash" class="splash" hidden aria-hidden="true">
+      <canvas id="splash-cv"></canvas>
+      <div class="sp-word" id="sp-word"><b>模桥</b><span>ModelingBridge</span></div>
+      <div class="sp-hint" id="sp-hint">轻触任意处跳过</div>
+      <div class="sp-load" id="sp-load">正在加载…</div>
+    </div></div>
+  <aside class="notes" id="notes" aria-live="polite"></aside>
+</div>
+
+<script>
+/* ======================= 状态 ======================= */
+const PAGES=[["home","首页"],["lesson","模型精讲"],["practice","专项刷题"],["quest","七关实战"],["library","资料·提示词库"],["records","学习记录"]];
+const S={
+  page:"home",device:"d",theme:"light",
+  home:{returning:true,q:""},
+  lesson:{toc:true,ai:false,sel:false,cp:null,cpSel:null,hl:false},
+  ticket:null,               // 回程票
+  practice:{answer:null,attempts:0,result:null,help:0,restored:false,nudgeOff:false,unknown:false,sawSolution:false},
+  ai:{open:false,level:"nudge",draft:false,sel:false,summary:null,sent:false,picker:false,pickSel:null,summaryText:"",persist:"session",threadsByScope:{}},
+  quest:{side:null,stageView:2},
+  menu:false,search:false,showClick:false,
+  library:{tab:"prompts",filter:"全部",open:"pr.breakdown.base",vars:{contest:"",problem:"",idea:""},copy:null,fromQuest:false},
+  records:{empty:false,storageOff:false,dialog:null},
+};
+const EX={id:"practice-4",title:"练习 2",kp:"资源约束的写法",anchor:"§2 把生产计划翻译成数学",
+  prompt:"装配每周最多 80 小时；A 每 m² 需装配 1 小时，B 每 m² 需 2 小时。正确的装配约束是？",
+  opts:[["a","x + 2y ≥ 80"],["b","x + 2y ≤ 80"],["c","2x + y ≤ 80"],["d","x + 2y = 80"]],answer:"b",
+  errors:{a:{tag:"不等号方向",msg:"「≥ 80」会允许 (0, 50)：装配要用 100 小时，超过可用的 80 小时。"},
+          c:{tag:"系数对应",msg:"2x + y 是切割工时的写法。装配中 A 用 1 小时、B 用 2 小时。"},
+          d:{tag:"把上限当成必须用完",msg:"「= 80」要求装配恰好用满，但题目只说「最多」，允许有剩余。"}},
+  help:["「每周最多 80 小时」中的“最多”，对应哪个不等号？","试试 x=0、y=50：装配一共要用多少小时？这个计划应当被允许吗？","装配总用量 = 1·x + 2·y（小时），不能超过 80，所以写 x + 2y ≤ 80；另需 x, y ≥ 0。“恰好用完”是求解后可能出现的结果，不能预先写成等式。"]};
+const PROMPT={id:"pr.breakdown.base",title:"赛题拆解 · 基础版",task:"读题拆解",contest:"通用（国赛 / 美赛可用）",
+  text:"我正在参加{比赛名称}。下面是题目：\n{题目内容}\n\n请不要直接给出模型或答案。请帮我：\n1. 用一句话复述题目要解决的核心问题；\n2. 拆出 2–4 个小问，每个小问写出需要的输入和期望输出；\n3. 指出题目中我可能忽略的限制条件。\n我目前的想法是：{我已有的思路}\n（我会自行核对你的回答，并在论文中如实说明 AI 使用情况。）",
+  vars:[["contest","比赛名称"],["problem","题目内容"],["idea","我已有的思路"]]};
+const PROMPTS=[[PROMPT.id,PROMPT.title,"读题拆解","通用"],["pr.io.table","小问输入输出表","读题拆解","通用"],["pr.model.check","模型选择自检","方法选择","国赛 / 美赛"],["pr.debug.explain","解释报错但不改写全部代码","代码调试","通用"],["pr.abstract.review","摘要自检清单","摘要与论文","美赛"]];
+
+/* ======================= 工具 ======================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const lines=(ws)=>ws.map(w=>`<span class="ln" style="width:${w}%"></span>`).join("");
+const A=(n)=>`<span class="anno" aria-hidden="true">${n}</span>`;
+const isM=()=>S.device==="m";
+
+/* ======================= 外壳 ======================= */
+function header(kind){
+  const cur={lesson:"精讲",practice:"刷题",quest:"实战",library:"资料"}[S.page];
+  const nav=[["lesson","精讲"],["practice","刷题"],["quest","实战"],["library","资料"]];
+  if(isM()){
+    const title={home:"",lesson:"线性规划 · 4/10",practice:"刷题 · 2/6",quest:"实战 · 第 2/7 关",library:"资料中心",records:"学习记录"}[S.page];
+    return `<header class="hdr ${kind==="hero"?"hero":""}"><span class="logo" data-go="home">M<i>·</i>模桥</span><span class="small muted">${title}</span><span class="sp"></span>
+      ${S.page==="lesson"||S.page==="practice"||S.page==="quest"?`<button class="icon-btn" data-act="ai-open" aria-label="打开 AI 助教">✦</button>`:""}
+      <button class="icon-btn" data-act="search" aria-label="搜索">⌕</button><button class="icon-btn" data-act="menu" aria-label="菜单" aria-expanded="${S.menu}">☰</button></header>`;
+  }
+  let mid="";
+  if(S.page==="lesson") mid=`<span class="crumb">精讲 / 线性规划 / 02 把生产计划翻译成数学</span><span class="progress" title="阅读位置 2/10"><i style="width:20%"></i></span><span class="small muted">2/10</span>`;
+  if(S.page==="practice") mid=`<span class="crumb">刷题 / 线性规划 / 练习 2 of 6</span>`;
+  if(S.page==="quest") mid=`<span class="crumb">实战 / 资源分配训练题</span><span class="small muted">草稿已保存 14:02</span>`;
+  return `<header class="hdr ${kind==="hero"?"hero":""}">
+    <span class="logo" data-go="home" title="首页">M<i>·</i>模桥</span>
+    <nav aria-label="主导航">${nav.map(([p,l])=>`<a data-go="${p}" class="${cur===l?"cur":""}">${l}</a>`).join("")}</nav>
+    ${mid}<span class="sp"></span>
+    <button class="icon-btn" data-act="search" aria-label="搜索">⌕ <span class="small">⌘K</span></button>
+    <a data-go="records" style="color:inherit">学习记录<span class="dot" title="有未提交草稿"></span></a>
+    <button class="icon-btn" data-act="theme" aria-label="切换主题">◐</button>
+    ${["lesson","practice","quest"].includes(S.page)?`<button class="icon-btn" data-act="ai-open" style="color:var(--ai);border-color:var(--ai)">✦ 助教</button>`:""}
+  </header>`;
+}
+
+/* ======================= AI 抽屉（共享） ======================= */
+function scope(){
+  if(S.page==="lesson") return {type:"section",id:"variables",title:"线性规划 / §2 把生产计划翻译成数学"};
+  if(S.page==="quest") return {type:"quest-stage",id:"quest:lp-case/breakdown",title:"资源分配训练题 / 第 2 关 拆解任务"};
+  return {type:"exercise",id:EX.id,title:"线性规划 / 练习 2 · 约束建模"};
+}
+function drawer(){
+  const sc=scope(), a=S.ai;
+  const key=sc.type+":"+sc.id, th=a.threadsByScope[key]||[];
+  const levels=[["nudge","启发"],["clue","线索"],["full","完整讲解"]];
+  const items=[
+    {k:"loc",label:`当前位置（公开）：${sc.title}`,on:true,fixed:true,pv:`scope=${key}`},
+    S.page==="practice"?{k:"draft",label:"我的作答草稿",on:a.draft,pv:S.practice.answer?`选择了：${EX.opts.find(o=>o[0]===S.practice.answer)[1]}`:"（尚未作答）"}:null,
+    S.page==="lesson"?{k:"sel",label:"选中的公式 / 段落",on:a.sel,pv:"x + 2y ≤ 80（装配约束）"}:null,
+    S.page==="quest"?{k:"draft",label:"本关作答草稿",on:a.draft,pv:"小问 1：预测各产品需求… (128 字)"}:null,
+    a.summary?{k:"sum",label:"带入的讨论摘要（非 AI 生成，可编辑）",on:true,pv:a.summary}:null,
+  ].filter(Boolean);
+  const payload={scope:key,level:a.level,context:items.filter(i=>i.on).map(i=>i.label),message:"（你在输入框中的问题）"};
+  return `<aside class="drawer ${isM()?"sheet":""}" role="complementary" aria-label="AI 助教">
+    <div class="dr-h">
+      <div class="row"><span class="ctx">✦ AI 助教</span><span class="sp"></span>
+        <button class="icon-btn small" data-act="ai-pick" title="带入其他讨论">⋯ 带入其他讨论</button>
+        <button class="icon-btn" data-act="ai-close" aria-label="关闭助教">×</button></div>
+      <div class="small muted" style="margin-top:4px">${A(1)}正在讨论：<b style="color:var(--text)">${esc(sc.title)}</b></div>
+      <div class="small" style="margin-top:4px">${A(2)}<span class="badge ${a.persist==="device"?"ok":""}">${a.persist==="device"?"已保存到此设备":"仅本次浏览"}</span><span class="muted">换题即新会话；回到本题可恢复</span></div>
+    </div>
+    <div class="dr-b">
+      <div class="unavail">${A(3)}AI 助教尚未接入。下方仅演示一次请求如何组成，<b>不会生成回答，也不会发出网络请求</b>。课程提示、判分与解析不受影响。</div>
+      ${th.map(m=>`<div class="msg ${m.role}"><span class="badge ${m.role==="user"?"":"warn"}">${m.role==="user"?"我":"未发送 · 演示"}</span> ${esc(m.text)}</div>`).join("")}
+      <div><div class="small muted" style="margin-bottom:4px">${A(4)}帮助深度（切换不会触发请求）</div>
+        <div class="levels" role="group" aria-label="帮助深度">${levels.map(([k,l])=>`<button aria-pressed="${a.level===k}" data-act="lvl" data-v="${k}">${l}</button>`).join("")}</div></div>
+      <div class="consent">${A(5)}<b>将发送</b> <span class="small muted">只有勾选项会随下一条消息发送</span>
+        ${items.map(i=>`<label><input type="checkbox" ${i.on?"checked":""} ${i.fixed?"disabled":""} data-act="consent" data-k="${i.k}"> <span>${esc(i.label)}</span></label><div class="pv">${esc(i.pv)}</div>`).join("")}
+      </div>
+      <div class="intents">${["解释这一段","我卡在这一步","帮我检查思路","分析报错"].map(t=>`<span data-act="intent" data-v="${t}">${t}</span>`).join("")}</div>
+      <textarea id="ai-input" aria-label="向 AI 助教提问" placeholder="写下你的问题…"></textarea>
+      <div class="row"><button class="btn ai" data-act="ai-send">查看将发送的内容</button><span class="small muted">接入后此按钮为「发送给 AI」</span></div>
+      ${a.sent?`<div><span class="badge warn">未发送</span><span class="small muted">以下为请求预览</span><pre class="payload">${esc(JSON.stringify(payload,null,2))}</pre></div>`:""}
+    </div></aside>`;
+}
+function pickerDialog(){
+  const a=S.ai;
+  if(!a.picker) return "";
+  const threads=[["lp.ch1.s04","精讲 §4 顶点比较","我为什么只需要比较四个顶点？ / 如果两条边平行会怎样？"],["ex.lp.p01","练习 1 · 目标函数","2000 和 2600 哪个是最优？"]];
+  if(a.picker==="list") return `<div class="scrim"><div class="dialog" role="dialog" aria-modal="true" aria-label="选择要带入的讨论">
+    <h3>带入其他讨论</h3><p class="small muted">只列出本次浏览中的会话${a.persist==="device"?"和已保存到此设备的会话":""}。不会自动发送。</p>
+    ${threads.map(t=>`<div class="pick ${a.pickSel===t[0]?"sel":""}" data-act="pick" data-v="${t[0]}"><b>${t[1]}</b><div class="small muted">${t[2]}</div></div>`).join("")}
+    <div class="row" style="margin-top:10px"><span class="sp"></span><button class="btn ghost" data-act="pick-cancel">取消</button><button class="btn ai" data-act="pick-next" ${a.pickSel?"":"disabled"}>预览摘要</button></div></div></div>`;
+  return `<div class="scrim"><div class="dialog" role="dialog" aria-modal="true" aria-label="预览摘要">
+    <h3>摘要预览 <span class="badge">非 AI 生成 · 摘录我的提问</span></h3>
+    <p class="small muted">确认后，这段文字会出现在「将发送」清单中，并只随你下一次主动发送的消息一起发出。可以修改或删减。</p>
+    <textarea id="sum-text">${esc(a.summaryText)}</textarea>
+    <div class="small muted">不会带入：对方回复全文、标准答案、你的其他草稿。</div>
+    <div class="row" style="margin-top:10px"><button class="btn ghost" data-act="pick-back">← 重新选择</button><span class="sp"></span><button class="btn ghost" data-act="pick-cancel">取消</button><button class="btn ai" data-act="pick-confirm">确认带入</button></div></div></div>`;
+}
+
+/* ======================= 首页 ======================= */
+function home(){
+  const q=S.home.q.trim();
+  const res=q?`<div class="results" role="listbox">
+      <div class="grp">精讲</div><div class="it" data-go="lesson"><span>线性规划 · 有限资源怎样分配</span><span class="badge ok">可学</span></div>
+      <div class="grp">练习</div><div class="it" data-go="practice"><span>线性规划专项 · 6 题</span><span class="badge ok">可练</span></div>
+      <div class="grp">方法速查</div><div class="it off" aria-disabled="true"><span>整数规划</span><span class="badge">仅速查 · 精讲筹备中</span></div>
+      <div class="grp">资料</div><div class="it" data-go="library"><span>提示词：模型选择自检</span><span class="badge">提示词库</span></div></div>`:"";
+  return header("hero")+`
+  <section class="hero">
+    <canvas class="net" id="hero-net" aria-hidden="true"></canvas>
+    <h1>从一个真实问题开始，<br>学会数学建模。</h1>
+    <p class="sub">免费 · 无需注册 · 进度只保存在你的浏览器 ${A(1)}</p>
+    <div class="doors">
+      <div class="door primary">${A(2)}<div class="k">我是新手</div><h2>从一个真实小问题开始</h2>
+        <div class="path">5 分钟认识建模 → 帮加工坊排一周生产 → 学会线性规划</div>
+        <button class="go" data-go="lesson">开始第一课 →</button></div>
+      <div class="door" style="position:relative">${A(3)}<div class="k">我有基础</div><h2>按方法或赛题查找</h2>
+        <label class="search"><span aria-hidden="true">⌕</span><input id="home-q" value="${esc(S.home.q)}" placeholder="搜索方法、题型或赛题，例如“优化”" aria-label="搜索方法、题型或赛题"></label>
+        <div class="fam"><span>优化</span><span>预测</span><span>评价</span><span>统计</span><span>赛题</span></div>
+        <div class="small" style="margin-top:8px;color:#9fc3bb">已开放 1 篇精讲 · 8 种方法速查</div>${res}</div>
+    </div>
+  </section>
+  ${S.home.returning?`<div class="cont">${A(4)}<b>继续学习</b>
+    <span>线性规划 · 第 4 节 完整求出最优解 <span class="muted small">· 2 天前</span></span><button class="btn sec" data-go="lesson">继续阅读</button>
+    <span class="muted">|</span><span>练习 2 有未提交草稿</span><button class="btn ghost" data-go="practice" data-restore="1">回到练习</button></div>`:""}
+  <section class="route">${A(5)}<h2 style="display:inline">一条路线，三种练法</h2>
+    <div class="track" style="margin-top:18px">
+      ${[["认识建模","5 分钟导论",1],["线性规划","精讲 · 刷题 · 实战",1],["回归预测","筹备中",0],["评价决策","筹备中",0],["综合项目","筹备中",0]].map(([t,s,on])=>`<div class="node ${on?"":"off"}" ${on?"":'aria-disabled="true" title="预计内容，尚未开放"'}><div class="c"></div><b>${t}</b><span class="small muted">${s}</span></div>`).join("")}
+    </div>
+    <p class="small muted" style="margin-top:16px">精讲＝读懂　刷题＝检验　实战＝完整走一次七关</p>
+  </section>
+  <div class="links">${A(6)}也可以直接去：<a data-go="quest">七关实战</a> · <a data-go="library">资料中心</a> · <a data-go="library">提示词库</a></div>
+  <footer class="foot">关于与合规 · 反馈 · 赛事日历 · GitHub　　© 模桥 ModelingBridge</footer>`;
+}
+
+/* ======================= 精讲 ======================= */
+function lesson(){
+  const L=S.lesson, t=S.ticket;
+  const ret=t?`<div class="retbar" role="region" aria-label="回程">${A(1)}<a data-act="return">← 回到 ${esc(t.label)}</a><span class="muted">你的作答、尝试次数和提示进度都已保存</span><span class="sp"></span><button class="icon-btn" data-act="drop-ticket" aria-label="不再显示回程条">×</button></div>`:"";
+  const toc=["一周的资源，应该怎样分配？","把生产计划翻译成数学","看见所有允许的计划","不用软件，完整求出最优解","让 Python 重现你的推导","再多一小时，究竟值多少钱？","必须整块生产时，答案会变吗？","算对了，还要问模型是否可信","合上推导，检查自己是否理解","把这套思路带到新的问题"];
+  const cp=L.cp;
+  const cpBlock=`<div class="cp">${A(5)}<div class="k">试一试 · 检查点</div>
+    <div style="margin:4px 0 6px">如果 A 做 40 m²、B 做 20 m²，装配会剩下多少小时？</div>
+    ${[["0","0 小时"],["20","20 小时"],["40","40 小时"]].map(([v,l])=>`<label class="opt ${L.cpSel===v?"sel":""}"><input type="radio" name="cp" data-act="cp-sel" data-v="${v}" ${L.cpSel===v?"checked":""}> ${l}</label>`).join("")}
+    <div class="row" style="margin-top:6px"><button class="btn sec" data-act="cp-check">核对</button><a class="small" data-act="noop">跳过 ↓</a><span class="small muted">不计成绩</span></div>
+    ${cp==="ok"?`<div class="fb ok"><div class="t">✓ 对了</div>1×40 + 2×20 = 80，装配恰好用完，剩 0 小时。</div>`:""}
+    ${cp==="bad"?`<div class="fb bad"><div class="t">✕ 再想想</div>装配用量 = 1·x + 2·y。代入 x=40, y=20 后与 80 比较。<div class="row" style="margin-top:6px"><a data-act="cp-retry">再试一次</a><a data-act="cp-confused">我没理解</a></div>
+      ${L.cpConfused?`<div class="nudge">${A(6)}<a data-act="hl">查看相关讲解（本节第 2 段）</a><button class="btn ai" data-act="ai-open">✦ 向 AI 提问</button><span class="small muted">两个都是你点了才发生</span></div>`:""}</div>`:""}
+  </div>`;
+  const article=`<article class="article">
+    ${!t?`<div class="cover">${A(2)}<div class="kicker">专题封面 · 线性规划</div><b>有限资源，怎样分配才更好？</b><div class="small muted">约 45–60 分钟 · 零基础可读 · 先修：一次方程（可跳过）</div>
+      <div class="row" style="margin-top:8px"><a class="btn" style="color:var(--brand-ink)">继续第 4 节</a><a data-go="practice">专项练习 6 题</a><a data-go="quest">竞赛应用 → 七关实战</a><span class="small muted">进阶拓展（筹备中）</span></div></div>`:""}
+    <div class="kicker">02 / 先说清变量、单位和假设，再写式子</div><h2>把生产计划翻译成数学</h2>
+    <p>${lines([96,90,72]).replace(/<span/g,'<span').slice(0)}</p>
+    <div class="para ${L.hl||t?"hl":""}" id="p-constraint">${A(3)}
+      ${L.sel?`<span class="selpop" data-act="ai-open-sel">✦ 解释所选</span>`:""}
+      切割方面，A 共用 2x 小时，B 共用 y 小时，合计不能超过 100 小时。同理，装配消耗 x+2y 小时，不能超过 80 小时。没有要求所有资源必须用完，所以要写<b>小于等于</b>，不能把资源上限误写成必须完成的任务。<span class="small muted">（现有教材第 2 节原文）</span>
+    </div>
+    <div class="formula">x + 2y ≤ 80 <span class="muted small">（装配）</span>　2x + y ≤ 100 <span class="muted small">（切割）</span><button class="icon-btn ask" data-act="ai-open-sel">${A(4)}✦ 解释此公式</button></div>
+    <p>${lines([94,88,60])}</p>
+    ${cpBlock}
+    <p>${lines([92,80])}</p>
+    <div class="row small"><a>← 上一节</a><span class="sp"></span><a>下一节：看见所有允许的计划 →</a></div>
+  </article>`;
+  const tocCol=isM()?"":(L.toc?`<nav class="toc" aria-label="本章目录"><div class="kicker">本章目录</div>${toc.map((x,i)=>`<a class="${i===1?"cur":""}">${String(i+1).padStart(2,"0")} ${x}</a>`).join("")}<p><a class="small" data-act="toc">◀ 收起</a></p></nav>`:`<nav class="toc"><a data-act="toc" title="展开目录">▶</a></nav>`);
+  const right=isM()?"":(S.ai.open?drawer():`<aside class="margin">${A(7)}<div class="kicker">符号表</div><dl><dt>x</dt><dd>A 产量，m²</dd><dt>y</dt><dd>B 产量，m²</dd><dt>z</dt><dd>贡献利润，元</dd></dl><hr class="s"><div class="kicker">本节关联</div><a class="small">· 线性的含义</a><br><a class="small">· 非负约束</a></aside>`);
+  return header()+ret+(isM()?`<div class="mtoc"><span>本章目录 2/10 ▾</span><span class="muted">符号表 ▾</span></div>`:"")+
+    `<div class="reader ${L.toc?"":"notoc"} ${S.ai.open&&!isM()?"withai":""}">${tocCol}${article}${right}</div>`+(isM()&&S.ai.open?drawer():"");
+}
+
+/* ======================= 刷题 ======================= */
+function practice(){
+  const P=S.practice;
+  const navItems=[["✓","自测 1"],["◐","练习 2",1],["○","练习 3"],["✕","自测 3"],["○","练习 1"],["✓","自测 2"]];
+  const qnav=`<nav class="qnav" aria-label="题目导航">${A(1)}<div class="kicker">线性规划 · 6 题</div>${navItems.map(([s,l,c])=>`<a class="${c?"cur":""}"><span class="st" aria-hidden="true">${s}</span>${l}${c&&P.answer&&!P.result?' <span class="small muted">草稿</span>':""}</a>`).join("")}
+    <hr class="s"><div class="small"><a>全部</a> | <a>只看错题</a></div><div class="small muted">难度：全部 ▾</div>
+    <p class="small muted">✓ 正确 ◐ 有草稿 ✕ 待重练 ○ 未做</p></nav>`;
+  let fb="";
+  const r=P.result;
+  if(r==="invalid") fb=`<div class="fb" role="status"><div class="t">请先选择一个答案</div></div>`;
+  if(r==="ok") fb=`<div class="fb ok" role="status"><div class="t">✓ 回答正确${P.sawSolution?' <span class="badge">看过解析后答对</span>':""}</div>${esc(EX.help[2])}<div class="row" style="margin-top:8px"><span class="small muted">用到的知识点：资源约束 · 不等号含义</span><span class="sp"></span><a>下一题 →</a></div></div>`;
+  if(r==="bad"){
+    const e=P.unknown?null:EX.errors[P.answer];
+    fb=`<div class="fb bad" role="status">${A(4)}<div class="t">✕ 还不对${e?` · 错误类型：${e.tag}`:""}</div>
+      ${e?esc(e.msg):"答案与参考不一致。我们无法确定具体原因——可以打开帮助，或回看相关知识点。"}
+      <div class="row" style="margin-top:8px"><button class="btn sec" data-act="retry">再试一次</button><a data-act="goto-kp">${A(5)}回看：${EX.kp} ${EX.anchor} →</a><span class="small muted">不会显示标准答案</span></div>
+      ${P.attempts>=2&&!P.nudgeOff?`<div class="nudge">${A(6)}<span>卡住了？可以回看知识点，或打开帮助。</span><a data-act="goto-kp">回看知识点</a><a data-act="help" data-v="1">打开帮助</a><a class="muted" data-act="nudge-off">不再提示</a></div>`:""}
+    </div>`;
+  }
+  const lad=P.help?`<div class="ladder">${A(7)}<div class="tabs" role="tablist">${["1 启发","2 线索","3 完整解析"].map((l,i)=>`<button role="tab" aria-pressed="${P.help===i+1}" data-act="help" data-v="${i+1}">${l}${i===2&&P.attempts>=2?' <span class="badge preset">推荐</span>':""}</button>`).join("")}</div>
+      <div class="body"><span class="badge preset">课程预置 · 已核验</span><div style="margin-top:6px">${esc(EX.help[P.help-1])}</div>
+      ${P.help===3?`<div class="small" style="margin-top:6px"><a data-act="goto-kp">相关段落：${EX.kp} ${EX.anchor} →</a></div>`:""}</div>
+      <div class="ai-row">还没懂？<button class="btn ai" data-act="ai-open-level">✦ 请 AI 助教在「${["启发","线索","完整讲解"][P.help-1]}」级别帮我</button><span class="muted">只预填，不会自动发送</span></div></div>`:"";
+  const q=`<div class="qcard">
+    ${P.restored?`<div class="banner" role="status">${A(2)}已恢复你的作答（尝试 ${P.attempts} 次 · 提示到第 ${P.help||0} 级）<span class="sp"></span><a data-act="clear">清空重做</a></div>`:""}
+    <div class="kicker">基础 · 约束建模 · 单选 · ${EX.id} <span class="badge warn">拟新增题 · 上线前需核验</span></div>
+    <h2>${esc(EX.prompt)}</h2>
+    <fieldset style="border:0;padding:0;margin:0"><legend class="small muted">选择一项（自动保存草稿）</legend>
+    ${EX.opts.map(([v,l])=>`<label class="opt ${P.answer===v?"sel":""}"><input type="radio" name="ex" data-act="ans" data-v="${v}" ${P.answer===v?"checked":""}> ${l}</label>`).join("")}</fieldset>
+    ${isM()?"":`<div class="row" style="margin-top:12px">${A(3)}<button class="btn" data-act="submit">提交答案</button><button class="btn ghost" data-act="help" data-v="${P.help?0:1}">帮助 ${P.help?"▴":"▾"}</button><span class="small muted">尝试 ${P.attempts} 次</span></div>`}
+    ${fb}${lad}
+    <div class="row small" style="margin-top:16px"><a>← 上一题</a><span class="sp"></span><a>下一题 →</a></div>
+    <p class="small muted">题目来源：模桥原创 · 已核验（确定性判分，不使用 AI）</p></div>`;
+  const body=isM()?`<div class="mtoc"><span>练习 2/6 ▾</span><span class="muted">只看错题</span></div><div class="practice">${q}</div>`
+    :`<div class="practice ${S.ai.open?"withai":""}">${qnav}${q}${S.ai.open?drawer():""}</div>`;
+  const bar=isM()?`${S.ai.open?drawer():""}<div class="actbar">${A(3)}<button class="btn ghost" data-act="help" data-v="${P.help?0:1}">帮助</button><button class="btn" data-act="submit">提交答案</button></div>`:"";
+  return header()+body+bar;
+}
+
+/* ======================= 七关 ======================= */
+function promptDetail(compact){
+  const L=S.library, v=L.vars;
+  const fill={"比赛名称":v.contest,"题目内容":v.problem,"我已有的思路":v.idea};
+  const prev=esc(PROMPT.text).replace(/\{(.+?)\}/g,(m,k)=>fill[k]?`<span class="filled">${esc(fill[k])}</span>`:`<span class="ph">{${k}}</span>`);
+  const res=L.copy==="ok"?`<div class="copyres ok" role="status">✓ 已复制完整提示词</div>`:L.copy==="warn"?`<div class="copyres warn" role="status">已复制。仍有 ${PROMPT.vars.filter(([k])=>!v[k].trim()).length} 个占位符未填写：${PROMPT.vars.filter(([k])=>!v[k].trim()).map(x=>"{"+x[1]+"}").join("、")}</div>`:L.copy==="bad"?`<div class="copyres bad" role="status">复制失败（浏览器拒绝访问剪贴板）。已在下方展开全文并全选，请按 Ctrl+C。<textarea style="width:100%;min-height:60px;margin-top:6px" readonly>${esc(PROMPT.text)}</textarea></div>`:"";
+  return `<div class="detail">
+    <div class="row"><b style="font-size:15px">${PROMPT.title}</b><span class="badge">演示模板</span><span class="badge">原创</span>${compact?`<span class="sp"></span><button class="icon-btn" data-act="side-close" aria-label="关闭">×</button>`:""}</div>
+    <div class="small muted" style="margin:4px 0 8px">用途：${PROMPT.task} · 适用阶段：第 1–2 关 · 比赛：${PROMPT.contest}<br>来源：模桥原创 · v0.1 · 2026-10 · 授权：原创（待定许可）</div>
+    <div class="small" style="border-left:3px solid var(--warn);padding-left:8px;margin-bottom:8px">比赛提醒：是否允许使用 AI、如何披露，以当届官方规则为准。本模板不用于捏造数据、结果或引用。</div>
+    ${PROMPT.vars.map(([k,l])=>`<label class="small">{${l}}${S.page==="quest"&&k!=="idea"&&L.fromQuest?' <span class="badge">已从当前训练题预填，可修改</span>':""}<input data-var="${k}" value="${esc(v[k])}"></label>`).join("")}
+    <div class="preview" aria-label="提示词预览">${prev}</div>
+    <div class="row"><button class="btn" data-act="copy">复制完整提示词</button><button class="btn ghost small" data-act="copy-fail">模拟：复制失败</button>${compact?`<a class="small" data-go="library">在资料中心打开 ↗</a>`:""}</div>${res}
+    <p class="small muted">复制只把文字放进你的剪贴板，不会调用任何 AI。</p></div>`;
+}
+function quest(){
+  const Q=S.quest;
+  const stages=["读题","拆解","数据","模型","代码","图表","论文"];
+  const stageTitles=["读题破冰","拆解任务","数据清单","模型选择","代码实践","图表表达","论文框架"];
+  const sv=Q.stageView, preview=sv>2;
+  const side=Q.side==="prompt"?promptDetail(true):Q.side==="ai"?drawer():null;
+  const tools=`<aside class="tools">${A(4)}<div class="kicker">本关工具</div>
+    <h4>常见错误（3）▾</h4>
+    <h4>相关提示词</h4>
+    <div class="prow"><span>赛题拆解 · 基础版</span><button class="btn ghost small" data-act="side-prompt">预览</button></div>
+    <div class="prow"><span>小问输入输出表</span><button class="btn ghost small" data-act="side-prompt">预览</button></div>
+    <hr class="s">${A(5)}<button class="btn ai" data-act="side-ai" style="width:100%">✦ 问 AI 助教</button>
+    <div class="small muted" style="margin-top:4px">会发送：本关任务（公开）；你的作答需勾选后才发送</div>
+    <hr class="s"><a class="small">回看方法：线性规划 §2 →</a></aside>`;
+  const main=preview?`<main><div class="banner" role="status">${A(2)}预览第 ${sv} 关：可以阅读任务、通关条件并先写草稿；<b>确认完成需先完成第 2 关</b>。<span class="sp"></span><a data-act="stage" data-v="2">回到当前关卡</a></div>
+    <div class="kicker">第 ${sv} 关 · ${stageTitles[sv-1]} · 预览</div><h2 style="margin:4px 0">${stageTitles[sv-1]}</h2>${lines([90,70])}
+    <div class="editor" contenteditable="true" aria-label="本关草稿">（可先写草稿，自动保存）</div>
+    <div style="margin-top:12px"><b class="small">通关条件（自检）</b>${lines([60,55,50])}</div>
+    <div class="row" style="margin-top:10px"><button class="btn" disabled aria-describedby="why">确认完成本关</button><span id="why" class="small muted">需先完成第 2 关「拆解任务」</span></div></main>`
+   :`<main><div class="kicker">第 2 关 · 拆解任务 · 产出：任务拆解表</div><h2 style="margin:4px 0">把大问题拆成 2–4 个小任务</h2>
+    <p class="small muted">目标：每个小任务写清输入、输出与判断指标。</p>
+    <div class="editor" contenteditable="true" aria-label="本关作答">小问 1：预测各产品需求… <span class="muted">（自动保存）</span></div>
+    <div style="margin-top:12px">${A(3)}<b class="small">通关条件（自检）</b>
+      <label class="opt"><input type="checkbox" checked> 至少拆出 2 个小任务</label>
+      <label class="opt"><input type="checkbox"> 每个小任务有输入和输出</label>
+      <label class="opt"><input type="checkbox"> 能说明任务之间的先后关系</label></div>
+    <div class="row" style="margin-top:10px"><button class="btn" disabled>确认完成本关 →</button><span class="small muted">还差 2 个条件</span></div></main>`;
+  const problem=`<aside><div class="kicker">题面 ▾</div>${lines([95,90,85,70,92,60])}<p class="small muted">资源分配训练题 · 教学改编</p><hr class="s"><a class="small muted">AI 工作台（实验，需要后端）</a></aside>`;
+  const stepper=`<div class="stepper" role="tablist" aria-label="七关">${A(1)}${stages.map((s,i)=>`<span role="tab" tabindex="0" style="cursor:pointer" aria-selected="${sv===i+1}" data-act="stage" data-v="${i+1}" class="${i===0?"done":sv===i+1?"cur":"soft"}">${i===0?"✓":i+1} ${s}${i>1?" · 预览":""}</span>`).join("")}<span class="sp"></span><span style="border:0" class="small muted">已定 Q4：可预览后续关卡，按顺序确认完成</span></div>`;
+  if(isM()) return header()+`<div class="stepper"><b data-act="stage" data-v="${sv===2?3:2}" style="cursor:pointer">第 ${sv}/7 关 ${stageTitles[sv-1]}${preview?"（预览）":""} ▾</b></div><div class="libtabs"><a>任务</a><a class="cur">作答</a><a>工具</a></div><div class="quest">${main}<hr class="s">${tools}</div>${side?(Q.side==="prompt"?`<div class="scrim"><div class="dialog" style="max-height:90%;overflow:auto">${side}</div></div>`:side):""}`;
+  return header()+stepper+`<div class="quest ${side?"withside":""}">${problem}${main}${side||tools}</div>`;
+}
+
+/* ======================= 资料 ======================= */
+function libTabs(){const L=S.library;return `<div class="libtabs" role="tablist">${A(1)}${[["index","资料索引"],["prompts","提示词库"],["tools","模板与工具"],["calendar","赛事日历"]].map(([k,l])=>`<a role="tab" aria-selected="${L.tab===k}" class="${L.tab===k?"cur":""}" data-act="libtab" data-v="${k}">${l}</a>`).join("")}</div>`;}
+function libIndex(){
+  const rows=[["2024 CUMCM C 题 · 农作物种植策略","赛题","官方公开链接","official"],["近三年真题拆解 · 交通警务平台（简化）","教学改编","原创","original"],["MCM 2024 优秀论文合集","优秀论文","仅索引 · 待授权","index"],["经典母题 · 葡萄酒评价","教学改编","原创","original"],["经典母题 · 软着陆轨迹设计（无教学案例）","教学改编","原创","original2"]];
+  return header()+libTabs()+`<div class="lib" style="grid-template-columns:170px minmax(0,1fr)"><nav class="filters"><div class="kicker">类型</div><a class="cur">全部</a><a>赛题</a><a>优秀论文</a><a>教学改编</a><div class="kicker" style="margin-top:10px">授权</div><a>原创</a><a>官方公开链接</a><a>仅索引</a></nav>
+  <section><div class="row"><label class="search" style="background:var(--surface);border-color:var(--border);flex:1"><span>⌕</span><input placeholder="年份、比赛、题号…" style="color:var(--text)"></label><span class="small">比赛 ▾ 年份 ▾</span></div>
+  ${rows.map(([t,k,lic,c])=>`<div class="pitem"><div class="row"><b>${t}</b><span class="badge">${k}</span><span class="badge ${c==="index"?"warn":"ok"}">${lic}</span><span class="sp"></span>
+    ${c==="official"?`<a class="small">官方来源 ↗</a>`:c==="index"?`<span class="small muted">不提供下载 · 来源核实后显示官方链接</span>`:c==="original"?`<a class="small" data-go="quest">去实战训练</a> <a class="small">查看拆解</a>`:`<a class="small muted">AI 工作台（实验，需要后端）</a>`}</div></div>`).join("")}
+  <p class="small muted">${A(2)}已定 Q6：未核实授权的第三方合集只显示经审核的索引与合法来源链接，不提供直接下载。旧「经典题改编练习 → 带入工作台」入口保留为“实验”链接。</p></section></div>`;
+}
+function libTools(){return header()+libTabs()+`<div class="rec"><h1>模板与工具</h1><p class="small muted">原「工具箱」全部内容迁入此处（编码技巧、论文写作技巧、交稿前四张检查卡），不删内容。</p><div class="dc"><div><b>编码技巧</b>${lines([80,70,60])}</div><div><b>论文写作技巧</b>${lines([80,66,72])}</div></div><section><b>交稿前四张检查卡</b><div class="row small">数据清洗 · 模型检验 · 图表表达 · 合规记录</div></section></div>`;}
+function libCal(){return header()+libTabs()+`<div class="rec"><h1>赛事日历</h1><p class="small muted">原「赛事日历」页面原样迁入：赛事分类筛选、加入规划、官方来源链接、备赛画像、生成备赛计划（后端不可用时使用现有本地生成）。</p>${lines([90,80,85,60])}</div>`;}
+function library(){
+  const L=S.library;
+  if(L.tab==="index") return libIndex();
+  if(L.tab==="tools") return libTools();
+  if(L.tab==="calendar") return libCal();
+  const tasks=["全部","读题拆解","假设与变量","方法选择","数据预处理","代码调试","图表","摘要与论文","论文自检","AI 使用说明"];
+  const list=PROMPTS.filter(p=>L.filter==="全部"||p[2]===L.filter);
+  return header()+libTabs()+`
+  <div class="lib"><nav class="filters">${A(2)}<div class="kicker">用途</div>${tasks.map(t=>`<a class="${L.filter===t?"cur":""}" data-act="filter" data-v="${t}">${t}</a>`).join("")}</nav>
+  <section><div class="row"><label class="search" style="background:var(--surface);border-color:var(--border);flex:1"><span>⌕</span><input placeholder="搜索提示词…" style="color:var(--text)"></label><span class="small">比赛：全部 ▾</span></div>
+    ${list.length?list.map(p=>`<div class="pitem ${L.open===p[0]?"cur":""}" data-act="open-prompt" data-v="${p[0]}"><div class="row"><b>${p[1]}</b><span class="badge">${p[2]}</span><span class="badge">${p[3]}</span><span class="badge">演示模板</span></div><div class="small muted">${p[0]===PROMPT.id?"把题目拆成小问并列出输入输出，不直接给出模型。":"（示意条目）"}</div></div>`).join(""):`<div class="empty" style="margin-top:14px">这个用途下还没有模板。<br><a data-act="filter" data-v="全部">查看全部</a></div>`}
+    <p class="small muted" style="margin-top:12px">${A(3)}资料索引中的第三方合集显示为「仅索引 · 待授权」，不提供下载。</p></section>
+  ${promptDetail(false)}</div>`;
+}
+
+/* ======================= 记录 ======================= */
+function records(){
+  const R=S.records, persist=S.ai.persist==="device";
+  const dlg=R.dialog==="off"?`<div class="scrim"><div class="dialog" role="dialog" aria-modal="true"><h3>停止把 AI 对话保存到此设备？</h3><p>此设备上已保存 <b>4 段</b>对话。</p>
+      <div class="row"><button class="btn ghost" data-act="dlg-keep">仅停止以后保存，保留这 4 段</button><button class="btn" style="background:var(--bad);border-color:var(--bad);color:#fff" data-act="dlg-del">同时删除这 4 段</button></div><p class="small muted">任何选择都不会影响你的学习进度和草稿。</p><a data-act="dlg-close">取消</a></div></div>`
+    :R.dialog==="clear-learning"?`<div class="scrim"><div class="dialog" role="dialog" aria-modal="true"><h3>清空学习数据？</h3><p>将从此浏览器删除：</p><ul class="small"><li>阅读位置 1 条</li><li>练习记录 6 条、草稿 1 条</li><li>实战报告 2 份、七关草稿 1 份</li></ul><p class="small"><b>不受影响：</b>AI 对话、主题与提示偏好。</p><p class="small muted">建议先导出 JSON。清空后无法恢复。</p>
+      <div class="row"><span class="sp"></span><button class="btn ghost" data-act="dlg-close">取消</button><button class="btn ghost" data-act="dlg-close">先导出</button><button class="btn" style="background:var(--bad);border-color:var(--bad);color:#fff" data-act="dlg-close">清空学习数据</button></div></div></div>`
+    :R.dialog==="on"?`<div class="scrim"><div class="dialog" role="dialog" aria-modal="true"><h3>把 AI 对话保存到此设备</h3><p class="small">开启后，按题目/知识点分开的对话会在这个浏览器中长期保留，下次访问可恢复。</p><ul class="small"><li>只保存在本机，<b>不会上传到模桥服务器</b>；不会跨设备同步。</li><li>共用电脑的其他人可能看到这些对话。</li><li>本地清空不会删除已发送给 AI 服务商的内容。</li></ul><div class="row"><span class="sp"></span><button class="btn ghost" data-act="dlg-close">取消</button><button class="btn" data-act="dlg-on">开启保存</button></div></div></div>`:"";
+  if(R.empty) return header()+`<div class="rec"><h1>学习记录</h1><p class="muted small">数据只保存在此浏览器</p><div class="empty">${A(1)}还没有学习记录。<br>读一节精讲或做一道题后，这里会出现你的进度。<br><br><button class="btn" data-go="lesson">从线性规划开始</button></div></div>`;
+  return header()+`<div class="rec"><h1>学习记录</h1><p class="muted small">数据只保存在此浏览器 ⓘ　不需要账号</p>
+    ${R.storageOff?`<div class="warnbar" role="alert">${A(6)}此浏览器当前不允许本地保存（可能是无痕模式或站点数据被禁用）。本次学习在关闭页面后会丢失，可先导出。</div>`:""}
+    <div class="cont" style="padding:12px 0;border:0;background:transparent">${A(1)}<b>继续</b><span>线性规划 · 第 4 节</span><button class="btn sec" data-go="lesson">继续阅读</button><span>练习 2 草稿未提交</span><button class="btn ghost" data-go="practice" data-restore="1">回到练习</button></div>
+    <section><h2>课程进度</h2>线性规划　读到 4/10 节 · 检查点尝试过 3/5 <span class="small muted">（检查点不计成绩）</span></section>
+    <section>${A(2)}<h2>练习</h2><div>6 题：✓ 3　✕ 1 待重练　◐ 1 草稿　○ 1 <a class="small">只看错题</a></div>
+      <div class="prow"><span>自测 3 · 错 2 次 · 用到「线索」级</span><span><a data-act="goto-kp">回看：灵敏度 §6</a>　<a>重练</a></span></div>
+      <div class="prow"><span>练习 1 · 看过解析后答对</span><span><a>再做一次</a></span></div></section>
+    <section><h2>实战报告</h2><div class="prow"><span>资源分配训练题 · 2/7 关 · 14:02</span><span><a data-go="quest">继续</a>　<a>导出 MD</a></span></div></section>
+    <section>${A(3)}<h2>数据与隐私</h2><div class="dc">
+      <div><b>学习数据</b> <span class="badge ok">自动保存在此设备</span><p class="small muted">进度 · 草稿 · 错题 · 实战报告 · 约 38 KB</p><div class="row"><button class="btn ghost">导出 JSON</button><button class="btn ghost" data-act="dlg" data-v="clear-learning" style="color:var(--bad)">清空学习数据…</button></div></div>
+      <div>${A(4)}<b>AI 对话</b> <span class="badge ${persist?"ok":""}">${persist?"已保存到此设备":"仅本次浏览"}</span>
+        <p class="small muted">默认关闭页面后消失。每道题、每个知识点分开保存。</p>
+        <label class="switch ${persist?"on":""}" data-act="persist" role="switch" aria-checked="${persist}"><i></i>保存到此设备（跨次访问恢复）</label>
+        <div class="row" style="margin-top:8px"><span class="small muted">4 段对话</span><button class="btn ghost">导出</button><button class="btn ghost" style="color:var(--bad)">清空 AI 对话…</button></div></div>
+    </div><p class="small muted">${A(5)}本地清空只删除此浏览器中的数据，不会删除已发送给 AI 服务商的内容。无痕模式、清除站点数据或更换浏览器都会丢失记录。</p></section>
+    <section><h2>偏好</h2><div class="row small"><span>主题：跟随系统 ▾</span><span>帮助建议提示：开</span></div></section>
+  </div>${dlg}`;
+}
+
+/* ======================= 全局浮层：手机菜单 / 搜索 ======================= */
+function menuOverlay(){
+  if(!S.menu) return "";
+  const items=[["home","首页"],["lesson","精讲"],["practice","刷题"],["quest","实战"],["library","资料"],["records","学习记录"]];
+  return `<div class="scrim" style="align-items:stretch;justify-content:flex-end"><nav class="dialog" style="border-radius:0;width:300px;height:100%" aria-label="移动导航">
+    <div class="row"><b>菜单</b><span class="sp"></span><button class="icon-btn" data-act="menu" aria-label="关闭菜单">×</button></div>
+    ${items.map(([p,l])=>`<a data-go="${p}" style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);color:var(--text);${S.page===p?"font-weight:700":""}">${l}${S.page===p?' <span class="small muted">当前</span>':" →"}</a>`).join("")}
+    <div class="row" style="margin-top:14px"><span class="small">主题</span><span class="sp"></span><button class="icon-btn" data-act="theme">${S.theme==="dark"?"深色":"浅色"} ◐</button></div>
+    <p class="small muted" style="margin-top:14px">关于与合规 · 反馈 · 赛事日历 · GitHub</p><p class="small muted">Esc 或点 × 关闭；跳转后自动关闭（沿用现有行为）。</p></nav></div>`;
+}
+function searchOverlay(){
+  if(!S.search) return "";
+  return `<div class="scrim" style="align-items:flex-start;padding-top:70px"><div class="dialog" role="dialog" aria-modal="true" aria-label="搜索" style="width:560px">
+    <label class="search" style="background:var(--bg);border-color:var(--border)"><span>⌕</span><input value="约束" aria-label="搜索内容" style="color:var(--text)"></label>
+    <div class="small muted" style="margin:8px 0 2px">精讲小节</div><div class="pitem" data-go="lesson">线性规划 · §2 把生产计划翻译成数学 <span class="badge ok">可学</span></div>
+    <div class="small muted" style="margin:8px 0 2px">练习</div><div class="pitem" data-go="practice">自测 1 · 切割工时约束 <span class="badge ok">可练</span></div>
+    <div class="small muted" style="margin:8px 0 2px">方法速查</div><div class="pitem" style="opacity:.5;cursor:not-allowed" aria-disabled="true">整数规划 <span class="badge">仅速查 · 精讲筹备中</span></div>
+    <div class="small muted" style="margin:8px 0 2px">提示词</div><div class="pitem" data-act="go-prompt">模型选择自检 <span class="badge">提示词库</span></div>
+    <p class="small muted">↑↓ 选择 · Enter 打开 · Esc 关闭。只搜站内本地索引，不联网、不记录搜索词。</p></div></div>`;
+}
+
+/* ======================= 注释 ======================= */
+const NOTES={
+ home:{t:"首页 · 品牌层",l:["承诺写在首屏：无需注册、本机保存（D-006/D-018）。","新手门为主按钮，直接进入导论→第一课，不经过中间介绍页。","进阶门是可输入的搜索框（试着输入任意文字），结果分组；筹备中内容不可点。","「继续学习」仅在本机有记录时出现（状态栏可切换「首访」），无空框。","一张路线图取代旧版四宫格、三张路径卡与七关横幅；筹备中节点灰显。","其余入口降为一行文字链接，不再是同权重卡片。"],s:"首页从 9 个区块减到 3 个；唯一的氛围动效是首屏网络（手机与减少动态时静态）。"},
+ lesson:{t:"模型精讲 · 专注层",l:["回程条：从练习「回看知识点」进入时出现，刷新仍在；点击回到原题并恢复。×只丢弃回程条，不影响草稿。","专题封面（无回程票时可见）：继续阅读 / 练习 / 实战 / 进阶，替代独立专题页。","从错题跳入时，目标段落描边高亮（减少动态时为静态描边）。","公式块常驻「解释此公式」；选中文字出现「解释所选」浮钮（状态栏可模拟）。只打开助教并预填，不发送。","检查点：左竖线而非卡片；按钮叫「核对」；即时反馈；可跳过；不计成绩。","检查点答错后点「我没理解」：出现「查看相关讲解」与「向 AI 提问」两个平级操作（D-015）。","宽屏右侧为符号表/本节关联；打开助教时被抽屉替换（推开正文，不遮挡）。"],s:"正文不做卡片；只有交互图、检查点、代码实验有容器。"},
+ practice:{t:"专项刷题 · 专注层",l:["题目导航用状态符号 + 文字，不只靠颜色；手机收为「练习 2/6 ▾」。","恢复草稿横幅：回程或刷新后出现，显示尝试次数与提示级别。","提交 / 帮助；手机固定在底部操作栏，AI 抽屉停在操作栏之上。","首次答错：显示错误类型与反例，不显示标准答案。状态栏可切换「错因未知」看不猜测的文案。","「回看知识点」带回程票跳到精讲对应段落。试试：选 A 提交 → 点回看 → 点回程条。","同题第 2 次错误：出现一次可关闭的轻提示；「不再提示」全站生效。","帮助梯子：三级可跳级；每级先给课程预置（已核验）内容，底部按钮才把该级带入 AI 助教——这就是「一把梯子两种来源」。"],s:"判分全部确定性（errorPatterns 映射）；AI 不参与判分。"},
+ quest:{t:"七关实战 · 工作流层",l:["关卡条：已完成 / 当前 / 后续；与精讲阅读器结构明显不同。","已定 Q4：点关卡条上的后续关卡进入「预览」，可读任务、写草稿；「确认完成」按钮禁用并说明需先完成哪一关。","通关条件自检；未满足时按钮禁用并说明还差几项。","相关提示词：在当前页侧板打开与资料中心同一个详情组件，可填变量、复制，关闭后回到关卡。","「问 AI 助教」是另一颗按钮，紫色并注明会发送什么；复制从不触发 AI。"],s:"题面不再经 URL 传给其他页面；AI 工作台降为底部实验链接。"},
+ library:{t:"资料中心（4 个子栏）",l:["一级导航仍是「资料」；子栏：资料索引 / 提示词库 / 模板与工具（原工具箱）/ 赛事日历（原日历）。都可点击切换。","提示词库按用途筛选为主，比赛为次级下拉；空结果有说明与回退（试点「数据预处理」）。","资料索引条目带授权状态；已定 Q6：「仅索引」不提供下载，只显示经审核的合法来源链接。"],s:"试着填写变量：预览中未填占位符高亮；复制有成功 / 含未填占位符 / 失败三种反馈。"},
+ records:{t:"学习记录 · 控制层",l:["继续学习：最近活动 + 未提交草稿。空状态可在状态栏切换。","练习区分：错了几次、用到第几级帮助、看过解析后答对。","学习数据与 AI 对话分开显示、分开导出、分开清空。","AI 保存开关：开启前说明影响；关闭时询问是否删除已有对话（D-018 验收 3）。","明确本地清空与服务商日志不是一回事。","浏览器不允许存储时的降级提示（状态栏可切换）。"],s:"清空对话框写明范围与条数，并提示先导出。"}
+};
+
+/* ======================= 状态栏 ======================= */
+function statebar(){
+  const c=(label,on,act,v="")=>`<button class="chip ${on?"on":""}" data-act="${act}" data-v="${v}">${label}</button>`;
+  const P=S.practice;
+  let h=`<span class="lbl">交互状态：</span>`;
+  if(S.page==="home") h+=c("▶ 打开 / 刷新首页（播放开屏）",SPL.running,"sp-play")+c("站内导航回首页",false,"sp-nav")+c("直接打开深链接",false,"sp-deep")+c("减少动态效果",SPL.reducedSim,"sp-reduced")+c("慢放 ×4",SPL.slow===4,"sp-slow")+c("应用加载慢",SPL.lagApp,"sp-lag")+c("逐帧查看",!!SPL.scrub,"sp-scrub")+(SPL.scrub?`<input type="range" id="sp-scrub" aria-label="开屏时间轴" min="0" max="${SPL.total-1}" value="${SPL.scrubAt||1000}" style="width:260px;margin-left:6px"><span class="lbl" id="sp-scrub-v">${SPL.scrubAt||1000} ms</span>`:"")+`<span class="lbl" id="sp-msg" style="margin-left:6px;color:#f0c674">${esc(SPL.msg)}</span>`+`<span class="lbl" style="margin-left:12px">首页：</span>`+c("回访用户（有记录）",S.home.returning,"sb-returning")+c("模拟搜索“优化”",!!S.home.q,"sb-search");
+  if(S.page==="lesson") h+=c("带回程票（从练习 2 跳入）",!!S.ticket,"sb-ticket")+c("模拟选中文字",S.lesson.sel,"sb-sel")+c("目录展开",S.lesson.toc,"toc")+c("AI 助教打开",S.ai.open,"sb-ai");
+  if(S.page==="practice") h+=c("未作答",!P.answer&&!P.result,"sb-p","fresh")+c("答错 1 次",P.result==="bad"&&P.attempts===1,"sb-p","bad1")+c("答错 2 次 + 轻提示",P.result==="bad"&&P.attempts>=2,"sb-p","bad2")+c("错因未知",P.unknown,"sb-unknown")+c("恢复草稿",P.restored,"sb-p","restore")+c("正确",P.result==="ok","sb-p","ok")+c("帮助梯子",!!P.help,"sb-help")+c("AI 助教打开",S.ai.open,"sb-ai")+c("跨章节摘要",!!S.ai.picker||!!S.ai.summary,"sb-pick");
+  if(S.page==="quest") h+=c("相关提示词侧板",S.quest.side==="prompt","sb-qs","prompt")+c("AI 助教",S.quest.side==="ai","sb-qs","ai")+c("预览第 4 关（Q4）",S.quest.stageView===4,"stage",S.quest.stageView===4?"2":"4");
+  h+=`<span class="lbl" style="margin-left:12px">全局：</span>`+c("手机菜单",S.menu,"menu")+c("搜索 ⌘K",S.search,"search");
+  if(S.page==="library") h+=c("变量已填写",!!S.library.vars.contest,"sb-fill")+c("复制：含占位符",S.library.copy==="warn","sb-copy","warn")+c("复制：失败",S.library.copy==="bad","sb-copy","bad");
+  if(S.page==="records") h+=c("空状态",S.records.empty,"sb-empty")+c("存储不可用",S.records.storageOff,"sb-storage")+c("AI 已保存到此设备",S.ai.persist==="device","sb-persist");
+  $("#statebar").innerHTML=h;
+}
+
+/* ======================= 渲染 ======================= */
+function render(){
+  $("#pages").innerHTML=PAGES.map(([k,l])=>`<button aria-pressed="${S.page===k}" data-page="${k}">${l}</button>`).join("");
+  $("#device").innerHTML=[["d","桌面"],["m","手机"]].map(([k,l])=>`<button aria-pressed="${S.device===k}" data-dev="${k}">${l}</button>`).join("");
+  $("#theme").innerHTML=[["light","浅"],["dark","深"]].map(([k,l])=>`<button aria-pressed="${S.theme===k}" data-th="${k}">${l}</button>`).join("");
+  const f=$("#frame");
+  f.className="frame "+S.device; f.dataset.theme=S.theme; $("#framewrap").className="framewrap "+S.device;
+  f.classList.toggle("showclick",S.showClick);
+  f.innerHTML=({home,lesson,practice,quest,library,records})[S.page]()+pickerDialog()+menuOverlay()+searchOverlay();
+  $("#clicktoggle").setAttribute("aria-pressed",S.showClick);
+  const n=NOTES[S.page];
+  $("#notes").innerHTML=`<h3>${n.t}</h3><p class="small" style="color:#555">${n.s}</p><ol>${n.l.map(x=>`<li>${x}</li>`).join("")}</ol>
+   ${S.page==="home"?`<hr><h3>开屏 D-019</h3><ol>${SPLASH_NOTES.map(x=>`<li>${x}</li>`).join("")}</ol>`:""}
+   <hr><p class="small" style="color:#666"><span class="tag">评审</span>黄色数字为注释编号；上方状态栏切换关键状态；页面内大部分按钮可点击。</p>`;
+  statebar();
+  if(S.page==="home") startHero(); else cancelAnimationFrame(HN.raf);
+}
+
+
+/* ======================= 首页数学网络（复用旧版 MathNetwork 算法） ======================= */
+// 与 frontend/src/components/motion/MathNetwork.tsx 相同：斐波那契球面节点、绕 Y 轴旋转、0.65 距离连线、30fps、DPR≤1.5
+function sphereNodes(n){return Array.from({length:n},(_,i)=>{const y=1-(i/(n-1))*2,r=Math.sqrt(1-y*y),a=i*Math.PI*(3-Math.sqrt(5));return{x:Math.cos(a)*r,y,z:Math.sin(a)*r};});}
+function projectNodes(nodes,phase,cx,cy,radius){return nodes.map(n=>{const x=n.x*Math.cos(phase)+n.z*Math.sin(phase),z=n.z*Math.cos(phase)-n.x*Math.sin(phase);return{x:cx+x*radius,y:cy+n.y*radius*.94+z*radius*.17,z};});}
+function linkPairs(nodes){const p=[];for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const d=Math.hypot(nodes[i].x-nodes[j].x,nodes[i].y-nodes[j].y,nodes[i].z-nodes[j].z);if(d<=.65)p.push([i,j,d]);}return p;}
+const HN={phase:0,raf:0,last:0,nodes:sphereNodes(88),pairs:null,cv:null};
+HN.pairs=linkPairs(HN.nodes);
+function heroGeom(){const cv=HN.cv;if(!cv)return null;const w=cv.clientWidth,h=cv.clientHeight;if(!w)return null;return{w,h,cx:w/2,cy:h/2,r:Math.min(w*.36,h*.37)};}
+function heroPointsIn(wrap){ // 当前首页球面各节点在 framewrap 坐标系中的位置
+  const g=heroGeom();if(!g)return null;
+  const a=HN.cv.getBoundingClientRect(),b=wrap.getBoundingClientRect();
+  return projectNodes(HN.nodes,HN.phase,g.cx,g.cy,g.r).map(p=>({x:p.x+a.left-b.left,y:p.y+a.top-b.top,z:p.z}));}
+function drawHero(){const cv=HN.cv,g=heroGeom();if(!g)return;const dpr=Math.min(devicePixelRatio||1,1.5);
+  if(cv.width!==Math.round(g.w*dpr)){cv.width=Math.round(g.w*dpr);cv.height=Math.round(g.h*dpr);}
+  const c=cv.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,g.w,g.h);
+  const pts=projectNodes(HN.nodes,HN.phase,g.cx,g.cy,g.r);
+  c.strokeStyle="rgba(105,192,186,0.12)";[.5,.78,1.08].forEach(sc=>{c.beginPath();c.ellipse(g.cx,g.cy,g.r*1.25,g.r*sc*.4,-.38,0,Math.PI*2);c.stroke();});
+  for(const[i,j,d]of HN.pairs){const p=pts[i],q=pts[j];c.strokeStyle=`rgba(100,211,196,${(.12+(p.z+q.z+2)*.045)*(1-d/.85)})`;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();}
+  for(const p of pts){c.fillStyle=`rgba(139,235,217,${.28+(p.z+1)*.3})`;c.beginPath();c.arc(p.x,p.y,1.4+(p.z+1)*.65,0,Math.PI*2);c.fill();}}
+function startHero(){cancelAnimationFrame(HN.raf);HN.cv=document.getElementById("hero-net");if(!HN.cv)return;HN.last=0;
+  const tick=t=>{if(!HN.cv||!HN.cv.isConnected)return;if(t-HN.last>=1000/30){if(!SPL.reducedSim&&HN.last)HN.phase+=Math.min(t-HN.last,64)*.000035;drawHero();HN.last=t;}HN.raf=requestAnimationFrame(tick);};
+  drawHero();if(!SPL.reducedSim)HN.raf=requestAnimationFrame(tick);}
+
+/* ======================= 开屏 D-019 原型 ======================= */
+// 触发：仅“打开 / 刷新首页”（文档首次加载且路径为 /）。站内导航、深链接、减少动态效果、浏览器前进后退恢复均不播放。
+const SPL={running:false,reducedSim:false,slow:1,lagApp:false,raf:0,msg:"",timer:0,skip:null,last:null};
+const LOGO_SEGS=[[4,27,4,10],[4,10,18,22],[18,22,32,10],[32,10,32,27],[4,10,18,27],[18,27,32,10]]; // 与 components/ui/Brand.tsx 的路径一致
+function logoTargets(n){const dotN=5,m=n-dotN,len=LOGO_SEGS.map(([a,b,c,d])=>Math.hypot(c-a,d-b)),L=len.reduce((x,y)=>x+y,0);
+  const counts=len.map(l=>Math.max(2,Math.round(m*l/L)));counts[counts.length-1]+=m-counts.reduce((x,y)=>x+y,0);
+  const out=[];LOGO_SEGS.forEach(([a,b,c,d],si)=>{const k=counts[si];for(let i=0;i<k;i++){const t=k===1?0:i/(k-1);out.push({x:a+(c-a)*t,y:b+(d-b)*t,seg:si,i});}});
+  for(let i=0;i<dotN;i++){const ang=i/dotN*Math.PI*2;out.push({x:18+Math.cos(ang)*1.1,y:8+Math.sin(ang)*1.1,seg:-1,i});}return out;}
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2, clamp=t=>t<0?0:t>1?1:t;
+function playSplash(reason,opts={}){
+  const wrap=$("#framewrap"),ov=$("#splash"),cv=$("#splash-cv"),word=$("#sp-word"),hint=$("#sp-hint"),load=$("#sp-load");
+  if(SPL.reducedSim){SPL.msg="减少动态效果：不播放开屏，直接显示首页";statebar();return;}
+  cancelAnimationFrame(SPL.raf);clearTimeout(SPL.timer);
+  const mobile=S.device==="m",n=mobile?48:88;
+  const T=mobile?{appear:250,converge:600,reveal:250,exit:400}:{appear:350,converge:650,reveal:350,exit:450};
+  Object.keys(T).forEach(k=>T[k]*=SPL.slow);
+  const holdUntil=SPL.lagApp?3200*SPL.slow:0; // 应用未就绪时停在 Logo，直到就绪
+  ov.hidden=false;ov.classList.remove("fast");ov.style.setProperty("--sp-bg",1);
+  word.style.opacity=0;hint.style.opacity=0;load.style.opacity=0;
+  const W=ov.clientWidth,H=ov.clientHeight,dpr=Math.min(devicePixelRatio||1,1.5);cv.width=W*dpr;cv.height=H*dpr;
+  const c=cv.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);
+  const nodes=sphereNodes(n),pairs=linkPairs(nodes),targets=logoTargets(n);
+  const R=Math.min(W*.36,H*.37)*(mobile?.9:.62),cx=W/2,cy=H/2-(mobile?30:24);
+  const LS=Math.min(W,H)*(mobile?.34:.26); // Logo 显示尺寸
+  word.style.setProperty("--sp-wy",(LS*.5+18-(mobile?30:24))+"px");
+  // 按屏幕位置配对节点与目标点，汇聚呈“扫入”而非乱飞
+  const p0=projectNodes(nodes,0,cx,cy,R),ord=p0.map((p,i)=>[p.x+p.y*.3,i]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+  const tord=targets.map((t,i)=>[t.x+t.y*.3,i]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+  const assign=new Array(n),rank=new Array(n);ord.forEach((ni,k)=>{assign[ni]=targets[tord[k]];rank[ni]=k/n;});
+  const toScreen=t=>({x:cx+(t.x-18)/36*LS,y:cy+(t.y-17.5)/36*LS});
+  const hdr=()=>{const a=$("#frame .logo"),b=wrap.getBoundingClientRect();if(!a)return{x:30,y:28,s:.4};const r=a.getBoundingClientRect();return{x:r.left-b.left+12,y:r.top-b.top+r.height/2,s:22/LS};};
+  const t0=performance.now();let skipped=false,frames=0;
+  SPL.total=Math.max(T.appear+T.converge+T.reveal,holdUntil)+T.exit;
+  SPL.running=!opts.paused;SPL.msg=opts.paused?"逐帧查看：拖动时间轴（阶段：0 出现 → 汇聚 → 浮现 → 退出）":`播放中（${reason}）`;statebar();
+  SPL.drawAt=drawAt;
+  function frame(now){
+    frames++;
+    if(drawAt(now-t0)===false){finish();return;}
+    SPL.raf=requestAnimationFrame(frame);
+  }
+  function drawAt(t){
+    const A=T.appear,Cv=A+T.converge,Rv=Cv+T.reveal;
+    const exitStart=Math.max(Rv,holdUntil),E=exitStart+T.exit;
+    if(t>=E)return false;
+    const phase=t/SPL.slow*.00009; // 开屏期间旋转略快于首页（0.000035/ms）；按时间计算，便于逐帧查看
+    c.clearRect(0,0,W,H);
+    const a=clamp(t/A);
+    const sp=projectNodes(nodes,phase,cx,cy,R);
+    const ek=t>exitStart?ease(clamp((t-exitStart)/T.exit)):0;
+    const heroPts=(!mobile&&ek>0)?heroPointsIn(wrap):null;
+    ov.style.setProperty("--sp-bg",1-ek); // 背景渐隐，露出已渲染好的首页
+    const pos=sp.map((p,i)=>{const k=ease(clamp((t-A-rank[i]*T.converge*.35)/(T.converge*.65)));const tg=toScreen(assign[i]);
+      let x=p.x+(tg.x-p.x)*k,y=p.y+(tg.y-p.y)*k;
+      if(ek>0){ if(heroPts){const h=heroPts[i%heroPts.length];x+=(h.x-x)*ek;y+=(h.y-y)*ek;} else {x+=(x-cx)*ek*.35;y+=(y-cy)*ek*.35;} }
+      return{x,y,z:p.z,k};});
+    for(const[i,j,d]of pairs){const p=pos[i],q=pos[j],f=1-Math.max(p.k,q.k);if(f<=0)continue; // 球面连线随汇聚淡出
+      c.strokeStyle=`rgba(100,211,196,${(.12+(p.z+q.z+2)*.045)*(1-d/.85)*a*f})`;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();}
+    const byseg={};pos.forEach((p,i)=>{const s=assign[i].seg;if(s<0)return;(byseg[s]=byseg[s]||[]).push([assign[i].i,p]);});
+    c.lineWidth=1.2;
+    Object.values(byseg).forEach(list=>{list.sort((u,v)=>u[0]-v[0]);for(let i=1;i<list.length;i++){const p=list[i-1][1],q=list[i][1],f=clamp((Math.min(p.k,q.k)-.72)/.28);if(f<=0)continue; // 粒子到位后沿笔画连线
+      c.strokeStyle=`rgba(145,228,200,${f*f*.85*Math.pow(1-ek,3)})`;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();}});
+    c.lineWidth=1;
+    for(const p of pos){c.fillStyle=`rgba(139,235,217,${Math.min(1,.28+(p.z+1)*.3+p.k*.3)*a*(heroPts?1:1-ek)})`;c.beginPath();c.arc(p.x,p.y,(1.4+(p.z+1)*.65)*(1-p.k*.35),0,Math.PI*2);c.fill();}
+    const rv=clamp((t-Cv)/T.reveal);
+    if(rv>0){ // 浮现：清晰 Logo + 一次柔光；退出时滑向顶栏 Logo 并缩小
+      const h=hdr(),gx=cx+(h.x-cx)*ek,gy=cy+(h.y-cy)*ek,sc=1+(h.s-1)*ek;
+      c.save();c.translate(gx,gy);c.scale(sc,sc);c.translate(-cx,-cy);
+      c.strokeStyle=`rgba(145,228,200,${rv*(1-ek*.7)})`;c.lineWidth=2.2/Math.max(sc,.35);c.lineJoin="round";c.lineCap="round";
+      c.shadowColor="rgba(145,228,200,.8)";c.shadowBlur=14*Math.sin(Math.PI*rv)*(1-ek);
+      c.beginPath();LOGO_SEGS.forEach(([x1,y1,x2,y2])=>{const u=toScreen({x:x1,y:y1}),v=toScreen({x:x2,y:y2});c.moveTo(u.x,u.y);c.lineTo(v.x,v.y);});c.stroke();
+      c.fillStyle=c.strokeStyle;const d=toScreen({x:18,y:8});c.beginPath();c.arc(d.x,d.y,2*LS/36,0,Math.PI*2);c.fill();c.restore();
+      word.style.opacity=rv*(1-clamp(ek*2));word.style.transform=`translate(-50%,${8*(1-rv)-ek*10}px)`;}
+    if(holdUntil&&t>Rv&&t<exitStart){word.style.opacity=.85+.15*Math.sin(t/190);if(t>2600*SPL.slow)load.style.opacity=.8;} // 应用未就绪：Logo 呼吸
+    if(ek>0)load.style.opacity=0;
+    hint.style.opacity=t>300*SPL.slow&&ek===0?.55:0;
+    return true;
+  }
+  function finish(){cancelAnimationFrame(SPL.raf);ov.hidden=true;SPL.running=false;const ms=Math.round(performance.now()-t0);
+    SPL.last={ms,frames,skipped};SPL.msg=skipped?`已跳过（${ms}ms 时点击）`:`播放完成：${ms}ms，${frames} 帧`;statebar();}
+  SPL.skip=()=>{if(!SPL.running||skipped)return;skipped=true;SPL.running=false;cancelAnimationFrame(SPL.raf);hint.style.opacity=0;ov.classList.add("fast");SPL.timer=setTimeout(()=>{ov.classList.remove("fast");finish();},260);};
+  if(opts.paused){drawAt(opts.at||0);return;}
+  SPL.raf=requestAnimationFrame(frame);
+}
+function closeScrub(){$("#splash").hidden=true;SPL.scrub=false;SPL.msg="";statebar();}
+$("#splash").addEventListener("pointerdown",()=>{if(SPL.scrub)return;SPL.skip&&SPL.skip();});
+document.addEventListener("input",e=>{if(e.target.id==="sp-scrub"){const v=+e.target.value;SPL.scrubAt=v;SPL.drawAt&&SPL.drawAt(v);const o=$("#sp-scrub-v");if(o)o.textContent=v+" ms";}});
+
+/* ======================= 交互 ======================= */
+function goto(p,opts={}){if(SPL.scrub)closeScrub();S.page=p;S.menu=false;S.search=false;S.ai.open=false;S.ai.sent=false;S.quest.side=null;if(opts.restore){restoreDraft();}render();window.scrollTo(0,0);$("#frame").scrollTop=0;}
+function restoreDraft(){const P=S.practice;if(!P.answer){P.answer="a";P.attempts=2;P.result=null;P.help=1;}P.result=null;P.restored=true;}
+function setPractice(v){
+  const P=S.practice;P.restored=false;P.unknown=false;P.sawSolution=false;
+  if(v==="fresh") Object.assign(P,{answer:null,attempts:0,result:null,help:0});
+  if(v==="bad1") Object.assign(P,{answer:"a",attempts:1,result:"bad"});
+  if(v==="bad2") Object.assign(P,{answer:"a",attempts:2,result:"bad",nudgeOff:false});
+  if(v==="restore") Object.assign(P,{answer:"a",attempts:2,result:null,help:2,restored:true});
+  if(v==="ok") Object.assign(P,{answer:"b",attempts:2,result:"ok"});
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-page],[data-dev],[data-th],[data-go],[data-act]");
+  if(!t) return;
+  if(t.dataset.page){goto(t.dataset.page);return;}
+  if(t.dataset.dev){S.device=t.dataset.dev;render();return;}
+  if(t.dataset.th){S.theme=t.dataset.th;render();return;}
+  if(t.dataset.go){goto(t.dataset.go,{restore:!!t.dataset.restore});return;}
+  const a=t.dataset.act, v=t.dataset.v, P=S.practice;
+  switch(a){
+    case "theme": S.theme=S.theme==="light"?"dark":"light";break;
+    case "showclick": S.showClick=!S.showClick;break;
+    case "menu": S.menu=!S.menu;break;
+    case "search": S.search=!S.search;break;
+    case "go-prompt": S.library.tab="prompts";S.library.open="pr.model.check";goto("library");return;
+    case "stage": S.quest.stageView=+v;break;
+    case "libtab": S.library.tab=v;break;
+    case "ai-open": S.ai.open=true;S.ai.sent=false;if(S.page==="quest")S.quest.side="ai";break;
+    case "ai-open-sel": S.ai.open=true;S.ai.sel=true;S.lesson.sel=false;break;
+    case "ai-open-level": S.ai.open=true;S.ai.level=["nudge","clue","full"][P.help-1];break;
+    case "ai-close": S.ai.open=false;S.ai.sent=false;if(S.page==="quest")S.quest.side=null;break;
+    case "lvl": S.ai.level=v;S.ai.sent=false;break;
+    case "consent": { const k=t.dataset.k; if(k==="draft")S.ai.draft=t.checked; if(k==="sel")S.ai.sel=t.checked; if(k==="sum"&&!t.checked)S.ai.summary=null; S.ai.sent=false; break; }
+    case "intent": { const i=$("#ai-input"); if(i) i.value=v+"："; return; }
+    case "ai-send": { const sc=scope(), key=sc.type+":"+sc.id, txt=($("#ai-input")||{}).value||"（空）"; (S.ai.threadsByScope[key]=S.ai.threadsByScope[key]||[]).push({role:"user",text:txt}); S.ai.sent=true; break; }
+    case "ai-pick": S.ai.picker="list";S.ai.pickSel=null;break;
+    case "pick": S.ai.pickSel=v;break;
+    case "pick-next": S.ai.picker="preview";S.ai.summaryText=S.ai.pickSel==="lp.ch1.s04"?"来自「精讲 §4 顶点比较」我的提问：\n1. 为什么只需要比较四个顶点？\n2. 如果两条边平行会怎样？":"来自「练习 1」我的提问：\n1. 2000 和 2600 哪个是最优？";break;
+    case "pick-back": S.ai.picker="list";break;
+    case "pick-cancel": S.ai.picker=false;break;
+    case "pick-confirm": S.ai.summary=($("#sum-text")||{}).value||S.ai.summaryText;S.ai.picker=false;S.ai.open=true;S.ai.sent=false;if(S.page==="quest")S.quest.side="ai";break;
+    case "toc": S.lesson.toc=!S.lesson.toc;break;
+    case "cp-sel": S.lesson.cpSel=v;S.lesson.cp=null;break;
+    case "cp-check": S.lesson.cp=S.lesson.cpSel===null?null:(S.lesson.cpSel==="0"?"ok":"bad");S.lesson.cpConfused=false;break;
+    case "cp-retry": S.lesson.cp=null;S.lesson.cpSel=null;break;
+    case "cp-confused": S.lesson.cpConfused=true;break;
+    case "hl": S.lesson.hl=true;break;
+    case "return": S.ticket=null;goto("practice",{restore:true});return;
+    case "drop-ticket": S.ticket=null;S.lesson.hl=false;break;
+    case "ans": P.answer=v;P.result=null;P.restored=false;break;
+    case "submit": if(!P.answer){P.result="invalid";break;} P.attempts++;P.result=P.answer===EX.answer?"ok":"bad";if(P.result==="ok"&&P.help===3)P.sawSolution=true;P.restored=false;break;
+    case "retry": P.result=null;break;
+    case "clear": Object.assign(P,{answer:null,attempts:0,result:null,help:0,restored:false});break;
+    case "help": P.help=+v;if(P.help===3&&!P.result)P.sawSolution=true;break;
+    case "nudge-off": P.nudgeOff=true;break;
+    case "goto-kp": S.ticket={label:"练习 2（草稿已保存）"};S.lesson.hl=true;goto("lesson");return;
+    case "side-prompt": S.quest.side="prompt";S.library.fromQuest=true;if(!S.library.vars.problem){S.library.vars.problem="某加工坊生产两种板材…（当前训练题题面）";S.library.vars.contest="校内训练";}S.library.copy=null;break;
+    case "side-ai": S.quest.side="ai";S.ai.open=true;break;
+    case "side-close": S.quest.side=null;break;
+    case "filter": S.library.filter=v;break;
+    case "open-prompt": S.library.open=v;break;
+    case "copy": { const L=S.library, text=PROMPT.text.replace(/\{(.+?)\}/g,(m,k)=>({"比赛名称":L.vars.contest,"题目内容":L.vars.problem,"我已有的思路":L.vars.idea})[k]||m); const missing=PROMPT.vars.some(([k])=>!L.vars[k].trim()); const done=()=>{L.copy=missing?"warn":"ok";render();}; (navigator.clipboard?navigator.clipboard.writeText(text).then(done,()=>{L.copy="bad";render();}):(L.copy="bad",render())); return; }
+    case "copy-fail": S.library.copy="bad";break;
+    case "persist": if(S.ai.persist==="device"){S.records.dialog="off";}else{S.records.dialog="on";} break;
+    case "dlg": S.records.dialog=v;break;
+    case "dlg-on": S.ai.persist="device";S.records.dialog=null;break;
+    case "dlg-keep": case "dlg-del": S.ai.persist="session";S.records.dialog=null;break;
+    case "dlg-close": S.records.dialog=null;break;
+    /* 状态栏 */
+    case "sb-returning": S.home.returning=!S.home.returning;break;
+    case "sb-search": S.home.q=S.home.q?"":"优化";break;
+    case "sp-play": if(S.page!=="home"){S.page="home";render();} playSplash(S.device==="m"?"手机 · 48 节点":"桌面 · 88 节点");return;
+    case "sp-nav": goto("lesson");goto("home");SPL.msg="站内导航回首页：不播放（开屏只在文档首次加载时出现）";statebar();return;
+    case "sp-deep": goto("lesson");SPL.msg="直接打开 /learn/linear-programming#derive：深链接不播放开屏";statebar();return;
+    case "sp-reduced": SPL.reducedSim=!SPL.reducedSim;SPL.msg=SPL.reducedSim?"已模拟 prefers-reduced-motion：开屏不播放，首页网络静止":"";break;
+    case "sp-slow": SPL.slow=SPL.slow===4?1:4;break;
+    case "sp-lag": SPL.lagApp=!SPL.lagApp;break;
+    case "sp-scrub": if(SPL.scrub){closeScrub();return;} if(SPL.running){cancelAnimationFrame(SPL.raf);SPL.running=false;} if(S.page!=="home"){S.page="home";render();} SPL.scrub=true;playSplash("逐帧",{paused:true,at:SPL.scrubAt||1000});return;
+    case "sb-ticket": S.ticket=S.ticket?null:{label:"练习 2（草稿已保存）"};S.lesson.hl=!!S.ticket;break;
+    case "sb-sel": S.lesson.sel=!S.lesson.sel;break;
+    case "sb-ai": S.ai.open=!S.ai.open;S.ai.sent=false;break;
+    case "sb-p": setPractice(v);break;
+    case "sb-unknown": P.unknown=!P.unknown;if(P.unknown){P.result="bad";P.attempts=Math.max(1,P.attempts);P.answer=P.answer||"c";}break;
+    case "sb-help": P.help=P.help?0:1;break;
+    case "sb-pick": if(S.ai.summary||S.ai.picker){S.ai.summary=null;S.ai.picker=false;}else{S.ai.open=true;S.ai.picker="list";}break;
+    case "sb-qs": S.quest.side=S.quest.side===v?null:v;if(v==="prompt"&&S.quest.side){S.library.fromQuest=true;S.library.vars.problem=S.library.vars.problem||"某加工坊生产两种板材…（当前训练题题面）";S.library.vars.contest=S.library.vars.contest||"校内训练";}S.ai.open=S.quest.side==="ai";break;
+    case "sb-fill": { const V=S.library.vars; if(V.contest){V.contest=V.problem=V.idea="";}else{V.contest="全国大学生数学建模竞赛";V.problem="（粘贴题目）";V.idea="先按产品拆成两问";} S.library.copy=null;break; }
+    case "sb-copy": S.library.copy=S.library.copy===v?null:v;break;
+    case "sb-empty": S.records.empty=!S.records.empty;break;
+    case "sb-storage": S.records.storageOff=!S.records.storageOff;break;
+    case "sb-persist": S.ai.persist=S.ai.persist==="device"?"session":"device";break;
+    case "noop": return;
+    default: return;
+  }
+  render();
+});
+document.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.id==="home-q"){S.home.q=t.value;render();const i=$("#home-q");i.focus();i.setSelectionRange(i.value.length,i.value.length);return;}
+  if(t.dataset.var){S.library.vars[t.dataset.var]=t.value;S.library.copy=null;const k=t.dataset.var;render();const i=document.querySelector(`[data-var="${k}"]`);i.focus();i.setSelectionRange(i.value.length,i.value.length);}
+});
+document.addEventListener("keydown",e=>{
+  if(SPL.running&&!["Shift","Control","Alt","Meta"].includes(e.key)){SPL.skip();return;}
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();S.search=true;render();return;}
+  if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches('[role=tab][data-act]')){e.preventDefault();e.target.click();return;}
+  if(e.key==="Escape"&&(S.menu||S.search||S.ai.open||S.quest.side||S.ai.picker||S.records.dialog)){
+    // 逐层关闭：最上层浮层先关
+    if(S.search)S.search=false;else if(S.menu)S.menu=false;else if(S.ai.picker)S.ai.picker=false;else if(S.records.dialog)S.records.dialog=null;else{S.ai.open=false;S.quest.side=null;}
+    render();}
+});
+const SPLASH_NOTES=["触发：只在“打开 / 刷新首页”时播放（文档首次加载且路径为 /）。站内导航回首页、深链接、浏览器前进后退恢复都不播放。","时长：桌面约 1.8 秒、手机约 1.5 秒，播完自动进入，无需任何操作。","过程：球面粒子出现 → 汇聚成模桥 Logo 笔画 → Logo 清晰浮现并有一次柔光、字标上浮 → 背景渐隐露出首页，Logo 滑向顶栏，粒子流回首页球面（手机向外散开淡出）。","可提前跳过：点击、轻触或按任意键，0.25 秒淡出。底部“轻触任意处跳过”为弱提示。","减少动态效果：不播放；首页网络静止（沿用现有 MathNetwork 降级）。","应用未就绪时停在 Logo 并轻微呼吸，2.6 秒后显示“正在加载…”，就绪后再退出。","开屏始终是深色品牌层，不随浅色 / 深色主题变化。"];
+render();
+if(S.page==="home") requestAnimationFrame(()=>playSplash("页面打开"));
+</script>
+</body>
+</html>

@@ -4,7 +4,7 @@ import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
-import { LearnPage } from "./Learn";
+import { ModelReferencePage as LearnPage } from "./ModelReference";
 
 describe("LearnPage", () => {
   it("renders recent MCM training cases before the method library", () => {

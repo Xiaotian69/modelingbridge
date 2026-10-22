@@ -51,3 +51,29 @@ Thumbs.db
 # Python venv
 venv/
 .venv/
+.gstack/
+
+# Unreviewed local material and private runtime data
+/资料/
+.worktrees/
+.claude/
+.codex/
+.env.*
+!.env.example
+!**/.env.example
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+coverage/
+*.tsbuildinfo
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.db
+*.pem
+*.key
+*.p12
+*.mp4
+*.mov
+*.xlsx
+*.xls

@@ -1,0 +1,120 @@
+/*
+ * ModelingBridge V2 design tokens.
+ * New UI uses the semantic tokens (--bg, --surface, --text …).
+ * Older Tailwind pages follow the theme through design/tailwindBridge.css.
+ */
+:root {
+  color-scheme: light;
+  --bg: #faf9f5;
+  --surface: #ffffff;
+  --surface-sunken: #f2f1eb;
+  --text: #1b2a2f;
+  --text-muted: #5b6b70;
+  --border: #dde3df;
+  --brand: #157a6e;
+  --brand-hover: #0f6b60;
+  --brand-ink: #ffffff;
+  --attend: #a35a12;
+  --ok: #2f7d32;
+  --bad: #b3261e;
+  --warn: #8a5a00;
+  --info: #2b5fa8;
+  --ai: #5a4fb0;
+  --focus: #a35a12;
+
+  /* Brand layer: fixed in both themes. */
+  --hero-bg: #0b1d24;
+  --hero-text: #e6f2ef;
+  --hero-muted: #9fc3bb;
+  --mint: #91e4c8;
+  --mint-ink: #06231e;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 72px;
+  /*
+   * Motion (single source; design/motion.ts mirrors these numbers and a test keeps them equal).
+   * --motion-scale: 1 normally, 0 for reduced motion, 0.6 on low-end devices ([data-motion="lite"]).
+   */
+  --motion-scale: 1;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --dur-quick: calc(140ms * var(--motion-scale));
+  --dur-page: calc(220ms * var(--motion-scale));
+  --dur-expand: calc(220ms * var(--motion-scale));
+  --dur-panel: calc(260ms * var(--motion-scale));
+  --dur-theme: calc(240ms * var(--motion-scale));
+  --dur-highlight: calc(1800ms * var(--motion-scale));
+  --motion-fast: var(--dur-quick);
+  --motion-base: var(--dur-page);
+  --header-h: 60px;
+  /* Feasible-region chart (learning/Graph.tsx): hue carries meaning, legend repeats it in text. */
+  --chart-grid: #dce8e3;
+  --chart-region: #bbebda;
+  --chart-region-edge: #187d65;
+  --chart-cut: #287dbe;
+  --chart-assemble: #945fac;
+  --chart-optimum: #b55313;
+  --chart-text: #4f6460;
+  --code-bg: #0f1d22;
+  --shadow-float: 0 12px 32px rgba(11, 29, 36, 0.18);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f171a;
+  --surface: #152126;
+  --surface-sunken: #0b1215;
+  --text: #e4ecea;
+  --text-muted: #9fb1b0;
+  --border: #26363b;
+  --brand: #5cc8b2;
+  --brand-hover: #7dd8c5;
+  --brand-ink: #06231e;
+  --attend: #e3a25a;
+  --ok: #7ccb80;
+  --bad: #f2867e;
+  --warn: #e6b65c;
+  --info: #8db2f0;
+  --ai: #a79df0;
+  --focus: #e3a25a;
+  --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --chart-grid: #233539;
+  --chart-region: #1f4a42;
+  --chart-region-edge: #5cc8b2;
+  --chart-cut: #6fb3ea;
+  --chart-assemble: #c39be0;
+  --chart-optimum: #f0a060;
+  --chart-text: #9fb1b0;
+  --code-bg: #0a1316;
+}
+
+/* Previous variable names, kept as aliases so older stylesheets follow the theme. */
+:root {
+  --ink: var(--text);
+  --muted: var(--text-muted);
+  --navy: var(--hero-bg);
+  --paper: var(--bg);
+  --line: var(--border);
+  --accent: var(--brand);
+  --shadow: 0 8px 24px #173e3210;
+}
+
+:root[data-motion="lite"] {
+  --motion-scale: 0.6;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root,
+  :root[data-motion="lite"] {
+    --motion-scale: 0;
+  }
+}

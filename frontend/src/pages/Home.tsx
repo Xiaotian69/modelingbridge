@@ -1,202 +1,174 @@
+import { useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import { contestCalendar, learningTracks, modelMethods } from "../data/modelingContent";
+import { MathNetwork } from "../components/motion/MathNetwork";
+import { Icon } from "../components/ui/Icon";
+import { HomeSearch } from "./home/HomeSearch";
+import { RecruitNotice } from "./home/RecruitNotice";
+import { readContinueItems, type ContinueItem } from "./home/continueLearning";
+import { courseById, sectionIndex, sectionTitleIn } from "../learning/courses";
 
-const studioStats = [
-  { label: "闯关关卡", value: "7 关" },
-  { label: "模型方法", value: `${modelMethods.length} 类` },
-  { label: "训练副本", value: "8 个" },
-  { label: "学习记录", value: "可导出" },
+type RouteStop = { title: string; detail: string; href?: string };
+const route: RouteStop[] = [
+  { title: "认识建模", detail: "第零课 · 15–20 分钟 · 互动", href: "/learn/introduction" },
+  { title: "线性规划", detail: "精讲 · 刷题 · 实战", href: "/learn/linear-programming" },
+  { title: "网络优化", detail: "图论 · 最短路 · 生成树", href: "/learn/graph" },
+  { title: "回归预测", detail: "回归分析 · 精讲 · 刷题", href: "/learn/regression" },
+  { title: "评价决策", detail: "AHP · TOPSIS · 精讲 · 刷题", href: "/learn/ahp" },
+  { title: "综合项目", detail: "筹备中" },
 ];
 
-const workflow = [
-  { title: "读题", desc: "识别目标、约束、小问关系" },
-  { title: "选模", desc: "把 AI 建议接到模型方法卡" },
-  { title: "编码", desc: "按数据流搭代码框架" },
-  { title: "检验", desc: "误差、约束、灵敏度复盘" },
-  { title: "成文", desc: "写结构，不代写终稿" },
-];
-
-export function HomePage() {
-  const coreContests = contestCalendar.filter((item) => item.valueLevel === "核心").slice(0, 2);
-
+function ContinueLearning() {
+  const [items] = useState<ContinueItem[]>(() => readContinueItems());
+  const reading = items.find((i) => i.kind === "reading");
+  const readingCourse = reading?.kind === "reading" ? courseById(reading.lesson) : null;
+  const readingNumber = reading && readingCourse ? sectionIndex(readingCourse, reading.sectionId) + 1 : 0;
+  const readingLabel =
+    readingCourse && readingNumber > 0
+      ? `第 ${readingNumber} 节 · ${sectionTitleIn(readingCourse, reading!.sectionId)}`
+      : "上次读到的位置";
+  if (!items.length) return null;
   return (
-    <div className="hairline-grid">
-      <section className="premium-shell">
-        <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
-          <div className="animate-rise text-white">
-            <p className="inline-flex rounded-md border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100">
-              免费试运行 · 数模闯关训练营
-            </p>
-            <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-tight sm:text-6xl">
-              像通关一样，走完一次数学建模
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-200">
-              模桥把一道题拆成读题、拆问、数据、模型、代码、图表和论文框架 7 个关卡。AI 只当教练，给提示和检查；每一关都需要你写下自己的判断，最后生成学习复盘报告。
-            </p>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              <ModeLink to="/quest" eyebrow="Quest Mode" title="开始数模闯关" desc="围绕一道题完成读题、拆问、数据、模型、代码、图表和论文框架。" />
-              <ModeLink to="/cases" eyebrow="Training Cases" title="选择训练副本" desc="从经典案例进入闯关，不追求题量，先把一题做深。" />
-            </div>
-          </div>
-
-          <div className="glass-panel animate-rise animate-float-subtle rounded-3xl p-5" style={{ animationDelay: "120ms" }}>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-100">Model Map</p>
-                  <h2 className="mt-2 text-xl font-semibold text-white">模型关背后的学习地图</h2>
-                </div>
-                <span className="rounded-full bg-emerald-300/15 px-3 py-1 text-xs font-semibold text-emerald-100">可点击</span>
-              </div>
-              <div className="mt-5 grid gap-3">
-                {modelMethods.slice(0, 5).map((method, index) => (
-                  <Link
-                    key={method.slug}
-                    to={`/learn#model-${method.slug}`}
-                    className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.08] px-4 py-3 transition hover:bg-white/[0.14]"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-xs font-bold text-slate-950">
-                        {index + 1}
-                      </span>
-                      <div>
-                        <p className="font-semibold text-white">{method.name}</p>
-                        <p className="text-xs text-slate-300">{method.family} · {method.level}</p>
-                      </div>
-                    </div>
-                    <span className="text-sm text-emerald-100 transition group-hover:translate-x-1">学习</span>
+    <section className="continue-strip" aria-labelledby="continue-title">
+      <div className="site-container continue-inner">
+        <h2 id="continue-title">继续学习</h2>
+        <ul>
+          {items.map((item) => (
+            <li key={item.kind}>
+              {item.kind === "reading" && (
+                <>
+                  <span>
+                    {readingCourse?.title ?? "精讲"} · {readingLabel}
+                  </span>
+                  <Link className="btn btn-secondary" to={item.href}>
+                    继续阅读
                   </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-10">
-        <div className="grid gap-3 sm:grid-cols-4">
-          {studioStats.map((item) => (
-            <div key={item.label} className="quiet-card rounded-2xl p-4">
-              <p className="text-xs font-semibold text-slate-400">{item.label}</p>
-              <p className="mt-2 text-2xl font-semibold text-slate-950">{item.value}</p>
-            </div>
+                </>
+              )}
+              {item.kind === "practice" && (
+                <>
+                  <span>
+                    专项练习：已做 {item.attempted} 题
+                    {item.wrong > 0 ? `，${item.wrong} 题待重练` : ""}
+                  </span>
+                  <Link className="btn btn-secondary" to={item.href}>
+                    继续练习
+                  </Link>
+                </>
+              )}
+              {item.kind === "quest" && (
+                <>
+                  <span>
+                    七关实战：已完成 {item.completed}/{item.total} 关
+                  </span>
+                  <Link className="btn btn-secondary" to={item.href}>
+                    继续实战
+                  </Link>
+                </>
+              )}
+            </li>
           ))}
-        </div>
-      </section>
-
-      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-8 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="quiet-card rounded-3xl p-6">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Roadmap</p>
-              <h2 className="mt-2 text-2xl font-semibold text-slate-950">学习底图仍然保留</h2>
-            </div>
-            <Link to="/learn" className="text-sm font-semibold text-bridge-700 hover:underline">
-              查看学习卡
-            </Link>
-          </div>
-          <div className="mt-6 grid gap-3">
-            {learningTracks.map((track) => (
-              <article key={track.title} className="interactive-card rounded-2xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="font-semibold text-slate-950">{track.title}</h3>
-                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">{track.duration}</span>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{track.focus}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {track.steps.map((step) => (
-                    <span key={step} className="soft-badge rounded-full px-2.5 py-1 text-xs text-slate-600">
-                      {step}
-                    </span>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        <div className="quiet-card rounded-3xl p-6">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Workflow</p>
-              <h2 className="mt-2 text-2xl font-semibold text-slate-950">一次完整闯关产物</h2>
-            </div>
-            <Link to="/records" className="text-sm font-semibold text-bridge-700 hover:underline">
-              查看记录
-            </Link>
-          </div>
-          <div className="mt-6 grid gap-3 sm:grid-cols-5">
-            {workflow.map((item, index) => (
-              <div key={item.title} className="rounded-2xl border border-slate-200 bg-white p-4">
-                <p className="text-xs font-bold text-bridge-700">0{index + 1}</p>
-                <h3 className="mt-3 font-semibold text-slate-950">{item.title}</h3>
-                <p className="mt-2 text-xs leading-5 text-slate-600">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
-            闯关报告用于学习复盘。AI 只做拆解、解释、路线建议和检查；论文最终表达、数据来源核验和结论判断仍由学生完成。
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-10 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="quiet-card rounded-3xl p-6">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Methods</p>
-              <h2 className="mt-2 text-2xl font-semibold text-slate-950">基础模型方法库</h2>
-            </div>
-            <Link to="/learn#methods" className="text-sm font-semibold text-bridge-700 hover:underline">
-              全部方法
-            </Link>
-          </div>
-          <div className="mt-6 grid gap-3 md:grid-cols-2">
-            {modelMethods.slice(0, 4).map((method) => (
-              <Link key={method.slug} to={`/learn#model-${method.slug}`} className="interactive-card rounded-2xl border border-slate-200 bg-white p-4">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="font-semibold text-slate-950">{method.name}</h3>
-                  <span className="rounded-full bg-bridge-50 px-2 py-0.5 text-xs font-semibold text-bridge-800">{method.family}</span>
-                </div>
-                <p className="mt-3 text-sm leading-6 text-slate-600">{method.when}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="quiet-card rounded-3xl p-6">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bridge-700">Calendar</p>
-              <h2 className="mt-2 text-2xl font-semibold text-slate-950">核心赛事提醒</h2>
-            </div>
-            <Link to="/calendar" className="text-sm font-semibold text-bridge-700 hover:underline">
-              完整日历
-            </Link>
-          </div>
-          <div className="mt-6 space-y-3">
-            {coreContests.map((contest) => (
-              <article key={contest.slug} className="rounded-2xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="font-semibold text-slate-950">{contest.name}</h3>
-                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-800">{contest.valueLevel}</span>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{contest.contestTime}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
+        </ul>
+        <Link className="text-link" to="/records">
+          全部学习记录
+        </Link>
+      </div>
+    </section>
   );
 }
 
-function ModeLink({ to, eyebrow, title, desc }: { to: string; eyebrow: string; title: string; desc: string }) {
+export function HomePage() {
   return (
-    <Link to={to} className="interactive-card rounded-2xl border border-white/14 bg-white/[0.1] p-5 text-white hover:bg-white/[0.16]">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100">{eyebrow}</p>
-      <h2 className="mt-3 text-xl font-semibold">{title}</h2>
-      <p className="mt-2 text-sm leading-6 text-slate-200">{desc}</p>
-    </Link>
+    <div className="home-page">
+      <section className="home-hero" aria-labelledby="home-title">
+        <RecruitNotice />
+        <div className="site-container hero-layout">
+          <div className="hero-copy">
+            <h1 id="home-title">
+              从一个真实问题开始，
+              <br />
+              学会数学建模。
+            </h1>
+            <p className="hero-sub">免费 · 无需注册 · 学习进度只保存在你的浏览器</p>
+            <div className="doors">
+              <section className="door door-primary" aria-labelledby="door-new">
+                <p className="door-kicker">我是新手</p>
+                <h2 id="door-new">从一个真实小问题开始</h2>
+                <p className="door-path">
+                  下雨了，两个雨伞点的伞够不够用？→ 认识数学建模 → 选一条路线学下去
+                </p>
+                <Link className="door-go" to="/learn/introduction">
+                  从第零课开始
+                  <Icon name="arrow" size={18} />
+                </Link>
+                <p className="door-note">
+                  已经了解建模？可以直接学<Link to="/learn/linear-programming">线性规划</Link>。
+                </p>
+              </section>
+              <section className="door" aria-labelledby="door-pro">
+                <p className="door-kicker">我有基础</p>
+                <h2 id="door-pro">按方法或赛题查找</h2>
+                <HomeSearch />
+              </section>
+            </div>
+          </div>
+          <div className="hero-visual" aria-hidden="true">
+            <MathNetwork />
+          </div>
+        </div>
+      </section>
+
+      <ContinueLearning />
+
+      <section className="site-container home-route" aria-labelledby="route-title">
+        <h2 id="route-title">一条路线，三种练法</h2>
+        <ol className="route-track" style={{ "--stops": route.length } as CSSProperties}>
+          {route.map((stop) => (
+            <li key={stop.title} className={stop.href ? "is-open" : "is-planned"}>
+              <span className="route-dot" aria-hidden="true" />
+              {stop.href ? (
+                <Link to={stop.href}>{stop.title}</Link>
+              ) : (
+                <b>{stop.title}</b>
+              )}
+              <span>{stop.detail}</span>
+            </li>
+          ))}
+        </ol>
+        <p className="route-legend">
+          <span>
+            <b>精讲</b> 读懂一个模型
+          </span>
+          <span>
+            <b>刷题</b> 检验是否真的会
+          </span>
+          <span>
+            <b>实战</b> 完整走一次七关
+          </span>
+        </p>
+      </section>
+
+      <section className="site-container home-roles" aria-labelledby="home-roles-title">
+        <div>
+          <p className="page-kicker">建模队伍分工探索 · 约 6–8 分钟</p>
+          <h2 id="home-roles-title">不确定先学建模、编程还是论文？</h2>
+          <p>
+            在一个校园共享单车案例里做 9 个小任务，体验建模手、编程手、论文手分别做什么。结果分开列出你的兴趣、经验和任务表现，给出可以先尝试的方向和下一步练习，不贴人格标签。
+          </p>
+        </div>
+        <Link className="btn btn-secondary home-roles-go" to="/learn/team-roles">
+          找到你的建模起点
+          <Icon name="arrow" size={16} />
+        </Link>
+      </section>
+
+      <nav className="site-container home-links" aria-label="更多入口">
+        <span>也可以直接去：</span>
+        <Link to="/quest">七关实战</Link>
+        <Link to="/library">资料中心</Link>
+        <Link to="/library/skills">AI 技能包</Link>
+        <Link to="/learn/reference">方法速查</Link>
+        <Link to="/library/calendar">赛事日历</Link>
+      </nav>
+    </div>
   );
 }

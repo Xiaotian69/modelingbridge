@@ -22,3 +22,10 @@ const localCases = [
 export function getLocalCase(slug: string): CaseDetail | null {
   return localCases.find((item) => item.slug === slug) ?? null;
 }
+
+/** Case list fallback for static-only EdgeOne deployments. */
+export function listLocalCases() {
+  return localCases.map(({ slug, title, difficulty, coverage, audience, data_status, summary }) => ({
+    slug, title, difficulty, coverage, audience, data_status, summary,
+  }));
+}

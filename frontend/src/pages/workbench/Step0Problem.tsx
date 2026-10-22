@@ -1,4 +1,4 @@
-import type { LlmProviderInfo, ProviderId, StudentLevel, WorkbenchAnalysis } from "../../types";
+import type { ProviderId, StudentLevel, WorkbenchAnalysis } from "../../types";
 import { ConfirmBar } from "../../components/workbench/ConfirmBar";
 import { Field } from "../../components/workbench/Field";
 import { StepActions } from "../../components/workbench/StepActions";
@@ -8,7 +8,6 @@ interface Step0Props {
   attachmentNote: string;
   level: StudentLevel;
   provider: ProviderId;
-  providers: LlmProviderInfo[];
   loading: boolean;
   error: string | null;
   data: WorkbenchAnalysis | null;
@@ -16,7 +15,6 @@ interface Step0Props {
   onProblemTextChange: (v: string) => void;
   onAttachmentNoteChange: (v: string) => void;
   onLevelChange: (v: StudentLevel) => void;
-  onProviderChange: (v: ProviderId) => void;
   onAnalyze: () => void;
   onCheck: (v: boolean) => void;
   onConfirm: () => void;
@@ -29,7 +27,6 @@ export function Step0Problem({
   attachmentNote,
   level,
   provider,
-  providers,
   loading,
   error,
   data,
@@ -37,7 +34,6 @@ export function Step0Problem({
   onProblemTextChange,
   onAttachmentNoteChange,
   onLevelChange,
-  onProviderChange,
   onAnalyze,
   onCheck,
   onConfirm,
@@ -74,32 +70,13 @@ export function Step0Problem({
           <option value="advanced">冲奖 / 更关注检验与表达</option>
         </select>
       </label>
-      <label className="block max-w-md text-sm font-medium text-slate-700">
-        大模型选择
-        <select
-          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-bridge-600 focus:outline-none focus:ring-2 focus:ring-bridge-600/20"
-          value={provider}
-          onChange={(e) => onProviderChange(e.target.value as ProviderId)}
-        >
-          {providers.length === 0 && (
-            <>
-              <option value="deepseek">DeepSeek</option>
-              <option value="mimo">Xiaomi MiMo</option>
-            </>
-          )}
-          {providers.map((item) => (
-            <option key={item.id} value={item.id} disabled={!item.enabled}>
-              {item.name} · {item.model}
-              {item.enabled ? "" : "（未配置）"}
-            </option>
-          ))}
-        </select>
-        {providers.length > 0 && (
-          <span className="mt-1 block text-xs leading-5 text-slate-500">
-            {providers.find((item) => item.id === provider)?.note}
-          </span>
-        )}
-      </label>
+      <div className="max-w-md text-sm">
+        <p className="font-medium text-slate-700">运行模式</p>
+        <p className="mt-1 rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-slate-700">教学演示</p>
+        <p className="mt-1 text-xs leading-5 text-slate-500">
+          公开快照为演示模式，真实 AI 服务不包含在 V3.0 公开快照中。
+        </p>
+      </div>
       <button
         type="button"
         onClick={onAnalyze}
@@ -120,7 +97,7 @@ export function Step0Problem({
           </p>
           {data.mode === "demo" && (
             <p className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">
-              当前返回的是演示回退结果，请检查模型 Key、Base URL 或模型名是否可用。
+              这是教学演示结果，不是实时 AI 回复。公开快照不包含真实 AI 服务。
             </p>
           )}
           <ConfirmBar

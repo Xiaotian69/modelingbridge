@@ -102,7 +102,7 @@ export function useWorkbenchState(initialProblemText: string, initialAttachmentN
     problemText: initialProblemText,
     attachmentNote: initialAttachmentNote,
     level: "beginner",
-    provider: "deepseek",
+    provider: "default",
     providers: [],
     step: 0,
     confirmed: Array(STEPS_COUNT).fill(false),

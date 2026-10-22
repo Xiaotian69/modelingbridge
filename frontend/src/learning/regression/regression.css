@@ -1,0 +1,136 @@
+/* Regression course: scatter / residual figures and the least squares lab. Tokens only (both themes). */
+.reg-figure svg,
+.reg-lab svg {
+  max-width: 560px;
+}
+.reg-point {
+  fill: var(--surface);
+  stroke: var(--chart-cut);
+  stroke-width: 2;
+}
+.reg-point.is-weekend {
+  fill: var(--chart-assemble);
+  stroke: var(--chart-assemble);
+}
+.reg-point.is-extra {
+  fill: var(--chart-optimum);
+  stroke: var(--surface);
+  stroke-width: 1.5;
+}
+.reg-zero {
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+}
+.reg-residual {
+  stroke: var(--chart-optimum);
+  stroke-width: 1.5;
+  opacity: 0.75;
+}
+.reg-line {
+  stroke-width: 2.5;
+}
+.reg-line.is-mine {
+  stroke: var(--chart-region-edge);
+}
+.reg-line.is-best {
+  stroke: var(--chart-optimum);
+  stroke-dasharray: 8 5;
+}
+.reg-line.is-simple {
+  stroke: var(--text-muted);
+  stroke-dasharray: 6 5;
+}
+.reg-line.is-weekday {
+  stroke: var(--chart-cut);
+}
+.reg-line.is-weekend {
+  stroke: var(--chart-assemble);
+}
+.reg-legend-weekday,
+.reg-legend-weekday-line {
+  color: var(--chart-cut);
+}
+.reg-legend-weekend,
+.reg-legend-weekend-line {
+  color: var(--chart-assemble);
+}
+.reg-legend-mine {
+  color: var(--chart-region-edge);
+}
+.reg-legend-best,
+.reg-legend-extra {
+  color: var(--chart-optimum);
+}
+.reg-legend-simple,
+.reg-legend-zero {
+  color: var(--text-muted);
+}
+.reg-lab-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 20px;
+  font-size: 14px;
+}
+.reg-lab-controls label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.reg-lab-controls output {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.reg-lab-controls input {
+  width: 100%;
+  accent-color: var(--brand);
+}
+.reg-lab-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+.reg-lab-toggles .lab-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.reg-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0 8px;
+}
+.reg-stats div {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.reg-stats dt {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.reg-stats dd {
+  margin: 2px 0 0;
+  font-size: 15px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+.reg-stats .is-best dd {
+  color: var(--chart-optimum);
+}
+
+@media (max-width: 600px) {
+  .reg-lab-controls,
+  .reg-stats {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .reg-lab-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lp-lab.reg-figure svg text,
+  .lp-lab.reg-lab svg text {
+    font-size: 22px;
+  }
+}

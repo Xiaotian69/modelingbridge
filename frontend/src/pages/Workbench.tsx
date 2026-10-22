@@ -2,9 +2,9 @@ import { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { analyzeProblem, getPromptVersion, listLlmProviders } from "../api/client";
 import { useWorkbenchState } from "../hooks/useWorkbenchState";
-import type { ProviderId, StudentLevel } from "../types";
+import type { StudentLevel } from "../types";
 import { buildWorkbenchAnalysis, buildWorkbenchSummary, buildWorkbenchUsageLog } from "../utils/markdownBuilder";
-import { saveWorkbenchRecord } from "./Records";
+import { saveWorkbenchRecord } from "../state/localRecords";
 import { Step0Problem } from "./workbench/Step0Problem";
 import { Step1Tasks } from "./workbench/Step1Tasks";
 import { Step2Data } from "./workbench/Step2Data";
@@ -157,25 +157,20 @@ export function WorkbenchPage() {
   return (
     <div className="hairline-grid">
       <div className="mx-auto max-w-7xl px-4 py-8">
-        <header className="premium-shell rounded-3xl p-6 text-white">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="inline-flex rounded-md border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100">
-                AI Studio
-              </p>
-              <h1 className="mt-3 text-3xl font-semibold">AI 辅助建模工作台</h1>
-              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-200">
-                从题面生成拆题、数据、模型、代码和检验路径。模型建议会连接到学习卡，方便继续追问和补课。
-              </p>
-            </div>
-            <div className="text-sm text-slate-300">
-              {promptMeta ? (
-                <p>提示词版本：{promptMeta.workbench_prompt}（{promptMeta.updated}）</p>
-              ) : (
-                <p>提示词版本加载中</p>
-              )}
-            </div>
-          </div>
+        <header className="case-head">
+          <p className="page-kicker">实验功能 · 需要后端服务</p>
+          <h1>AI 工作台（实验）</h1>
+          {!providers.some(p => p.enabled) && (
+            <p role="status" className="notice notice-warn">
+              公开快照为演示模式：真实 AI 服务不包含在 V3.0 公开快照中。当前可学习建模流程；演示结果不代表实时 AI 回复。
+            </p>
+          )}
+          <p className="page-lead">
+            从题面生成拆题、数据、模型、代码和检验路径。模型建议会连接到学习卡，方便继续追问和补课。
+          </p>
+          <p className="case-head-audience">
+            {promptMeta ? `提示词版本：${promptMeta.workbench_prompt}（${promptMeta.updated}）` : "提示词版本：未连接后端"}
+          </p>
         </header>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[18rem_1fr]">
@@ -230,7 +225,7 @@ export function WorkbenchPage() {
 
           <main className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <div className="border-b border-slate-200 pb-4">
-              <p className="text-xs font-semibold text-bridge-700">Step {step + 1}</p>
+              <p className="text-xs font-semibold text-bridge-700">第 {step + 1} 步</p>
               <h2 className="mt-1 text-xl font-semibold text-slate-950">{STEPS[step].title}</h2>
               <p className="mt-1 text-sm text-slate-500">{STEPS[step].hint}</p>
             </div>
@@ -251,7 +246,6 @@ export function WorkbenchPage() {
                   attachmentNote={attachmentNote}
                   level={level}
                   provider={provider}
-                  providers={providers}
                   loading={loading}
                   error={error}
                   data={data}
@@ -259,7 +253,6 @@ export function WorkbenchPage() {
                   onProblemTextChange={(v) => dispatch({ type: "SET_PROBLEM_TEXT", payload: v })}
                   onAttachmentNoteChange={(v) => dispatch({ type: "SET_ATTACHMENT_NOTE", payload: v })}
                   onLevelChange={(v: StudentLevel) => dispatch({ type: "SET_LEVEL", payload: v })}
-                  onProviderChange={(v: ProviderId) => dispatch({ type: "SET_PROVIDER", payload: v })}
                   onAnalyze={onAnalyze}
                   onCheck={(v) => dispatch({ type: "MARK_CONFIRMED", payload: { index: 0, value: v } })}
                   onConfirm={() => onConfirmStep(0)}
